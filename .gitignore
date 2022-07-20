@@ -46,4 +46,5 @@ Visual Studio Projects/*
 !Visual Studio Projects/*.sln
 !Visual Studio Projects/0ReadMe_Projects.txt
 
-
+# Ignore formatted documentation files
+doc-output
