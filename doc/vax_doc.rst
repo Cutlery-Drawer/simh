@@ -140,25 +140,22 @@ CPU and system devices
 
 CPU
 """
-CPU options include the size of main memory and the treatment of the ``HALT`` instruction.
+CPU options include the size of main memory and the treatment of the ``HALT`` instruction. ::
 
-===================  ===========================================
-``SET CPU 16M``      Set memory size = 16MB
-``SET CPU 32M``      Set memory size = 32MB
-``SET CPU 48M``      Set memory size = 48MB
-``SET CPU 64M``      Set memory size = 64MB
-``SET CPU 128M``     Set memory size = 128MB
-``SET CPU 256M``     Set memory size = 256MB
-``SET CPU 512M``     Set memory size = 512MB
-``SET CPU SIMHALT``  Kernel ``HALT`` returns to simulator
-``SET CPU CONHALT``  Kernel ``HALT`` returns to boot ROM console
-===================  ===========================================
+    SET CPU 16M                   Set memory size = 16MB
+    SET CPU 32M                   Set memory size = 32MB
+    SET CPU 48M                   Set memory size = 48MB
+    SET CPU 64M                   Set memory size = 64MB
+    SET CPU 128M                  Set memory size = 128MB
+    SET CPU 256M                  Set memory size = 256MB
+    SET CPU 512M                  Set memory size = 512MB
+    SET CPU SIMHALT               Kernel HALT returns to simulator
+    SET CPU CONHALT               Kernel HALT returns to boot ROM console
 
-The CPU also implements a command to display a virtual to physical address translation:
+The CPU also implements a command to display a virtual to physical address translation::
 
-==============================  ======================================================================
-``SHOW {-kesu} CPU VIRTUAL=n``  Show translation for address ``n`` in kernel/exec/supervisor/user mode
-==============================  ======================================================================
+    SHOW {-kesu} CPU VIRTUAL=n    Show translation for address n
+                                  in kernel/exec/supervisor/user mode
 
 Notes on memory size:
 
@@ -252,15 +249,14 @@ Name               Size  Comments
 
 The CPU attempts to detect when the simulator is idle.
 When idle, the simulator does not use any resources on the host system.
-Idle detection is controlled by the ``SET IDLE`` and ``SET NOIDLE`` commands:
+Idle detection is controlled by the ``SET IDLE`` and ``SET NOIDLE`` commands::
 
-===============================  =======================================================================
-``SET CPU IDLE{=platform}{:n}``  Enable idle detection for ``platform``. Supported platform names are:
-                                 ``VMS``, ``ULTRIX``, ``ULTRIXOLD``, ``ULTRIX-1.X``
-                                 ``3BSD``, ``4.0BSD``, ``4.1BSD``, ``4.2BSD``, ``QUASIJARUS``
-                                 ``NETBSD``, ``NETBSDOLD``, ``OPENBSD``, ``OPENBSDOLD``, ``32V``, ``ELN``
-``SET CPU NOIDLE``               Disable idle detection
-===============================  =======================================================================
+    SET CPU IDLE{=platform}{:n}   Enable idle detection for the specified platform.
+                                  Supported platform names are:
+                                  VMS, ULTRIX, ULTRIXOLD, ULTRIX-1.X 3BSD,
+                                  4.0BSD, 4.1BSD, 4.2BSD, QUASIJARUS, NETBSD,
+                                  NETBSDOLD, OPENBSD, OPENBSDOLD, 32V, ELN
+    SET CPU NOIDL                 Disable idle detection
 
 Idle detection is disabled by default.
 If idle detection is enabled with an incorrect operating system setting, simulator performance could be impacted.
@@ -269,15 +265,13 @@ The value ``n``, if present in the ``SET CPU IDLE={OS}:n`` command,
 indicates the number of seconds the simulator must run before idling starts.
 
 The CPU can maintain a history of the most recently executed instructions.
-This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands:
+This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands::
 
-=================================  ========================================
-``SET CPU HISTORY``                Clear history buffer
-``SET CPU HISTORY=0``              Disable history
-``SET CPU {-T} HISTORY=n{:file}``  Enable history, length = ``n``
-``SHOW CPU HISTORY``               Print CPU history
-``SHOW CPU HISTORY=n``             Print first ``n`` entries of CPU history
-=================================  ========================================
+    SET CPU HISTORY               Clear history buffer
+    SET CPU HISTORY=0             Disable history
+    SET CPU {-T} HISTORY=n{:file} Enable history, length = n
+    SHOW CPU HISTORY              Print CPU history
+    SHOW CPU HISTORY=n            Print first n entries of CPU history
 
 The ``-T`` switch causes simulator time to be recorded (and displayed) with each history entry.
 When writing history to a file (``SET CPU HISTORY=n:file``), ``n`` specifies the buffer flush frequency.
@@ -301,31 +295,24 @@ An invalid entry is indicated by a tag of 0xFFFFFFFF.
 Qbus adapter (QBA)
 """"""""""""""""""
 The QBA simulates the CQBIC Qbus adapter chip.
-It recognizes the following options:
+It recognizes the following options::
 
-===========================  =========================
-``SET QBA AUTOCONFIGURE``    Enable autoconfiguration
-``SET QBA NOAUTOCONFIGURE``  Disable autoconfiguration
-===========================  =========================
+    SET QBA AUTOCONFIGURE         Enable autoconfiguration
+    SET QBA NOAUTOCONFIGURE       Disable autoconfiguration
 
-and the following display command:
+and the following display command::
 
-====================  ==========================
-``SHOW QBA IOSPACE``  Show I/O space address map
-====================  ==========================
+    SHOW QBA IOSPACE              Show I/O space address map
 
-The QBA also implements a command to display a Qbus address to physical address translation:
+The QBA also implements a command to display a Qbus address to physical address translation::
 
-======================  =======================================
-``SHOW QBA VIRTUAL=n``  Show translation for Qbus address ``n``
-======================  =======================================
+    SHOW QBA VIRTUAL=n            Show translation for Qbus address n
 
 Finally, the QBA implements main memory examination and modification via the Qbus map.
-The data width is always 16b:
+The data width is always 16b::
 
-===============  ==============================================================
-``EX QBA 0/10``  Examine main memory words corresponding to Qbus addresses 0-10
-===============  ==============================================================
+    EX QBA 0/10                   Examine main memory words corresponding
+                                  to Qbus addresses 0-10
 
 The QBA registers are:
 
@@ -348,20 +335,16 @@ Read-only memory (ROM)
 """"""""""""""""""""""
 The boot ROM consists of a single unit, simulating the 128KB boot ROM.
 It has no registers.
-The boot ROM is loaded with a binary byte stream using the ``LOAD -r`` command:
+The boot ROM is loaded with a binary byte stream using the ``LOAD -r`` command::
 
-======================  =============================
-``LOAD -r KA655X.BIN``  Load ROM image ``KA655X.BIN``
-======================  =============================
+    LOAD -r KA655X.BIN            Load ROM image KA655X.BIN
 
 ROM accesses a use a calibrated delay that slows ROM-based execution to about 500K instructions per second.
 This delay is required to make the power-up self-test routines run correctly on very fast hosts.
-The delay is controlled with the commands:
+The delay is controlled with the commands::
 
-===================  =================
-``SET ROM NODELAY``  ROM runs like RAM
-``SET ROM DELAY``    ROM runs slowly
-===================  =================
+    SET ROM NODELAY               ROM runs like RAM
+    SET ROM DELAY                 ROM runs slowly
 
 Non-volatile memory (NVR)
 """""""""""""""""""""""""
@@ -585,16 +568,14 @@ RLV12/RL01,RL02 cartridge disk (RL)
 """""""""""""""""""""""""""""""""""
 RLV12 options include the ability to set units write enabled or write locked,
 to set the drive type to RL01, RL02, or autosize,
-and to write a DEC standard 044 compliant bad block table on the last track:
+and to write a DEC standard 044 compliant bad block table on the last track::
 
-=========================  =========================================
-``SET RLn LOCKED``         Set unit ``n`` write locked
-``SET RLn WRITEENABLED``   Set unit ``n`` write enabled
-``SET RLn RL01``           Set type to RL01
-``SET RLn RL02``           Set type to RL02
-``SET RLn AUTOSIZE``       Set type based on file size at ``ATTACH``
-``SET RLn BADBLOCK``       Write bad block table on last track
-=========================  =========================================
+    SET RLn LOCKED                Set unit n write locked
+    SET RLn WRITEENABLED          Set unit n write enabled
+    SET RLn RL01                  Set type to RL01
+    SET RLn RL02                  Set type to RL02
+    SET RLn AUTOSIZE              Set type based on file size at ATTACH
+    SET RLn BADBLOCK              Write bad block table on last track
 
 The type options can be used only when a unit is not attached to a file.
 The bad block option can be used only when a unit is attached to a file.
@@ -640,33 +621,31 @@ The simulator implements four MSCP disk controllers, RQ, RQB, RQC, RQD.
 Initially, RQB, RQC, and RQD are disabled.
 Each RQ controller simulates an RQDX3 MSCP disk controller with four drives.
 RQ options include the ability to set units write enabled or write locked,
-and to set the drive type to one of many disk types:
+and to set the drive type to one of many disk types::
 
-=========================  =================================
-``SET RQn LOCKED``         Set unit ``n`` write locked
-``SET RQn WRITEENABLED``   Set unit ``n`` write enabled
-``SET RQn RX50``           Set type to RX50
-``SET RQn RX33``           Set type to RX33
-``SET RQn RD32``           Set type to RD32
-``SET RQn RD51``           Set type to RD51
-``SET RQn RD52``           Set type to RD52
-``SET RQn RD53``           Set type to RD53
-``SET RQn RD54``           Set type to RD54
-``SET RQn RD31``           Set type to RD31
-``SET RQn RA80``           Set type to RA80
-``SET RQn RA81``           Set type to RA81
-``SET RQn RA82``           Set type to RA82
-``set RQn RA71``           Set type to RA71
-``SET RQn RA72``           Set type to RA72
-``SET RQn RA90``           Set type to RA90
-``SET RQn RA92``           Set type to RA92
-``SET RQn RRD40``          Set type to RRD40 (CD-ROM)
-``SET RQn RAUSER{=n}``     Set type to RA82 with ``n`` MB's
-``SET -L RQn RAUSER{=n}``  Set type to RA82 with ``n`` LBN's
-=========================  =================================
+    SET RQn LOCKED                Set unit n write locked
+    SET RQn WRITEENABLED          Set unit n write enabled
+    SET RQn RX50                  Set type to RX50
+    SET RQn RX33                  Set type to RX33
+    SET RQn RD32                  Set type to RD32
+    SET RQn RD51                  Set type to RD51
+    SET RQn RD52                  Set type to RD52
+    SET RQn RD53                  Set type to RD53
+    SET RQn RD54                  Set type to RD54
+    SET RQn RD31                  Set type to RD31
+    SET RQn RA80                  Set type to RA80
+    SET RQn RA81                  Set type to RA81
+    SET RQn RA82                  Set type to RA82
+    set RQn RA71                  Set type to RA71
+    SET RQn RA72                  Set type to RA72
+    SET RQn RA90                  Set type to RA90
+    SET RQn RA92                  Set type to RA92
+    SET RQn RRD40                 Set type to RRD40 (CD-ROM)
+    SET RQn RAUSER{=n}            Set type to RA82 with n MBs
+    SET -L RQn RAUSER{=n}         Set type to RA82 with n LBNs
 
 The type options can be used only when a unit is not attached to a file.
-RAUSER is a "user specified" disk;
+``RAUSER`` is a "user specified" disk;
 the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers (LBN's, 512 bytes each).
 The minimum size is 5MB;
 the maximum size is 2GB without extended file support, 1TB with extended file support.
@@ -674,29 +653,27 @@ the maximum size is 2GB without extended file support, 1TB with extended file su
 Units can also be set ``ENABLED`` or ``DISABLED``.
 
 Drive units have changeable unit numbers.
-Unit numbers can be changed with:
+Unit numbers can be changed with::
 
-====================  ===================
-``SET RQn UNIT=val``  Set unit plug value
-====================  ===================
+    SET RQn UNIT=val              Set unit plug value
 
 Each device has 4 units which have unique MSCP unit numbers (0, 1, 2 and 3).
 
-Each RQ controller implements the following special ``SHOW`` commands:
+Each RQ controller implements the following special ``SHOW`` commands::
 
-==================  ===============================
-``SHOW RQn TYPE``   Show drive type
-``SHOW RQ RINGS``   Show command and response rings
-``SHOW RQ FREEQ``   Show packet free queue
-``SHOW RQ RESPQ``   Show packet response queue
-``SHOW RQ UNITQ``   Show unit queues
-``SHOW RQ ALL``     Show all ring and queue state
-``SHOW RQn UNITQ``  Show unit queues for unit ``n``
-``SHOW RQn UNIT``   Show unit plug value
-==================  ===============================
+    SHOW RQn TYPE                 Show drive type
+    SHOW RQ RINGS                 Show command and response rings
+    SHOW RQ FREEQ                 Show packet free queue
+    SHOW RQ RESPQ                 Show packet response queue
+    SHOW RQ UNITQ                 Show unit queues
+    SHOW RQ ALL                   Show all ring and queue state
+    SHOW RQn UNITQ                Show unit queues for unit n
+    SHOW RQn UNIT                 Show unit plug value
 
 Each RQ controller implements these registers:
 
+==================  ====  ==========================================================
+Name                Size  Comments
 ==================  ====  ==========================================================
 ``SA``              16    Status/address register
 ``S1DAT``           16    Step 1 init host data
@@ -745,19 +722,15 @@ Tapes
 
 TSV11/TSV05 magnetic tape (TS)
 """"""""""""""""""""""""""""""
-TS options include the ability to make the unit write enabled or write locked.
+TS options include the ability to make the unit write enabled or write locked. ::
 
-=======================  ======================
-``SET TS LOCKED``        Set unit write locked
-``SET TS WRITEENABLED``  Set unit write enabled
-=======================  ======================
+    SET TS LOCKED                 Set unit write locked
+    SET TS WRITEENABLED           Set unit write enabled
 
-The TS drive can be set to a specific reel capacity in MB, or to unlimited capacity:
+The TS drive can be set to a specific reel capacity in MB, or to unlimited capacity::
 
-===================  ========================================
-``SET TS0 CAPAC=m``  Set capacity to ``m`` MB (0 = unlimited)
-``SHOW TS0 CAPAC``   Show capacity in MB
-===================  ========================================
+    SET TS0 CAPAC=m               Set capacity to m MB (0 = unlimited)
+    SHOW TS0 CAPAC                Show capacity in MB
 
 The TSV11 does not support the ``BOOT`` command.
 
@@ -807,48 +780,40 @@ TQK50 TMSCP tape controller (TQ)
 """"""""""""""""""""""""""""""""
 The TQ controller simulates the TQK50 TMSCP tape controller.
 TQ options include the ability to set units write enabled or write locked,
-and to specify the controller type and tape length:
+and to specify the controller type and tape length::
 
-=========================  ==========================================================
-``SET TQn LOCKED``         Set unit ``n`` write locked
-``SET TQn WRITEENABLED``   Set unit ``n`` write enabled
-``SET TQ TK50``            Set controller type to TK50
-``SET TQ TK70``            Set controller type to TK70
-``SET TQ TU81``            Set controller type to TU81
-``SET TQ TKUSER{=n}``      Set controller type to TK50 with tape capacity of ``n`` MB
-=========================  ==========================================================
+    SET TQn LOCKED                Set unit n write locked
+    SET TQn WRITEENABLED          Set unit n write enabled
+    SET TQ TK50                   Set controller type to TK50
+    SET TQ TK70                   Set controller type to TK70
+    SET TQ TU81                   Set controller type to TU81
+    SET TQ TKUSER{=n}             Set controller type to TK50 with tape capacity of n MB
 
 User-specified capacity must be between 50 and 2000000000 MB. 
 Regardless of the controller type,
 individual units can be set to a specific reel capacity in MB,
-or to unlimited capacity:
+or to unlimited capacity::
 
-===================  ===================================================
-``SET TQn CAPAC=m``  Set unit ``n`` capacity to ``m`` MB (0 = unlimited)
-``SHOW TQn CAPAC``   Show unit ``n`` capacity in MB
-===================  ===================================================
+    SET TQn CAPAC=m               Set unit n capacity to m MB (0 = unlimited)
+    SHOW TQn CAPAC                Show unit n capacity in MB
 
 Drive units have changeable unit numbers.
-Unit numbers can be changed with:
+Unit numbers can be changed with::
 
-====================  ===================
-``SET TQn UNIT=val``  Set unit plug value
-====================  ===================
+    SET TQn UNIT=val              Set unit plug value
 
 Device TQ has 4 units (TQ0, TQ1, TQ2 and TQ3) which have unique MSCP unit numbers (0, 1, 2 and 3).
 
-The TQ controller implements the following special ``SHOW`` commands:
+The TQ controller implements the following special ``SHOW`` commands::
 
-===================  ===============================
-``SHOW TQ TYPE``     Show controller type
-``SHOW TQ RINGS``    Show command and response rings
-``SHOW TQ FREEQ``    Show packet free queue
-``SHOW TQ RESPQ``    Show packet response queue
-``SHOW TQ UNITQ``    Show unit queues
-``SHOW TQ ALL``      Show all ring and queue state
-``SHOW TQn UNITQ``   Show unit queues for unit ``n``
-``SHOW TQn UNIT``    Show unit plug value
-===================  ===============================
+    SHOW TQ TYPE                  Show controller type
+    SHOW TQ RINGS                 Show command and response rings
+    SHOW TQ FREEQ                 Show packet free queue
+    SHOW TQ RESPQ                 Show packet response queue
+    SHOW TQ UNITQ                 Show unit queues
+    SHOW TQ ALL                   Show all ring and queue state
+    SHOW TQn UNITQ                Show unit queues for unit n
+    SHOW TQn UNIT                 Show unit plug value
 
 The TQ controller implements these registers:
 
@@ -902,11 +867,9 @@ DZV11 terminal multiplexer (DZ)
 """""""""""""""""""""""""""""""
 The DZV11 is a 4-line terminal multiplexor
 Up to 4 DZ11's (16 lines) are supported.
-The number of lines can be changed with the command
+The number of lines can be changed with the command ::
 
-==================  =======================
-``SET DZ LINES=n``  Set line count to ``n``
-==================  =======================
+    SET DZ LINES=n                Set line count to n
 
 The line count must be a multiple of 4, with a maximum of 16.
 
@@ -941,11 +904,9 @@ Finally, the command ::
 displays logging information for all DZ lines.
 
 The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-==========================  =====================
-``ATTACH {-am} DZ <port>``  Set up listening port
-==========================  =====================
+    ATTACH {-am} DZ <port>        Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 The optional switch ``-m`` turns on the DZV11's modem controls;
@@ -960,13 +921,11 @@ It assumes that the incoming connections are Telnet connections.
 The connection remains open until disconnected by the simulated program,
 the Telnet client, a ``SET DZ DISCONNECT`` command, or a ``DETACH DZ`` command.
 
-Other special DZ commands:
+Other special DZ commands::
 
-================================  ======================================
-``SHOW DZ CONNECTIONS``           Show current connections
-``SHOW DZ STATISTICS``            Show statistics for active connections
-``SET DZ DISCONNECT=linenumber``  Disconnects the specified line
-================================  ======================================
+    SHOW DZ CONNECTIONS           Show current connections
+    SHOW DZ STATISTICS            Show statistics for active connections
+    SET DZ DISCONNECT=linenumber  Disconnects the specified line
 
 The DZV11 implements these registers:
 
@@ -1008,51 +967,42 @@ The DHQ11 supports programmable bit width (between 5 and 8) for the input and ou
 
 The DHQ11 has a rocker switch for determining the programming mode.
 By default, the DHV11 mode is selected, though DHU11 mode is recommended for applications that can support it.
-The VH controller may be adjusted on a per controller basis as follows:
+The VH controller may be adjusted on a per controller basis as follows::
 
-===============  ==========================================
-``SET VHn DHU``  Use the DHU programming mode and registers
-``SET VHn DHV``  Use the DHV programming mode and registers
-===============  ==========================================
+    SET VHn DHU                   Use the DHU programming mode and registers
+    SET VHn DHV                   Use the DHV programming mode and registers
 
 DMA output is supported.
 In a real DHQ11, DMA is not initiated immediately upon receipt of ``TX.DMA.START`` but is dependent upon some internal processes.
 The VH controller mimics this behavior by default.
 It may be desirable to alter this and start immediately,
 though this may not be compatible with all operating systems and diagnostics.
-You can change the behavior of the VH controller as follows:
+You can change the behavior of the VH controller as follows::
 
-===================  ===============================
-``SET VHn NORMAL``   Use normal DMA procedures
-``SET VHn FASTDMA``  Set DMA to initiate immediately
-===================  ===============================
+    SET VHn NORMAL                Use normal DMA procedures
+    SET VHn FASTDMA               Set DMA to initiate immediately
 
 The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-====================  =====================
-``ATTACH VH <port>``  Set up listening port
-====================  =====================
+    ATTACH VH <port>              Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 This port is the point of entry for all lines on all VH controllers.
 
-The number of lines can be changed with the command
+The number of lines can be changed with the command ::
 
-==================  =======================
-``SET VH LINES=n``  Set line count to ``n``
-==================  =======================
+    SET VH LINES=n                Set line count to n
 
 The line count must be a multiple of 8, with a maximum of 32.
 
 Modem and auto-disconnect support may be set on an individual controller basis.
 The ``SET MODEM`` command directs the controller to report modem status changes to the computer.
-The ``SET HANGUP`` command turns on active disconnects (disconnect session if computer clears Data Terminal Ready).
+The ``SET HANGUP`` command turns on active disconnects
+(disconnect session if computer clears Data Terminal Ready). ::
 
-======================  =====================================
-``SET VHn [NO]MODEM``   Disable/enable modem control
-``SET VHn [NO]HANGUP``  Disable/enable disconnect on DTR drop
-======================  =====================================
+    SET VHn [NO]MODEM             Disable/enable modem control
+    SET VHn [NO]HANGUP            Disable/enable disconnect on DTR drop
 
 Once the VH is attached and the simulator is running,
 the VH will listen for connections on the specified port.
@@ -1060,13 +1010,11 @@ It assumes that the incoming connections are Telnet connections.
 The connection remains open until disconnected by the simulated program,
 the Telnet client, a ``SET VH DISCONNECT`` command, or a ``DETACH VH`` command.
 
-Other special VH commands:
+Other special VH commands::
 
-================================  ======================================
-``SHOW VH CONNECTIONS``           Show current connections
-``SHOW VH STATISTICS``            Show statistics for active connections
-``SET VH DISCONNECT=linenumber``  Disconnects the specified line
-================================  ======================================
+    SHOW VH CONNECTIONS           Show current connections
+    SHOW VH STATISTICS            Show statistics for active connections
+    SET VH DISCONNECT=linenumber  Disconnects the specified line
 
 The DHQ11 implements these registers, though not all can be examined from SCP:
 
@@ -1080,7 +1028,7 @@ Name           Size  Comments
 ``TXINT``      4     Transmit interrupts, boards 3..0
 =============  ====  ======================================
 
-    [more to be described...]
+    [more to be described…]
 
 The DHQ11 does not support save and restore.
 All open connections are lost when the simulator shuts down or the VH is detached.
@@ -1091,7 +1039,7 @@ The simulator implements two DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, 
 Initially, XQ is enabled, and XQB is disabled.
 Options allow control of the MAC address, the controller mode, and the sanity timer. ::
 
-    SET  XQ MAC=<mac-address>   ex. 08-00-2B-AA-BB-CC
+    SET  XQ MAC=<mac-address>     ex. 08-00-2B-AA-BB-CC
     SHOW XQ MAC
 
 These commands are used to change or display the MAC address.
@@ -1183,13 +1131,11 @@ The card reader supports ASCII, card image, and column binary format card "decks
 When reading plain ASCII files, lines longer than 80 characters are silently truncated. 
 Card image support is included for 80 column Hollerith, 82 column Hollerith (silently ignoring columns 0 and 81), and 40 column Hollerith (mark-sense) cards.
 Column binary supports 80 column card images only.
-All files are attached read-only (as if the ``-R`` switch were given).
+All files are attached read-only (as if the ``-R`` switch were given). ::
 
-=======================  =========================
-``ATTACH -A CR <file>``  File is ASCII text
-``ATTACH -B CR <file>``  File is column binary
-``ATTACH -I CR <file>``  File is card image format
-=======================  =========================
+    ATTACH -A CR <file>           File is ASCII text
+    ATTACH -B CR <file>           File is column binary
+    ATTACH -I CR <file>           File is card image format
 
 If no flags are given, the file extension is evaluated.
 If the filename ends in ``.TXT``, the file is treated as ASCII text.
@@ -1207,10 +1153,11 @@ Use the following command to explicitly set the correct translation::
     SET TRANSLATION={DEFAULT|026|026FTN|029|EBCDIC}
 
 This command should be given after a deck is attached to the simulator.
-The mappings above are completely described at http://www.cs.uiowa.edu/~jones/cards/codes.html.
+The mappings above are completely described at http://homepage.divms.uiowa.edu/~jones/cards/codes.html.
 Note that DEC typically used 029 or 026FTN mappings.
 
-DEC operating systems used a variety of methods to determine the end of a deck (recognizing that 'hopper empty' does not necessarily mean the end of a deck.
+DEC operating systems used a variety of methods to determine the end of a deck
+(recognizing that 'hopper empty' does not necessarily mean the end of a deck).
 Below is a summary of the various operating system conventions for signaling end of deck:
 
 =======  ========================================================

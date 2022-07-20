@@ -157,61 +157,59 @@ CPU and system
 
 CPU
 """
-The CPU options include CPU type, CPU instruction set options for the specified type, and the size of main memory.
+The CPU options include CPU type, CPU instruction set options for the specified type, and the size of main memory. ::
 
-=============================  ========================
-``SET CPU 11/03``              Set CPU type to 11/03
-``SET CPU 11/04``              Set CPU type to 11/04
-``SET CPU 11/05``              Set CPU type to 11/05
-``SET CPU 11/20``              Set CPU type to 11/20
-``SET CPU 11/23``              Set CPU type to 11/23
-``SET CPU 11/23+``             Set CPU type to 11/23+
-``SET CPU 11/24``              Set CPU type to 11/24
-``SET CPU 11/34``              Set CPU type to 11/34
-``SET CPU 11/40``              Set CPU type to 11/40
-``SET CPU 11/44``              Set CPU type to 11/44
-``SET CPU 11/45``              Set CPU type to 11/45
-``SET CPU 11/53``              Set CPU type to 11/53
-``SET CPU 11/60``              Set CPU type to 11/60
-``SET CPU 11/70``              Set CPU type to 11/70
-``SET CPU 11/73``              Set CPU type to 11/73
-``SET CPU 11/73B``             Set CPU type to 11/73B
-``SET CPU 11/83``              Set CPU type to 11/83
-``SET CPU 11/84``              Set CPU type to 11/84
-``set CPU 11/93``              Set CPU type to 11/93
-``set CPU 11/94``              Set CPU type to 11/94
-``SET CPU U18``                Deprecated; same as 11/45
-``SET CPU URH11``              Deprecated; same as 11/84
-``SET CPU URH70``              Deprecated; same as 11/70
-``SET CPU Q22``                Deprecated; same as 11/73
-``SET CPU NOEIS``              Disable EIS instructions
-``SET CPU EIS``                Enable EIS instructions
-``SET CPU NOFIS``              Disable FIS instructions
-``SET CPU FIS``                Enable FIS instructions
-``SET CPU NOFPP``              Disable FPP instructions
-``SET CPU FPP``                Enable FPP instructions
-``SET CPU NOCIS``              Disable CIS instructions
-``SET CPU CIS``                Enable CIS instructions
-``SET CPU NOBEVENT``           Disable BEVENT interrupt
-``SET CPU BEVENT``             Enable BEVENT interrupt
-``SET CPU NOMMU``              Disable MMU functionality
-``SET CPU MMU``                Enable MMU functionality
-``SET CPU 16K``                Set memory size = 16KB
-``SET CPU 32K``                Set memory size = 32KB
-``SET CPU 48K``                Set memory size = 48KB
-``SET CPU 64K``                Set memory size = 64KB
-``SET CPU 96K``                Set memory size = 96KB
-``SET CPU 128K``               Set memory size = 128KB
-``SET CPU 192K``               Set memory size = 192KB
-``SET CPU 256K``               Set memory size = 256KB
-``SET CPU 384K``               Set memory size = 384KB
-``SET CPU 512K``               Set memory size = 512KB
-``SET CPU 768K``               Set memory size = 768KB
-``SET CPU 1024K`` (or ``1M``)  Set memory size = 1024KB
-``SET CPU 2048K`` (or ``2M``)  Set memory size = 2048KB
-``SET CPU 3072K`` (or ``3M``)  Set memory size = 3072KB
-``SET CPU 4096K`` (or ``4M``)  Set memory size = 4096KB
-=============================  ========================
+    SET CPU 11/03                 Set CPU type to 11/03
+    SET CPU 11/04                 Set CPU type to 11/04
+    SET CPU 11/05                 Set CPU type to 11/05
+    SET CPU 11/20                 Set CPU type to 11/20
+    SET CPU 11/23                 Set CPU type to 11/23
+    SET CPU 11/23+                Set CPU type to 11/23+
+    SET CPU 11/24                 Set CPU type to 11/24
+    SET CPU 11/34                 Set CPU type to 11/34
+    SET CPU 11/40                 Set CPU type to 11/40
+    SET CPU 11/44                 Set CPU type to 11/44
+    SET CPU 11/45                 Set CPU type to 11/45
+    SET CPU 11/53                 Set CPU type to 11/53
+    SET CPU 11/60                 Set CPU type to 11/60
+    SET CPU 11/70                 Set CPU type to 11/70
+    SET CPU 11/73                 Set CPU type to 11/73
+    SET CPU 11/73B                Set CPU type to 11/73B
+    SET CPU 11/83                 Set CPU type to 11/83
+    SET CPU 11/84                 Set CPU type to 11/84
+    set CPU 11/93                 Set CPU type to 11/93
+    set CPU 11/94                 Set CPU type to 11/94
+    SET CPU U18                   Deprecated; same as 11/45
+    SET CPU URH11                 Deprecated; same as 11/84
+    SET CPU URH70                 Deprecated; same as 11/70
+    SET CPU Q22                   Deprecated; same as 11/73
+    SET CPU NOEIS                 Disable EIS instructions
+    SET CPU EIS                   Enable EIS instructions
+    SET CPU NOFIS                 Disable FIS instructions
+    SET CPU FIS                   Enable FIS instructions
+    SET CPU NOFPP                 Disable FPP instructions
+    SET CPU FPP                   Enable FPP instructions
+    SET CPU NOCIS                 Disable CIS instructions
+    SET CPU CIS                   Enable CIS instructions
+    SET CPU NOBEVENT              Disable BEVENT interrupt
+    SET CPU BEVENT                Enable BEVENT interrupt
+    SET CPU NOMMU                 Disable MMU functionality
+    SET CPU MMU                   Enable MMU functionality
+    SET CPU 16K                   Set memory size = 16KB
+    SET CPU 32K                   Set memory size = 32KB
+    SET CPU 48K                   Set memory size = 48KB
+    SET CPU 64K                   Set memory size = 64KB
+    SET CPU 96K                   Set memory size = 96KB
+    SET CPU 128K                  Set memory size = 128KB
+    SET CPU 192K                  Set memory size = 192KB
+    SET CPU 256K                  Set memory size = 256KB
+    SET CPU 384K                  Set memory size = 384KB
+    SET CPU 512K                  Set memory size = 512KB
+    SET CPU 768K                  Set memory size = 768KB
+    SET CPU 1024K (or 1M)         Set memory size = 1024KB
+    SET CPU 2048K (or 2M)         Set memory size = 2048KB
+    SET CPU 3072K (or 3M)         Set memory size = 3072KB
+    SET CPU 4096K (or 4M)         Set memory size = 4096KB
 
 The CPU types and their capabilities are shown in the following table:
 
@@ -245,7 +243,7 @@ if a capability is not included, it cannot be enabled.
 
 The CPU implements a ``SHOW`` command to display the I/O address assignments::
 
-    SHOW CPU IOSPACE
+    SHOW CPU IOSPACE              Show I/O space address assignments
 
 If memory size is being reduced, and the memory being truncated contains non-zero data, the simulator asks for confirmation.
 Data in the truncated portion of memory is lost.
@@ -307,27 +305,23 @@ Name                             Size  Comments
 
 The CPU attempts to detect when the simulator is idle.
 When idle, the simulator does not use any resources on the host system.
-Idle detection is controlled by the ``SET IDLE`` and ``SET NOIDLE`` commands:
+Idle detection is controlled by the ``SET IDLE`` and ``SET NOIDLE`` commands::
 
-======================  ======================
-``SET CPU IDLE``        Enable idle detection
-``SET CPU NOIDLE``      Disable idle detection
-======================  ======================
+    SET CPU IDLE                  Enable idle detection
+    SET CPU NOIDLE                Disable idle detection
 
 Idle detection is disabled by default.
 The CPU is considered idle if a ``WAIT`` instruction is executed.
 This will work for RSTS/E and RSX-11M+, but not for RT-11 or UNIX. 
 
 The CPU can maintain a history of the most recently executed instructions.
-This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands:
+This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands::
 
-======================  ========================================
-``SET CPU HISTORY``     Clear history buffer
-``SET CPU HISTORY=0``   Disable history
-``SET CPU HISTORY=n``   Enable history, length = ``n``
-``SHOW CPU HISTORY``    Print CPU history
-``SHOW CPU HISTORY=n``  Print first ``n`` entries of CPU history
-======================  ========================================
+    SET CPU HISTORY               Clear history buffer
+    SET CPU HISTORY=0             Disable history
+    SET CPU HISTORY=n             Enable history, length = n
+    SHOW CPU HISTORY              Print CPU history
+    SHOW CPU HISTORY=n            Print first n entries of CPU history
 
 The maximum length for the history is 262144 entries.
 
@@ -343,7 +337,9 @@ The default is type ``-e``, the usual break on instruction virtual address (PC) 
 ``-x``  Memory write physical address
 ======  =============================
 
-Instruction fetches are treated as memory reads, so a read breakpoint will trigger for an instruction fetched from that address, not just for a data read from that address. 
+Instruction fetches are treated as memory reads,
+so a read breakpoint will trigger for an instruction fetched from that address,
+not just for a data read from that address.
 
 In most cases, breakpoints are handled as if the instruction has not yet executed.
 If necessary (for write breakpoints), state is restored from the start of the instruction to make it appear that way.
@@ -356,7 +352,9 @@ When execution continues, the instruction is resumed from where it left off, pro
 The CIS instruction description in the PDP11 documentation spells out what the CIS state is that must be left untouched.
 
 Interrupts involve two reads (the vector) and two writes (the stack push of the previous PC and PSW).
-Those may match memory read or write breakpoints.  If so, the interrupt setup processing is completed normally, and the simulator stops at the first instruction of the interrupt handler.
+Those may match memory read or write breakpoints.
+If so, the interrupt setup processing is completed normally,
+and the simulator stops at the first instruction of the interrupt handler.
 
 System registers (SYSTEM)
 """""""""""""""""""""""""
@@ -661,38 +659,34 @@ Error handling is as follows:
 
 KW11-L Line-time clock (CLK)
 """"""""""""""""""""""""""""
-The line-time clock (CLK) frequency can be adjusted as follows:
+The line-time clock (CLK) frequency can be adjusted as follows::
 
-=================  =====================
-``SET CLK 60HZ``   Set frequency to 60Hz
-``SET CLK 50HZ``   Set frequency to 50Hz
-=================  =====================
+    SET CLK 60HZ                  Set frequency to 60Hz
+    SET CLK 50HZ                  Set frequency to 50Hz
 
 The default is 60Hz.
 
 The line-time clock implements these registers:
 
-=========  =====  =====================
+=========  =====  ==============================
 Name       Size   Comments
-=========  =====  =====================
+=========  =====  ==============================
 ``CSR``    16     Control/status register
 ``INT``    1      Interrupt pending flag
 ``DONE``   1      Device done flag (CSR<7>)
 ``IE``     1      Interrupt enable flag (CSR<6>)
 ``TIME``   24     Clock interval
-=========  =====  =====================
+=========  =====  ==============================
 
 The line-time clock autocalibrates;
 the clock interval is adjusted up or down so that the clock tracks actual elapsed time.
 
 KW11-P programmable clock (PCLK)
 """"""""""""""""""""""""""""""""
-The programmable clock (PCLK) line frequency can be adjusted as follows:
+The programmable clock (PCLK) line frequency can be adjusted as follows::
 
-=================  =====================
-``SET PCLK 60HZ``  Set frequency to 60Hz
-``SET PCLK 50HZ``  Set frequency to 50Hz
-=================  =====================
+    SET PCLK 60HZ                  Set frequency to 60Hz
+    SET PCLK 50HZ                  Set frequency to 50Hz
 
 The default is 60Hz.
 
@@ -727,12 +721,10 @@ Cassettes are simulated as magnetic tapes with a fixed capacity (93,000 characte
 The tape format is always SIMH standard.
 The TA11 is disabled by default.
 
-TA11 options include the ability to make units write enabled or write locked.
+TA11 options include the ability to make units write enabled or write locked. ::
 
-===========================  ======================================
-``SET CTn LOCKED``           Set unit ``n`` write locked
-``SET CTn WRITEENABLED``     Set unit ``n`` write enabled
-===========================  ======================================
+    SET CTn LOCKED                Set unit n write locked
+    SET CTn WRITEENABLED          Set unit n write enabled
 
 Units can not be set ``ENABLED`` or ``DISABLED``.
 The TA11 does not support the ``BOOT`` command.
@@ -773,12 +765,10 @@ Floppy disk drives
 
 RX11/RX01 floppy disk (RX)
 """"""""""""""""""""""""""
-RX11 options include the ability to set units write enabled or write locked:
+RX11 options include the ability to set units write enabled or write locked::
 
-==========================  ============================
-``SET RXn LOCKED``          Set unit ``n`` write locked
-``SET RXn WRITEENABLED``    Set unit ``n`` write enabled
-==========================  ============================
+    SET RXn LOCKED                Set unit n write locked
+    SET RXn WRITEENABLED          Set unit n write enabled
 
 The RX11 supports the ``BOOT`` command.
 
@@ -822,15 +812,13 @@ therefore, end of file and OS I/O errors cannot occur.
 
 RX211/RX02 floppy disk (RY)
 """""""""""""""""""""""""""
-RX211 options include the ability to set units write enabled or write locked, single or double density, or autosized:
+RX211 options include the ability to set units write enabled or write locked, single or double density, or autosized::
 
-========================  ========================================
-``SET RYn LOCKED``        Set unit ``n`` write locked
-``SET RYn WRITEENABLED``  Set unit ``n`` write enabled
-``SET RYn SINGLE``        Set unit ``n`` single density
-``SET RYn DOUBLE``        Set unit ``n`` double density (default)
-``SET RYn AUTOSIZE``      Set unit ``n`` to autosize at ``ATTACH``
-========================  ========================================
+    SET RYn LOCKED                Set unit n write locked
+    SET RYn WRITEENABLED          Set unit n write enabled
+    SET RYn SINGLE                Set unit n single density
+    SET RYn DOUBLE                Set unit n double density (default)
+    SET RYn AUTOSIZE              Set unit n to autosize at ATTACH
 
 The RX211 supports the ``BOOT`` command.
 The RX211 is disabled in a Qbus system with more than 256KB of memory.
@@ -879,12 +867,10 @@ Cartridge disk drives
 
 RK11/RK05 cartridge disk (RK)
 """""""""""""""""""""""""""""
-RK11 options include the ability to make units write enabled or write locked:
+RK11 options include the ability to make units write enabled or write locked::
 
-=========================  ============================
-``SET RKn LOCKED``         Set unit ``n`` write locked
-``SET RKn WRITEENABLED``   Set unit ``n`` write enabled
-=========================  ============================
+    SET RKn LOCKED                Set unit n write locked
+    SET RKn WRITEENABLED          Set unit n write enabled
 
 Units can also be set ``ENABLED`` or ``DISABLED``.
 The RK11 supports the ``BOOT`` command.
@@ -931,16 +917,14 @@ RK611/RK06,RK07 cartridge disk (HK)
 """""""""""""""""""""""""""""""""""
 RK611 options include the ability to set units write enabled or write locked,
 to set the drive type to RK06, RK07, or autosize,
-and to write a DEC standard 144 compliant bad block table on the last track:
+and to write a DEC standard 144 compliant bad block table on the last track::
 
-=========================  =========================================
-``SET HKn LOCKED``         Set unit ``n`` write locked
-``SET HKn WRITEENABLED``   Set unit ``n`` write enabled
-``SET HKn RK06``           Set type to RK06
-``SET HKn RK07``           Set type to RK07
-``SET HKn AUTOSIZE``       Set type based on file size at ``ATTACH``
-``SET HKn BADBLOCK``       Write bad block table on last track
-=========================  =========================================
+    SET HKn LOCKED                Set unit n write locked
+    SET HKn WRITEENABLED          Set unit n write enabled
+    SET HKn RK06                  Set type to RK06
+    SET HKn RK07                  Set type to RK07
+    SET HKn AUTOSIZE              Set type based on file size at ATTACH
+    SET HKn BADBLOCK              Write bad block table on last track
 
 The type options can be used only when a unit is not attached to a file.
 The bad block option can be used only when a unit is attached to a file.
@@ -996,16 +980,14 @@ RL11(RLV12)/RL01,RL02 cartridge disk (RL)
 """""""""""""""""""""""""""""""""""""""""
 RL11 options include the ability to set units write enabled or write locked,
 to set the drive type to RL01, RL02, or autosize,
-and to write a DEC standard 144 compliant bad block table on the last track:
+and to write a DEC standard 144 compliant bad block table on the last track::
 
-========================  =========================================
-``SET RLn LOCKED``        Set unit ``n`` write locked
-``SET RLn WRITEENABLED``  Set unit ``n`` write enabled
-``SET RLn RL01``          Set type to RL01
-``SET RLn RL02``          Set type to RL02
-``SET RLn AUTOSIZE``      Set type based on file size at ``ATTACH``
-``SET RLn BADBLOCK``      Write bad block table on last track
-========================  =========================================
+    SET RLn LOCKED                Set unit n write locked
+    SET RLn WRITEENABLED          Set unit n write enabled
+    SET RLn RL01                  Set type to RL01
+    SET RLn RL02                  Set type to RL02
+    SET RLn AUTOSIZE              Set type based on file size at ATTACH
+    SET RLn BADBLOCK              Write bad block table on last track
 
 The type options can be used only when a unit is not attached to a file.
 The bad block option can be used only when a unit is attached to a file.
@@ -1085,21 +1067,19 @@ RP04/05/06/07, RM02/03/05/80 disk pack drives (RP)
 The RP controller implements the Massbus family of large disk drives.
 RP options include the ability to set units write enabled or write locked,
 to set the drive type to one of six disk types or autosize,
-and to write a DEC standard 144 compliant bad block table on the last track:
+and to write a DEC standard 144 compliant bad block table on the last track::
 
-========================  =========================================
-``SET RPn LOCKED``        Set unit ``n`` write locked
-``SET RPn WRITEENABLED``  Set unit ``n`` write enabled
-``SET RPn RM03``          Set type to RM03
-``SET RPn RM05``          Set type to RM05
-``SET RPn RM80``          Set type to RM80
-``SET RPn RP04``          Set type to RP04
-``SET RPn RP05``          Set type to RP05
-``SET RPn RP06``          Set type to RP06
-``SET RPn RP07``          Set type to RP07
-``SET RPn AUTOSIZE``      Set type based on file size at ``ATTACH``
-``SET RPn BADBLOCK``      Write bad block table on last track
-========================  =========================================
+    SET RPn LOCKED           Set unit n write locked
+    SET RPn WRITEENABLED     Set unit n write enabled
+    SET RPn RM03             Set type to RM03
+    SET RPn RM05             Set type to RM05
+    SET RPn RM80             Set type to RM80
+    SET RPn RP04             Set type to RP04
+    SET RPn RP05             Set type to RP05
+    SET RPn RP06             Set type to RP06
+    SET RPn RP07             Set type to RP07
+    SET RPn AUTOSIZE         Set type based on file size at ATTACH
+    SET RPn BADBLOCK         Write bad block table on last track
 
 The type options can be used only when a unit is not attached to a file.
 The bad block option can be used only when a unit is attached to a file.
@@ -1149,22 +1129,18 @@ TM02/TM03/TE16/TU45/TU77 magnetic tapes (TU)
 The TU controller implements the Massbus family of 800/1600bpi magnetic tape drives.
 TU options include the ability to select the formatter type (TM02 or TM03),
 to set the drive type to one of three drives (TE16, TU45, or TU77),
-and to set the drives write enabled or write locked.
+and to set the drives write enabled or write locked. ::
 
-================  ===========================
-``SET TU TM02``   Set controller type to TM02
-``SET TU TM03``   Set controller type to TM03
-``SET TUn TE16``  Set drive type to TE16
-``SET TUn TU45``  Set drive type to TU45
-``SET TUn TU77``  Set drive type to TU77
-================  ===========================
+    SET TU TM02                   Set controller type to TM02
+    SET TU TM03                   Set controller type to TM03
+    SET TUn TE16                  Set drive type to TE16
+    SET TUn TU45                  Set drive type to TU45
+    SET TUn TU77                  Set drive type to TU77
 
-Magnetic tape units can be set to a specific reel capacity in MB, or to unlimited capacity:
+Magnetic tape units can be set to a specific reel capacity in MB, or to unlimited capacity::
 
-===================  ===================================================
-``SET TUn CAPAC=m``  Set unit ``n`` capacity to ``m`` MB (0 = unlimited)
-``SHOW TUn CAPAC``   Show unit ``n`` capacity in MB
-===================  ===================================================
+    SET TUn CAPAC=m               Set unit n capacity to m MB (0 = unlimited)
+    SHOW TUn CAPAC                Show unit n capacity in MB
 
 Units can be set ``ENABLED`` or ``DISABLED``.
 The TU controller supports the ``BOOT`` command.
@@ -1200,15 +1176,13 @@ OS I/O error    Parity error; if ``STOP_IOE``, stop
 RS03/RS04 fixed head disks
 """"""""""""""""""""""""""
 The RS controller implements the Massbus family fixed head disks.
-RS options include the ability to set units write enabled or write locked and to set the drive type to RS03, RS04, or autosize.
+RS options include the ability to set units write enabled or write locked and to set the drive type to RS03, RS04, or autosize. ::
 
-========================  =========================================
-``SET RSn LOCKED``        Set unit ``n`` write lock enabled
-``SET RSn WRITEENABLED``  Set unit ``n`` write enabled
-``SET RSn RS03``          Set type to RS03
-``SET RSn RS05``          Set type to RS04
-``SET RSn AUTOSIZE``      Set type based on file size at ``ATTACH``
-========================  =========================================
+    SET RSn LOCKED                Set unit n write lock enabled
+    SET RSn WRITEENABLED          Set unit n write enabled
+    SET RSn RS03                  Set type to RS03
+    SET RSn RS05                  Set type to RS04
+    SET RSn AUTOSIZE              Set type based on file size at ATTACH
 
 The drive type options can be used only when a unit is not attached to a file.
 Units can be set ``ENABLED`` or ``DISABLED``.
@@ -1248,29 +1222,28 @@ RQDX3/UDA50 MSCP disk controllers (RQ, RQB, RQC, RQD)
 The simulator implements four MSCP disk controllers, RQ, RQB, RQC, RQD.
 Initially, RQB, RQC, and RQD are disabled.
 Each RQ controller simulates an RQDX3 MSCP disk controller with four disk drives.
-RQ options include the ability to set units write enabled or write locked, and to set the drive type to one of many disk types:
+RQ options include the ability to set units write enabled or write locked,
+and to set the drive type to one of many disk types::
 
-=========================  =================================
-``SET RQn LOCKED``         Set unit ``n`` write locked
-``SET RQn WRITEENABLED``   Set unit ``n`` write enabled
-``SET RQn RX50``           Set type to RX50
-``SET RQn RX33``           Set type to RX33
-``SET RQn RD32``           Set type to RD32
-``SET RQn RD51``           Set type to RD51
-``SET RQn RD52``           Set type to RD52
-``SET RQn RD53``           Set type to RD53
-``SET RQn RD54``           Set type to RD54
-``SET RQn RD31``           Set type to RD31
-``SET RQn RA81``           Set type to RA81
-``SET RQn RA82``           Set type to RA82
-``set RQn RA71``           Set type to RA71
-``SET RQn RA72``           Set type to RA72
-``SET RQn RA90``           Set type to RA90
-``SET RQn RA92``           Set type to RA92
-``SET RQn RRD40``          Set type to RRD40 (CD-ROM)
-``SET RQn RAUSER{=n}``     Set type to RA82 with ``n`` MB's
-``SET -L RQn RAUSER{=n}``  Set type to RA82 with ``n`` LBN's
-=========================  =================================
+    SET RQn LOCKED                Set unit n write locked
+    SET RQn WRITEENABLED          Set unit n write enabled
+    SET RQn RX50                  Set type to RX50
+    SET RQn RX33                  Set type to RX33
+    SET RQn RD32                  Set type to RD32
+    SET RQn RD51                  Set type to RD51
+    SET RQn RD52                  Set type to RD52
+    SET RQn RD53                  Set type to RD53
+    SET RQn RD54                  Set type to RD54
+    SET RQn RD31                  Set type to RD31
+    SET RQn RA81                  Set type to RA81
+    SET RQn RA82                  Set type to RA82
+    set RQn RA71                  Set type to RA71
+    SET RQn RA72                  Set type to RA72
+    SET RQn RA90                  Set type to RA90
+    SET RQn RA92                  Set type to RA92
+    SET RQn RRD40                 Set type to RRD40 (CD-ROM)
+    SET RQn RAUSER{=n}            Set type to RA82 with n MB's
+    SET -L RQn RAUSER{=n}         Set type to RA82 with n LBN's
 
 The type options can be used only when a unit is not attached to a file.
 RAUSER is a "user specified" disk;
@@ -1285,25 +1258,23 @@ In a Qbus system, an RQ supports 22b addressing and identifies itself as an RQDX
 Drive units have changeable unit numbers.
 Unit numbers can be changed with::
 
-    SET RQn UNIT=val
+    SET RQn UNIT=val              Set unit plug value
 
 Device RQ has 4 units (RQ0, RQ1, RQ2 and RQ3) which have unique MSCP unit numbers (0, 1, 2 and 3).
 Device RQB has 4 units (RQB0, RQB1, RQB2 and RQB3) which have unique MSCP unit numbers (4, 5, 6 and 7).
 Device RQC has 4 units (RQC0, RQC1, RQC2 and RQC3) which have unique MSCP unit numbers (8, 9, 10 and 11).
 Device RQD has 4 units (RQD0, RQD1, RQD2 and RQD3) which have unique MSCP unit numbers (12, 13, 14 and 15).
 
-Each RQ controller implements the following special ``SHOW`` commands:
+Each RQ controller implements the following special ``SHOW`` commands::
 
-==================  ===============================
-``SHOW RQn TYPE``   Show drive type
-``SHOW RQ RINGS``   Show command and response rings
-``SHOW RQ FREEQ``   Show packet free queue
-``SHOW RQ RESPQ``   Show packet response queue
-``SHOW RQ UNITQ``   Show unit queues
-``SHOW RQ ALL``     Show all ring and queue state
-``SHOW RQn UNITQ``  Show unit queues for unit ``n``
-``SHOW RQn UNIT``   Show unit plug value
-==================  ===============================
+    SHOW RQn TYPE                 Show drive type
+    SHOW RQ RINGS                 Show command and response rings
+    SHOW RQ FREEQ                 Show packet free queue
+    SHOW RQ RESPQ                 Show packet response queue
+    SHOW RQ UNITQ                 Show unit queues
+    SHOW RQ ALL                   Show all ring and queue state
+    SHOW RQn UNITQ                Show unit queues for unit n
+    SHOW RQn UNIT                 Show unit plug value
 
 Each RQ controller implements these registers:
 
@@ -1357,15 +1328,13 @@ Fixed head disks
 RC11 fixed head disk (RC)
 """""""""""""""""""""""""
 RC11 options include the ability to set the number of platters to a fixed value between 1 and 4,
-or to autosize the number of platters:
+or to autosize the number of platters::
 
-===================  =======================
-``SET RC 1P``        One platter (256K)
-``SET RC 2P``        Two platters (512K)
-``SET RC 3P``        Three platters (768K)
-``SET RC 4P``        Four platters (1024K)
-``SET RC AUTOSIZE``  Autosized on ``ATTACH``
-===================  =======================
+    SET RC 1P                     One platter (256K)
+    SET RC 2P                     Two platters (512K)
+    SET RC 3P                     Three platters (768K)
+    SET RC 4P                     Four platters (1024K)
+    SET RC AUTOSIZE               Autosized on ATTACH
 
 The default is one platter.
 The RC11 does not support the ``BOOT`` command.
@@ -1412,19 +1381,17 @@ therefore, end of file and OS I/O errors cannot occur.
 RF11/RS11 fixed head disk (RF)
 """"""""""""""""""""""""""""""
 RF11 options include the ability to set the number of platters to a fixed value between 1 and 8,
-or to autosize the number of platters:
+or to autosize the number of platters::
 
-===================  =======================
-``SET RF 1P``        One platter (256K)
-``SET RF 2P``        Two platters (512K)
-``SET RF 3P``        Three platters (768K)
-``SET RF 4P``        Four platters (1024K)
-``SET RF 5P``        Five platters (1280K)
-``SET RF 6P``        Six platters (1536K)
-``SET RF 7P``        Seven platters (1792K)
-``SET RF 8P``        Eight platters (2048K)
-``SET RF AUTOSIZE``  Autosized on ``ATTACH``
-===================  =======================
+    SET RF 1P                     One platter (256K)
+    SET RF 2P                     Two platters (512K)
+    SET RF 3P                     Three platters (768K)
+    SET RF 4P                     Four platters (1024K)
+    SET RF 5P                     Five platters (1280K)
+    SET RF 6P                     Six platters (1536K)
+    SET RF 7P                     Seven platters (1792K)
+    SET RF 8P                     Eight platters (2048K)
+    SET RF AUTOSIZE               Autosized on ATTACH
 
 The default is one platter.
 The RF11 supports the ``BOOT`` command.
@@ -1472,12 +1439,10 @@ therefore, end of file and OS I/O errors cannot occur.
 TC11/TU56 DECtape (DT)
 ----------------------
 The DT controller implements the TC11 DECtape controller and TU56 drives.
-DECtape options include the ability to make units write enabled or write locked.
+DECtape options include the ability to make units write enabled or write locked. ::
 
-========================  ============================
-``SET DTn LOCKED``        Set unit ``n`` write locked
-``SET DTn WRITEENABLED``  Set unit ``n`` write enabled
-========================  ============================
+    SET DTn LOCKED                Set unit n write locked
+    SET DTn WRITEENABLED          Set unit n write enabled
 
 Units can be set ``ENABLED`` or ``DISABLED``.
 The TC11 supports the ``BOOT`` command.
@@ -1532,19 +1497,15 @@ Magnetic tape controllers
 
 TM11 magnetic tape (TM)
 """""""""""""""""""""""
-TM options include the ability to make units write enabled or write locked.
+TM options include the ability to make units write enabled or write locked. ::
 
-========================  ============================
-``SET TMn LOCKED``        Set unit ``n`` write locked
-``SET TMn WRITEENABLED``  Set unit ``n`` write enabled
-========================  ============================
+    SET TMn LOCKED                Set unit n write locked
+    SET TMn WRITEENABLED          Set unit n write enabled
 
-Magnetic tape units can be set to a specific reel capacity in MB, or to unlimited capacity:
+Magnetic tape units can be set to a specific reel capacity in MB, or to unlimited capacity::
 
-===================  ===================================================
-``SET TMn CAPAC=m``  Set unit ``n`` capacity to ``m`` MB (0 = unlimited)
-``SHOW TMn CAPAC``   Show unit ``n`` capacity in MB
-===================  ===================================================
+    SET TMn CAPAC=m               Set unit n capacity to m MB (0 = unlimited)
+    SHOW TMn CAPAC                Show unit n capacity in MB
 
 Units can be set ``ENABLED`` or ``DISABLED``.
 
@@ -1586,19 +1547,15 @@ OS I/O error  Parity error; if ``STOP_IOE``, stop
 
 TS11/TSV05 magnetic tape (TS)
 """""""""""""""""""""""""""""
-TS options include the ability to make the unit write enabled or write locked.
+TS options include the ability to make the unit write enabled or write locked. ::
 
-=======================  ======================
-``SET TS LOCKED``        Set unit write locked
-``SET TS WRITEENABLED``  Set unit write enabled
-=======================  ======================
+    SET TS LOCKED                 Set unit write locked
+    SET TS WRITEENABLED           Set unit write enabled
 
-The TS drive can be set to a specific reel capacity in MB, or to unlimited capacity:
+The TS drive can be set to a specific reel capacity in MB, or to unlimited capacity::
 
-===================  ========================================
-``SET TS0 CAPAC=m``  Set capacity to ``m`` MB (0 = unlimited)
-``SHOW TS0 CAPAC``   Show capacity in MB
-===================  ========================================
+    SET TS0 CAPAC=m               Set capacity to m MB (0 = unlimited)
+    SHOW TS0 CAPAC                Show capacity in MB
 
 The TS11 supports the ``BOOT`` command.
 The bootstrap supports only DEC standard boot formats.
@@ -1652,34 +1609,29 @@ TQK50 TMSCP tape controller (TQ)
 """"""""""""""""""""""""""""""""
 The TQ controller simulates the TQK50 TMSCP tape controller.
 TQ options include the ability to set units write enabled or write locked,
-and to specify the controller type and tape length:
+and to specify the controller type and tape length::
 
-========================  ==========================================================
-``SET TQn LOCKED``        Set unit ``n`` write locked
-``SET TQn WRITEENABLED``  Set unit ``n`` write enabled
-``SET TQ TK50``           Set controller type to TK50
-``SET TQ TK70``           Set controller type to TK70
-``SET TQ TU81``           Set controller type to TU81
-``SET TQ TKUSER{=n}``     Set controller type to TK50 with tape capacity of ``n`` MB
-========================  ==========================================================
+    SET TQn LOCKED                Set unit n write locked
+    SET TQn WRITEENABLED          Set unit n write enabled
+    SET TQ TK50                   Set controller type to TK50
+    SET TQ TK70                   Set controller type to TK70
+    SET TQ TU81                   Set controller type to TU81
+    SET TQ TKUSER{=n}             Set controller type to TK50 with
+                                  tape capacity of n MB
 
 User-specified capacity must be between 50 and 2000 MB.
 
 Regardless of the controller type,
 individual units can be set to a specific reel capacity in MB,
-or to unlimited capacity:
+or to unlimited capacity::
 
-===================  ===================================================
-``SET TQn CAPAC=m``  Set unit ``n`` capacity to ``m`` MB (0 = unlimited)
-``SHOW TQn CAPAC``   Show unit ``n`` capacity in MB
-===================  ===================================================
+    SET TQn CAPAC=m               Set unit n capacity to m MB (0 = unlimited)
+    SHOW TQn CAPAC                Show unit n capacity in MB
 
 Drive units have changeable unit numbers.
-Unit numbers can be changed with:
+Unit numbers can be changed with::
 
-====================  ===================
-``SET TQn UNIT=val``  Set unit plug value
-====================  ===================
+    SET TQn UNIT=val              Set unit plug value
 
 Device TQ has 4 units (TQ0, TQ1, TQ2 and TQ3) which have unique MSCP unit numbers (0, 1, 2 and 3).
 
@@ -1687,18 +1639,16 @@ The TQ controller supports the ``BOOT`` command.
 In a Unibus system, the TQ supports 18b addressing.
 In a Qbus system, the TQ supports 22b addressing.
 
-The TQ controller implements the following special ``SHOW`` commands:
+The TQ controller implements the following special ``SHOW`` commands::
 
-==================  ===============================
-``SHOW TQ TYPE``    Show controller type
-``SHOW TQ RINGS``   Show command and response rings
-``SHOW TQ FREEQ``   Show packet free queue
-``SHOW TQ RESPQ``   Show packet response queue
-``SHOW TQ UNITQ``   Show unit queues
-``SHOW TQ ALL``     Show all ring and queue state
-``SHOW TQn UNITQ``  Show unit queues for unit ``n``
-``SHOW TQn UNIT``   Show unit plug value
-==================  ===============================
+    SHOW TQ TYPE                  Show controller type
+    SHOW TQ RINGS                 Show command and response rings
+    SHOW TQ FREEQ                 Show packet free queue
+    SHOW TQ RESPQ                 Show packet response queue
+    SHOW TQ UNITQ                 Show unit queues
+    SHOW TQ ALL                   Show all ring and queue state
+    SHOW TQn UNITQ                Show unit queues for unit n
+    SHOW TQn UNIT                 Show unit plug value
 
 The TQ controller implements these registers:
 
@@ -1758,17 +1708,13 @@ the PDP-11 simulator supports up to sixteen additional DC11 terminal interfaces.
 The additional terminals consist of two independent devices, DCI and DCO.
 The entire set is modeled as a terminal multiplexer, with DCI as the master controller.
 The additional terminals perform input and output through Telnet sessions connected to a user-specified port.
-The number of lines is specified with a ``SET`` command:
+The number of lines is specified with a ``SET`` command::
 
-====================  ==============================================
-``SET DCIX LINES=n``  Set number of additional lines to ``n`` [1-16]
-====================  ==============================================
+    SET DCIX LINES=n              Set number of additional lines to n [1-16]
 
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-======================  =====================
-``ATTACH DCIX <port>``  Set up listening port
-======================  =====================
+    ATTACH DCIX <port>            Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 The additional terminals are disabled by default.
@@ -1788,19 +1734,15 @@ Mode    Input characters        Output characters
 ======  ======================  =====================================
 
 The default mode is ``7P``.
-In addition, each line can be configured to behave as though it was attached to a dataset, or hardwired to a terminal:
+In addition, each line can be configured to behave as though it was attached to a dataset, or hardwired to a terminal::
 
-======================  ========================================
-``SET DCOn DATASET``    Simulate attachment to a dataset (modem)
-``SET DCOn NODATASET``  Simulate direct attachment to a terminal
-======================  ========================================
+    SET DCOn DATASET              Simulate attachment to a dataset (modem)
+    SET DCOn NODATASET            Simulate direct attachment to a terminal
 
 Finally, each line supports output logging.
-The ``SET DCOn LOG`` command enables logging on a line:
+The ``SET DCOn LOG`` command enables logging on a line::
 
-=========================  ========================================
-``SET DCOn LOG=filename``  Log output of line ``n`` to ``filename``
-=========================  ========================================
+    SET DCOn LOG=filename         Log output of line n to filename
 
 The ``SET DCOn NOLOG`` command disables logging and closes the open log file, if any.
 
@@ -1811,15 +1753,13 @@ The connections remain open until disconnected either by the Telnet client,
 a ``SET DCI DISCONNECT`` command,
 or a ``DETACH DCI`` command.
 
-Other special commands:
+Other special commands::
 
-========================  ======================================
-``SHOW DCI CONNECTIONS``  Show current connections
-``SHOW DCI STATISTICS``   Show statistics for active connections
-``SET DCOn DISCONNECT``   Disconnects the specified line
-========================  ======================================
+    SHOW DCI CONNECTIONS          Show current connections
+    SHOW DCI STATISTICS           Show statistics for active connections
+    SET DCOn DISCONNECT           Disconnects the specified line
 
-The input device  (DCI) implements these registers:
+The input device (DCI) implements these registers:
 
 =============  ====  ===========================================
 Name           Size  Comments
@@ -1849,17 +1789,13 @@ The PDP-11 simulator supports up to sixteen additional KL11/DL11 terminal interf
 The additional terminals consist of two independent devices, DLI and DLO.
 The entire set is modeled as a terminal multiplexer, with DLI as the master controller.
 The additional terminals perform input and output through Telnet sessions connected to a user-specified port.
-The number of lines is specified with a ``SET`` command:
+The number of lines is specified with a ``SET`` command::
 
-===================  ==============================================
-``SET DLI LINES=n``  Set number of additional lines to ``n`` [1-16]
-===================  ==============================================
+    SET DLI LINES=n               Set number of additional lines to n [1-16]
 
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-=====================  =====================
-``ATTACH DLI <port>``  Set up listening port
-=====================  =====================
+    ATTACH DLI <port>             Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 The additional terminals are disabled by default.
@@ -1878,27 +1814,25 @@ Mode    Input characters        Output characters
 ``8B``  No changes              No changes
 ======  ======================  ==================================
 
-===============  ===============
-``SET DLOn UC``  Set ``UC`` mode
-``SET DLOn 7P``  Set ``7P`` mode
-``SET DLOn 7B``  Set ``7B`` mode
-``SET DLOn 8B``  Set ``8B`` mode
-===============  ===============
+ ::
+
+    SET DLOn UC                   Set UC mode
+    SET DLOn 7P                   Set 7P mode
+    SET DLOn 7B                   Set 7B mode
+    SET DLOn 8B                   Set 8B mode
 
 The default mode is ``UC``.
-In addition, each line can be configured to behave as though it was attached to a dataset, or hardwired to a terminal:
+In addition,
+each line can be configured to behave as though it was attached to a dataset,
+or hardwired to a terminal::
 
-======================  ========================================
-``SET DLOn DATASET``    Simulate attachment to a dataset (modem)
-``SET DLOn NODATASET``  Simulate direct attachment to a terminal
-======================  ========================================
+    SET DLOn DATASET              Simulate attachment to a dataset (modem)
+    SET DLOn NODATASET            Simulate direct attachment to a terminal
 
 Finally, each line supports output logging.
-The ``SET DLOn LOG`` command enables logging on a line:
+The ``SET DLOn LOG`` command enables logging on a line::
 
-=========================  ========================================
-``SET DLOn LOG=filename``  Log output of line ``n`` to ``filename``
-=========================  ========================================
+    SET DLOn LOG=filename         Log output of line n to filename
 
 The ``SET DLOn NOLOG`` command disables logging and closes the open log file, if any.
 
@@ -1909,13 +1843,11 @@ The connections remain open until disconnected either by the Telnet client,
 a ``SET DLI DISCONNECT`` command,
 or a ``DETACH DLI`` command.
 
-Other special commands:
+Other special commands::
 
-========================  ======================================
-``SHOW DLI CONNECTIONS``  Show current connections
-``SHOW DLI STATISTICS``   Show statistics for active connections
-``SET DLOn DISCONNECT``   Disconnects the specified line
-========================  ======================================
+    SHOW DLI CONNECTIONS          Show current connections
+    SHOW DLI STATISTICS           Show statistics for active connections
+    SET DLOn DISCONNECT           Disconnects the specified line
 
 The input device (DLI) implements these registers:
 
@@ -1948,7 +1880,7 @@ The DZ11 is an 8-line terminal multiplexer.
 Up to 4 DZ11's (32 lines) are supported. 
 The number of lines can be changed with the command ::
 
-    SET DZ LINES=n
+    SET DZ LINES=n                Set line count to n
 
 The line count must be a multiple of 8, with a maximum of 32.
 
@@ -1983,11 +1915,9 @@ Finally, the command ::
 displays logging information for all DZ lines.
 
 The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-==========================  =====================
-``ATTACH {-am} DZ <port>``  Set up listening port
-==========================  =====================
+    ATTACH {-am} DZ <port>        Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 The optional switch ``-m`` turns on the DZ11's modem controls;
@@ -2002,13 +1932,11 @@ It assumes that the incoming connections are Telnet connections.
 The connection remains open until disconnected by the simulated program, the Telnet client,
 a ``SET DZ DISCONNECT`` command, or a ``DETACH DZ`` command.
 
-Other special DZ commands:
+Other special DZ commands::
 
-================================  ======================================
-``SHOW DZ CONNECTIONS``           Show current connections
-``SHOW DZ STATISTICS``            Show statistics for active connections
-``SET DZ DISCONNECT=linenumber``  Disconnects the specified line
-================================  ======================================
+    SHOW DZ CONNECTIONS           Show current connections
+    SHOW DZ STATISTICS            Show statistics for active connections
+    SET DZ DISCONNECT=linenumber  Disconnects the specified line
 
 The DZ11 implements these registers:
 
@@ -2048,49 +1976,41 @@ The DHQ11 supports programmable bit width (between 5 and 8) for the input and ou
 
 The DHQ11 has a rocker switch for determining the programming mode.
 By default, the DHV11 mode is selected, though DHU11 mode is recommended for applications that can support it.
-The VH controller may be adjusted on a per controller basis as follows:
+The VH controller may be adjusted on a per controller basis as follows::
 
-===============  ==========================================
-``SET VHn DHU``  Use the DHU programming mode and registers
-``SET VHn DHV``  Use the DHV programming mode and registers
-===============  ==========================================
+    SET VHn DHU                   Use the DHU programming mode and registers
+    SET VHn DHV                   Use the DHV programming mode and registers
 
 DMA output is supported.
 In a real DHQ11, DMA is not initiated immediately upon receipt of ``TX.DMA.START`` but is dependent upon some internal processes.
 The VH controller mimics this behavior by default.
 It may be desirable to alter this and start immediately,
 though this may not be compatible with all operating systems and diagnostics.
-You can change the behavior of the VH controller as follows:
+You can change the behavior of the VH controller as follows::
 
-===================  ===============================
-``SET VHn NORMAL``   Use normal DMA procedures
-``SET VHn FASTDMA``  Set DMA to initiate immediately
-===================  ===============================
+    SET VHn NORMAL                Use normal DMA procedures
+    SET VHn FASTDMA               Set DMA to initiate immediately
 
 The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
-The ``ATTACH`` command specifies the port to be used:
+The ``ATTACH`` command specifies the port to be used::
 
-====================  =====================
-``ATTACH VH <port>``  Set up listening port
-====================  =====================
+    ATTACH VH <port>              Set up listening port
 
 where ``<port>`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
 This port is the point of entry for all lines on all VH controllers.
 
 The number of lines can be changed with the command ::
 
-    SET VH LINES=n
+    SET VH LINES=n                Set line count to n
 
 The line count must be a multiple of 8, with a maximum of 32.
 
 Modem and auto-disconnect support may be set on an individual controller basis.
 The ``SET MODEM`` command directs the controller to report modem status changes to the computer.
-The ``SET HANGUP`` command turns on active disconnects (disconnect session if computer clears Data Terminal Ready).
+The ``SET HANGUP`` command turns on active disconnects (disconnect session if computer clears Data Terminal Ready). ::
 
-======================  =====================================
-``SET VHn [NO]MODEM``   Disable/enable modem control
-``SET VHn [NO]HANGUP``  Disable/enable disconnect on DTR drop
-======================  =====================================
+    SET VHn [NO]MODEM             Disable/enable modem control
+    SET VHn [NO]HANGUP            Disable/enable disconnect on DTR drop
 
 Once the VH is attached and the simulator is running,
 the VH will listen for connections on the specified port.
@@ -2098,24 +2018,25 @@ It assumes that the incoming connections are Telnet connections.
 The connection remains open until disconnected by the simulated program,
 the Telnet client, a ``SET VH DISCONNECT`` command, or a ``DETACH VH`` command.
 
-Other special VH commands:
+Other special VH commands::
 
-================================  ======================================
-``SHOW VH CONNECTIONS``           Show current connections
-``SHOW VH STATISTICS``            Show statistics for active connections
-``SET VH DISCONNECT=linenumber``  Disconnects the specified line
-================================  ======================================
+    SHOW VH CONNECTIONS           Show current connections
+    SHOW VH STATISTICS            Show statistics for active connections
+    SET VH DISCONNECT=linenumber  Disconnects the specified line
 
 The DHQ11 implements these registers, though not all can be examined from SCP:
 
+=============  ====  ======================================
 Name           Size  Comments
+=============  ====  ======================================
 ``CSR[0:3]``   16    Control/status register, boards 0 to 3
 ``RBUF[0:3]``  16    Receive buffer, boards 0 to 3
 ``LPR[0:3]``   16    Line parameter register, boards 0 to 3
 ``RXINT``      4     Receive interrupts, boards 3..0
 ``TXINT``      4     Transmit interrupts, boards 3..0
+=============  ====  ======================================
 
-[more to be described...]
+    [more to be described...]
 
 The DHQ11 does not support save and restore.
 All open connections are lost when the simulator shuts down or the VH is detached.
@@ -2129,7 +2050,7 @@ The simulator implements two DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, 
 Initially, XQ is enabled, and XQB is disabled.
 Options allow control of the MAC address, the controller mode, and the sanity timer. ::
 
-    SET XQ MAC=<mac-address>     ex. 08-00-2B-AA-BB-CC
+    SET XQ MAC=<mac-address>      ex. 08-00-2B-AA-BB-CC
     SHOW XQ MAC
 
 These commands are used to change or display the MAC address.
@@ -2162,7 +2083,7 @@ it is ignored by a DELQA in Normal mode, which uses switch S4 for a different pu
 
 These commands change or display the service polling timer.
 The polling timer is calibrated to run the service thread 200 times per second.
-This value can be changed to accommodate particular system requirements for more (or less) frequent polling.
+This value can be changed to accommodate particular system requirements for more (or less) frequent polling. ::
 
     SHOW XQ STATS
 
@@ -2170,7 +2091,7 @@ This command will display the accumulated statistics for the simulated Ethernet 
 
 To access the network, the simulated Ethernet controller must be attached to a real Ethernet interface::
 
-    ATTACH XQ0 {ethX|<device_name>}     ex. eth0 or /dev/era0
+    ATTACH XQ0 {ethX|<device_name>}           ex. eth0 or /dev/era0
     SHOW XQ ETH
 
 where ``X`` in ``ethX`` is the number of the Ethernet controller to attach, or the real device name.
@@ -2210,20 +2131,21 @@ Its operation is analogous to the DELQA/DEQNA controller.
 
 CR11/CD11 card reader (CR)
 """"""""""""""""""""""""""
-The card reader (CR) implements a single controller (either the CR11 or the CD11) and card reader (e.g., Documation M200, GDI Model 100) by reading a file and presenting lines or cards to the simulator.
+The card reader (CR) implements a single controller (either the CR11 or the CD11)
+and card reader (e.g., Documation M200, GDI Model 100)
+by reading a file and presenting lines or cards to the simulator.
 Card decks may be represented by plain text ASCII files, card image files, or column binary files.
 The CR11 controller is also compatible with the CM11-F, CME11, and CMS11.
 
 Card image files are a file format designed by Douglas W. Jones at the University of Iowa to support the interchange of card deck data.
 These files have a much richer information carrying capacity than plain ASCII files.
-Card Image files can contain such interchange information as card-stock color, corner cuts, special artwork, as well as the binary punch data representing all 12 columns.  Complete details on the format, as well as sample code, are available at `Prof. Jones's site <http://homepage.divms.uiowa.edu/~jones/cards/>`_.
+Card Image files can contain such interchange information as card-stock color, corner cuts, special artwork, as well as the binary punch data representing all 12 columns.
+Complete details on the format, as well as sample code, are available at `Prof. Jones's site <http://homepage.divms.uiowa.edu/~jones/cards/>`_.
 
-The card reader can be configured to support either of the two controllers supported by DEC:
+The card reader can be configured to support either of the two controllers supported by DEC::
 
-===============  ===========================
-``SET CR CR11``  Set controller type to CR11
-``SET CR CD11``  Set controller type to CD11
-===============  ===========================
+    SET CR CR11                   Set controller type to CR11
+    SET CR CD11                   Set controller type to CD11
 
 The controller type must be set before attaching a virtual card deck to the device.
 You may NOT change controller type once a file is attached.
@@ -2231,16 +2153,16 @@ You may NOT change controller type once a file is attached.
 The primary differences are summarized in the table below.
 By default, the CR11 simulation is selected.
 
-=============  ====================  ====
+=============  ====================  ============
 \              CR11                  CD11
-=============  ====================  ====
+=============  ====================  ============
 BR             6                     4
 Registers      4                     3
 Data transfer  BR                    DMA
 Card rate      200-600               1000-1200
 Hopper cap.    <= 1000               1000-2250
 Cards          Mark-sense & punched  Punched only
-=============  ====================  ====
+=============  ====================  ============
 
 Examples of the CR11 include the M8290 and M8291 (CMS11).
 All card readers use a common vector at 0230 and CSR at 177160.
@@ -2249,13 +2171,11 @@ The card reader supports ASCII, card image, and column binary format card "decks
 When reading plain ASCII files, lines longer than 80 characters are silently truncated.
 Card image support is included for 80 column Hollerith, 82 column Hollerith (silently ignoring columns 0 and 81), and 40 column Hollerith (mark-sense) cards.
 Column binary supports 80 column card images only.
-All files are attached read-only (as if the ``-R`` switch were given).
+All files are attached read-only (as if the ``-R`` switch were given). ::
 
-=======================  =========================
-``ATTACH -A CR <file>``  File is ASCII text
-``ATTACH -B CR <file>``  File is column binary
-``ATTACH -I CR <file>``  File is card image format
-=======================  =========================
+    ATTACH -A CR <file>           File is ASCII text
+    ATTACH -B CR <file>           File is column binary
+    ATTACH -I CR <file>           File is card image format
 
 If no flags are given, the file extension is evaluated.
 If the filename ends in ``.TXT``, the file is treated as ASCII text.
@@ -2273,7 +2193,7 @@ Use the following command to explicitly set the correct translation::
     SET TRANSLATION={DEFAULT|026|026FTN|029|EBCDIC}
 
 This command should be given after a deck is attached to the simulator.
-The mappings above are completely described at http://www.cs.uiowa.edu/~jones/cards/codes.html.
+The mappings above are completely described at http://homepage.divms.uiowa.edu/~jones/cards/codes.html.
 Note that DEC typically used 029 or 026FTN mappings.
 
 DEC operating systems used a variety of methods to determine the end of a deck,
@@ -2372,18 +2292,13 @@ Up to eight units may be contiguously present in a single machine and are all lo
 This simulation implements all functionality of the device including the ability to single step computation of the BCC.
 The KG is disabled by default.
 
-The KG11 supports the following options:
+The KG11 supports the following options::
 
-===========================  =================================================
-``SET KG UNITS=n``           Set the number of units [0-8]
-
-``SET KG DEBUG={opt,opt…}``  Set the debugging options:
-
-                             | ``REG`` - any time a register is touched
-                             | ``POLY`` - any time the polynomial is changed
-                             | ``CYCLE`` - each cycle computing the polynomial
-
-===========================  =================================================
+    SET KG UNITS=n              Set the number of units [0-8]
+    SET KG DEBUG={opt,opt…}     Set the debugging options:
+                                REG - any time a register is touched
+                                POLY - any time the polynomial is changed
+                                CYCLE - each cycle computing the polynomial
 
 The KG11 implements the following registers, replicated for each unit:
 
