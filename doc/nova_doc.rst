@@ -24,38 +24,37 @@ This memorandum documents the Nova simulator.
 Simulator files
 ===============
 
-=============  ==================
-``sim/``       | ``scp.h``
-               | ``sim_console.h``
-               | ``sim_defs.h``
-               | ``sim_fio.h``
-               | ``sim_rev.h``
-               | ``sim_sock.h``
-               | ``sim_tape.h``
-               | ``sim_timer.h``
-               | ``sim_tmxr.h``
-               | ``scp.c``
-               | ``sim_console.c``
-               | ``sim_fio.c``
-               | ``sim_sock.c``
-               | ``sim_tape.c``
-               | ``sim_timer.c``
-               | ``sim_tmxr.c``
+``sim/``
+    | ``scp.h``
+    | ``sim_console.h``
+    | ``sim_defs.h``
+    | ``sim_fio.h``
+    | ``sim_rev.h``
+    | ``sim_sock.h``
+    | ``sim_tape.h``
+    | ``sim_timer.h``
+    | ``sim_tmxr.h``
+    | ``scp.c``
+    | ``sim_console.c``
+    | ``sim_fio.c``
+    | ``sim_sock.c``
+    | ``sim_tape.c``
+    | ``sim_timer.c``
+    | ``sim_tmxr.c``
 
-``sim/nova/``  | ``nova_defs.h``
-               | ``nova_cpu.c``
-               | ``nova_clk.c``
-               | ``nova_dkp.c``
-               | ``nova_dsk.c``
-               | ``nova_lp.c``
-               | ``nova_mta.c``
-               | ``nova_plt.c``
-               | ``nova_qty.c``
-               | ``nova_sys.c``
-               | ``nova_tt.c``
-               | ``nova_tt1.c``
-
-=============  ==================
+``sim/nova/``
+    | ``nova_defs.h``
+    | ``nova_cpu.c``
+    | ``nova_clk.c``
+    | ``nova_dkp.c``
+    | ``nova_dsk.c``
+    | ``nova_lp.c``
+    | ``nova_mta.c``
+    | ``nova_plt.c``
+    | ``nova_qty.c``
+    | ``nova_sys.c``
+    | ``nova_tt.c``
+    | ``nova_tt1.c``
 
 Nova features
 =============
