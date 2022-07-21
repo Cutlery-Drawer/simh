@@ -28,3 +28,4 @@ Each link leads to documentation about SimH, or a particular simulator:
    Xerox Data Systems Sigma 32b systems <sigma_doc>
    TX-0 simulator usage <tx0_doc>
    The SIMH breakpoint subsystem <simh_breakpoints>
+   SIMH magtape representation and handling <simh_magtape>
