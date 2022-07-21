@@ -650,9 +650,11 @@ and to set the drive type to one of many disk types::
 
 The type options can be used only when a unit is not attached to a file.
 ``RAUSER`` is a "user specified" disk;
-the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers (LBN's, 512 bytes each).
+the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers
+(LBNs, 512 bytes each).
 The minimum size is 5MB;
-the maximum size is 2GB without extended file support, 1TB with extended file support.
+the maximum size is 2GB without extended file support,
+1TB with extended file support.
 
 Units can also be set ``ENABLED`` or ``DISABLED``.
 
@@ -1055,8 +1057,8 @@ Two cards with the same MAC address will see each other's packets, resulting in 
     SHOW XQ TYPE
 
 These commands are used to change or display the controller mode.
-DELQA mode is better and faster but may not be usable by older or non-DEC OS's.
-Also, be aware that DEQNA mode is not supported by many modern OS's.
+DELQA mode is better and faster but may not be usable by older or non-DEC OSes.
+Also, be aware that DEQNA mode is not supported by many modern OSes.
 The DEQNA-LOCK mode of the DELQA card is emulated by setting the the controller to DEQNA — there is no need for a separate mode.
 DEQNA-LOCK mode behaves exactly like a DEQNA, except for the operation of the VAR and MOP processing. ::
 

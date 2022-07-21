@@ -137,7 +137,7 @@ The sources originate on a Windows system and have CRLF line endings.
 For use on other systems, the sources may need to be converted to LF line endings.
 This can be done with the ``unzip`` utility (``unzip -a``).
 
-The supplied makefile will compile the simulators for UNIX and Unix-like systems.
+The supplied makefile will compile the simulators for Unix and Unix-like systems.
 The VAX and PDP-11 can be compiled with or without Ethernet support.
 The makefile will automatically build these simulators with Ethernet support if the necessary network components are available on the system which is doing the building.
 The recommended libpcap components are those packaged and provided by the host operating system vendor.
@@ -1153,7 +1153,7 @@ typically, one time unit represents one instruction execution.
 In most simulators, the ``SET <device> DISABLED`` command removes the specified device from the configuration.
 A ``DISABLED`` device is invisible to running programs.
 The device can still be |RESET|_, but it cannot be
-|ATTACH|_ ed, |DETACH|_ ed, or |BOOT|_ ed.
+|ATTACH|_\ed, |DETACH|_\ed, or |BOOT|_\ed.
 ``SET <device> ENABLED`` restores a disabled device to a configuration.
 
 Most multi-unit devices allow units to be enabled or disabled::
@@ -1536,7 +1536,7 @@ If an action command must contain a semicolon, that action command should be enc
 If ``<dev>`` is not specified, CPU is assumed.
 ``<reg>`` is a register (scalar or subscripted) belonging to the indicated device.
 The ``<conditional-op>`` and optional ``<logical-op>`` are the same as those used for "search specifiers" by the |EXAMINE|_ and |DEPOSIT|_ commands (see above).
-The ``<value>`` s are expressed in the radix specified for ``<reg>``, not in the radix for the device.
+The ``<value>``\s are expressed in the radix specified for ``<reg>``, not in the radix for the device.
 
 If the ``<logical-op>`` and ``<value>`` are specified, the target register value is first altered as indicated.
 The result is then compared to the ``<value>`` via the ``<conditional-op>``.
@@ -2470,7 +2470,7 @@ Rev 2.3c, May, 98
     - Fixed bug in PDP-11 DIV overflow check
     - Fixed bugs in PDP-11 magnetic tape bootstrap
     - Fixed bug in PDP-11 magnetic tape unit select
-    - Replaced UNIX V7 disk images
+    - Replaced Unix V7 disk images
 
 Rev 2.3b, May, 98
     - Added switch recognition to all simulator commands
@@ -2493,7 +2493,7 @@ Rev 2.3a, Nov, 97
 Rev 2.3, Mar, 97
     - Added PDP-11 RP
     - Added PDP-1
-    - Changed UNIX terminal I/O to TERMIOS
+    - Changed Unix terminal I/O to TERMIOS
     - Changed magnetic tape format to double ended
     - Changed PDP-8 current page mnemonic from T to C
     - Added endian independent I/O routines
@@ -2599,7 +2599,7 @@ Don Lewine               Nova documentation and legal permissions
 Tim Litt                 PDP-10 hardware documentation and schematics, tape images, and software sources
 Tim Markson              DZ11 debugging
 Bill McDermith           HP 2100 debugging, 12565A simulator
-Scott McGregor           PDP-11 UNIX legal permissions
+Scott McGregor           PDP-11 Unix legal permissions
 Jeff Moffatt             HP 2100 information, documentation, and software
 Alec Muffett             Solaris port testing
 Terry Newton             HP 21MX debugging
@@ -2628,10 +2628,10 @@ Chris Suddick            PDP-11 floating point debugging
 Ben Supnik               Macintosh timing routine
 Bob Supnik               SIMH simulators
 Ben Thomas               VMS character-by-character I/O routines
-Warren Toomey            PDP-11 UNIX software
+Warren Toomey            PDP-11 Unix software
 Deb Toivonen             DEC documentation
 Mike Umbricht            DEC documentation, H316 documentation and schematics
-Leendert van Doorn       PDP-11 UNIX V6 debugging, TERMIOS implementation
+Leendert van Doorn       PDP-11 Unix V6 debugging, TERMIOS implementation
 Fred van Kempen          Ethernet code, RK611 emulator, PDP-11 debugging, VAX/Ultrix debugging
 Holger Veit              OS/2 socket support
 David Waks               PDP-8 ESI-X and PDP-7 SIM8 software

@@ -59,7 +59,7 @@ Device name(s)   Simulates
 ``PTP``          Paper Tape Punch
 ``TTI``          FlexoWriter input
 ``TTO``          FlexoWriter output
-``DPY``          512x512 7" high-persistence phosphor CRT Display
+``DPY``          512×512 7″ high-persistence phosphor CRT Display
 ===============  ================================================
 
 The TX-0 simulator implements the following unique stop conditions:
@@ -220,7 +220,7 @@ Display (DPY)
 """""""""""""
 In 1957, a 10-inch, electro-static deflection,
 cathode ray tube, having 512 by 512 addressable locations,
-in a 7 × 7 inch raster, point-by-point display system was installed on the TX-0.
+in a 7×7-inch raster, point-by-point display system was installed on the TX-0.
 In simulation, the display is accomplished using a separate graphical display window.
 
 The display is accessed via the ``DIS`` order,

@@ -1244,12 +1244,12 @@ and to set the drive type to one of many disk types::
     SET RQn RA90                  Set type to RA90
     SET RQn RA92                  Set type to RA92
     SET RQn RRD40                 Set type to RRD40 (CD-ROM)
-    SET RQn RAUSER{=n}            Set type to RA82 with n MB's
-    SET -L RQn RAUSER{=n}         Set type to RA82 with n LBN's
+    SET RQn RAUSER{=n}            Set type to RA82 with n MBs
+    SET -L RQn RAUSER{=n}         Set type to RA82 with n LBNs
 
 The type options can be used only when a unit is not attached to a file.
 RAUSER is a "user specified" disk;
-the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers (LBN's, 512 bytes each).
+the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers (LBNs, 512 bytes each).
 The minimum size is 5MB; the maximum size is 2GB without extended file support, 1TB with extended file support.
 
 Units can be set ``ENABLED`` or ``DISABLED``.
@@ -1881,7 +1881,7 @@ All open connections are lost when the simulator shuts down or DLO is detached.
 DZ11 terminal multiplexer (DZ)
 """"""""""""""""""""""""""""""
 The DZ11 is an 8-line terminal multiplexer.
-Up to 4 DZ11's (32 lines) are supported. 
+Up to 4 DZ11s (32 lines) are supported. 
 The number of lines can be changed with the command ::
 
     SET DZ LINES=n                Set line count to n
@@ -1966,7 +1966,7 @@ All open connections are lost when the simulator shuts down or the DZ is detache
 DHQ11 terminal multiplexer (VH)
 """""""""""""""""""""""""""""""
 The DHQ11 is an 8-line terminal multiplexer for Qbus systems.
-Up to 4 DHQ11's are supported.
+Up to 4 DHQ11s are supported.
 
 The DHQ11 is a programmable asynchronous terminal multiplexer.
 It has two programming modes: DHV11 and DHU11.
@@ -2067,8 +2067,8 @@ Two cards with the same MAC address will see each other's packets, resulting in 
     SHOW XQ TYPE
 
 These commands are used to change or display the controller mode.
-DELQA mode is better and faster but may not be usable by older or non-DEC OS's.
-Also, be aware that DEQNA mode is not supported by many modern OS's.
+DELQA mode is better and faster but may not be usable by older or non-DEC OSes.
+Also, be aware that DEQNA mode is not supported by many modern OSes.
 The DEQNA-LOCK mode of the DELQA card is emulated by setting the the controller to DEQNA — there is no need for a separate mode.
 DEQNA-LOCK mode behaves exactly like a DEQNA, except for the operation of the VAR and MOP processing. ::
 
@@ -2272,7 +2272,7 @@ Arithmetic options
 
 KE11A extended arithmetic option (KE)
 """""""""""""""""""""""""""""""""""""
-The KE11A extended arithmetic option (KE) provides multiply, divide, normalization, and multi-bit shift capability on Unibus PDP-11's that lack the EIS instruction set.
+The KE11A extended arithmetic option (KE) provides multiply, divide, normalization, and multi-bit shift capability on Unibus PDP-11s that lack the EIS instruction set.
 In practice, it was only sold with the PDP-11/20.
 The KE is disabled by default.
 

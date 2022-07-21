@@ -326,7 +326,7 @@ To load and run SIM8::
 
 DECsys
 ------
-PDP-7 DECsys was Digital Equipment Corporation’s first mass storage-based operating system.
+PDP-7 DECsys was Digital Equipment Corporation's first mass storage-based operating system.
 Designed for an 8KW PDP-7 with two or three DECtape drives,
 it provided an interactive program development environment for Fortran and assembly language programs.
 My thanks to Professor Harlan Lefevre, of the University of Oregon,
@@ -574,7 +574,7 @@ SPS decks are not free-format, but operands must be placed in columns:
 
 =======  ============================================================
 1–5      Line count (optional)
-6-7      Count (number of characters when defining a constant).
+6–7      Count (number of characters when defining a constant).
 8–13     Label (six characters, must start with alphabetic).
 14–16    Opcode: Examples:
 
@@ -654,7 +654,7 @@ place the SPS source between the ``SPS1.OBJ`` and the ``SPS2.OBJ`` deck,
 and another copy of the same source after the ``SPS2.OBJ`` deck (SPS is a two-pass assembler).
 SPS prints a listing on LPT and punches an object deck on CDP, ready to run.
 
-A UNIX command script to assemble an SPS deck painlessly is in ``sps``.
+A Unix command script to assemble an SPS deck painlessly is in ``sps``.
 To use the script, enter ``sps programname``.
 The script creates ``programname.lst`` for the listing and ``programname.obj`` for the object deck.
 Windows users are out of luck, for now.
