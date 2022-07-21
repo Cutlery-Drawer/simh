@@ -102,13 +102,13 @@ For example:
 
     t_stat cpu_reset (DEVICE *dptr)
     {
-      …
+      /* ... */
         sim_brk_dflt = SWMASK ('E');
         sim_brk_types = sim_brk_dflt|SWMASK ('P')|
                         SWMASK ('R')|SWMASK ('S')|
                         SWMASK ('W')|SWMASK ('X');
         sim_brk_type_desc = cpu_breakpoints;
-      …
+      /* ... */
     }
 
 In the breakpoint dispatch code something like:
@@ -117,7 +117,7 @@ In the breakpoint dispatch code something like:
 
     reason = STOP_IBKPT;
     sim_messagef (reason, "%s", sim_brk_message());
-    [and then sim_instr() returns with:]
+    /* and then sim_instr() returns with: */
     return reason;
 
 Or, if it is desirable to suppress the standard message produced when returning to SCP, the following may be used:
@@ -126,7 +126,7 @@ Or, if it is desirable to suppress the standard message produced when returning 
 
     reason = STOP_IBKPT;
     reason = sim_messagef (reason, "%s\n", sim_brk_message());
-    [and then sim_instr() returns with:]
+    /* and then sim_instr() returns with: */
     return reason;
 
 ``sim_messagef`` produces a message which contains either the breakpoint type and the matched breakpoint address

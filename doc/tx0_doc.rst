@@ -247,7 +247,7 @@ TX-0 usage examples
 Several example tapes can be used to test the TX-0 simulation.
 
 Tic-tac-toe game
-""""""""""""""""
+----------------
 The tic-tac-toe game can be run using the ``tic.simh`` startup script::
 
     ; TX-0 Initialization file for the tic-tac-toe game
@@ -260,7 +260,7 @@ In this game, you simply use the light-pen (mouse) to select where you want to p
 You must click right on top of or very close to the dot in the center of the square you want to place your "X" into.
 
 MOUSE game
-""""""""""
+----------
 The MOUSE game,
 written by John E. Ward is a more complex game with requires involvement not only with the light pen,
 but also the ``TAC``.
