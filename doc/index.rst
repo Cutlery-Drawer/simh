@@ -29,3 +29,4 @@ Each link leads to documentation about SimH, or a particular simulator:
    TX-0 simulator usage <tx0_doc>
    The SIMH breakpoint subsystem <simh_breakpoints>
    SIMH magtape representation and handling <simh_magtape>
+   Adding an I/O device to a SIMH virtual machine <simh_vmio>
