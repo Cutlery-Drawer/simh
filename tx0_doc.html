@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. TX-0 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="tx-0-simulator-usage">
+<h1><span class="sectnum">1. </span>TX-0 simulator usage<a class="headerlink" href="#tx-0-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2012-11-09</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id1"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#tx-0-features" id="id2"><span class="sectnum">1.2. </span>TX-0 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id3"><span class="sectnum">1.2.1. </span>CPU</a></p></li>
+<li><p><a class="reference internal" href="#i-o-devices" id="id4"><span class="sectnum">1.2.2. </span>I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#photoelectric-tape-reader-petr" id="id5"><span class="sectnum">1.2.2.1. </span>Photoelectric tape reader (PETR)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-punch-ptp" id="id6"><span class="sectnum">1.2.2.2. </span>Paper tape punch (PTP)</a></p></li>
+<li><p><a class="reference internal" href="#console-typewriter-input-tti-output-tto" id="id7"><span class="sectnum">1.2.2.3. </span>Console typewriter input (TTI), output (TTO)</a></p></li>
+<li><p><a class="reference internal" href="#display-dpy" id="id8"><span class="sectnum">1.2.2.4. </span>Display (DPY)</a></p></li>
+<li><p><a class="reference internal" href="#light-pen-pen" id="id9"><span class="sectnum">1.2.2.5. </span>Light pen (PEN)</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#tx-0-usage-examples" id="id10"><span class="sectnum">1.3. </span>TX-0 usage examples</a></p></li>
+</ul>
+</nav>
+<p>This memorandum documents the TX-0 simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/TX-0/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tx0_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tx0_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tx0_stddev.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tx0_sys.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">tx0_sys_orig.c</span></code></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="tx-0-features">
+<h2><span class="sectnum">1.2. </span>TX-0 features<a class="headerlink" href="#tx-0-features" title="Permalink to this heading">¶</a></h2>
+<p>The TX-0 is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>TX-0 CPU with up to 64KW of memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PETR</span></code></p></td>
+<td><p>Photo Electric Tape Rader</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PTP</span></code></p></td>
+<td><p>Paper Tape Punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTI</span></code></p></td>
+<td><p>FlexoWriter input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTO</span></code></p></td>
+<td><p>FlexoWriter output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DPY</span></code></p></td>
+<td><p>512x512 7” high-persistence phosphor CRT Display</p></td>
+</tr>
+</tbody>
+</table>
+<p>The TX-0 simulator implements the following unique stop conditions:</p>
+<ul class="simple">
+<li><p>An unimplemented operator is referenced, and register <code class="docutils literal notranslate"><span class="pre">STOP_OPR</span></code> is set</p></li>
+<li><p>An invalid interrupt request is made</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> commands has an optional argument to specify the load address:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LOAD</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span> <span class="p">{</span><span class="o">&lt;</span><span class="n">starting</span> <span class="n">address</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command loads a paper-tape bootstrap format file at the specified address.
+If no address is specified, loading starts at location 200.
+The <code class="docutils literal notranslate"><span class="pre">DUMP</span></code> command is not supported.</p>
+<section id="cpu">
+<h3><span class="sectnum">1.2.1. </span>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The TX-0 was upgraded over the years from the original 1956 “Standard” instruction set to a later “Extended” instruction set completed in 1962.
+In addition, the TX-0 CPU can operate in one of three operating modes:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Read In Mode</p></td>
+<td><p>Instruction words are fetched from the tape.</p></td>
+</tr>
+<tr class="row-even"><td><p>Test Mode</p></td>
+<td><p>Instruction words are fetched from the TBR.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Normal Mode</p></td>
+<td><p>Instruction words are fetched from memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Only CPU options are the presence of the extended arithmetic operator and the size of main memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">TX0STD</span>                <span class="n">Set</span> <span class="n">CPU</span> <span class="n">model</span> <span class="n">to</span> <span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="s2">&quot;Standard&quot;</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">TX0EXT</span>                <span class="n">Set</span> <span class="n">CPU</span> <span class="n">model</span> <span class="n">to</span> <span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="s2">&quot;Extended&quot;</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NORMAL</span>                <span class="n">Set</span> <span class="n">CPU</span> <span class="n">mode</span> <span class="n">to</span> <span class="n">Normal</span> <span class="n">Mode</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">TEST</span>                  <span class="n">Set</span> <span class="n">CPU</span> <span class="n">Mode</span> <span class="n">to</span> <span class="n">Test</span> <span class="n">Mode</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">READIN</span>                <span class="n">Set</span> <span class="n">CPU</span> <span class="n">Mode</span> <span class="n">to</span> <span class="n">Read</span> <span class="n">In</span> <span class="n">Mode</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">4</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span><span class="n">K</span> <span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="n">Memory</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">8</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">8</span><span class="n">K</span> <span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="n">Memory</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">64</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">64</span><span class="n">K</span> <span class="p">(</span><span class="n">Core</span> <span class="n">Memory</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.
+Initial memory size is 64K.
+The default configuration is a TX-0 with AO, EAO, and GPR.</p>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MBR</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Memory Buffer Register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AC</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Accumulator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MAR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Memory Address Register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Program Counter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IR</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Instruction Register (5 bits in Extended mode, 2 bits in Standard mode)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LR</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Live Register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TBR</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Toggle Switch Buffer Register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TAC</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Toggle Switch Accumulator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XR</span></code></p></td>
+<td><p>14</p></td>
+<td><p>Index Register (Extended mode only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Test Mode flip-flop (Read only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Read In Mode flip-flop (Read only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LP</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Light Pen / Light Gun flip-flops</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="i-o-devices">
+<h3><span class="sectnum">1.2.2. </span>I/O devices<a class="headerlink" href="#i-o-devices" title="Permalink to this heading">¶</a></h3>
+<p>The TX-0 includes several I/O devices,
+and unlike more modern machines,
+these devices are not memory or I/O mapped,
+but rather have specific CPU operate orders to access them.</p>
+<section id="photoelectric-tape-reader-petr">
+<h4><span class="sectnum">1.2.2.1. </span>Photoelectric tape reader (PETR)<a class="headerlink" href="#photoelectric-tape-reader-petr" title="Permalink to this heading">¶</a></h4>
+<p>The PETR is a 250 line per minute Ferranti photoelectric paper tape reader using standard seven-hole Flexowriter tape that was modified to solid state circuitry.
+Lines without seventh hole punched are ignored by the PETR.
+As each line of the tape is read in,
+the data is stored into an 18-bit <code class="docutils literal notranslate"><span class="pre">BUF</span></code> register with bits mapped as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tape</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>15</p></td>
+</tr>
+</tbody>
+</table>
+<p>Up to three lines of tape may be read into a single the single <code class="docutils literal notranslate"><span class="pre">BUF</span></code> register.
+Before subsequent lines are read,
+the <code class="docutils literal notranslate"><span class="pre">BUF</span></code> register is cycled one bit right.</p>
+<p>The PETR reads data from or a disk file.
+The POS register specifies the number of the next data item to be read.
+Thus, by changing POS, the user can backspace or advance the reader.</p>
+<p>The PETR supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+<code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">PETR</span></code> switches the CPU to Read-In mode, and starts the processor running.</p>
+<p>The paper tape reader implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>18</p></td>
+<td><p>18-bit buffer to store up to three lines of Paper tape input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the input file</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="paper-tape-punch-ptp">
+<h4><span class="sectnum">1.2.2.2. </span>Paper tape punch (PTP)<a class="headerlink" href="#paper-tape-punch-ptp" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape punch (PTP) punches standard seven-hole Flexowriter tape.
+The POS register specifies the number of the next data item to be written.
+Thus, by changing POS, the user can backspace or advance the punch.</p>
+<p>The paper tape punch implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="console-typewriter-input-tti-output-tto">
+<h4><span class="sectnum">1.2.2.3. </span>Console typewriter input (TTI), output (TTO)<a class="headerlink" href="#console-typewriter-input-tti-output-tto" title="Permalink to this heading">¶</a></h4>
+<p>The Typewriter is a half-duplex electric Friden Flexowriter typewriter.
+The typewriter input (TTI) polls the console keyboard for input.
+The typewriter output (TTO) writes to the simulator console window.
+On input, TTI converts the ASCII character received from the keyboard to Flexowriter code.
+On output, the TTO converts the Flexowriter code to ASCII for display on the simulator console window.</p>
+<p>The typewriter input implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Typewriter buffer (shared)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Upper case/lower case state (shared)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Input ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Keyboard polling interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The typewriter output implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Typewriter buffer (shared)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Upper case/lower case state (shared)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RPLS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Return restart pulse flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Output done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="display-dpy">
+<h4><span class="sectnum">1.2.2.4. </span>Display (DPY)<a class="headerlink" href="#display-dpy" title="Permalink to this heading">¶</a></h4>
+<p>In 1957, a 10-inch, electro-static deflection,
+cathode ray tube, having 512 by 512 addressable locations,
+in a 7 × 7 inch raster, point-by-point display system was installed on the TX-0.
+In simulation, the display is accomplished using a separate graphical display window.</p>
+<p>The display is accessed via the <code class="docutils literal notranslate"><span class="pre">DIS</span></code> order,
+with the coordinate specified in the <code class="docutils literal notranslate"><span class="pre">AC</span></code>.
+<code class="docutils literal notranslate"><span class="pre">DIS</span></code> will intensify a point with <em>X</em> and <em>Y</em> coordinates,
+where <em>X</em> is specified by <code class="docutils literal notranslate"><span class="pre">AC</span></code> digits 0-8,
+and <em>Y</em> is specified by <code class="docutils literal notranslate"><span class="pre">AC</span></code> digits 9-17.
+Bit 0 is the sign for <em>X</em>,
+and bit 9 is the sign for <em>Y</em>.
+The complement system is in effect when signs are negative.</p>
+</section>
+<section id="light-pen-pen">
+<h4><span class="sectnum">1.2.2.5. </span>Light pen (PEN)<a class="headerlink" href="#light-pen-pen" title="Permalink to this heading">¶</a></h4>
+<p>In 1958, a Light-Pen,
+a solid state version of an idea being developed for the Sage System, was added to the TX-0.
+The light-pen status is read using the <code class="docutils literal notranslate"><span class="pre">PEN</span></code> order,
+with light-pen flip-flops 1 and 2 being read into <code class="docutils literal notranslate"><span class="pre">AC</span></code> positions 0 and 1 respectively.</p>
+<p>In simulation,
+the light-pen is implemented using a computer mouse or touch screen.</p>
+</section>
+</section>
+</section>
+<section id="tx-0-usage-examples">
+<h2><span class="sectnum">1.3. </span>TX-0 usage examples<a class="headerlink" href="#tx-0-usage-examples" title="Permalink to this heading">¶</a></h2>
+<p>Several example tapes can be used to test the TX-0 simulation.</p>
+<p>The tic-tac-toe game can be run using the <code class="docutils literal notranslate"><span class="pre">tic.simh</span></code> startup script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="n">Initialization</span> <span class="n">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">tic</span><span class="o">-</span><span class="n">tac</span><span class="o">-</span><span class="n">toe</span> <span class="n">game</span>
+<span class="nb">set</span> <span class="n">dpy</span> <span class="n">enable</span>
+<span class="n">att</span> <span class="n">petr</span> <span class="n">bin_tic</span><span class="o">-</span><span class="n">tac</span><span class="o">-</span><span class="n">toe_new_code_12</span><span class="o">-</span><span class="mi">16</span><span class="o">-</span><span class="mf">61.</span><span class="n">bin</span>
+<span class="n">boot</span> <span class="n">petr</span>
+<span class="n">g</span>
+</pre></div>
+</div>
+<p>In this game, you simply use the light-pen (mouse) to select where you want to place the “X” (the TX-0 is “O.”).
+You must click right on top of or very close to the dot in the center of the square you want to place your “X” into.</p>
+<p>The MOUSE game,
+written by John E. Ward is a more complex game with requires involvement not only with the light pen,
+but also the <code class="docutils literal notranslate"><span class="pre">TAC</span></code>.
+In simulation,
+the <code class="docutils literal notranslate"><span class="pre">TAC</span></code> can be accessed by stopping the simulation and using the <code class="docutils literal notranslate"><span class="pre">Deposit</span></code> command to change the value of the <code class="docutils literal notranslate"><span class="pre">TAC</span></code> to select various modes.</p>
+<p>Here is the configuration file, <code class="docutils literal notranslate"><span class="pre">mouse.simh</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="n">Initialization</span> <span class="n">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">Mouse</span> <span class="n">Maze</span> <span class="n">Game</span>
+<span class="nb">set</span> <span class="n">dpy</span> <span class="n">enable</span>
+<span class="n">att</span> <span class="n">petr</span> <span class="n">bin_newMouse_3</span><span class="o">-</span><span class="mi">22</span><span class="o">-</span><span class="mf">66.</span><span class="n">bin</span>
+
+<span class="p">;</span> <span class="n">The</span> <span class="n">mouse</span> <span class="n">maze</span> <span class="n">game</span> <span class="n">mode</span> <span class="ow">is</span> <span class="n">manipulated</span> <span class="n">under</span> <span class="n">TAC</span> <span class="n">control</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400014</span> <span class="o">=</span> <span class="n">Erase</span> <span class="n">Wall</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400024</span> <span class="o">=</span> <span class="n">Write</span> <span class="n">Wall</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400011</span> <span class="o">=</span> <span class="n">Erase</span> <span class="n">Cheese</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400021</span> <span class="o">=</span> <span class="n">Write</span> <span class="n">Cheese</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400012</span> <span class="o">=</span> <span class="n">Erase</span> <span class="n">Mouse</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400022</span> <span class="o">=</span> <span class="n">Write</span> <span class="n">Mouse</span> <span class="n">mode</span><span class="o">.</span>
+<span class="p">;</span> <span class="mi">400002</span> <span class="o">=</span> <span class="s2">&quot;do mouse&quot;</span> <span class="p">(</span><span class="n">start</span> <span class="n">the</span> <span class="n">mouse</span> <span class="n">searching</span><span class="o">.</span><span class="p">)</span>
+<span class="p">;</span> <span class="mi">400017</span> <span class="o">=</span> <span class="s2">&quot;do over&quot;</span>
+
+<span class="p">;</span> <span class="n">Start</span> <span class="ow">in</span> <span class="s2">&quot;Erase Wall&quot;</span> <span class="n">mode</span>
+<span class="n">d</span> <span class="n">tac</span> <span class="mi">400014</span>
+<span class="n">boot</span> <span class="n">petr</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/tx0_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

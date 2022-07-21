@@ -1,0 +1,2519 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. VAX (MicroVAX 3900) simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="1. VAX-11/780 simulator usage" href="vax780_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="vax-microvax-3900-simulator-usage">
+<h1><span class="sectnum">1. </span>VAX (MicroVAX 3900) simulator usage<a class="headerlink" href="#vax-microvax-3900-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2018-04-23</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id1"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#vax-features" id="id2"><span class="sectnum">1.2. </span>VAX features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu-and-system-devices" id="id3"><span class="sectnum">1.2.1. </span>CPU and system devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id4"><span class="sectnum">1.2.1.1. </span>CPU</a></p></li>
+<li><p><a class="reference internal" href="#translation-buffer-tlb" id="id5"><span class="sectnum">1.2.1.2. </span>Translation buffer (TLB)</a></p></li>
+<li><p><a class="reference internal" href="#qbus-adapter-qba" id="id6"><span class="sectnum">1.2.1.3. </span>Qbus adapter (QBA)</a></p></li>
+<li><p><a class="reference internal" href="#read-only-memory-rom" id="id7"><span class="sectnum">1.2.1.4. </span>Read-only memory (ROM)</a></p></li>
+<li><p><a class="reference internal" href="#non-volatile-memory-nvr" id="id8"><span class="sectnum">1.2.1.5. </span>Non-volatile memory (NVR)</a></p></li>
+<li><p><a class="reference internal" href="#system-devices-sysd" id="id9"><span class="sectnum">1.2.1.6. </span>System devices (SYSD)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#i-o-device-addressing" id="id10"><span class="sectnum">1.2.2. </span>I/O device addressing</a></p></li>
+<li><p><a class="reference internal" href="#programmed-i-o-devices" id="id11"><span class="sectnum">1.2.3. </span>Programmed I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#terminal-input-tti" id="id12"><span class="sectnum">1.2.3.1. </span>Terminal input (TTI)</a></p></li>
+<li><p><a class="reference internal" href="#terminal-output-tto" id="id13"><span class="sectnum">1.2.3.2. </span>Terminal output (TTO)</a></p></li>
+<li><p><a class="reference internal" href="#lpv11-line-printer-lpt" id="id14"><span class="sectnum">1.2.3.3. </span>LPV11 line printer (LPT)</a></p></li>
+<li><p><a class="reference internal" href="#real-time-clock-clk" id="id15"><span class="sectnum">1.2.3.4. </span>Real-time clock (CLK)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#disks" id="id16"><span class="sectnum">1.2.4. </span>Disks</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rlv12-rl01-rl02-cartridge-disk-rl" id="id17"><span class="sectnum">1.2.4.1. </span>RLV12/RL01,RL02 cartridge disk (RL)</a></p></li>
+<li><p><a class="reference internal" href="#rqdx3-mscp-disk-controllers-rq-rqb-rqc-rqd" id="id18"><span class="sectnum">1.2.4.2. </span>RQDX3 MSCP disk controllers (RQ, RQB, RQC, RQD)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#tapes" id="id19"><span class="sectnum">1.2.5. </span>Tapes</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#tsv11-tsv05-magnetic-tape-ts" id="id20"><span class="sectnum">1.2.5.1. </span>TSV11/TSV05 magnetic tape (TS)</a></p></li>
+<li><p><a class="reference internal" href="#tqk50-tmscp-tape-controller-tq" id="id21"><span class="sectnum">1.2.5.2. </span>TQK50 TMSCP tape controller (TQ)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#communications-devices" id="id22"><span class="sectnum">1.2.6. </span>Communications devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#dzv11-terminal-multiplexer-dz" id="id23"><span class="sectnum">1.2.6.1. </span>DZV11 terminal multiplexer (DZ)</a></p></li>
+<li><p><a class="reference internal" href="#dhq11-terminal-multiplexer-vh" id="id24"><span class="sectnum">1.2.6.2. </span>DHQ11 terminal multiplexer (VH)</a></p></li>
+<li><p><a class="reference internal" href="#delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb" id="id25"><span class="sectnum">1.2.6.3. </span>DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#cr11-card-reader-cr" id="id26"><span class="sectnum">1.2.7. </span>CR11 card reader (CR)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id27"><span class="sectnum">1.3. </span>Symbolic display and input</a></p></li>
+<li><p><a class="reference internal" href="#appendix-the-ka655-x" id="id28"><span class="sectnum">1.4. </span>Appendix - The KA655”X”</a></p></li>
+</ul>
+</nav>
+<p>This memorandum documents the DEC VAX (MicroVAX 3900) simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<p>To compile the VAX, you must define <code class="docutils literal notranslate"><span class="pre">VM_VAX</span></code> and <code class="docutils literal notranslate"><span class="pre">USE_INT64</span></code> as part of the compilation command-line.
+To enable extended file support (files greater than 2GB), you must define <code class="docutils literal notranslate"><span class="pre">USE_ADDR64</span></code> as part of the command-line as well.</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_disk.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_ether.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_serial.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_disk.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_ether.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_serial.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/vax/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_ka655x_bin.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vaxmod_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_cis.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_cmode.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_cpu1.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_fpa.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_io.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_mmu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_octa.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_stddev.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_sys.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_syscm.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_sysdev.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vax_syslist.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/pdp11/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_cr_dat.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_mscp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_uqssp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_xq.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_xq_bootrom.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_cr.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_lp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_rl.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_rq.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_tq.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_ts.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_vh.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp11_xq.c</span></code></div>
+</div>
+</dd>
+</dl>
+<p>Additional files are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/vax/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ka655x.bin</span></code>  (Extended memory boot ROM code)</div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="vax-features">
+<h2><span class="sectnum">1.2. </span>VAX features<a class="headerlink" href="#vax-features" title="Permalink to this heading">¶</a></h2>
+<p>The VAX simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>KA655”X” CPU with 16MB-512MB of memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TLB</span></code></p></td>
+<td><p>Translation buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ROM</span></code></p></td>
+<td><p>Read-only memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NVR</span></code></p></td>
+<td><p>Non-volatile memory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QBA</span></code></p></td>
+<td><p>Qbus adapter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SYSD</span></code></p></td>
+<td><p>System devices</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTI</span></code>, <code class="docutils literal notranslate"><span class="pre">TTO</span></code></p></td>
+<td><p>Console terminal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CLK</span></code></p></td>
+<td><p>Real-time clock</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DZ</span></code></p></td>
+<td><p>DZV11 4-line terminal multiplexer (up to 32)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VH</span></code></p></td>
+<td><p>DHQ11 8-line terminal multiplexer (up to 4)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CR</span></code></p></td>
+<td><p>CR11 card reader</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LPT</span></code></p></td>
+<td><p>LPV11 line printer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RL</span></code></p></td>
+<td><p>RLV12/RL01(2) cartridge disk controller with four drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQ</span></code></p></td>
+<td><p>RQDX3 MSCP controller with four drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RQB</span></code></p></td>
+<td><p>Second RQDX3 MSCP controller with four drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQC</span></code></p></td>
+<td><p>Third RQDX3 MSCP controller with four drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RQD</span></code></p></td>
+<td><p>Fourth RQDX3 MSCP controller with four drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TS</span></code></p></td>
+<td><p>TSV11/TSV05 magnetic tape controller with one drive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TQ</span></code></p></td>
+<td><p>TQK50 TMSCP magnetic tape controller with four drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XQ</span></code></p></td>
+<td><p>DELQA/DEQNA Ethernet controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XQB</span></code></p></td>
+<td><p>Second DELQA/DEQNA Ethernet controller</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CR, DZ, VH, LPT, RL, RQ, RQB, RQC, RQD, RY, TS, TQ, XQ, and XQB devices can be set <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+RQB, RQC, RQD, VH, and XQB are disabled by default.</p>
+<p>The VAX simulator implements several unique stop conditions:</p>
+<ul class="simple">
+<li><p>Change mode to interrupt stack</p></li>
+<li><p>Illegal vector (<code class="docutils literal notranslate"><span class="pre">bits&lt;1:0&gt;</span></code> = 2 or 3)</p></li>
+<li><p>Unexpected exception during interrupt or exception</p></li>
+<li><p>Process PTE in P0 or P1 space instead of system space</p></li>
+<li><p>Unknown IPL</p></li>
+<li><p>Infinite loop (BRB/W to self at IPL 1F)</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command supports a simple binary format,
+consisting of a stream of binary bytes without origin or checksum,
+for loading memory, the boot ROM, or the non-volatile memory.
+The <code class="docutils literal notranslate"><span class="pre">DUMP</span></code> command is not implemented.</p>
+<section id="cpu-and-system-devices">
+<h3><span class="sectnum">1.2.1. </span>CPU and system devices<a class="headerlink" href="#cpu-and-system-devices" title="Permalink to this heading">¶</a></h3>
+<section id="cpu">
+<h4><span class="sectnum">1.2.1.1. </span>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h4>
+<p>CPU options include the size of main memory and the treatment of the <code class="docutils literal notranslate"><span class="pre">HALT</span></code> instruction.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="mi">16</span><span class="n">M</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">16</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">32</span><span class="n">M</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">32</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">48</span><span class="n">M</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">48</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">64</span><span class="n">M</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">64</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">128</span><span class="n">M</span>                  <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">128</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">256</span><span class="n">M</span>                  <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">256</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">512</span><span class="n">M</span>                  <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">512</span><span class="n">MB</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">SIMHALT</span>               <span class="n">Kernel</span> <span class="n">HALT</span> <span class="n">returns</span> <span class="n">to</span> <span class="n">simulator</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">CONHALT</span>               <span class="n">Kernel</span> <span class="n">HALT</span> <span class="n">returns</span> <span class="n">to</span> <span class="n">boot</span> <span class="n">ROM</span> <span class="n">console</span>
+</pre></div>
+</div>
+<p>The CPU also implements a command to display a virtual to physical address translation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="p">{</span><span class="o">-</span><span class="n">kesu</span><span class="p">}</span> <span class="n">CPU</span> <span class="n">VIRTUAL</span><span class="o">=</span><span class="n">n</span>    <span class="n">Show</span> <span class="n">translation</span> <span class="k">for</span> <span class="n">address</span> <span class="n">n</span>
+                              <span class="ow">in</span> <span class="n">kernel</span><span class="o">/</span><span class="n">exec</span><span class="o">/</span><span class="n">supervisor</span><span class="o">/</span><span class="n">user</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>Notes on memory size:</p>
+<ul class="simple">
+<li><p>The real KA655 CPU only supported 16MB to 64MB of memory.
+The simulator implements a KA655”X”,
+which increases supported memory to 512MB.</p></li>
+<li><p>The firmware (<code class="docutils literal notranslate"><span class="pre">ka655x.bin</span></code>) contains code to determine the size of extended memory and set up the PFN bit map accordingly.
+Other than setting up the PFN bit map,
+the firmware does not recognize extended memory and will behave as though memory size was 64MB.</p></li>
+<li><p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.</p></li>
+<li><p>If the simulator is running VMS, the operating system may have a <code class="docutils literal notranslate"><span class="pre">SYSGEN</span></code> parameter set called <code class="docutils literal notranslate"><span class="pre">PHYSICAL</span> <span class="pre">PAGES</span></code>
+(viewable from <code class="docutils literal notranslate"><span class="pre">MCR</span> <span class="pre">SYSGEN</span> <span class="pre">SHOW</span> <span class="pre">PHYSICALPAGES</span></code>).
+<code class="docutils literal notranslate"><span class="pre">PHYSICALPAGES</span></code> limits the maximum number of physical pages of memory the OS will recognize.
+If it is set to a lower value than the new memory size of the machine,
+then only the first <code class="docutils literal notranslate"><span class="pre">PHYSICALPAGES</span></code> of memory will be recognized,
+otherwise the actual size of the extended memory will be realized by VMS upon each boot.
+Some users and/or sites may specify the <code class="docutils literal notranslate"><span class="pre">PHYSICALPAGES</span></code> parameter in the input file to <code class="docutils literal notranslate"><span class="pre">AUTOGEN</span></code> (<code class="docutils literal notranslate"><span class="pre">SYS$SYSTEM:MODPARAMS.DAT</span></code>).
+If <code class="docutils literal notranslate"><span class="pre">PHYSICALPAGES</span></code> is specified there, it will have to be adjusted before running <code class="docutils literal notranslate"><span class="pre">AUTOGEN</span></code> to recognize more memory.
+The default value for <code class="docutils literal notranslate"><span class="pre">PHYSICALPAGES</span></code> is 1048576, which describes 512MB of RAM.</p></li>
+</ul>
+<p>Initial memory size is 16MB.</p>
+<p>Memory can be loaded with a binary byte stream using the <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command.
+The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command recognizes three switches:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-o</span></kbd></dt>
+<dd><p>Origin argument follows filename</p>
+</dd>
+<dt><kbd><span class="option">-r</span></kbd></dt>
+<dd><p>Load the boot ROM</p>
+</dd>
+<dt><kbd><span class="option">-n</span></kbd></dt>
+<dd><p>Load the non-volatile RAM</p>
+</dd>
+</dl>
+<p>The CPU supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command and is the only VAX device to do so.
+Note that the behavior of the bootstrap depends on the capabilities of the console terminal emulator.
+If the terminal window supports full VT100 emulation (including Multilanguage Character Set support),
+the bootstrap will ask the user to specify the language;
+otherwise, it will default to English.</p>
+<p>These switches are recognized when examining or depositing in CPU memory:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-b</span></kbd></dt>
+<dd><p>Examine/deposit bytes</p>
+</dd>
+<dt><kbd><span class="option">-w</span></kbd></dt>
+<dd><p>Examine/deposit words</p>
+</dd>
+<dt><kbd><span class="option">-l</span></kbd></dt>
+<dd><p>Examine/deposit longwords</p>
+</dd>
+<dt><kbd><span class="option">-d</span></kbd></dt>
+<dd><p>Data radix is decimal</p>
+</dd>
+<dt><kbd><span class="option">-o</span></kbd></dt>
+<dd><p>Data radix is octal</p>
+</dd>
+<dt><kbd><span class="option">-h</span></kbd></dt>
+<dd><p>Data radix is hexadecimal</p>
+</dd>
+<dt><kbd><span class="option">-m</span></kbd></dt>
+<dd><p>Examine (only) VAX instructions</p>
+</dd>
+<dt><kbd><span class="option">-p</span></kbd></dt>
+<dd><p>Examine/deposit PDP-11 (compatibility mode) instructions</p>
+</dd>
+<dt><kbd><span class="option">-r</span></kbd></dt>
+<dd><p>Examine (only) RADIX50 encoded data</p>
+</dd>
+<dt><kbd><span class="option">-v</span></kbd></dt>
+<dd><p>Interpret address as virtual, current mode</p>
+</dd>
+<dt><kbd><span class="option">-k</span></kbd></dt>
+<dd><p>Interpret address as virtual, kernel mode</p>
+</dd>
+<dt><kbd><span class="option">-e</span></kbd></dt>
+<dd><p>Interpret address as virtual, executive mode</p>
+</dd>
+<dt><kbd><span class="option">-s</span></kbd></dt>
+<dd><p>Interpret address as virtual, supervisor mode</p>
+</dd>
+<dt><kbd><span class="option">-u</span></kbd></dt>
+<dd><p>Interpret address as virtual, user mode</p>
+</dd>
+</dl>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R0</span></code> .. <code class="docutils literal notranslate"><span class="pre">R14</span></code></p></td>
+<td><p>32</p></td>
+<td><p>R0 to R14</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Alias for R12</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Alias for R13</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Alias for R14</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PSL</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Processor status longword</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CC</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Condition codes, PSL&lt;3:0&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">KSP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Kernel stack pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ESP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Executive stack pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SSP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Supervisor stack pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">USP</span></code></p></td>
+<td><p>32</p></td>
+<td><p>User stack pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Interrupt stack pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SCBB</span></code></p></td>
+<td><p>32</p></td>
+<td><p>System control block base</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PCBB</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Process control block base</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">P0BR</span></code></p></td>
+<td><p>32</p></td>
+<td><p>P0 base register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">P0LR</span></code></p></td>
+<td><p>22</p></td>
+<td><p>P0 length register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">P1BR</span></code></p></td>
+<td><p>32</p></td>
+<td><p>P1 base register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">P1LR</span></code></p></td>
+<td><p>22</p></td>
+<td><p>P1 length register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBR</span></code></p></td>
+<td><p>32</p></td>
+<td><p>System base register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SLR</span></code></p></td>
+<td><p>22</p></td>
+<td><p>System length register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SISR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Software interrupt summary register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ASTLVL</span></code></p></td>
+<td><p>4</p></td>
+<td><p>AST level register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MAPEN</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Memory management enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Performance monitor enable</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TRPIRQ</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Trap/interrupt pending</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CRDERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Correctible read data error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MEMERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Memory error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PCQ[0:63]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>PC prior to last PC change or interrupt; most recent PC change first</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRU</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Interrupt character</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU attempts to detect when the simulator is idle.
+When idle, the simulator does not use any resources on the host system.
+Idle detection is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">IDLE</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">NOIDLE</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">IDLE</span><span class="p">{</span><span class="o">=</span><span class="n">platform</span><span class="p">}{:</span><span class="n">n</span><span class="p">}</span>   <span class="n">Enable</span> <span class="n">idle</span> <span class="n">detection</span> <span class="k">for</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">platform</span><span class="o">.</span>
+                              <span class="n">Supported</span> <span class="n">platform</span> <span class="n">names</span> <span class="n">are</span><span class="p">:</span>
+                              <span class="n">VMS</span><span class="p">,</span> <span class="n">ULTRIX</span><span class="p">,</span> <span class="n">ULTRIXOLD</span><span class="p">,</span> <span class="n">ULTRIX</span><span class="o">-</span><span class="mf">1.</span><span class="n">X</span> <span class="mi">3</span><span class="n">BSD</span><span class="p">,</span>
+                              <span class="mf">4.0</span><span class="n">BSD</span><span class="p">,</span> <span class="mf">4.1</span><span class="n">BSD</span><span class="p">,</span> <span class="mf">4.2</span><span class="n">BSD</span><span class="p">,</span> <span class="n">QUASIJARUS</span><span class="p">,</span> <span class="n">NETBSD</span><span class="p">,</span>
+                              <span class="n">NETBSDOLD</span><span class="p">,</span> <span class="n">OPENBSD</span><span class="p">,</span> <span class="n">OPENBSDOLD</span><span class="p">,</span> <span class="mi">32</span><span class="n">V</span><span class="p">,</span> <span class="n">ELN</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOIDL</span>                 <span class="n">Disable</span> <span class="n">idle</span> <span class="n">detection</span>
+</pre></div>
+</div>
+<p>Idle detection is disabled by default.
+If idle detection is enabled with an incorrect operating system setting, simulator performance could be impacted.
+The default operating system setting is <code class="docutils literal notranslate"><span class="pre">VMS</span></code>.
+The value <code class="docutils literal notranslate"><span class="pre">n</span></code>, if present in the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">IDLE={OS}:n</span></code> command,
+indicates the number of seconds the simulator must run before idling starts.</p>
+<p>The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> and <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span>               <span class="n">Clear</span> <span class="n">history</span> <span class="n">buffer</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="mi">0</span>             <span class="n">Disable</span> <span class="n">history</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="p">{</span><span class="o">-</span><span class="n">T</span><span class="p">}</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span><span class="p">{:</span><span class="n">file</span><span class="p">}</span> <span class="n">Enable</span> <span class="n">history</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span>              <span class="n">Print</span> <span class="n">CPU</span> <span class="n">history</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>            <span class="n">Print</span> <span class="n">first</span> <span class="n">n</span> <span class="n">entries</span> <span class="n">of</span> <span class="n">CPU</span> <span class="n">history</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">-T</span></code> switch causes simulator time to be recorded (and displayed) with each history entry.
+When writing history to a file (<code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">HISTORY=n:file</span></code>), <code class="docutils literal notranslate"><span class="pre">n</span></code> specifies the buffer flush frequency.
+Warning: prodigious amounts of disk space may be consumed.
+The maximum length for the history is 250000 entries.</p>
+</section>
+<section id="translation-buffer-tlb">
+<h4><span class="sectnum">1.2.1.2. </span>Translation buffer (TLB)<a class="headerlink" href="#translation-buffer-tlb" title="Permalink to this heading">¶</a></h4>
+<p>The translation buffer consists of two units,
+representing the system and user translation buffers, respectively.
+It has no registers.
+Each translation buffer entry consists of two 32b words, as follows:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">word</span> <span class="pre">n</span></code></p></td>
+<td><p>Tag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">word</span> <span class="pre">n+1</span></code></p></td>
+<td><p>Cached PTE</p></td>
+</tr>
+</tbody>
+</table>
+<p>An invalid entry is indicated by a tag of 0xFFFFFFFF.</p>
+</section>
+<section id="qbus-adapter-qba">
+<h4><span class="sectnum">1.2.1.3. </span>Qbus adapter (QBA)<a class="headerlink" href="#qbus-adapter-qba" title="Permalink to this heading">¶</a></h4>
+<p>The QBA simulates the CQBIC Qbus adapter chip.
+It recognizes the following options:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">QBA</span> <span class="n">AUTOCONFIGURE</span>         <span class="n">Enable</span> <span class="n">autoconfiguration</span>
+<span class="n">SET</span> <span class="n">QBA</span> <span class="n">NOAUTOCONFIGURE</span>       <span class="n">Disable</span> <span class="n">autoconfiguration</span>
+</pre></div>
+</div>
+<p>and the following display command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">QBA</span> <span class="n">IOSPACE</span>              <span class="n">Show</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">space</span> <span class="n">address</span> <span class="nb">map</span>
+</pre></div>
+</div>
+<p>The QBA also implements a command to display a Qbus address to physical address translation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">QBA</span> <span class="n">VIRTUAL</span><span class="o">=</span><span class="n">n</span>            <span class="n">Show</span> <span class="n">translation</span> <span class="k">for</span> <span class="n">Qbus</span> <span class="n">address</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>Finally, the QBA implements main memory examination and modification via the Qbus map.
+The data width is always 16b:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">EX</span> <span class="n">QBA</span> <span class="mi">0</span><span class="o">/</span><span class="mi">10</span>                   <span class="n">Examine</span> <span class="n">main</span> <span class="n">memory</span> <span class="n">words</span> <span class="n">corresponding</span>
+                              <span class="n">to</span> <span class="n">Qbus</span> <span class="n">addresses</span> <span class="mi">0</span><span class="o">-</span><span class="mi">10</span>
+</pre></div>
+</div>
+<p>The QBA registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SCR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>System configuration register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DSER</span></code></p></td>
+<td><p>8</p></td>
+<td><p>DMA system error register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MEAR</span></code></p></td>
+<td><p>13</p></td>
+<td><p>Master error address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SEAR</span></code></p></td>
+<td><p>20</p></td>
+<td><p>Slave error address register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MBR</span></code></p></td>
+<td><p>29</p></td>
+<td><p>Qbus map base register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IPC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Interprocessor communications register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IPL17</span></code></p></td>
+<td><p>32</p></td>
+<td><p>IPL 17 interrupt flags</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IPL16</span></code></p></td>
+<td><p>32</p></td>
+<td><p>IPL 16 interrupt flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IPL15</span></code></p></td>
+<td><p>32</p></td>
+<td><p>IPL 15 interrupt flags</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IPL14</span></code></p></td>
+<td><p>32</p></td>
+<td><p>IPL 14 interrupt flags</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="read-only-memory-rom">
+<h4><span class="sectnum">1.2.1.4. </span>Read-only memory (ROM)<a class="headerlink" href="#read-only-memory-rom" title="Permalink to this heading">¶</a></h4>
+<p>The boot ROM consists of a single unit, simulating the 128KB boot ROM.
+It has no registers.
+The boot ROM is loaded with a binary byte stream using the <code class="docutils literal notranslate"><span class="pre">LOAD</span> <span class="pre">-r</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LOAD</span> <span class="o">-</span><span class="n">r</span> <span class="n">KA655X</span><span class="o">.</span><span class="n">BIN</span>            <span class="n">Load</span> <span class="n">ROM</span> <span class="n">image</span> <span class="n">KA655X</span><span class="o">.</span><span class="n">BIN</span>
+</pre></div>
+</div>
+<p>ROM accesses a use a calibrated delay that slows ROM-based execution to about 500K instructions per second.
+This delay is required to make the power-up self-test routines run correctly on very fast hosts.
+The delay is controlled with the commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">ROM</span> <span class="n">NODELAY</span>               <span class="n">ROM</span> <span class="n">runs</span> <span class="n">like</span> <span class="n">RAM</span>
+<span class="n">SET</span> <span class="n">ROM</span> <span class="n">DELAY</span>                 <span class="n">ROM</span> <span class="n">runs</span> <span class="n">slowly</span>
+</pre></div>
+</div>
+</section>
+<section id="non-volatile-memory-nvr">
+<h4><span class="sectnum">1.2.1.5. </span>Non-volatile memory (NVR)<a class="headerlink" href="#non-volatile-memory-nvr" title="Permalink to this heading">¶</a></h4>
+<p>The NVR consists of a single unit, simulating 1KB of battery-backed up memory in the SSC chip.
+When the simulator starts, NVR is cleared to 0, and the SSC battery-low indicator is set.
+Normally, NVR is saved and restored like other memory in the system.
+Alternately, NVR can be attached to a file.
+This allows its contents to be saved and restored independently of other memories,
+so that NVR state can be preserved across simulator runs.</p>
+<p>Successfully loading an NVR image clears the SSC battery-low indicator.</p>
+</section>
+<section id="system-devices-sysd">
+<h4><span class="sectnum">1.2.1.6. </span>System devices (SYSD)<a class="headerlink" href="#system-devices-sysd" title="Permalink to this heading">¶</a></h4>
+<p>The system devices are the system-specific facilities implemented in the CVAX chip,
+the KA655 CPU board, the CMCTL memory controller, and the SSC system support chip.
+Note that the simulation of these devices is incomplete and is intended strictly to allow the patched bootstrap and console code to run.
+The SYSD registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CADR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Cache disable register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MSER</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Memory system error register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONPC</span></code></p></td>
+<td><p>32</p></td>
+<td><p>PC at console halt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONPSL</span></code></p></td>
+<td><p>32</p></td>
+<td><p>PSL at console halt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMCSR[0:17]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>CMCTL control and status registers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CACR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Second-level cache control register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BDR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Front panel jumper register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BASE</span></code></p></td>
+<td><p>29</p></td>
+<td><p>SSC base address register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CNF</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC configuration register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BTO</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC bus timeout register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TCSR0</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 0 control/status register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIR0</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 0 interval register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TNIR0</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 0 next interval register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIVEC0</span></code></p></td>
+<td><p>9</p></td>
+<td><p>SSC timer 0 interrupt vector register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TCSR1</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 1 control/status register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIR1</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 1 interval register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TNIR1</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC timer 1 next interval register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIVEC1</span></code></p></td>
+<td><p>9</p></td>
+<td><p>SSC timer 1 interrupt vector register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADSM0</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC address match 0 address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ADSK0</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC address match 0 mask</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADSM1</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC address match 1 address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ADSK1</span></code></p></td>
+<td><p>32</p></td>
+<td><p>SSC address match 1 mask</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDGDAT[0:16383]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Cache diagnostic data store</p></td>
+</tr>
+</tbody>
+</table>
+<p>BDR&lt;7&gt; is the halt-enabled switch.
+It controls how the console firmware responds to a <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command,
+a kernel halt (if option <code class="docutils literal notranslate"><span class="pre">CONHALT</span></code> is set),
+or a console halt (<code class="docutils literal notranslate"><span class="pre">BREAK</span></code> typed on the console terminal).
+If BDR&lt;7&gt; is set, the console firmware responds to all these conditions by entering its interactive command mode.
+If BDR&lt;7&gt; is clear, the console firmware boots the operating system in response to these conditions.
+This bit can be set and cleared by the command <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">AUTOBOOT</span></code> (clearing the flag) and <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">NOAUTOBOOT</span></code> (setting the flag).
+The default value is set.</p>
+</section>
+</section>
+<section id="i-o-device-addressing">
+<h3><span class="sectnum">1.2.2. </span>I/O device addressing<a class="headerlink" href="#i-o-device-addressing" title="Permalink to this heading">¶</a></h3>
+<p>Qbus I/O space is not large enough to allow all possible devices to be configured simultaneously at fixed addresses.
+Instead, many devices have floating addresses;
+that is, the assigned device address depends on the presence of other devices in the configuration:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DZ11</span></code></p></td>
+<td><p>All instances have floating addresses</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DHQ11</span></code></p></td>
+<td><p>All instances have floating addresses</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RL11</span></code></p></td>
+<td><p>First instance has fixed address, rest floating</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RXV211</span></code></p></td>
+<td><p>First instance has fixed address, rest floating</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MSCP</span></code> disk</p></td>
+<td><p>First instance has fixed address, rest floating</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TMSCP</span></code> tape</p></td>
+<td><p>First instance has fixed address, rest floating</p></td>
+</tr>
+</tbody>
+</table>
+<p>To maintain addressing consistency as the configuration changes,
+the simulator implements DEC’s standard I/O address and vector autoconfiguration algorithms for all Qbus devices.
+This allows the user to enable or disable devices without needing to manage I/O addresses and vectors.</p>
+<p>In addition to autoconfiguration,
+most devices support the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;device&gt;</span> <span class="pre">ADDRESS</span></code> command,
+which allows the I/O page address of the device to be changed,
+and the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;device&gt;</span> <span class="pre">VECTOR</span></code> command, which allows the vector of the device to be changed.
+Explicitly setting the I/O address or vector of a device DISABLES autoconfiguration for that device and for the entire system.
+As a consequence, the user may have to manually configure all other autoconfigured devices,
+because the autoconfiguration algorithm no longer recognizes the explicitly configured device.
+A device can be reset to autoconfigure with the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;device&gt;</span> <span class="pre">AUTOCONFIGURE</span></code> command.
+Autoconfiguration can be restored for the entire system with the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">QBA</span> <span class="pre">AUTOCONFIGURE</span></code> command.</p>
+<p>The current I/O map can be displayed with the <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">QBA</span> <span class="pre">IOSPACE</span></code> command.
+Addresses that have set by autoconfiguration are marked with an asterisk (*).</p>
+<p>All devices support the <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">&lt;device&gt;</span> <span class="pre">ADDRESS</span></code> and <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">&lt;device&gt;</span> <span class="pre">VECTOR</span></code> commands,
+which display the device address and vector, respectively.</p>
+</section>
+<section id="programmed-i-o-devices">
+<h3><span class="sectnum">1.2.3. </span>Programmed I/O devices<a class="headerlink" href="#programmed-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<section id="terminal-input-tti">
+<h4><span class="sectnum">1.2.3.1. </span>Terminal input (TTI)<a class="headerlink" href="#terminal-input-tti" title="Permalink to this heading">¶</a></h4>
+<p>The terminal interfaces (TTI, TTO) can be set to one of three modes, <code class="docutils literal notranslate"><span class="pre">7P</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code> or <code class="docutils literal notranslate"><span class="pre">8B</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default mode is <code class="docutils literal notranslate"><span class="pre">8B</span></code>.</p>
+<p>When the console terminal is attached to a Telnet session or the simulator is running from a Windows command prompt, it recognizes <code class="docutils literal notranslate"><span class="pre">BREAK</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> is entered, and BDR&lt;7&gt; is set, control returns to the console firmware;
+otherwise, <code class="docutils literal notranslate"><span class="pre">BREAK</span></code> is treated as a normal terminal input condition.</p>
+<p>The terminal input (TTI) polls the console keyboard for input.
+It implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Control/status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag (CSR&lt;15&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag (CSR&lt;7&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CSR&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Number of characters input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Input polling interval (if 0, the keyboard
+is polled synchronously with the TODR)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="terminal-output-tto">
+<h4><span class="sectnum">1.2.3.2. </span>Terminal output (TTO)<a class="headerlink" href="#terminal-output-tto" title="Permalink to this heading">¶</a></h4>
+<p>The terminal output (TTO) writes to the simulator console window.
+It implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag (CSR&lt;15&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag (CSR&lt;7&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CSR&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="lpv11-line-printer-lpt">
+<h4><span class="sectnum">1.2.3.3. </span>LPV11 line printer (LPT)<a class="headerlink" href="#lpv11-line-printer-lpt" title="Permalink to this heading">¶</a></h4>
+<p>The line printer (LPT) writes data to a disk file.
+The POS register specifies the number of the next data item to be written.
+Thus, by changing POS, the user can backspace or advance the printer.</p>
+<p>The line printer implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag (CSR&lt;15&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag (CSR&lt;7&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CSR&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of paper</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="real-time-clock-clk">
+<h4><span class="sectnum">1.2.3.4. </span>Real-time clock (CLK)<a class="headerlink" href="#real-time-clock-clk" title="Permalink to this heading">¶</a></h4>
+<p>The clock (CLK) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CSR&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TODR</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Time-of-day register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BLOW</span></code></p></td>
+<td><p>1</p></td>
+<td><p>TODR battery low indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Clock frequency</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TPS</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Ticks per second (100)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The real-time clock autocalibrates;
+the clock interval is adjusted up or down so that the clock tracks actual elapsed time.</p>
+<p>There are two modes of TODR operation.</p>
+<ol class="arabic simple">
+<li><p><strong>Default VMS mode.</strong>
+Without initializing the TODR it returns the current time of year offset which VMS would set the clock to if VMS knew the correct time (i.e., by manual input).
+This is correct almost all the time unless a VMS disk hadn’t been booted from in the current year.
+This mode produces strange time results for non-VMS OSes on each system boot.</p></li>
+<li><p><strong>OS Agnostic mode.</strong>
+This mode behaves precisely like the VAX780 TODR and works correctly for all OSes.
+This mode is enabled by attaching the CLK to a battery backup state file for the TOY clock (i.e., <code class="docutils literal notranslate"><span class="pre">sim&gt;</span> <span class="pre">attach</span> <span class="pre">CLK</span> <span class="pre">TOY_CLOCK</span></code>).
+When operating in OS Agnostic mode, the TODR will initially start counting from 0 and be adjusted differently when an OS specifically writes to the TODR.
+VMS determines if the TODR currently contains a valid time if the value it sees is less than about 1 month.
+If the time isn’t valid, VMS will prompt to set the time during the system boot.
+While prompting for the time it will wait for an answer to the prompt for up to the <code class="docutils literal notranslate"><span class="pre">SYSGEN</span></code> parameter <code class="docutils literal notranslate"><span class="pre">TIMEPROMPTWAIT</span></code> seconds.
+A value of 0 for <code class="docutils literal notranslate"><span class="pre">TIMEPROMPTWAIT</span></code> will disable the clock setting prompt.</p></li>
+</ol>
+</section>
+</section>
+<section id="disks">
+<h3><span class="sectnum">1.2.4. </span>Disks<a class="headerlink" href="#disks" title="Permalink to this heading">¶</a></h3>
+<section id="rlv12-rl01-rl02-cartridge-disk-rl">
+<h4><span class="sectnum">1.2.4.1. </span>RLV12/RL01,RL02 cartridge disk (RL)<a class="headerlink" href="#rlv12-rl01-rl02-cartridge-disk-rl" title="Permalink to this heading">¶</a></h4>
+<p>RLV12 options include the ability to set units write enabled or write locked,
+to set the drive type to RL01, RL02, or autosize,
+and to write a DEC standard 044 compliant bad block table on the last track:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RLn</span> <span class="n">LOCKED</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">WRITEENABLED</span>          <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">RL01</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RL01</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">RL02</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RL02</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">AUTOSIZE</span>              <span class="n">Set</span> <span class="nb">type</span> <span class="n">based</span> <span class="n">on</span> <span class="n">file</span> <span class="n">size</span> <span class="n">at</span> <span class="n">ATTACH</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">BADBLOCK</span>              <span class="n">Write</span> <span class="n">bad</span> <span class="n">block</span> <span class="n">table</span> <span class="n">on</span> <span class="n">last</span> <span class="n">track</span>
+</pre></div>
+</div>
+<p>The type options can be used only when a unit is not attached to a file.
+The bad block option can be used only when a unit is attached to a file.
+Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The RLV12 does not support the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.</p>
+<p>The RLV12 implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLCS</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLDA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Disk address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLBA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Memory address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLBAE</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Memory address extension (RLV12)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLMP</span></code>, <code class="docutils literal notranslate"><span class="pre">RLMP1</span></code>, <code class="docutils literal notranslate"><span class="pre">RLMP2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Multipurpose register queue</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag (CSR&lt;15&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag (CSR&lt;7&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CSR&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Seek time, per cylinder</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational delay</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+<tr class="row-even"><td><p>end of file</p></td>
+<td><p>x</p></td>
+<td><p>Assume rest of disk is zero</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rqdx3-mscp-disk-controllers-rq-rqb-rqc-rqd">
+<h4><span class="sectnum">1.2.4.2. </span>RQDX3 MSCP disk controllers (RQ, RQB, RQC, RQD)<a class="headerlink" href="#rqdx3-mscp-disk-controllers-rq-rqb-rqc-rqd" title="Permalink to this heading">¶</a></h4>
+<p>The simulator implements four MSCP disk controllers, RQ, RQB, RQC, RQD.
+Initially, RQB, RQC, and RQD are disabled.
+Each RQ controller simulates an RQDX3 MSCP disk controller with four drives.
+RQ options include the ability to set units write enabled or write locked,
+and to set the drive type to one of many disk types:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RQn</span> <span class="n">LOCKED</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">WRITEENABLED</span>          <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RX50</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RX50</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RX33</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RX33</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD32</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD32</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD51</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD51</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD52</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD52</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD53</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD53</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD54</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD54</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RD31</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RD31</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA80</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA80</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA81</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA81</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA82</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA82</span>
+<span class="nb">set</span> <span class="n">RQn</span> <span class="n">RA71</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA71</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA72</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA72</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA90</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA90</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RA92</span>                  <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA92</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RRD40</span>                 <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RRD40</span> <span class="p">(</span><span class="n">CD</span><span class="o">-</span><span class="n">ROM</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">RQn</span> <span class="n">RAUSER</span><span class="p">{</span><span class="o">=</span><span class="n">n</span><span class="p">}</span>            <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA82</span> <span class="k">with</span> <span class="n">n</span> <span class="n">MBs</span>
+<span class="n">SET</span> <span class="o">-</span><span class="n">L</span> <span class="n">RQn</span> <span class="n">RAUSER</span><span class="p">{</span><span class="o">=</span><span class="n">n</span><span class="p">}</span>         <span class="n">Set</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">RA82</span> <span class="k">with</span> <span class="n">n</span> <span class="n">LBNs</span>
+</pre></div>
+</div>
+<p>The type options can be used only when a unit is not attached to a file.
+<code class="docutils literal notranslate"><span class="pre">RAUSER</span></code> is a “user specified” disk;
+the user can specify the size of the disk in either MB (1000000 bytes) or logical block numbers (LBN’s, 512 bytes each).
+The minimum size is 5MB;
+the maximum size is 2GB without extended file support, 1TB with extended file support.</p>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+<p>Drive units have changeable unit numbers.
+Unit numbers can be changed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RQn</span> <span class="n">UNIT</span><span class="o">=</span><span class="n">val</span>              <span class="n">Set</span> <span class="n">unit</span> <span class="n">plug</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>Each device has 4 units which have unique MSCP unit numbers (0, 1, 2 and 3).</p>
+<p>Each RQ controller implements the following special <code class="docutils literal notranslate"><span class="pre">SHOW</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">RQn</span> <span class="n">TYPE</span>                 <span class="n">Show</span> <span class="n">drive</span> <span class="nb">type</span>
+<span class="n">SHOW</span> <span class="n">RQ</span> <span class="n">RINGS</span>                 <span class="n">Show</span> <span class="n">command</span> <span class="ow">and</span> <span class="n">response</span> <span class="n">rings</span>
+<span class="n">SHOW</span> <span class="n">RQ</span> <span class="n">FREEQ</span>                 <span class="n">Show</span> <span class="n">packet</span> <span class="n">free</span> <span class="n">queue</span>
+<span class="n">SHOW</span> <span class="n">RQ</span> <span class="n">RESPQ</span>                 <span class="n">Show</span> <span class="n">packet</span> <span class="n">response</span> <span class="n">queue</span>
+<span class="n">SHOW</span> <span class="n">RQ</span> <span class="n">UNITQ</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="n">queues</span>
+<span class="n">SHOW</span> <span class="n">RQ</span> <span class="n">ALL</span>                   <span class="n">Show</span> <span class="nb">all</span> <span class="n">ring</span> <span class="ow">and</span> <span class="n">queue</span> <span class="n">state</span>
+<span class="n">SHOW</span> <span class="n">RQn</span> <span class="n">UNITQ</span>                <span class="n">Show</span> <span class="n">unit</span> <span class="n">queues</span> <span class="k">for</span> <span class="n">unit</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">RQn</span> <span class="n">UNIT</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="n">plug</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>Each RQ controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Status/address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">S1DAT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Step 1 init host data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CQBA</span></code></p></td>
+<td><p>22</p></td>
+<td><p>Command queue base address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CQLNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Command queue length</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CQIDX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Command queue index</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQBA</span></code></p></td>
+<td><p>22</p></td>
+<td><p>Request queue base address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RQLNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Request queue length</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQIDX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Request queue index</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FREE</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Head of free packet list</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RESP</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Head of response packet list</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PBSY</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Number of busy packets</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CFLGS</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Controller flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSTA</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Controller state</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERR</span></code></p></td>
+<td><p>9</p></td>
+<td><p>Port error number</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CRED</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Host credits</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HAT</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Host available timer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HTMO</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Host timeout value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CPKT[0:3]</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Current packet, units 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PKTQ[0:3]</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Packet queue, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UFLG[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Unit flags, units 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PLUG[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Unit plug values, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ITIME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Response time for initialization steps (except for step 4)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">QTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Response time for ‘immediate’ packets</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Response time for data transfers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PKTS[33*32]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Packet buffers, 33W each, 32 entries</p></td>
+</tr>
+</tbody>
+</table>
+<p>While VMS is not timing sensitive,
+most of the BSD-derived operating systems (NetBSD, OpenBSD, etc) are.
+The <code class="docutils literal notranslate"><span class="pre">QTIME</span></code> and <code class="docutils literal notranslate"><span class="pre">XTIME</span></code> parameters are set to values that allow these operating systems to run correctly.</p>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>not attached</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+<tr class="row-odd"><td><p>end of file</p></td>
+<td><p>Assume rest of disk is zero</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="tapes">
+<h3><span class="sectnum">1.2.5. </span>Tapes<a class="headerlink" href="#tapes" title="Permalink to this heading">¶</a></h3>
+<section id="tsv11-tsv05-magnetic-tape-ts">
+<h4><span class="sectnum">1.2.5.1. </span>TSV11/TSV05 magnetic tape (TS)<a class="headerlink" href="#tsv11-tsv05-magnetic-tape-ts" title="Permalink to this heading">¶</a></h4>
+<p>TS options include the ability to make the unit write enabled or write locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TS</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">TS</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>The TS drive can be set to a specific reel capacity in MB, or to unlimited capacity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TS0</span> <span class="n">CAPAC</span><span class="o">=</span><span class="n">m</span>               <span class="n">Set</span> <span class="n">capacity</span> <span class="n">to</span> <span class="n">m</span> <span class="n">MB</span> <span class="p">(</span><span class="mi">0</span> <span class="o">=</span> <span class="n">unlimited</span><span class="p">)</span>
+<span class="n">SHOW</span> <span class="n">TS0</span> <span class="n">CAPAC</span>                <span class="n">Show</span> <span class="n">capacity</span> <span class="ow">in</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>The TSV11 does not support the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.</p>
+<p>The TS controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TSSR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Status register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TSBA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Bus address register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TSDBX</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Data buffer extension register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CHDR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command packet header</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CADL</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command packet low address or count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CADH</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command packet high address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CLNT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command packet length</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MHDR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet header</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MRFC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet residual frame count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MXS0</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet extended status 0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MXS1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet extended status 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MXS2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet extended status 2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MXS3</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet extended status 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MXS4</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Message packet extended status 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WADL</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write char packet low address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WADH</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write char packet high address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WLNT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write char packet length</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WOPT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write char packet options</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WXOPT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write char packet extended options</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ATTN</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Attention message pending</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BOOT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Boot request pending</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OWNC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>If set, tape owns command buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OWNM</span></code></p></td>
+<td><p>1</p></td>
+<td><p>If set, tape owns message buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>not attached</p></td>
+<td><p>Tape not ready</p></td>
+</tr>
+<tr class="row-odd"><td><p>end of file</p></td>
+<td><p>Bad tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Fatal tape error</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tqk50-tmscp-tape-controller-tq">
+<h4><span class="sectnum">1.2.5.2. </span>TQK50 TMSCP tape controller (TQ)<a class="headerlink" href="#tqk50-tmscp-tape-controller-tq" title="Permalink to this heading">¶</a></h4>
+<p>The TQ controller simulates the TQK50 TMSCP tape controller.
+TQ options include the ability to set units write enabled or write locked,
+and to specify the controller type and tape length:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TQn</span> <span class="n">LOCKED</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">TQn</span> <span class="n">WRITEENABLED</span>          <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+<span class="n">SET</span> <span class="n">TQ</span> <span class="n">TK50</span>                   <span class="n">Set</span> <span class="n">controller</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">TK50</span>
+<span class="n">SET</span> <span class="n">TQ</span> <span class="n">TK70</span>                   <span class="n">Set</span> <span class="n">controller</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">TK70</span>
+<span class="n">SET</span> <span class="n">TQ</span> <span class="n">TU81</span>                   <span class="n">Set</span> <span class="n">controller</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">TU81</span>
+<span class="n">SET</span> <span class="n">TQ</span> <span class="n">TKUSER</span><span class="p">{</span><span class="o">=</span><span class="n">n</span><span class="p">}</span>             <span class="n">Set</span> <span class="n">controller</span> <span class="nb">type</span> <span class="n">to</span> <span class="n">TK50</span> <span class="k">with</span> <span class="n">tape</span> <span class="n">capacity</span> <span class="n">of</span> <span class="n">n</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>User-specified capacity must be between 50 and 2000000000 MB.
+Regardless of the controller type,
+individual units can be set to a specific reel capacity in MB,
+or to unlimited capacity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TQn</span> <span class="n">CAPAC</span><span class="o">=</span><span class="n">m</span>               <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">capacity</span> <span class="n">to</span> <span class="n">m</span> <span class="n">MB</span> <span class="p">(</span><span class="mi">0</span> <span class="o">=</span> <span class="n">unlimited</span><span class="p">)</span>
+<span class="n">SHOW</span> <span class="n">TQn</span> <span class="n">CAPAC</span>                <span class="n">Show</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">capacity</span> <span class="ow">in</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>Drive units have changeable unit numbers.
+Unit numbers can be changed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TQn</span> <span class="n">UNIT</span><span class="o">=</span><span class="n">val</span>              <span class="n">Set</span> <span class="n">unit</span> <span class="n">plug</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>Device TQ has 4 units (TQ0, TQ1, TQ2 and TQ3) which have unique MSCP unit numbers (0, 1, 2 and 3).</p>
+<p>The TQ controller implements the following special <code class="docutils literal notranslate"><span class="pre">SHOW</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">TYPE</span>                  <span class="n">Show</span> <span class="n">controller</span> <span class="nb">type</span>
+<span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">RINGS</span>                 <span class="n">Show</span> <span class="n">command</span> <span class="ow">and</span> <span class="n">response</span> <span class="n">rings</span>
+<span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">FREEQ</span>                 <span class="n">Show</span> <span class="n">packet</span> <span class="n">free</span> <span class="n">queue</span>
+<span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">RESPQ</span>                 <span class="n">Show</span> <span class="n">packet</span> <span class="n">response</span> <span class="n">queue</span>
+<span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">UNITQ</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="n">queues</span>
+<span class="n">SHOW</span> <span class="n">TQ</span> <span class="n">ALL</span>                   <span class="n">Show</span> <span class="nb">all</span> <span class="n">ring</span> <span class="ow">and</span> <span class="n">queue</span> <span class="n">state</span>
+<span class="n">SHOW</span> <span class="n">TQn</span> <span class="n">UNITQ</span>                <span class="n">Show</span> <span class="n">unit</span> <span class="n">queues</span> <span class="k">for</span> <span class="n">unit</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">TQn</span> <span class="n">UNIT</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="n">plug</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>The TQ controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Status/address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">S1DAT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Step 1 init host data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CQBA</span></code></p></td>
+<td><p>22</p></td>
+<td><p>Command queue base address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CQLNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Command queue length</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CQIDX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Command queue index</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQBA</span></code></p></td>
+<td><p>22</p></td>
+<td><p>Request queue base address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RQLNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Request queue length</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RQIDX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Request queue index</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FREE</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Head of free packet list</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RESP</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Head of response packet list</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PBSY</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Number of busy packets</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CFLGS</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Controller flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSTA</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Controller state</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PERR</span></code></p></td>
+<td><p>9</p></td>
+<td><p>Port error number</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CRED</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Host credits</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HAT</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Host available timer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HTMO</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Host timeout value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CPKT[0:3]</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Current packet, units 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PKTQ[0:3]</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Packet queue, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UFLG[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Unit flags, units 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PLUG[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Unit plug values, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:3]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Tape position, units 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OBJP[0:3]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Object position, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ITIME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Response time for initialization steps (except for step 4)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">QTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Response time for ‘immediate’ packets</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Response time for data transfers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PKTS[33*32]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Packet buffers, 33W each, 32 entries</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>not attached</p></td>
+<td><p>Tape not ready</p></td>
+</tr>
+<tr class="row-odd"><td><p>end of file</p></td>
+<td><p>End of medium</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Fatal tape error</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="communications-devices">
+<h3><span class="sectnum">1.2.6. </span>Communications devices<a class="headerlink" href="#communications-devices" title="Permalink to this heading">¶</a></h3>
+<section id="dzv11-terminal-multiplexer-dz">
+<h4><span class="sectnum">1.2.6.1. </span>DZV11 terminal multiplexer (DZ)<a class="headerlink" href="#dzv11-terminal-multiplexer-dz" title="Permalink to this heading">¶</a></h4>
+<p>The DZV11 is a 4-line terminal multiplexor
+Up to 4 DZ11’s (16 lines) are supported.
+The number of lines can be changed with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DZ</span> <span class="n">LINES</span><span class="o">=</span><span class="n">n</span>                <span class="n">Set</span> <span class="n">line</span> <span class="n">count</span> <span class="n">to</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>The line count must be a multiple of 4, with a maximum of 16.</p>
+<p>The DZ11 supports three character processing modes, <code class="docutils literal notranslate"><span class="pre">7P</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, and <code class="docutils literal notranslate"><span class="pre">8B</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">8B</span></code>.</p>
+<p>The DZV11 supports logging on a per-line basis.
+The command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DZ</span> <span class="n">LOG</span><span class="o">=</span><span class="n">line</span><span class="o">=</span><span class="n">filename</span>
+</pre></div>
+</div>
+<p>enables logging for the specified line to the indicated file.
+The command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DZ</span> <span class="n">NOLOG</span><span class="o">=</span><span class="n">line</span>
+</pre></div>
+</div>
+<p>disables logging for the specified line and closes any open log file.
+Finally, the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">DZ</span> <span class="n">LOG</span>
+</pre></div>
+</div>
+<p>displays logging information for all DZ lines.</p>
+<p>The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
+The <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command specifies the port to be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="p">{</span><span class="o">-</span><span class="n">am</span><span class="p">}</span> <span class="n">DZ</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>        <span class="n">Set</span> <span class="n">up</span> <span class="n">listening</span> <span class="n">port</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;port&gt;</span></code> is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
+The optional switch <code class="docutils literal notranslate"><span class="pre">-m</span></code> turns on the DZV11’s modem controls;
+the optional switch <code class="docutils literal notranslate"><span class="pre">-a</span></code> turns on active disconnects
+(disconnect session if computer clears Data Terminal Ready).
+Without modem control, the DZV11 behaves as though terminals were directly connected;
+disconnecting the Telnet session does not cause any operating system-visible change in line status.</p>
+<p>Once the DZ is attached and the simulator is running,
+the DZ will listen for connections on the specified port.
+It assumes that the incoming connections are Telnet connections.
+The connection remains open until disconnected by the simulated program,
+the Telnet client, a <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DZ</span> <span class="pre">DISCONNECT</span></code> command, or a <code class="docutils literal notranslate"><span class="pre">DETACH</span> <span class="pre">DZ</span></code> command.</p>
+<p>Other special DZ commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">DZ</span> <span class="n">CONNECTIONS</span>           <span class="n">Show</span> <span class="n">current</span> <span class="n">connections</span>
+<span class="n">SHOW</span> <span class="n">DZ</span> <span class="n">STATISTICS</span>            <span class="n">Show</span> <span class="n">statistics</span> <span class="k">for</span> <span class="n">active</span> <span class="n">connections</span>
+<span class="n">SET</span> <span class="n">DZ</span> <span class="n">DISCONNECT</span><span class="o">=</span><span class="n">linenumber</span>  <span class="n">Disconnects</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>The DZV11 implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RBUF[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Receive buffer, boards 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Line parameter register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TCR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Transmission control register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MSR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Modem status register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TDR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Transmit data register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SAENB[0:3]</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Silo alarm enabled, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RXINT</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Receive interrupts, boards 3 to 0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TXINT</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Transmit interrupts, boards 3 to 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MDMTCL</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Modem control enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">AUTODS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Autodisconnect enabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>The DZV11 partially supports save and restore.
+A save simulator state will restore the listening sockets and serial port parameters,
+but all active incoming telnet connections will be lost.</p>
+<p>All active incoming telnet connections are lost when the simulator shuts down or the DZ is detached.</p>
+</section>
+<section id="dhq11-terminal-multiplexer-vh">
+<h4><span class="sectnum">1.2.6.2. </span>DHQ11 terminal multiplexer (VH)<a class="headerlink" href="#dhq11-terminal-multiplexer-vh" title="Permalink to this heading">¶</a></h4>
+<p>The DHQ11 is an 8-line terminal multiplexer for Qbus systems.
+Up to 4 DHQ11’s are supported.</p>
+<p>The DHQ11 is a programmable asynchronous terminal multiplexer.
+It has two programming modes: DHV11 and DHU11.
+The register sets are compatible with these devices.
+For transmission, the DHQ11 can be used in either DMA or programmed I/O mode.
+For reception, there is a 256-entry FIFO for received characters, dataset status changes, and diagnostic information, and a programmable input interrupt timer (in DHU mode).
+The device supports 16-, 18-, and 22-bit addressing.
+The DHQ11 can be programmed to filter and/or handle XON/XOFF characters independently of the processor.
+The DHQ11 supports programmable bit width (between 5 and 8) for the input and output of characters.</p>
+<p>The DHQ11 has a rocker switch for determining the programming mode.
+By default, the DHV11 mode is selected, though DHU11 mode is recommended for applications that can support it.
+The VH controller may be adjusted on a per controller basis as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">VHn</span> <span class="n">DHU</span>                   <span class="n">Use</span> <span class="n">the</span> <span class="n">DHU</span> <span class="n">programming</span> <span class="n">mode</span> <span class="ow">and</span> <span class="n">registers</span>
+<span class="n">SET</span> <span class="n">VHn</span> <span class="n">DHV</span>                   <span class="n">Use</span> <span class="n">the</span> <span class="n">DHV</span> <span class="n">programming</span> <span class="n">mode</span> <span class="ow">and</span> <span class="n">registers</span>
+</pre></div>
+</div>
+<p>DMA output is supported.
+In a real DHQ11, DMA is not initiated immediately upon receipt of <code class="docutils literal notranslate"><span class="pre">TX.DMA.START</span></code> but is dependent upon some internal processes.
+The VH controller mimics this behavior by default.
+It may be desirable to alter this and start immediately,
+though this may not be compatible with all operating systems and diagnostics.
+You can change the behavior of the VH controller as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">VHn</span> <span class="n">NORMAL</span>                <span class="n">Use</span> <span class="n">normal</span> <span class="n">DMA</span> <span class="n">procedures</span>
+<span class="n">SET</span> <span class="n">VHn</span> <span class="n">FASTDMA</span>               <span class="n">Set</span> <span class="n">DMA</span> <span class="n">to</span> <span class="n">initiate</span> <span class="n">immediately</span>
+</pre></div>
+</div>
+<p>The terminal lines perform input and output through Telnet sessions connected to a user-specified port.
+The <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command specifies the port to be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">VH</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>              <span class="n">Set</span> <span class="n">up</span> <span class="n">listening</span> <span class="n">port</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;port&gt;</span></code> is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
+This port is the point of entry for all lines on all VH controllers.</p>
+<p>The number of lines can be changed with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">VH</span> <span class="n">LINES</span><span class="o">=</span><span class="n">n</span>                <span class="n">Set</span> <span class="n">line</span> <span class="n">count</span> <span class="n">to</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>The line count must be a multiple of 8, with a maximum of 32.</p>
+<p>Modem and auto-disconnect support may be set on an individual controller basis.
+The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">MODEM</span></code> command directs the controller to report modem status changes to the computer.
+The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">HANGUP</span></code> command turns on active disconnects
+(disconnect session if computer clears Data Terminal Ready).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">VHn</span> <span class="p">[</span><span class="n">NO</span><span class="p">]</span><span class="n">MODEM</span>             <span class="n">Disable</span><span class="o">/</span><span class="n">enable</span> <span class="n">modem</span> <span class="n">control</span>
+<span class="n">SET</span> <span class="n">VHn</span> <span class="p">[</span><span class="n">NO</span><span class="p">]</span><span class="n">HANGUP</span>            <span class="n">Disable</span><span class="o">/</span><span class="n">enable</span> <span class="n">disconnect</span> <span class="n">on</span> <span class="n">DTR</span> <span class="n">drop</span>
+</pre></div>
+</div>
+<p>Once the VH is attached and the simulator is running,
+the VH will listen for connections on the specified port.
+It assumes that the incoming connections are Telnet connections.
+The connection remains open until disconnected by the simulated program,
+the Telnet client, a <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">VH</span> <span class="pre">DISCONNECT</span></code> command, or a <code class="docutils literal notranslate"><span class="pre">DETACH</span> <span class="pre">VH</span></code> command.</p>
+<p>Other special VH commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">VH</span> <span class="n">CONNECTIONS</span>           <span class="n">Show</span> <span class="n">current</span> <span class="n">connections</span>
+<span class="n">SHOW</span> <span class="n">VH</span> <span class="n">STATISTICS</span>            <span class="n">Show</span> <span class="n">statistics</span> <span class="k">for</span> <span class="n">active</span> <span class="n">connections</span>
+<span class="n">SET</span> <span class="n">VH</span> <span class="n">DISCONNECT</span><span class="o">=</span><span class="n">linenumber</span>  <span class="n">Disconnects</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>The DHQ11 implements these registers, though not all can be examined from SCP:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control/status register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RBUF[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Receive buffer, boards 0 to 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPR[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Line parameter register, boards 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RXINT</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Receive interrupts, boards 3..0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TXINT</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Transmit interrupts, boards 3..0</p></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<div><p>[more to be described…]</p>
+</div></blockquote>
+<p>The DHQ11 does not support save and restore.
+All open connections are lost when the simulator shuts down or the VH is detached.</p>
+</section>
+<section id="delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb">
+<h4><span class="sectnum">1.2.6.3. </span>DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB)<a class="headerlink" href="#delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb" title="Permalink to this heading">¶</a></h4>
+<p>The simulator implements two DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB).
+Initially, XQ is enabled, and XQB is disabled.
+Options allow control of the MAC address, the controller mode, and the sanity timer.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>  <span class="n">XQ</span> <span class="n">MAC</span><span class="o">=&lt;</span><span class="n">mac</span><span class="o">-</span><span class="n">address</span><span class="o">&gt;</span>     <span class="n">ex</span><span class="o">.</span> <span class="mi">08</span><span class="o">-</span><span class="mi">00</span><span class="o">-</span><span class="mi">2</span><span class="n">B</span><span class="o">-</span><span class="n">AA</span><span class="o">-</span><span class="n">BB</span><span class="o">-</span><span class="n">CC</span>
+<span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">MAC</span>
+</pre></div>
+</div>
+<p>These commands are used to change or display the MAC address.
+<code class="docutils literal notranslate"><span class="pre">&lt;mac-address&gt;</span></code> is a valid Ethernet MAC, delimited by dashes or periods.
+The controller defaults to <code class="docutils literal notranslate"><span class="pre">08-00-2B-AA-BB-CC</span></code>, which should be sufficient if there is only one SIMH controller on your LAN.
+Two cards with the same MAC address will see each other’s packets, resulting in a serious mess.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>  <span class="n">XQ</span> <span class="n">TYPE</span><span class="o">=</span><span class="p">{</span><span class="n">DEQNA</span><span class="o">|</span><span class="p">[</span><span class="n">DELQA</span><span class="p">]</span><span class="o">|</span><span class="n">DELQA</span><span class="o">-</span><span class="n">T</span><span class="p">}</span>
+<span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">TYPE</span>
+</pre></div>
+</div>
+<p>These commands are used to change or display the controller mode.
+DELQA mode is better and faster but may not be usable by older or non-DEC OS’s.
+Also, be aware that DEQNA mode is not supported by many modern OS’s.
+The DEQNA-LOCK mode of the DELQA card is emulated by setting the the controller to DEQNA — there is no need for a separate mode.
+DEQNA-LOCK mode behaves exactly like a DEQNA, except for the operation of the VAR and MOP processing.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>  <span class="n">XQ</span> <span class="n">SANITY</span><span class="o">=</span><span class="p">{</span><span class="n">ON</span><span class="o">|</span><span class="p">[</span><span class="n">OFF</span><span class="p">]}</span>
+<span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">SANITY</span>
+</pre></div>
+</div>
+<p>These commands change or display the <code class="docutils literal notranslate"><span class="pre">INITIALIZATION</span></code> sanity timer (DEQNA jumper W3/DELQA switch S4).
+The <code class="docutils literal notranslate"><span class="pre">INITIALIZATION</span></code> sanity timer has a default timeout of 4 minutes, and cannot be turned off, just reset.
+The normal sanity timer can be set by operating system software regardless of the state of this switch.
+Note that only the DEQNA (or the DELQA in DEQNA-LOCK mode (=DEQNA)) supports the sanity timer —
+it is ignored by a DELQA in Normal mode, which uses switch S4 for a different purpose.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span>  <span class="n">XQ</span> <span class="n">POLL</span><span class="o">=</span><span class="p">{</span><span class="n">DEFAULT</span><span class="o">|</span><span class="mf">4..2500</span><span class="p">}</span>
+<span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">POLL</span>
+</pre></div>
+</div>
+<p>These commands change or display the service polling timer.
+The polling timer is calibrated to run the service thread 200 times per second.
+This value can be changed to accommodate particular system requirements for more (or less) frequent polling.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">STATS</span>
+</pre></div>
+</div>
+<p>This command will display the accumulated statistics for the simulated Ethernet controller.</p>
+<p>To access the network, the simulated Ethernet controller must be attached to a real Ethernet interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">XQ0</span> <span class="p">{</span><span class="n">ethX</span><span class="o">|&lt;</span><span class="n">device_name</span><span class="o">&gt;</span><span class="p">}</span>     <span class="n">ex</span><span class="o">.</span> <span class="n">eth0</span> <span class="ow">or</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">era0</span>
+<span class="n">SHOW</span> <span class="n">XQ</span> <span class="n">ETH</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">X</span></code> in <code class="docutils literal notranslate"><span class="pre">ethX</span></code> is the number of the Ethernet controller to attach, or the real device name.
+The <code class="docutils literal notranslate"><span class="pre">X</span></code> number is system-dependant.
+If you only have one Ethernet controller, the number will probably be 0.
+To find out what your system thinks the Ethernet numbers are, use the <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">XQ</span> <span class="pre">ETH</span></code> command.
+The device list can be quite cryptic, depending on the host system, but is probably better than guessing.
+If you do not attach the device, the controller will behave as though the Ethernet cable were unplugged.</p>
+<p>XQ and XQB have the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SA0</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SA1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SA2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SA3</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SA4</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SA5</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Station address word 5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RBDL</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Receive buffer descriptor list</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XBDL</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Trans(X)mit buffer descriptor list</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CSR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control status register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">VAR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Vector address register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request flag</p></td>
+</tr>
+</tbody>
+</table>
+<p>One final note: because of its asynchronous nature,
+the XQ controller is not limited to the ~1.5Mbit/sec of the real DEQNA/DELQA controllers,
+nor the 10Mbit/sec of a standard Ethernet.
+Attach it to a Fast Ethernet (100 Mbit/sec) card, and “Feel the Power!” 😀</p>
+</section>
+</section>
+<section id="cr11-card-reader-cr">
+<h3><span class="sectnum">1.2.7. </span>CR11 card reader (CR)<a class="headerlink" href="#cr11-card-reader-cr" title="Permalink to this heading">¶</a></h3>
+<p>The card reader (CR) implements a single controller (the CR11) and card reader (e.g., Documation M200, GDI Model 100) by reading a file and presenting lines or cards to the simulator.
+Card decks may be represented by plain text ASCII files, card image files, or column binary files.
+The CR11 controller is also compatible with the CM11-F, CME11, and CMS11.</p>
+<p>Card image files are a file format designed by Douglas W. Jones at the University of Iowa to support the interchange of card deck data.
+These files have a much richer information carrying capacity than plain ASCII files.
+Card Image files can contain such interchange information as card-stock color, corner cuts, special artwork, as well as the binary punch data representing all 12 columns.
+Complete details on the format, as well as sample code, are available at <a class="reference external" href="http://homepage.divms.uiowa.edu/~jones/cards/">Prof. Jones’s site</a>.</p>
+<p>Examples of the CR11 include the M8290 and M8291 (CMS11).
+All card readers use a common vector at 0230 and CSR at 177160.
+Even though the CR11 is normally configured as a BR6 device,
+it is configured for BR4 in this simulation.</p>
+<p>The card reader supports ASCII, card image, and column binary format card “decks”.
+When reading plain ASCII files, lines longer than 80 characters are silently truncated.
+Card image support is included for 80 column Hollerith, 82 column Hollerith (silently ignoring columns 0 and 81), and 40 column Hollerith (mark-sense) cards.
+Column binary supports 80 column card images only.
+All files are attached read-only (as if the <code class="docutils literal notranslate"><span class="pre">-R</span></code> switch were given).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="o">-</span><span class="n">A</span> <span class="n">CR</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>           <span class="n">File</span> <span class="ow">is</span> <span class="n">ASCII</span> <span class="n">text</span>
+<span class="n">ATTACH</span> <span class="o">-</span><span class="n">B</span> <span class="n">CR</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>           <span class="n">File</span> <span class="ow">is</span> <span class="n">column</span> <span class="n">binary</span>
+<span class="n">ATTACH</span> <span class="o">-</span><span class="n">I</span> <span class="n">CR</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>           <span class="n">File</span> <span class="ow">is</span> <span class="n">card</span> <span class="n">image</span> <span class="nb">format</span>
+</pre></div>
+</div>
+<p>If no flags are given, the file extension is evaluated.
+If the filename ends in <code class="docutils literal notranslate"><span class="pre">.TXT</span></code>, the file is treated as ASCII text.
+If the filename ends in <code class="docutils literal notranslate"><span class="pre">.CBN</span></code>, the file is treated as column binary.
+Otherwise, the CR driver looks for a card image header.
+If a correct header is found the file is treated as card image format,
+otherwise it is treated as ASCII text.</p>
+<p>The correct character translation MUST be set if a plain-text file is to be used for card deck input.
+The correct translation SHOULD be set to allow correct ASCII debugging of a card image or column binary input deck.
+Depending upon the operating system in use, how it was generated, and how the card data will be read and used,
+the translation must be set correctly so that the proper character set is used by the driver.
+Use the following command to explicitly set the correct translation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TRANSLATION</span><span class="o">=</span><span class="p">{</span><span class="n">DEFAULT</span><span class="o">|</span><span class="mi">026</span><span class="o">|</span><span class="mi">026</span><span class="n">FTN</span><span class="o">|</span><span class="mi">029</span><span class="o">|</span><span class="n">EBCDIC</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This command should be given after a deck is attached to the simulator.
+The mappings above are completely described at <a class="reference external" href="http://homepage.divms.uiowa.edu/~jones/cards/codes.html">http://homepage.divms.uiowa.edu/~jones/cards/codes.html</a>.
+Note that DEC typically used 029 or 026FTN mappings.</p>
+<p>DEC operating systems used a variety of methods to determine the end of a deck
+(recognizing that ‘hopper empty’ does not necessarily mean the end of a deck).
+Below is a summary of the various operating system conventions for signaling end of deck:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>RT-11:</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch in column 1</p></td>
+</tr>
+<tr class="row-even"><td><p>RSTS/E:</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-11-0-1</span></code> or <code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch in column 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>RSX:</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch</p></td>
+</tr>
+<tr class="row-even"><td><p>VMS:</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch in first 8 columns</p></td>
+</tr>
+<tr class="row-odd"><td><p>TOPS:</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-11-0-1</span></code> or <code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch in column 1</p></td>
+</tr>
+</tbody>
+</table>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">AUTOEOF</span></code> setting,
+the card reader can be set to automatically generate an EOF card consisting of the <code class="docutils literal notranslate"><span class="pre">12-11-0-1-6-7-8-9</span></code> punch in columns 1-8.
+When set to CD11 mode,
+this switch also enables automatic setting of the EOF bit in the controller after the EOF card has been processed.
+[The CR11 does not have a similar capability].
+By default <code class="docutils literal notranslate"><span class="pre">AUTOEOF</span></code> is enabled.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CR</span> <span class="n">AUTOEOF</span>
+<span class="n">SET</span> <span class="n">CR</span> <span class="n">NOAUTOEOF</span>
+</pre></div>
+</div>
+<p>The default card reader rate for the CR11 is 285 cpm.
+The reader rate can be set to its default value or to anywhere in the range 200..1200 cpm.
+This rate may be changed while the unit is attached.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CR</span> <span class="n">RATE</span><span class="o">=</span><span class="p">{</span><span class="n">DEFAULT</span><span class="o">|</span><span class="mf">200..1200</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>It is standard operating procedure for operators to load a card deck and press the momentary action RESET button to clear any error conditions and alert the processor that a deck is available to read.
+Use the following command to simulate pressing the card reader RESET button,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CR</span> <span class="n">RESET</span>
+</pre></div>
+</div>
+<p>Another common control of physical card readers is the STOP button.
+An operator could use this button to finish the read operation for the current card and terminate reading a deck early.
+Use the following command to simulate pressing the card reader STOP button.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CR</span> <span class="n">STOP</span>
+</pre></div>
+</div>
+<p>The simulator does not support the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+The simulator does not stop on file I/O errors.
+Instead the controller signals a reader check to the CPU.</p>
+<p>The CR controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>ASCII value of last column processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CRS</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CR11 status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CRB1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CR11 12-bit Hollerith character</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CRB2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CR11 8-bit compressed character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CRM</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CR11 maintenance register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CDST</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CD11 control/status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDCC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CD11 column count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CDBA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CD11 current bus address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDDB</span></code></p></td>
+<td><p>16</p></td>
+<td><p>CD11 data buffer, 2nd status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BLOWER</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Blower state value</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag (CRS&lt;15&gt;)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag (CRS&lt;6&gt;)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>File position - do not alter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay time between columns</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The VAX simulator implements symbolic display and input.
+Display is controlled by command-line switches:</p>
+<dl class="option-list">
+<dt><kbd><span class="option">-a</span>, <span class="option">-c</span></kbd></dt>
+<dd><p>Display as ASCII data</p>
+</dd>
+<dt><kbd><span class="option">-m</span></kbd></dt>
+<dd><p>Display instruction mnemonics</p>
+</dd>
+<dt><kbd><span class="option">-p</span></kbd></dt>
+<dd><p>Display compatibility mode mnemonics</p>
+</dd>
+<dt><kbd><span class="option">-r</span></kbd></dt>
+<dd><p>Display RADIX50 encoding</p>
+</dd>
+</dl>
+<p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>ASCII characters (determined by length)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>ASCII string (maximum 60 characters)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Compatibility mode instruction mnemonic</p></td>
+</tr>
+<tr class="row-even"><td><p>Alphabetic</p></td>
+<td><p>Instruction mnemonic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Numeric</p></td>
+<td><p>Octal number</p></td>
+</tr>
+</tbody>
+</table>
+<p>VAX instruction input uses standard VAX assembler syntax.
+Compatibility mode instruction input uses standard PDP-11 assembler syntax.</p>
+<p>The syntax for VAX specifiers is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Syntax</p></th>
+<th class="head"><p>Specifier</p></th>
+<th class="head"><p>Displacement</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">#s^n</span></code>, <code class="docutils literal notranslate"><span class="pre">#n</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0n</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Short literal, integer only</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[Rn]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4n</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Indexed, second specifier follows</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Rn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5n</span></code></p></td>
+<td><p>—</p></td>
+<td><p>PC illegal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6n</span></code></p></td>
+<td><p>—</p></td>
+<td><p>PC illegal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7n</span></code></p></td>
+<td><p>—</p></td>
+<td><p>PC illegal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">(Rn)+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8n</span></code></p></td>
+<td><p>—</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">#i^n</span></code>, <code class="docutils literal notranslate"><span class="pre">#n</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
+<td><p>Immediate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;(Rn)+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9n</span></code></p></td>
+<td><p>—</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;#addr</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">addr</span></code></p></td>
+<td><p>Absolute</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">{+/-}b^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">An</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Byte displacement</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">b^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Byte PC relative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;{+/-}b^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Bn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Byte displacement deferred</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;b^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">BF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Byte PC relative deferred</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">{+/-}w^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Cn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Word displacement</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">w^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Word PC relative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;{+/-}w^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Dn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Word displacement deferred</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;w^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Word PC relative deferred</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">{+/-}l^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">En</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Long displacement</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">l^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Long PC relative</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;{+/-}l^d(Rn)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Fn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{+/-}d</span></code></p></td>
+<td><p>Long displacement deferred</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;l^d</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FF</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">d</span> <span class="pre">-</span> <span class="pre">PC</span></code></p></td>
+<td><p>Long PC relative deferred</p></td>
+</tr>
+</tbody>
+</table>
+<p>If no override is given for a literal (<code class="docutils literal notranslate"><span class="pre">s^</span></code> or <code class="docutils literal notranslate"><span class="pre">i^</span></code>) or for a displacement or PC relative address (<code class="docutils literal notranslate"><span class="pre">b^</span></code>, <code class="docutils literal notranslate"><span class="pre">w^</span></code>, or <code class="docutils literal notranslate"><span class="pre">l^</span></code>),
+the simulator chooses the mode automatically.</p>
+</section>
+<section id="appendix-the-ka655-x">
+<h2><span class="sectnum">1.4. </span>Appendix - The KA655”X”<a class="headerlink" href="#appendix-the-ka655-x" title="Permalink to this heading">¶</a></h2>
+<p>The real KA655 is limited to 64MB of memory,
+and the KA655 firmware is coded to this limit.
+However, the VAX operating systems (VMS, Ultrix, NetBSD) know very little about the hardware details.
+Instead, they take their memory size information from the Restart Parameter Block (RPB).
+If the firmware sets up an RPB for more than 64MB,
+the operating systems use the extra memory without requiring source changes.</p>
+<p>If more than 64MB of memory is configured,
+the simulator implements an 18th <code class="docutils literal notranslate"><span class="pre">CMCTL</span></code> register.
+This read-only register gives the size of main memory in MB.
+The console firmware (<code class="docutils literal notranslate"><span class="pre">ka655x.bin</span></code>) uses this to set up the RPB.
+Other parts of the firmware are generally unaware of extended memory;
+thus, all the diagnostic commands operate only on the first 64MB of memory.
+However <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">MEM</span></code> will display the total amount of memory the simulator is configured with.</p>
+<p>If 64MB or less of memory is configured,
+the 18th <code class="docutils literal notranslate"><span class="pre">CMCTL</span></code> register is invisible,
+and the simulator operates like a real KA655.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Digital Equipment Corporation MicroVAX 3900</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#simulator-files"><span class="sectnum">1.1. </span>Simulator files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vax-features"><span class="sectnum">1.2. </span>VAX features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cpu-and-system-devices"><span class="sectnum">1.2.1. </span>CPU and system devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cpu"><span class="sectnum">1.2.1.1. </span>CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#translation-buffer-tlb"><span class="sectnum">1.2.1.2. </span>Translation buffer (TLB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qbus-adapter-qba"><span class="sectnum">1.2.1.3. </span>Qbus adapter (QBA)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#read-only-memory-rom"><span class="sectnum">1.2.1.4. </span>Read-only memory (ROM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#non-volatile-memory-nvr"><span class="sectnum">1.2.1.5. </span>Non-volatile memory (NVR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#system-devices-sysd"><span class="sectnum">1.2.1.6. </span>System devices (SYSD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#i-o-device-addressing"><span class="sectnum">1.2.2. </span>I/O device addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#programmed-i-o-devices"><span class="sectnum">1.2.3. </span>Programmed I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#terminal-input-tti"><span class="sectnum">1.2.3.1. </span>Terminal input (TTI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#terminal-output-tto"><span class="sectnum">1.2.3.2. </span>Terminal output (TTO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lpv11-line-printer-lpt"><span class="sectnum">1.2.3.3. </span>LPV11 line printer (LPT)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#real-time-clock-clk"><span class="sectnum">1.2.3.4. </span>Real-time clock (CLK)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#disks"><span class="sectnum">1.2.4. </span>Disks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rlv12-rl01-rl02-cartridge-disk-rl"><span class="sectnum">1.2.4.1. </span>RLV12/RL01,RL02 cartridge disk (RL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rqdx3-mscp-disk-controllers-rq-rqb-rqc-rqd"><span class="sectnum">1.2.4.2. </span>RQDX3 MSCP disk controllers (RQ, RQB, RQC, RQD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tapes"><span class="sectnum">1.2.5. </span>Tapes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tsv11-tsv05-magnetic-tape-ts"><span class="sectnum">1.2.5.1. </span>TSV11/TSV05 magnetic tape (TS)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tqk50-tmscp-tape-controller-tq"><span class="sectnum">1.2.5.2. </span>TQK50 TMSCP tape controller (TQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#communications-devices"><span class="sectnum">1.2.6. </span>Communications devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dzv11-terminal-multiplexer-dz"><span class="sectnum">1.2.6.1. </span>DZV11 terminal multiplexer (DZ)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dhq11-terminal-multiplexer-vh"><span class="sectnum">1.2.6.2. </span>DHQ11 terminal multiplexer (VH)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb"><span class="sectnum">1.2.6.3. </span>DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cr11-card-reader-cr"><span class="sectnum">1.2.7. </span>CR11 card reader (CR)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#symbolic-display-and-input"><span class="sectnum">1.3. </span>Symbolic display and input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#appendix-the-ka655-x"><span class="sectnum">1.4. </span>Appendix - The KA655”X”</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="vax780_doc.html" title="previous chapter"><span class="sectnum">1. </span>VAX-11/780 simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/vax_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

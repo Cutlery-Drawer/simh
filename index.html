@@ -1,0 +1,618 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Simulator Documentation &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SIMH Users’ Guide, V4.0" href="simh_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simulator-documentation">
+<h1>Simulator Documentation<a class="headerlink" href="#simulator-documentation" title="Permalink to this heading">¶</a></h1>
+<p>Each link leads to documentation about SimH, or a particular simulator:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#running-a-simulator">1. Running a simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#compiling-a-simulator">2. Compiling a simulator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#compiling-under-unix-linux-macos">2.1 Compiling under Unix/Linux/macOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#compiling-under-windows">2.2 Compiling under Windows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#compiling-with-ethernet-support">2.2.1 Compiling with Ethernet support</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#compiling-under-visual-c">2.2.2 Compiling under Visual C++</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#using-the-predefined-project-definitions">2.2.2.1 Using the predefined project definitions</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#defining-your-own-visual-c-project-definitions">2.2.2.2 Defining your own Visual C++ project definitions</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#compiling-under-mingw">2.2.3 Compiling under MinGW</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#compiling-under-openvms">2.3 Compiling under OpenVMS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#simulator-conventions">3. Simulator Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#commands">4. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#loading-and-saving-programs">4.1 Loading and saving programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#saving-and-restoring-state">4.2 Saving and restoring state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#resetting-devices">4.3 Resetting devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#connecting-and-disconnecting-devices">4.4 Connecting and disconnecting devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#examining-and-changing-state">4.5 Examining and changing state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#evaluating-instructions">4.6 Evaluating instructions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#running-a-simulated-program">4.7 Running a simulated program</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#controlling-the-simulation-rate">4.7.1 Controlling the simulation rate</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#stopping-the-simulator">4.8 Stopping the simulator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#simulator-detected-stop-conditions">4.8.1 Simulator detected stop conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#user-specified-stop-conditions">4.8.2 User-specified stop conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#breakpoints">4.8.3 Breakpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#execution-time-limits">4.8.4 Execution time limits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#halt-on-output-data">4.9 Halt on output data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#switches">4.9.1 Switches</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#escaping-string-data">4.9.1.1 Escaping string data</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#determining-which-output-matched">4.9.2 Determining which output matched</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#injecting-input-data">4.10 Injecting input data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#delay">4.10.1 Delay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#after">4.10.2 After</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#id3">4.10.3 Escaping string data</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#setting-device-parameters">4.11 Setting device parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#displaying-parameters-and-status">4.12 Displaying parameters and status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#altering-the-simulated-configuration">4.13 Altering the simulated configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#console-options">4.14 Console options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#remote-console">4.15 Remote console</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#master-mode">4.15.1 Master mode</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#executing-command-files">4.16 Executing command files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#default-command-file-executed-on-simulator-startup">4.16.1 Default command file executed on simulator startup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#change-command-execution-flow">4.16.2 Change command execution flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#subroutine-calls">4.16.3 Subroutine calls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#pausing-command-execution">4.16.4 Pausing command execution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#displaying-arbitrary-text">4.16.5 Displaying arbitrary text</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#echo-command">4.16.5.1 <code class="docutils literal notranslate"><span class="pre">ECHO</span></code> command</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#echof-command">4.16.5.2 <code class="docutils literal notranslate"><span class="pre">ECHOF</span></code> command</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#testing-simulator-state">4.16.6 Testing simulator state</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#condition-expressions">4.16.6.1 Condition expressions</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#internal-simulator-variables-expressions">4.16.6.1.1 Internal simulator variables expressions</a></li>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#c-style-expressions">4.16.6.1.2 C style expressions</a></li>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#string-comparison-expressions">4.16.6.1.3 String comparison expressions</a></li>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#file-existence-test">4.16.6.1.4 File existence test</a></li>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#file-comparison-test">4.16.6.1.5 File comparison test</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#example-test-of-simulator-state">4.16.6.2 Example test of simulator state</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#trapping-on-command-completion-conditions">4.16.7 Trapping on command completion conditions</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#enabling-error-traps">4.16.7.1 Enabling Error Traps</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#disabling-error-traps">4.16.7.2 Disabling error traps</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#on-command">4.16.7.3 <code class="docutils literal notranslate"><span class="pre">ON</span></code> command</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#parameters">4.16.7.3.1 Parameters</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="simh_doc.html#control-c-trapping">CONTROL-C Trapping</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#command-arguments">4.16.8 Command arguments</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#do-command-argument-manipulation">4.16.8.1 DO command argument manipulation</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#built-in-variables">4.16.8.2 Built-in variables</a></li>
+<li class="toctree-l5"><a class="reference internal" href="simh_doc.html#environment-variables">4.16.8.3 Environment variables</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#gathering-user-input-into-an-environment-variable">4.16.8.3.1 Gathering user input into an environment variable</a></li>
+<li class="toctree-l6"><a class="reference internal" href="simh_doc.html#arithmetic-expressions">4.16.8.3.2 Arithmetic expressions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#command-aliases">4.16.9 Command aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#executing-system-commands">4.17 Executing system commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#getting-help">4.18 Getting help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#recording-simulator-activities">4.19 Recording simulator activities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#id6">4.19.1 Switches</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#controlling-debugging">4.20 Controlling debugging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#id7">4.20.1 Switches</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#device-debug-options">4.20.2 Device debug options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#displaying-debug-settings">4.20.3 Displaying debug settings</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#exiting-the-simulator">4.21 Exiting the simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#manipulating-files-within-the-simulator">4.22 Manipulating files within the simulator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#manipulating-file-archives">4.22.1 Manipulating file archives</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_doc.html#transferring-data-from-the-web">4.22.2 Transferring data from the web</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#appendix-1-file-representations">Appendix 1: File Representations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#a-1-hard-disks">A.1 Hard disks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#a-2-floppy-disks">A.2 Floppy disks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#a-3-magnetic-tapes">A.3 Magnetic tapes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#a-4-line-printers">A.4 Line printers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_doc.html#a-5-dectapes">A.5 DECtapes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#appendix-2-debug-status">Appendix 2: Debug status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#revision-history-covering-rev-2-0-to-rev-3-5">Revision history (covering Rev 2.0 to Rev 3.5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_doc.html#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-8"><span class="sectnum">1.1. </span>PDP-8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#esi-x"><span class="sectnum">1.1.1. </span>ESI-X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#focal69"><span class="sectnum">1.1.2. </span>FOCAL69</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#pdp-8-os-8"><span class="sectnum">1.1.3. </span>PDP-8 OS/8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#pdp-8-tss-8"><span class="sectnum">1.1.4. </span>PDP-8 TSS/8</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-11"><span class="sectnum">1.2. </span>PDP-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#unix-v5-v6-v7"><span class="sectnum">1.2.1. </span>Unix V5, V6, V7</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#unix-v5"><span class="sectnum">1.2.1.1. </span>Unix V5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#unix-v6"><span class="sectnum">1.2.1.2. </span>Unix V6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#unix-v7"><span class="sectnum">1.2.1.3. </span>Unix V7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#rt-11"><span class="sectnum">1.2.2. </span>RT-11</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#rt-11-v4"><span class="sectnum">1.2.2.1. </span>RT-11 V4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#rt-11-v5-3"><span class="sectnum">1.2.2.2. </span>RT-11 V5.3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#nova-and-eclipse-rdos"><span class="sectnum">1.2.3. </span>Nova and Eclipse RDOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-1"><span class="sectnum">1.3. </span>PDP-1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#pdp-1-lisp"><span class="sectnum">1.3.1. </span>PDP-1 LISP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#pdp-1-ddt"><span class="sectnum">1.3.2. </span>PDP-1 DDT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-7"><span class="sectnum">1.4. </span>PDP-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#sim8"><span class="sectnum">1.4.1. </span>SIM8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#decsys"><span class="sectnum">1.4.2. </span>DECsys</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-9-pdp-15"><span class="sectnum">1.5. </span>PDP-9/PDP-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#focal"><span class="sectnum">1.5.1. </span>FOCAL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#advanced-software-system-keyboard-monitor"><span class="sectnum">1.5.2. </span>Advanced Software System/Keyboard Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#advanced-software-system-foreground-background"><span class="sectnum">1.5.3. </span>Advanced Software System/Foreground Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#dos-15"><span class="sectnum">1.5.4. </span>DOS-15</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#ibm-1401"><span class="sectnum">1.6. </span>IBM 1401</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#single-card-koans"><span class="sectnum">1.6.1. </span>Single card “Koans”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#diagnostic-tape"><span class="sectnum">1.6.2. </span>Diagnostic tape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#sps"><span class="sectnum">1.6.3. </span>SPS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#hp2116-16k-basic"><span class="sectnum">1.7. </span>HP2116 16K BASIC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#pdp-10-tops-10-7-03-tops-10-7-04-tops-20-v4-1"><span class="sectnum">1.8. </span>PDP-10 TOPS-10 7.03, TOPS-10 7.04, TOPS-20 V4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simh_swre.html#interdata-32b-systems"><span class="sectnum">1.9. </span>Interdata 32b systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_swre.html#interdata-7-32-unix"><span class="sectnum">1.9.1. </span>Interdata 7/32 Unix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#id1"><span class="sectnum">1.9.1.1. </span>Unix V6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_swre.html#id2"><span class="sectnum">1.9.1.2. </span>Unix V7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="simh_faq.html#general-questions"><span class="sectnum">1.1. </span>General questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-is-simh"><span class="sectnum">1.1.1. </span>What is SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#why-was-simh-written"><span class="sectnum">1.1.2. </span>Why was SIMH written?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-is-the-history-of-simh"><span class="sectnum">1.1.3. </span>What is the history of SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#who-writes-and-maintains-simh"><span class="sectnum">1.1.4. </span>Who writes and maintains SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-is-simh-licensed"><span class="sectnum">1.1.5. </span>How is SIMH licensed?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-is-simh-distributed"><span class="sectnum">1.1.6. </span>How is SIMH distributed?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#which-computer-systems-does-simh-simulate"><span class="sectnum">1.1.7. </span>Which computer systems does SIMH simulate?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#which-host-systems-does-simh-run-on"><span class="sectnum">1.1.8. </span>Which host systems does SIMH run on?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-software-packages-are-available-to-run-on-simh"><span class="sectnum">1.1.9. </span>What software packages are available to run on SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#where-can-i-get-more-information-on-simh"><span class="sectnum">1.1.10. </span>Where can I get more information on SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-search-the-simh-mailing-list-archive-for-questions-that-might-have-been-asked-and-answered-before"><span class="sectnum">1.1.11. </span>How do I search the SIMH mailing list archive for questions that might have been asked and answered before?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_faq.html#operational-questions"><span class="sectnum">1.2. </span>Operational questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-simh-on-windows"><span class="sectnum">1.2.1. </span>How do I install SIMH on Windows?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-simh-with-ethernet-support-on-windows"><span class="sectnum">1.2.2. </span>How do I install SIMH with Ethernet support on Windows?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-simh-on-unix-linux-macos"><span class="sectnum">1.2.3. </span>How do I install SIMH on Unix/Linux/macOS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-simh-on-vms"><span class="sectnum">1.2.4. </span>How do I install SIMH on VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-transcribe-a-real-cd-for-use-with-simh"><span class="sectnum">1.2.5. </span>How do I transcribe a real CD for use with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-transcribe-other-archival-media-for-use-with-simh"><span class="sectnum">1.2.6. </span>How do I transcribe other archival media for use with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-can-i-get-text-files-in-and-out-of-simh"><span class="sectnum">1.2.7. </span>How can I get text files in and out of SIMH?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#tape-input"><span class="sectnum">1.2.7.1. </span>Tape input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#serial-input-and-output"><span class="sectnum">1.2.7.2. </span>Serial input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#paper-tape-input-and-output"><span class="sectnum">1.2.7.3. </span>Paper tape input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#ethernet-input-and-output"><span class="sectnum">1.2.7.4. </span>Ethernet input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#printer-output"><span class="sectnum">1.2.7.5. </span>Printer output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-can-i-get-binary-files-in-and-out-of-simh"><span class="sectnum">1.2.8. </span>How can I get binary files in and out of SIMH?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#id1"><span class="sectnum">1.2.8.1. </span>Serial input and output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#can-i-connect-real-devices-on-the-host-computer-to-simh"><span class="sectnum">1.2.9. </span>Can I connect real devices on the host computer to SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#my-windows-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why"><span class="sectnum">1.2.10. </span>My Windows host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#my-linux-macos-or-other-unix-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why"><span class="sectnum">1.2.11. </span>My Linux, macOS or other Unix host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-can-i-use-my-wireless-ethernet-card-with-simh"><span class="sectnum">1.2.12. </span>How can I use my wireless Ethernet card with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#why-doesn-t-simh-idling-work-on-my-unix-host"><span class="sectnum">1.2.13. </span>Why doesn’t SIMH idling work on my Unix host?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_faq.html#writing-and-debugging-new-code"><span class="sectnum">1.3. </span>Writing and debugging new code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-resources-are-available-for-writing-new-simulators"><span class="sectnum">1.3.1. </span>What resources are available for writing new simulators?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-debugging-facilities-are-available-in-simh"><span class="sectnum">1.3.2. </span>What debugging facilities are available in SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#when-do-i-need-to-use-the-host-debugger-for-debugging-a-simulator"><span class="sectnum">1.3.3. </span>When do I need to use the host debugger for debugging a simulator?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-is-the-release-process-for-simh"><span class="sectnum">1.3.4. </span>What is the release process for SIMH?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_faq.html#vax"><span class="sectnum">1.4. </span>VAX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#where-can-i-get-software-and-hobbyist-licenses-for-the-vax"><span class="sectnum">1.4.1. </span>Where can I get software and hobbyist licenses for the VAX?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-vms"><span class="sectnum">1.4.2. </span>How do I install VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-netbsd"><span class="sectnum">1.4.3. </span>How do I install NetBSD?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-install-ultrix"><span class="sectnum">1.4.4. </span>How do I install Ultrix?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#what-s-the-cpu-serial-number-for-my-hobbyist-license-pak"><span class="sectnum">1.4.5. </span>What’s the CPU serial number for my hobbyist license PAK?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-import-and-make-my-hobbyist-license-paks-usable"><span class="sectnum">1.4.6. </span>How do I import and make my hobbyist license PAKs usable?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-change-the-simulator-from-a-vaxserver-3900-to-a-microvax-3900"><span class="sectnum">1.4.7. </span>How do I change the simulator from a VAXserver 3900 to a MicroVAX 3900?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#is-there-an-example-of-the-simulator-running-vms"><span class="sectnum">1.4.8. </span>Is there an example of the simulator running VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-can-i-import-files-to-a-simulated-vms-environment"><span class="sectnum">1.4.9. </span>How can I import files to a simulated VMS environment?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#the-easy-way"><span class="sectnum">1.4.9.1. </span>The Easy Way</a></li>
+<li class="toctree-l4"><a class="reference internal" href="simh_faq.html#alternatively"><span class="sectnum">1.4.9.2. </span>Alternatively</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-do-i-make-imported-files-readable-on-a-simulated-vms-system"><span class="sectnum">1.4.10. </span>How do I make imported files readable on a simulated VMS system?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#how-can-i-export-files-from-a-simulated-vms-environment"><span class="sectnum">1.4.11. </span>How can I export files from a simulated VMS environment?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simh_faq.html#pdp-11"><span class="sectnum">1.5. </span>PDP-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simh_faq.html#when-installing-rsts-e-from-simulated-magnetic-tape-the-installation-process-hangs-with-no-error-message-why"><span class="sectnum">1.5.1. </span>When installing RSTS/E from simulated magnetic tape, the installation process hangs with no error message; why?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nova_doc.html#simulator-files"><span class="sectnum">1.1. </span>Simulator files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nova_doc.html#nova-features"><span class="sectnum">1.2. </span>Nova features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nova_doc.html#cpu"><span class="sectnum">1.2.1. </span>CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nova_doc.html#programmed-i-o-devices"><span class="sectnum">1.2.2. </span>Programmed I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#paper-tape-reader-ptr"><span class="sectnum">1.2.2.1. </span>Paper tape reader (PTR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#paper-tape-punch-ptp"><span class="sectnum">1.2.2.2. </span>Paper tape punch (PTP)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#terminal-input-tti"><span class="sectnum">1.2.2.3. </span>Terminal input (TTI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#terminal-output-tto"><span class="sectnum">1.2.2.4. </span>Terminal output (TTO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#line-printer-lpt"><span class="sectnum">1.2.2.5. </span>Line printer (LPT)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#real-time-clock-rtc"><span class="sectnum">1.2.2.6. </span>Real-time clock (RTC)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#plotter-plt"><span class="sectnum">1.2.2.7. </span>Plotter (PLT)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#second-terminal-tti1-tto1"><span class="sectnum">1.2.2.8. </span>Second terminal (TTI1, TTO1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nova_doc.html#asynchronous-multiplexers-qty-alm"><span class="sectnum">1.2.2.9. </span>Asynchronous multiplexers (QTY, ALM)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="nova_doc.html#fixed-head-disk-dsk"><span class="sectnum">1.2.3. </span>Fixed head disk (DSK)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nova_doc.html#moving-head-disk-dkp"><span class="sectnum">1.2.4. </span>Moving head disk (DKP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nova_doc.html#magnetic-tape-mta"><span class="sectnum">1.2.5. </span>Magnetic tape (MTA)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nova_doc.html#symbolic-display-and-input"><span class="sectnum">1.3. </span>Symbolic display and input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pdp11_doc.html#simulator-files"><span class="sectnum">1.1. </span>Simulator files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdp11_doc.html#pdp-11-features"><span class="sectnum">1.2. </span>PDP-11 features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#cpu-and-system"><span class="sectnum">1.2.1. </span>CPU and system</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#cpu"><span class="sectnum">1.2.1.1. </span>CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#system-registers-system"><span class="sectnum">1.2.1.2. </span>System registers (SYSTEM)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#i-o-devices"><span class="sectnum">1.2.2. </span>I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#unibus-and-qbus-dma-devices"><span class="sectnum">1.2.2.1. </span>Unibus and Qbus DMA devices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#i-o-device-addressing"><span class="sectnum">1.2.2.2. </span>I/O device addressing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#programmed-i-o-devices"><span class="sectnum">1.2.3. </span>Programmed I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#pc11-paper-tape-reader-ptr"><span class="sectnum">1.2.3.1. </span>PC11 paper tape reader (PTR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#pc11-paper-tape-punch-ptp"><span class="sectnum">1.2.3.2. </span>PC11 paper tape punch (PTP)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#dl11-terminal-input-tti"><span class="sectnum">1.2.3.3. </span>DL11 terminal input (TTI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#dl11-terminal-output-tto"><span class="sectnum">1.2.3.4. </span>DL11 terminal output (TTO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#lp11-line-printer-lpt"><span class="sectnum">1.2.3.5. </span>LP11 line printer (LPT)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#kw11-l-line-time-clock-clk"><span class="sectnum">1.2.3.6. </span>KW11-L Line-time clock (CLK)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#kw11-p-programmable-clock-pclk"><span class="sectnum">1.2.3.7. </span>KW11-P programmable clock (PCLK)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#ta11-ta60-cassette-tape-ct"><span class="sectnum">1.2.3.8. </span>TA11/TA60 cassette tape (CT)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#floppy-disk-drives"><span class="sectnum">1.2.4. </span>Floppy disk drives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rx11-rx01-floppy-disk-rx"><span class="sectnum">1.2.4.1. </span>RX11/RX01 floppy disk (RX)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rx211-rx02-floppy-disk-ry"><span class="sectnum">1.2.4.2. </span>RX211/RX02 floppy disk (RY)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#cartridge-disk-drives"><span class="sectnum">1.2.5. </span>Cartridge disk drives</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rk11-rk05-cartridge-disk-rk"><span class="sectnum">1.2.5.1. </span>RK11/RK05 cartridge disk (RK)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rk611-rk06-rk07-cartridge-disk-hk"><span class="sectnum">1.2.5.2. </span>RK611/RK06,RK07 cartridge disk (HK)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rl11-rlv12-rl01-rl02-cartridge-disk-rl"><span class="sectnum">1.2.5.3. </span>RL11(RLV12)/RL01,RL02 cartridge disk (RL)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#massbus-subsystems"><span class="sectnum">1.2.6. </span>Massbus subsystems</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rh70-rh11-massbus-adapters-rha-rhb-rhc"><span class="sectnum">1.2.6.1. </span>RH70/RH11 Massbus adapters (RHA, RHB, RHC)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rp04-05-06-07-rm02-03-05-80-disk-pack-drives-rp"><span class="sectnum">1.2.6.2. </span>RP04/05/06/07, RM02/03/05/80 disk pack drives (RP)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#tm02-tm03-te16-tu45-tu77-magnetic-tapes-tu"><span class="sectnum">1.2.6.3. </span>TM02/TM03/TE16/TU45/TU77 magnetic tapes (TU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rs03-rs04-fixed-head-disks"><span class="sectnum">1.2.6.4. </span>RS03/RS04 fixed head disks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#rqdx3-uda50-mscp-disk-controllers-rq-rqb-rqc-rqd"><span class="sectnum">1.2.7. </span>RQDX3/UDA50 MSCP disk controllers (RQ, RQB, RQC, RQD)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#fixed-head-disks"><span class="sectnum">1.2.8. </span>Fixed head disks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rc11-fixed-head-disk-rc"><span class="sectnum">1.2.8.1. </span>RC11 fixed head disk (RC)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#rf11-rs11-fixed-head-disk-rf"><span class="sectnum">1.2.8.2. </span>RF11/RS11 fixed head disk (RF)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#tc11-tu56-dectape-dt"><span class="sectnum">1.2.9. </span>TC11/TU56 DECtape (DT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#magnetic-tape-controllers"><span class="sectnum">1.2.10. </span>Magnetic tape controllers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#tm11-magnetic-tape-tm"><span class="sectnum">1.2.10.1. </span>TM11 magnetic tape (TM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#ts11-tsv05-magnetic-tape-ts"><span class="sectnum">1.2.10.2. </span>TS11/TSV05 magnetic tape (TS)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#tqk50-tmscp-tape-controller-tq"><span class="sectnum">1.2.10.3. </span>TQK50 TMSCP tape controller (TQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#communications-devices"><span class="sectnum">1.2.11. </span>Communications devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#dc11-additional-terminal-interfaces-dci-dco"><span class="sectnum">1.2.11.1. </span>DC11 additional terminal interfaces (DCI/DCO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#kl11-dl11-additional-terminal-interfaces-dli-dlo"><span class="sectnum">1.2.11.2. </span>KL11/DL11 additional terminal interfaces (DLI/DLO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#dz11-terminal-multiplexer-dz"><span class="sectnum">1.2.11.3. </span>DZ11 terminal multiplexer (DZ)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#dhq11-terminal-multiplexer-vh"><span class="sectnum">1.2.11.4. </span>DHQ11 terminal multiplexer (VH)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#ethernet-controllers"><span class="sectnum">1.2.12. </span>Ethernet controllers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb"><span class="sectnum">1.2.12.1. </span>DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#delua-deuna-unibus-ethernet-controllers-xu-xub"><span class="sectnum">1.2.12.2. </span>DELUA/DEUNA Unibus Ethernet controllers (XU, XUB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#cr11-cd11-card-reader-cr"><span class="sectnum">1.2.12.3. </span>CR11/CD11 card reader (CR)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#arithmetic-options"><span class="sectnum">1.2.13. </span>Arithmetic options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#ke11a-extended-arithmetic-option-ke"><span class="sectnum">1.2.13.1. </span>KE11A extended arithmetic option (KE)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pdp11_doc.html#kg11a-communications-arithmetic-option-kg"><span class="sectnum">1.2.13.2. </span>KG11A communications arithmetic option (KG)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pdp11_doc.html#symbolic-display-and-input"><span class="sectnum">1.3. </span>Symbolic display and input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdp11_doc.html#the-uc15"><span class="sectnum">1.4. </span>The UC15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pdp11_doc.html#dr11-parallel-interfaces-uca-ucb"><span class="sectnum">1.4.1. </span>DR11 parallel interfaces (UCA, UCB)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vax780_doc.html#simulator-files"><span class="sectnum">1.1. </span>Simulator files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vax780_doc.html#vax780-features"><span class="sectnum">1.2. </span>VAX780 features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#cpu-and-system-devices"><span class="sectnum">1.2.1. </span>CPU and system devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#cpu"><span class="sectnum">1.2.1.1. </span>CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#translation-buffer-tlb"><span class="sectnum">1.2.1.2. </span>Translation buffer (TLB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#sbi-controller-sbi"><span class="sectnum">1.2.1.3. </span>SBI controller (SBI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#memory-controllers-mctl0-mctl1"><span class="sectnum">1.2.1.4. </span>Memory controllers (MCTL0, MCTL1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#time-of-day-clock-todr"><span class="sectnum">1.2.1.5. </span>Time-of-day clock (TODR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#interval-timer-tmr"><span class="sectnum">1.2.1.6. </span>Interval timer (TMR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#unibus-adapter-uba"><span class="sectnum">1.2.1.7. </span>Unibus adapter (UBA)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#massbus-adapters-mba0-mba1"><span class="sectnum">1.2.1.8. </span>Massbus adapters (MBA0, MBA1)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#i-o-device-addressing"><span class="sectnum">1.2.2. </span>I/O device addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#programmed-i-o-devices"><span class="sectnum">1.2.3. </span>Programmed I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#console-input-tti"><span class="sectnum">1.2.3.1. </span>Console input (TTI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#console-output-tto"><span class="sectnum">1.2.3.2. </span>Console output (TTO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#rx01-console-floppy-disk-rxc"><span class="sectnum">1.2.3.3. </span>RX01 console floppy disk (RXC)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#line-printer-lpt"><span class="sectnum">1.2.3.4. </span>Line printer (LPT)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#disks"><span class="sectnum">1.2.4. </span>Disks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#rp04-05-06-07-rm02-03-05-80-disk-pack-drives-rp"><span class="sectnum">1.2.4.1. </span>RP04/05/06/07, RM02/03/05/80 disk pack drives (RP)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#rl11-rl01-rl02-cartridge-disk-rl"><span class="sectnum">1.2.4.2. </span>RL11/RL01/RL02 cartridge disk (RL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#rk611-rk06-rk07-cartridge-disk-hk"><span class="sectnum">1.2.4.3. </span>RK611/RK06/RK07 cartridge disk (HK)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#uda50-mscp-disk-controllers-rq-rqb-rqc-rqd"><span class="sectnum">1.2.4.4. </span>UDA50 MSCP disk controllers (RQ, RQB, RQC, RQD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#tapes"><span class="sectnum">1.2.5. </span>Tapes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#tm03-te16-tu45-tu77-magnetic-tapes-tu"><span class="sectnum">1.2.5.1. </span>TM03/TE16/TU45/TU77 magnetic tapes (TU)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#ts11-magnetic-tape-ts"><span class="sectnum">1.2.5.2. </span>TS11 magnetic tape (TS)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#tuk50-tmscp-tape-controller-tq"><span class="sectnum">1.2.5.3. </span>TUK50 TMSCP tape controller (TQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax780_doc.html#communications-devices"><span class="sectnum">1.2.6. </span>Communications devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#dz11-terminal-multiplexer-dz"><span class="sectnum">1.2.6.1. </span>DZ11 terminal multiplexer (DZ)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#dhu11-terminal-multiplexer-vh"><span class="sectnum">1.2.6.2. </span>DHU11 terminal multiplexer (VH)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#delua-deuna-unibus-ethernet-controllers-xu-xub"><span class="sectnum">1.2.6.3. </span>DELUA/DEUNA Unibus Ethernet controllers (XU, XUB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax780_doc.html#dmc11-dmr11-unibus-ddcmp-controllers"><span class="sectnum">1.2.6.4. </span>DMC11/DMR11 Unibus DDCMP controllers</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#hardware-description"><span class="sectnum">1.2.6.4.1. </span>Hardware description</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#models"><span class="sectnum">1.2.6.4.1.1. </span>Models</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#dmc11"><span class="sectnum">1.2.6.4.1.1.1. </span>DMC11</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#dmr11"><span class="sectnum">1.2.6.4.1.1.2. </span>DMR11</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#dmp11"><span class="sectnum">1.2.6.4.1.1.3. </span>DMP11</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#dmv11"><span class="sectnum">1.2.6.4.1.1.4. </span>DMV11</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#registers"><span class="sectnum">1.2.6.4.1.2. </span>Registers</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#configuration"><span class="sectnum">1.2.6.4.2. </span>Configuration</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#set-commands"><span class="sectnum">1.2.6.4.2.1. </span><code class="docutils literal notranslate"><span class="pre">Set</span></code> commands</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#lines"><span class="sectnum">1.2.6.4.2.1.1. </span>Lines</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#peer"><span class="sectnum">1.2.6.4.2.1.2. </span>Peer</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#connectpoll"><span class="sectnum">1.2.6.4.2.1.3. </span>Connectpoll</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#speed"><span class="sectnum">1.2.6.4.2.1.4. </span>Speed</a></li>
+<li class="toctree-l7"><a class="reference internal" href="vax780_doc.html#type"><span class="sectnum">1.2.6.4.2.1.5. </span>Type</a></li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#attach"><span class="sectnum">1.2.6.4.2.2. </span>Attach</a></li>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#examples"><span class="sectnum">1.2.6.4.2.3. </span>Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#monitoring"><span class="sectnum">1.2.6.4.3. </span>Monitoring</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="vax780_doc.html#show-commands"><span class="sectnum">1.2.6.4.3.1. </span>Show commands</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#restrictions"><span class="sectnum">1.2.6.4.4. </span>Restrictions</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#implementation"><span class="sectnum">1.2.6.4.5. </span>Implementation</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#debugging"><span class="sectnum">1.2.6.4.6. </span>Debugging</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#related-devices"><span class="sectnum">1.2.6.4.7. </span>Related devices</a></li>
+<li class="toctree-l5"><a class="reference internal" href="vax780_doc.html#cr11-card-reader-cr"><span class="sectnum">1.2.6.4.8. </span>CR11 card reader (CR)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vax780_doc.html#symbolic-display-and-input"><span class="sectnum">1.3. </span>Symbolic display and input</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vax_doc.html#simulator-files"><span class="sectnum">1.1. </span>Simulator files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vax_doc.html#vax-features"><span class="sectnum">1.2. </span>VAX features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#cpu-and-system-devices"><span class="sectnum">1.2.1. </span>CPU and system devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#cpu"><span class="sectnum">1.2.1.1. </span>CPU</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#translation-buffer-tlb"><span class="sectnum">1.2.1.2. </span>Translation buffer (TLB)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#qbus-adapter-qba"><span class="sectnum">1.2.1.3. </span>Qbus adapter (QBA)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#read-only-memory-rom"><span class="sectnum">1.2.1.4. </span>Read-only memory (ROM)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#non-volatile-memory-nvr"><span class="sectnum">1.2.1.5. </span>Non-volatile memory (NVR)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#system-devices-sysd"><span class="sectnum">1.2.1.6. </span>System devices (SYSD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#i-o-device-addressing"><span class="sectnum">1.2.2. </span>I/O device addressing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#programmed-i-o-devices"><span class="sectnum">1.2.3. </span>Programmed I/O devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#terminal-input-tti"><span class="sectnum">1.2.3.1. </span>Terminal input (TTI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#terminal-output-tto"><span class="sectnum">1.2.3.2. </span>Terminal output (TTO)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#lpv11-line-printer-lpt"><span class="sectnum">1.2.3.3. </span>LPV11 line printer (LPT)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#real-time-clock-clk"><span class="sectnum">1.2.3.4. </span>Real-time clock (CLK)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#disks"><span class="sectnum">1.2.4. </span>Disks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#rlv12-rl01-rl02-cartridge-disk-rl"><span class="sectnum">1.2.4.1. </span>RLV12/RL01,RL02 cartridge disk (RL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#rqdx3-mscp-disk-controllers-rq-rqb-rqc-rqd"><span class="sectnum">1.2.4.2. </span>RQDX3 MSCP disk controllers (RQ, RQB, RQC, RQD)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#tapes"><span class="sectnum">1.2.5. </span>Tapes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#tsv11-tsv05-magnetic-tape-ts"><span class="sectnum">1.2.5.1. </span>TSV11/TSV05 magnetic tape (TS)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#tqk50-tmscp-tape-controller-tq"><span class="sectnum">1.2.5.2. </span>TQK50 TMSCP tape controller (TQ)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#communications-devices"><span class="sectnum">1.2.6. </span>Communications devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#dzv11-terminal-multiplexer-dz"><span class="sectnum">1.2.6.1. </span>DZV11 terminal multiplexer (DZ)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#dhq11-terminal-multiplexer-vh"><span class="sectnum">1.2.6.2. </span>DHQ11 terminal multiplexer (VH)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vax_doc.html#delqa-t-delqa-deqna-qbus-ethernet-controllers-xq-xqb"><span class="sectnum">1.2.6.3. </span>DELQA-T/DELQA/DEQNA Qbus Ethernet controllers (XQ, XQB)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vax_doc.html#cr11-card-reader-cr"><span class="sectnum">1.2.7. </span>CR11 card reader (CR)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vax_doc.html#symbolic-display-and-input"><span class="sectnum">1.3. </span>Symbolic display and input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vax_doc.html#appendix-the-ka655-x"><span class="sectnum">1.4. </span>Appendix - The KA655”X”</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="simh_doc.html" title="next chapter">SIMH Users’ Guide, V4.0</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

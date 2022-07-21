@@ -1,0 +1,1177 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. SimH sample software packages &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. SimH FAQ" href="simh_faq.html" />
+    <link rel="prev" title="SIMH Users’ Guide, V4.0" href="simh_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simh-sample-software-packages">
+<h1><span class="sectnum">1. </span>SimH sample software packages<a class="headerlink" href="#simh-sample-software-packages" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2006-06-20</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#pdp-8" id="id3"><span class="sectnum">1.1. </span>PDP-8</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#esi-x" id="id4"><span class="sectnum">1.1.1. </span>ESI-X</a></p></li>
+<li><p><a class="reference internal" href="#focal69" id="id5"><span class="sectnum">1.1.2. </span>FOCAL69</a></p></li>
+<li><p><a class="reference internal" href="#pdp-8-os-8" id="id6"><span class="sectnum">1.1.3. </span>PDP-8 OS/8</a></p></li>
+<li><p><a class="reference internal" href="#pdp-8-tss-8" id="id7"><span class="sectnum">1.1.4. </span>PDP-8 TSS/8</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-11" id="id8"><span class="sectnum">1.2. </span>PDP-11</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#unix-v5-v6-v7" id="id9"><span class="sectnum">1.2.1. </span>Unix V5, V6, V7</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#unix-v5" id="id10"><span class="sectnum">1.2.1.1. </span>Unix V5</a></p></li>
+<li><p><a class="reference internal" href="#unix-v6" id="id11"><span class="sectnum">1.2.1.2. </span>Unix V6</a></p></li>
+<li><p><a class="reference internal" href="#unix-v7" id="id12"><span class="sectnum">1.2.1.3. </span>Unix V7</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#rt-11" id="id13"><span class="sectnum">1.2.2. </span>RT-11</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rt-11-v4" id="id14"><span class="sectnum">1.2.2.1. </span>RT-11 V4</a></p></li>
+<li><p><a class="reference internal" href="#rt-11-v5-3" id="id15"><span class="sectnum">1.2.2.2. </span>RT-11 V5.3</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nova-and-eclipse-rdos" id="id16"><span class="sectnum">1.2.3. </span>Nova and Eclipse RDOS</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-1" id="id17"><span class="sectnum">1.3. </span>PDP-1</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#pdp-1-lisp" id="id18"><span class="sectnum">1.3.1. </span>PDP-1 LISP</a></p></li>
+<li><p><a class="reference internal" href="#pdp-1-ddt" id="id19"><span class="sectnum">1.3.2. </span>PDP-1 DDT</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-7" id="id20"><span class="sectnum">1.4. </span>PDP-7</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#sim8" id="id21"><span class="sectnum">1.4.1. </span>SIM8</a></p></li>
+<li><p><a class="reference internal" href="#decsys" id="id22"><span class="sectnum">1.4.2. </span>DECsys</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-9-pdp-15" id="id23"><span class="sectnum">1.5. </span>PDP-9/PDP-15</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#focal" id="id24"><span class="sectnum">1.5.1. </span>FOCAL</a></p></li>
+<li><p><a class="reference internal" href="#advanced-software-system-keyboard-monitor" id="id25"><span class="sectnum">1.5.2. </span>Advanced Software System/Keyboard Monitor</a></p></li>
+<li><p><a class="reference internal" href="#advanced-software-system-foreground-background" id="id26"><span class="sectnum">1.5.3. </span>Advanced Software System/Foreground Background</a></p></li>
+<li><p><a class="reference internal" href="#dos-15" id="id27"><span class="sectnum">1.5.4. </span>DOS-15</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ibm-1401" id="id28"><span class="sectnum">1.6. </span>IBM 1401</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#single-card-koans" id="id29"><span class="sectnum">1.6.1. </span>Single card “Koans”</a></p></li>
+<li><p><a class="reference internal" href="#diagnostic-tape" id="id30"><span class="sectnum">1.6.2. </span>Diagnostic tape</a></p></li>
+<li><p><a class="reference internal" href="#sps" id="id31"><span class="sectnum">1.6.3. </span>SPS</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#hp2116-16k-basic" id="id32"><span class="sectnum">1.7. </span>HP2116 16K BASIC</a></p></li>
+<li><p><a class="reference internal" href="#pdp-10-tops-10-7-03-tops-10-7-04-tops-20-v4-1" id="id33"><span class="sectnum">1.8. </span>PDP-10 TOPS-10 7.03, TOPS-10 7.04, TOPS-20 V4.1</a></p></li>
+<li><p><a class="reference internal" href="#interdata-32b-systems" id="id34"><span class="sectnum">1.9. </span>Interdata 32b systems</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#interdata-7-32-unix" id="id35"><span class="sectnum">1.9.1. </span>Interdata 7/32 Unix</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#id1" id="id36"><span class="sectnum">1.9.1.1. </span>Unix V6</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id37"><span class="sectnum">1.9.1.2. </span>Unix V7</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>This memorandum documents the sample software packages available to run with the SIMH simulators.
+Many of these packages are available under limited use licenses;
+please read the license terms included with the software.</p>
+<section id="pdp-8">
+<h2><span class="sectnum">1.1. </span>PDP-8<a class="headerlink" href="#pdp-8" title="Permalink to this heading">¶</a></h2>
+<section id="esi-x">
+<h3><span class="sectnum">1.1.1. </span>ESI-X<a class="headerlink" href="#esi-x" title="Permalink to this heading">¶</a></h3>
+<p>ESI-X is an interactive program for technical computation.
+It can execute both immediate commands and stored programs (like BASIC).
+ESI-X is provided as both source and as a binary loader format paper-tape image.
+For more information see the documentation included with the program.
+My thanks to Dave Waks, who wrote the program,
+and to Paul Pierce and Tim Litt, who recovered the source from its archival medium.</p>
+<p>To load and run ESI-X:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">esix</span><span class="o">.</span><span class="n">bin</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span> <span class="mi">5400</span>
+<span class="n">_TYPE</span> <span class="mi">2</span><span class="o">+</span><span class="mf">2.</span>
+       <span class="mi">2</span><span class="o">+</span><span class="mi">2</span> <span class="o">=</span>     <span class="mi">4</span>
+</pre></div>
+</div>
+</section>
+<section id="focal69">
+<h3><span class="sectnum">1.1.2. </span>FOCAL69<a class="headerlink" href="#focal69" title="Permalink to this heading">¶</a></h3>
+<p>FOCAL69 is an interactive program for technical computations.
+It can execute both immediate commands and stored programs (like BASIC).
+FOCAL69 is provided as a binary loader format paper-tape image.
+To load and run FOCAL69:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">focal69</span><span class="o">.</span><span class="n">bin</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span> <span class="mi">200</span>
+<span class="o">*</span><span class="n">TYPE</span> <span class="mi">2</span><span class="o">+</span><span class="mi">2</span>
+<span class="o">=</span>    <span class="mf">4.000</span><span class="o">*</span>
+</pre></div>
+</div>
+</section>
+<section id="pdp-8-os-8">
+<h3><span class="sectnum">1.1.3. </span>PDP-8 OS/8<a class="headerlink" href="#pdp-8-os-8" title="Permalink to this heading">¶</a></h3>
+<p>OS/8 is the PDP-8’s mass storage-based operating system.
+It provides a program development and execution environment for assembler, BASIC, and FORTRAN programs.
+OS/8 is provided under license, as is, without fee, by Digital Equipment Corporation, for non-commercial use only.
+Please read the enclosed license agreement for full terms and conditions.
+This license agreement must be reproduced with any copy of the OS/8 disk images.
+My thanks to Doug Jones of the University of Iowa, who provided the disk images,
+and to Digital Equipment Corporation, which provided the license.</p>
+<p>To boot and run OS/8:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rx0</span> <span class="n">os8_rx</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rx1</span> <span class="n">os8f4_rx</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rx0</span>
+
+<span class="o">.</span><span class="n">DA</span> <span class="n">dd</span><span class="o">-</span><span class="n">mmm</span><span class="o">-</span><span class="n">yy</span>
+<span class="o">.</span>
+</pre></div>
+</div>
+<p>Note that OS/8 only recognizes upper case characters.
+The first disk (drive 0) is the system disk; it also includes BASIC.
+The second disk (drive 1) includes FORTRAN.</p>
+</section>
+<section id="pdp-8-tss-8">
+<h3><span class="sectnum">1.1.4. </span>PDP-8 TSS/8<a class="headerlink" href="#pdp-8-tss-8" title="Permalink to this heading">¶</a></h3>
+<p>TSS/8 is the PDP-8’s timesharing system.
+It provides a program development and execution environment for assembler, BASIC, and FORTRAN programs.
+TSS/8 is provided as is, without fee, by Digital Equipment Corporation, for non-commercial use only.
+My thanks to John Wilson of Dbit Inc, who provided the disk image and the initialization tape source.
+Note: your environment must have a functioning second Teletype;
+that is, you cannot run TSS if your host system does not support the SIMH sockets library.</p>
+<p>To load and run TSS/8:</p>
+<ol class="arabic">
+<li><p>Load the paper-tape bootstrap:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">tss8_init</span><span class="o">.</span><span class="n">bin</span>
+</pre></div>
+</div>
+</li>
+<li><p>Mount the TSS/8 disk image of the RF08:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">rf</span> <span class="n">tss8_rf</span><span class="o">.</span><span class="n">dsk</span>
+</pre></div>
+</div>
+</li>
+<li><p>Assign a TCP/IP port to the Telnet listener for the extra terminals:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">ttix</span> <span class="o">&lt;</span><span class="n">port</span> <span class="c1">#&gt;         4000 typically works</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the bootstrap:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span> <span class="mi">24200</span>
+</pre></div>
+</div>
+</li>
+<li><p>TSS/8 will boot and go through its startup dialog</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>LOAD, DUMP, START, ETC? START
+MONTH-DAY-YEAR: mm:dd:yy&gt;         numeric, yy in range [74:85]
+HR:MIN - hh:mm&gt;                   numeric, 24 hour format
+(type cr to get attention)
+
+.
+</pre></div>
+</div>
+</li>
+<li><p>and is now ready for login.
+The list of accounts and passwords:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>PPN</p></th>
+<th class="head"><p>Password</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[0,1]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VH3M</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[0,2]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">LXHE</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[0,3]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SHUG</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[77,77]</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[1,10]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">WBCN</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[20,1]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DT</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[20,2]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PT</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[20,3]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TSS8</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[20,4]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EDIT</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[20,5]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4TH</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[1,50]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">JERK</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<ul>
+<li><p>Login using one of the existing accounts.
+The <code class="docutils literal notranslate"><span class="pre">login</span></code> command won’t echo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">LOGIN</span> <span class="mi">2</span> <span class="n">LXHE</span>                             <span class="n">privileged</span> <span class="n">library</span> <span class="n">account</span>
+
+<span class="n">TSS</span><span class="o">/</span><span class="mf">8.24</span>  <span class="n">JOB</span> <span class="mi">01</span>  <span class="p">[</span><span class="mi">00</span><span class="p">,</span><span class="mi">02</span><span class="p">]</span>  <span class="n">K00</span>    <span class="mi">23</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">06</span>
+<span class="n">SYSTEM</span> <span class="n">IS</span> <span class="n">DOWN</span><span class="p">,</span> <span class="n">INC</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+<li><p>The system is now ready for commands.
+To get a directory listing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span><span class="n">R</span> <span class="n">CAT</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Other users can log in by connecting, from a Telnet client, to localhost on the port specified in the <code class="docutils literal notranslate"><span class="pre">ATTACH</span> <span class="pre">TTIX</span></code> command.</p>
+</section>
+</section>
+<section id="pdp-11">
+<h2><span class="sectnum">1.2. </span>PDP-11<a class="headerlink" href="#pdp-11" title="Permalink to this heading">¶</a></h2>
+<section id="unix-v5-v6-v7">
+<h3><span class="sectnum">1.2.1. </span>Unix V5, V6, V7<a class="headerlink" href="#unix-v5-v6-v7" title="Permalink to this heading">¶</a></h3>
+<p>Unix was first developed on the PDP-7;
+its first widespread usage was on the PDP-11.
+Unix provides a program development and execution environment for assembler and C programs.
+Unix V5, V6, V7 for the PDP-11 is provided under license, as is, without fee, by Caldera Corportion, for non-commercial use only.
+Please read the enclosed license agreement for full terms and conditions.
+This license must be reproduced with any copy of the Unix V5, V6, V7 disk images.
+My thanks to PUPS, the PDP-11 Unix Preservation Society of Australia, which provided the disk images, and to Caldera, which provided the license.</p>
+<section id="unix-v5">
+<h4><span class="sectnum">1.2.1.1. </span>Unix V5<a class="headerlink" href="#unix-v5" title="Permalink to this heading">¶</a></h4>
+<p>Unix V5 is contained on a single RK05 disk image.
+To boot Unix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">u18</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk0</span> <span class="n">unix_v5_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rk</span>
+<span class="nd">@unix</span>
+<span class="n">login</span><span class="p">:</span> <span class="n">root</span>
+<span class="c1">#ls -l</span>
+</pre></div>
+</div>
+</section>
+<section id="unix-v6">
+<h4><span class="sectnum">1.2.1.2. </span>Unix V6<a class="headerlink" href="#unix-v6" title="Permalink to this heading">¶</a></h4>
+<p>Unix V6 is contained on four RK05 disk images.
+To boot Unix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">u18</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk0</span> <span class="n">unix0_v6_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk1</span> <span class="n">unix1_v6_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk2</span> <span class="n">unix2_v6_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk3</span> <span class="n">unix3_v6_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rk0</span>
+<span class="nd">@unix</span>
+<span class="n">login</span><span class="p">:</span> <span class="n">root</span>
+<span class="c1"># ls -l</span>
+</pre></div>
+</div>
+</section>
+<section id="unix-v7">
+<h4><span class="sectnum">1.2.1.3. </span>Unix V7<a class="headerlink" href="#unix-v7" title="Permalink to this heading">¶</a></h4>
+<p>Unix V7 is contained on a single RL02 disk image.
+To boot Unix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">u18</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rl0</span> <span class="n">RL02</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rl0</span> <span class="n">unix_v7_rl</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rl0</span>
+<span class="nd">@boot</span>
+<span class="n">New</span> <span class="n">Boot</span><span class="p">,</span> <span class="n">known</span> <span class="n">devices</span> <span class="n">are</span> <span class="n">hp</span> <span class="n">ht</span> <span class="n">rk</span> <span class="n">rl</span> <span class="n">rp</span> <span class="n">tm</span> <span class="n">vt</span>
+<span class="p">:</span> <span class="n">rl</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">rl2unix</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+<p>A smaller image is contained on a single RK05 disk image.
+To boot Unix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">u18</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk0</span> <span class="n">unix_v7_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rk0</span>
+<span class="nd">@boot</span>
+<span class="n">New</span> <span class="n">Boot</span><span class="p">,</span> <span class="n">known</span> <span class="n">devices</span> <span class="n">are</span> <span class="n">hp</span> <span class="n">ht</span> <span class="n">rk</span> <span class="n">rl</span> <span class="n">rp</span> <span class="n">tm</span> <span class="n">vt</span>
+<span class="p">:</span> <span class="n">rk</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">rkunix</span>
+<span class="c1"># STTY -LCASE</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rt-11">
+<h3><span class="sectnum">1.2.2. </span>RT-11<a class="headerlink" href="#rt-11" title="Permalink to this heading">¶</a></h3>
+<p>RT-11 is the PDP-11’s single user operating system.
+It provides a program development and execution environment for assembler, BASIC, and FORTRAN programs.
+RT-11 is provided under license, as is, without fee, by Mentec Corporation, for non-commercial use <strong>ONLY ON THIS SIMULATOR</strong>.
+Please read the enclosed license agreement for full terms and conditions.
+This license agreement must be reproduced with any copy of the RT-11 disk image.
+My thanks to John Wilson, a private collector, who provided the disk image for RT-11 V4;
+to Megan Gentry, of Digital Equipment Corporation, who provided the disk image for RT-11 V5.3;
+and to Mentec Corporation, which provided the license.</p>
+<section id="rt-11-v4">
+<h4><span class="sectnum">1.2.2.1. </span>RT-11 V4<a class="headerlink" href="#rt-11-v4" title="Permalink to this heading">¶</a></h4>
+<p>RT-11 is contained in a single RK05 disk image.
+To boot and run RT-11:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rk0</span> <span class="n">rtv4_rk</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rk0</span>
+</pre></div>
+</div>
+<p>For RL, HK, RM, and RP series disks,
+RT-11 expects to find a manufacturer’s bad block table in the last track of the disk.
+Therefore, INITialization of a new (all zero’s) disk fails,
+because there is no valid bad block table.
+To create a minimal bad block table, use the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;unit&gt;</span> <span class="pre">BADBLOCK</span></code> command.</p>
+</section>
+<section id="rt-11-v5-3">
+<h4><span class="sectnum">1.2.2.2. </span>RT-11 V5.3<a class="headerlink" href="#rt-11-v5-3" title="Permalink to this heading">¶</a></h4>
+<p>RT-11 is contained in a single RL02 disk image.
+To boot and run RT-11:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rl0</span> <span class="n">rl02</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rl0</span> <span class="n">rtv53_rl</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">rl0</span>
+</pre></div>
+</div>
+<p>This is a full RT-11 distribution kit.
+It expects the user to copy the distribution pack and generate a new system.
+This requires mounting a blank pack on RL1.
+When a blank pack is attached to the simulator,
+a bad block table must be created with the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;unit&gt;</span> <span class="pre">BADBLOCK</span></code> command.</p>
+</section>
+</section>
+<section id="nova-and-eclipse-rdos">
+<h3><span class="sectnum">1.2.3. </span>Nova and Eclipse RDOS<a class="headerlink" href="#nova-and-eclipse-rdos" title="Permalink to this heading">¶</a></h3>
+<p>RDOS is the Nova’s real-time mass storage operating system.
+It provides a program development and execution environment for assembler, BASIC, and FORTRAN programs.
+RDOS is provided under license, as is, without fee, by Data General Corporation, for non-commercial use only.
+Please read the enclosed license agreement for full terms and conditions.
+This license agreement must be reproduced with any copy of the RDOS disk image.
+My thanks to Carl Friend, a private collector, who provided the disk image,
+and to Data General Corporation, which provided the license.</p>
+<p>To boot and run RDOS for the Nova:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; att dp0 rdos_d31.dsk
+sim&gt; set tti dasher
+sim&gt; boot dp0
+FILENAME? (cr)
+DATE (mm/dd/yy)? xx/yy/zz
+TIME (hh:mm:ss)? hh:mm:ss
+R
+list/e
+</pre></div>
+</div>
+<p>To boot and run RDOS for the Eclipse:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; att dp0 zrdos75.dsk
+sim&gt; set tti dasher
+sim&gt; boot dp0
+FILENAME? (cr)
+DATE (mm/dd/yy)? xx/yy/zz
+TIME (hh:mm:ss)? hh:mm:ss
+R
+list/e
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pdp-1">
+<h2><span class="sectnum">1.3. </span>PDP-1<a class="headerlink" href="#pdp-1" title="Permalink to this heading">¶</a></h2>
+<section id="pdp-1-lisp">
+<h3><span class="sectnum">1.3.1. </span>PDP-1 LISP<a class="headerlink" href="#pdp-1-lisp" title="Permalink to this heading">¶</a></h3>
+<p>PDP-1 LISP is an interactive interpreter for the Lisp language.
+It can execute both interactive commands and stored programs.
+The startup instructions for LISP are complicated;
+the documentation included with the program provides information on loading and operating LISP.
+My thanks to Peter Deutsch, who wrote the program,
+to Gordon Greene, who typed it in from a printed listing,
+and to Paul McJones, who helped with the final debug process.</p>
+</section>
+<section id="pdp-1-ddt">
+<h3><span class="sectnum">1.3.2. </span>PDP-1 DDT<a class="headerlink" href="#pdp-1-ddt" title="Permalink to this heading">¶</a></h3>
+<p>PDP-1 DDT is an interactive debugging tool for the PDP-1.
+It provides symbolic debugging capabilities for PDP-1 programs.
+The documentation included with the program provides information on loading and operating DDT.
+My thanks to Derek Peschel, who transcribed and debugged DDT.</p>
+</section>
+</section>
+<section id="pdp-7">
+<h2><span class="sectnum">1.4. </span>PDP-7<a class="headerlink" href="#pdp-7" title="Permalink to this heading">¶</a></h2>
+<section id="sim8">
+<h3><span class="sectnum">1.4.1. </span>SIM8<a class="headerlink" href="#sim8" title="Permalink to this heading">¶</a></h3>
+<p>PDP-7 SIM8 is a PDP-8 simulator for the PDP-7.
+It implements an 8K PDP-8/I with keyboard, teleprinter, reader, punch, and line printer.
+It provides an interactive console environment for control and debug of the simulated PDP-8.
+For more information see the documentation included with the program.
+My thanks to Dave Waks, who wrote the program,
+and to Paul Pierce and Tim Litt, who recovered the source from its archival medium.</p>
+<p>To load and run SIM8:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">sim8</span><span class="o">.</span><span class="n">rim</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">tti</span> <span class="n">fdx</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span>
+<span class="n">AC</span><span class="o">/</span> <span class="mi">0000</span>
+</pre></div>
+</div>
+</section>
+<section id="decsys">
+<h3><span class="sectnum">1.4.2. </span>DECsys<a class="headerlink" href="#decsys" title="Permalink to this heading">¶</a></h3>
+<p>PDP-7 DECsys was Digital Equipment Corporation’s first mass storage-based operating system.
+Designed for an 8KW PDP-7 with two or three DECtape drives,
+it provided an interactive program development environment for Fortran and assembly language programs.
+My thanks to Professor Harlan Lefevre, of the University of Oregon,
+whose careful preservation of a fully functioning PDP-7, and its software,
+for almost forty years made possible the recovery of this software.</p>
+<p>To load and run DECsys:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="o">-</span><span class="n">e</span> <span class="n">dt2</span> <span class="n">decsys</span><span class="o">.</span><span class="n">dtp</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">dt3</span> <span class="n">scratch</span><span class="o">.</span><span class="n">dtp</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">decsys</span><span class="o">.</span><span class="n">rim</span> <span class="mi">17640</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span>
+
+<span class="n">GA</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pdp-9-pdp-15">
+<h2><span class="sectnum">1.5. </span>PDP-9/PDP-15<a class="headerlink" href="#pdp-9-pdp-15" title="Permalink to this heading">¶</a></h2>
+<section id="focal">
+<h3><span class="sectnum">1.5.1. </span>FOCAL<a class="headerlink" href="#focal" title="Permalink to this heading">¶</a></h3>
+<p>FOCAL15 is an interactive program for technical computations.
+It can execute both immediate commands and stored programs (like BASIC).
+FOCAL15 is provided as a binary loader format paper-tape image.
+My thanks to Al Kossow, who provided the binary image.
+To load and run FOCAL15:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; load focal15.bin
+sim&gt; run
+*TYPE FSQT(2),!
+=    1.4142
+*
+</pre></div>
+</div>
+</section>
+<section id="advanced-software-system-keyboard-monitor">
+<h3><span class="sectnum">1.5.2. </span>Advanced Software System/Keyboard Monitor<a class="headerlink" href="#advanced-software-system-keyboard-monitor" title="Permalink to this heading">¶</a></h3>
+<p>The Advanced Software System Keyboard Monitor is the simplest mass storage monitor for the PDP-15.
+It offers single-user program development and execution capabilities.
+My thanks to David Gesswein, who provided the DECtape images of ADSS/KM.
+To load and run ADSS/KM-15:</p>
+<ol class="arabic">
+<li><p>On the PDP-9 (only), initialize extend mode to on:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">d</span> <span class="n">extm_init</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>Load the paper-tape bootstrap into upper memory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">dec</span><span class="o">-</span><span class="mi">15</span><span class="n">u</span><span class="o">.</span><span class="n">rim</span> <span class="mi">77637</span>
+</pre></div>
+</div>
+<p>You <em>must</em> specify the load address.</p>
+</li>
+<li><p>Verify that the bootstrap loaded correctly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">ex</span> <span class="n">pc</span>
+<span class="n">PC</span><span class="p">:</span>  <span class="mi">077646</span>
+</pre></div>
+</div>
+</li>
+<li><p>Change the default line printer to be the LP09 rather than the Type 647 (PDP-9) or LP15 (PDP-15):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">lpt</span> <span class="n">disabled</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">lp9</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+</li>
+<li><p>Mount the Advanced Software System DECtape image on DECtape unit 0:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">dt</span> <span class="n">adss15_32k</span><span class="o">.</span><span class="n">dtp</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the bootstrap:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span>
+</pre></div>
+</div>
+</li>
+<li><p>The DECtape will boot and print out</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>KMS9-15 V5B000
+$
+</pre></div>
+</div>
+<p>and is now ready for commands.
+Recognized commands include:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td><p>List system device directory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+<td><p>List available commands</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>List device assignments</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SCOM</span></code></p></td>
+<td><p>List systems communication region</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>To run Focal, assign unused DAT slot 10 and then load Focal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$A LPA0 10
+$GLOAD
+LOADER V5B000
+&gt;_FOCAL&lt;altmode = control-[&gt;
+FOCAL V9A
+*TYPE 2+2,!
+4.0000
+*
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="advanced-software-system-foreground-background">
+<h3><span class="sectnum">1.5.3. </span>Advanced Software System/Foreground Background<a class="headerlink" href="#advanced-software-system-foreground-background" title="Permalink to this heading">¶</a></h3>
+<p>The Advanced Software System/Foreground Background is a real-time monitor for the PDP-15.
+It offers foreground and background execution of programs.
+My thanks to David Gesswein, who provided the DECtape images of ADSS/FB.</p>
+<p>Note: your environment must have a functioning second Teletype;
+that is, you cannot run Foreground/Background if your host system does not support the SIMH sockets library.</p>
+<p>To load and run ADSS/FB:</p>
+<ol class="arabic">
+<li><p>Load the paper-tape bootstrap into upper memory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">dec</span><span class="o">-</span><span class="mi">15</span><span class="n">u</span><span class="o">.</span><span class="n">rim</span> <span class="mi">77637</span>
+</pre></div>
+</div>
+<p>You <em>must</em> specify the load address.</p>
+</li>
+<li><p>Verify that the bootstrap loaded correctly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">ex</span> <span class="n">pc</span>
+<span class="n">PC</span><span class="p">:</span>  <span class="mi">077646</span>
+</pre></div>
+</div>
+</li>
+<li><p>Mount the Foreground/Background DECtape image on DECtape unit 0:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">dt</span> <span class="n">fb15_32k</span><span class="o">.</span><span class="n">dtp</span>
+</pre></div>
+</div>
+</li>
+<li><p>Assign a TCP/IP port to the Telnet listener for the second terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">assign</span> <span class="n">tti1</span> <span class="o">&lt;</span><span class="n">port</span> <span class="c1">#&gt;            4000 typically works</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start a Telnet client to act as the second terminal and connect to localhost on the specified port.</p></li>
+<li><p>Run the bootstrap:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span>
+</pre></div>
+</div>
+</li>
+<li><p>The DECtape will boot, and the Foreground/Background Monitor will print on the second terminal</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>F9/15 V4A
+$
+</pre></div>
+</div>
+<p>and is now ready for commands.
+Recognized commands include:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">D</span> <span class="pre">0</span></code></p></td>
+<td><p>List system device directory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>List device assignments</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>To activate the background, load <code class="docutils literal notranslate"><span class="pre">IDLE</span></code> into the foreground:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$A DTA0 -4
+$GLOAD
+FGLOAD V2A
+&gt;_IDLE&lt;altmode = control-[&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Background terminal responds with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>B9/15 V4A
+$
+</pre></div>
+</div>
+<p>and is now ready for commands.</p>
+</li>
+</ol>
+</section>
+<section id="dos-15">
+<h3><span class="sectnum">1.5.4. </span>DOS-15<a class="headerlink" href="#dos-15" title="Permalink to this heading">¶</a></h3>
+<p>DOS-15 is a more polished version of ADSS-15 using the RF15 or RP15 as its system device.
+My thanks to Hans Pufal, who recovered DOS-15 from DECtape and deduced how to reconstruct disk images from DECtapes.
+To load and run DOS-15:</p>
+<ol class="arabic">
+<li><p>Load the DOS-15 paper tape bootstrap into upper memory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">rfsboot</span><span class="o">.</span><span class="n">rim</span> <span class="mi">77637</span>
+</pre></div>
+</div>
+<p>You <em>must</em> specify the load address.</p>
+</li>
+<li><p>Mount the DOS-15 RF disk image on the RF15:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rf</span> <span class="n">dosv2a_4p</span><span class="o">.</span><span class="n">rf</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run the bootstrap:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span>
+</pre></div>
+</div>
+</li>
+<li><p>The RF disk will boot and print out</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DOS</span><span class="o">-</span><span class="mi">15</span> <span class="n">V2A</span>
+<span class="n">ENTER</span> <span class="n">DATE</span> <span class="p">(</span><span class="n">MM</span><span class="o">/</span><span class="n">DD</span><span class="o">/</span><span class="n">YY</span><span class="p">)</span> <span class="o">-</span>
+</pre></div>
+</div>
+</li>
+<li><p>Enter the date (the year must be between 70 and 99).
+DOS-15 will print its prompt and is now ready for commands.
+Recognized commands include:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+<td><p>System information</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td><p>System configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>System device assignments</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</section>
+</section>
+<section id="ibm-1401">
+<h2><span class="sectnum">1.6. </span>IBM 1401<a class="headerlink" href="#ibm-1401" title="Permalink to this heading">¶</a></h2>
+<section id="single-card-koans">
+<h3><span class="sectnum">1.6.1. </span>Single card “Koans”<a class="headerlink" href="#single-card-koans" title="Permalink to this heading">¶</a></h3>
+<p>One of the art forms for the IBM 1401 was packing useful programs into a single punched card.
+Three samples are included:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">i1401_ctolp</span><span class="o">.</span><span class="n">cd</span>     <span class="n">Prints</span> <span class="n">a</span> <span class="n">card</span> <span class="n">deck</span> <span class="n">on</span> <span class="n">the</span> <span class="n">line</span> <span class="n">printer</span>
+<span class="n">i1401_ctopu</span><span class="o">.</span><span class="n">cd</span>     <span class="n">Copies</span> <span class="n">a</span> <span class="n">card</span> <span class="n">deck</span> <span class="n">to</span> <span class="n">the</span> <span class="n">card</span> <span class="n">punch</span>
+<span class="n">i1401_hello</span><span class="o">.</span><span class="n">cd</span>     <span class="n">Prints</span> <span class="s2">&quot;HELLO WORLD&quot;</span> <span class="n">on</span> <span class="n">the</span> <span class="n">line</span> <span class="n">printer</span> <span class="ow">and</span> <span class="n">stops</span>
+</pre></div>
+</div>
+<p>To use the reproduction cards, simply insert them at the beginning of a text file, terminated by newline.
+Attach the modified file to the card reader, attach a blank file to the output device, and boot the card reader.</p>
+</section>
+<section id="diagnostic-tape">
+<h3><span class="sectnum">1.6.2. </span>Diagnostic tape<a class="headerlink" href="#diagnostic-tape" title="Permalink to this heading">¶</a></h3>
+<p>The software and writeup were provided by Charles Owens.</p>
+<p>This 1401 Diagnostics tape is a bootable tape containing a series of 1401 diagnostics dating from about 1962.
+The 1407 Inquiry console is not used;
+all control is via the front panel.</p>
+<p>To run in the simulator, attach thusly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">mt1</span> <span class="mi">1401</span><span class="n">diag</span><span class="o">.</span><span class="n">mt</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">lpt</span> <span class="n">errorlist</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">mt1</span>
+</pre></div>
+</div>
+<p>The simulator will halt with <code class="docutils literal notranslate"><span class="pre">IS</span> <span class="pre">=</span> <span class="pre">433</span></code>.
+At this point, you can set options through the sense switches and memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="mi">1252</span> <span class="s2">&quot;1&quot;</span>      <span class="n">Will</span> <span class="n">cause</span> <span class="n">headings</span> <span class="n">to</span> <span class="nb">print</span> <span class="k">for</span> <span class="n">each</span> <span class="n">test</span> <span class="n">run</span><span class="o">.</span>
+                <span class="n">Otherwise</span> <span class="n">no</span> <span class="n">printing</span> <span class="n">will</span> <span class="n">occur</span> <span class="n">unless</span> <span class="n">there</span> <span class="n">are</span>
+                <span class="n">errors</span><span class="o">.</span>
+<span class="n">D</span> <span class="n">SSB</span> <span class="mi">1</span>         <span class="n">Loop</span> <span class="k">if</span> <span class="n">an</span> <span class="n">error</span> <span class="ow">is</span> <span class="n">detected</span><span class="o">.</span>
+<span class="n">D</span> <span class="n">SSC</span> <span class="mi">1</span>         <span class="n">Prints</span> <span class="nb">all</span> <span class="n">test</span> <span class="n">cases</span> <span class="ow">not</span> <span class="n">just</span> <span class="n">errors</span><span class="o">.</span>
+<span class="n">D</span> <span class="n">SSD</span> <span class="mi">1</span>         <span class="n">Repeat</span> <span class="n">the</span> <span class="n">test</span> <span class="n">run</span> <span class="n">over</span> <span class="ow">and</span> <span class="n">over</span><span class="o">.</span>
+<span class="n">D</span> <span class="n">SSE</span> <span class="mi">1</span>         <span class="n">Halt</span> <span class="k">if</span> <span class="nb">any</span> <span class="n">error</span> <span class="ow">is</span> <span class="n">detected</span><span class="p">,</span> <span class="n">otherwise</span> <span class="k">continue</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>When you continue from this halt (use C to CON),
+the simulator will halt at 3001.
+Enter C again and the tape will spin thru a series of basic CPU diagnostics.</p>
+</section>
+<section id="sps">
+<h3><span class="sectnum">1.6.3. </span>SPS<a class="headerlink" href="#sps" title="Permalink to this heading">¶</a></h3>
+<p>The software and writeup were provided by Charles Owens.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sps1.obj</span></code> and <code class="docutils literal notranslate"><span class="pre">sps2.obj</span></code> are the object card decks for the “Symbolic Programming System”,
+a primitive assembler for the 1401 that predates the better known and more functional Autocoder.</p>
+<p>To use SPS, write an SPS program using your favorite editor (two examples are provided, <code class="docutils literal notranslate"><span class="pre">hello.sps</span></code> and <code class="docutils literal notranslate"><span class="pre">diaglist.sps</span></code>).
+SPS decks are not free-format, but operands must be placed in columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>1–5</p></td>
+<td><p>Line count (optional)</p></td>
+</tr>
+<tr class="row-even"><td><p>6-7</p></td>
+<td><p>Count (number of characters when defining a constant).</p></td>
+</tr>
+<tr class="row-odd"><td><p>8–13</p></td>
+<td><p>Label (six characters, must start with alphabetic).</p></td>
+</tr>
+<tr class="row-even"><td><p>14–16</p></td>
+<td><p>Opcode: Examples:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p>Add</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p>Branch (must be d-mod for conditional)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BWZ</span></code></p></td>
+<td><p>Branch if wordmark or zone</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">C</span></code></p></td>
+<td><p>Compare</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CC</span></code></p></td>
+<td><p>Carriage control (printer)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CS</span></code></p></td>
+<td><p>CLear storage</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span></code></p></td>
+<td><p>Control unit (e.g. tape)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CW</span></code></p></td>
+<td><p>Clear workmark</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td><p>Divide</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DC</span></code></p></td>
+<td><p>Define constant (no wordmark)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DCW</span></code></p></td>
+<td><p>Define constant (starts in 24, length in 6-7)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">END</span></code></p></td>
+<td><p>End of program</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LCA</span></code></p></td>
+<td><p>Load characters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">H</span></code></p></td>
+<td><p>Halt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">M</span></code></p></td>
+<td><p>Multiply</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MCE</span></code></p></td>
+<td><p>Move and edit</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MCS</span></code></p></td>
+<td><p>Move and supress zeros</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MCW</span></code></p></td>
+<td><p>Move characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MN</span></code></p></td>
+<td><p>Move numeric</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MZ</span></code></p></td>
+<td><p>Move zone</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ORG</span></code></p></td>
+<td><p>Define origin point</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td><p>Punch card</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>Read card</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td><p>Subtract</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SS</span></code></p></td>
+<td><p>Stacker select</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SW</span></code></p></td>
+<td><p>Set wordmark</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">W</span></code></p></td>
+<td><p>Write line</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ZA</span></code></p></td>
+<td><p>Zero and add</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ZS</span></code></p></td>
+<td><p>Zero and subtract</p></td>
+</tr>
+</tbody>
+</table>
+<p>Tape:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MCW</span> <span class="pre">%UX</span> <span class="pre">YYY</span> <span class="pre">W</span></code></p></td>
+<td><p>Write tape from addr <code class="docutils literal notranslate"><span class="pre">YYY</span></code> w/o wordmarks)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LCA</span> <span class="pre">%UX</span> <span class="pre">YYY</span> <span class="pre">W</span></code></p></td>
+<td><p>Write tape, unit <code class="docutils literal notranslate"><span class="pre">X</span></code> from addr <code class="docutils literal notranslate"><span class="pre">YYY</span></code> w/wordmarks)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MCW</span> <span class="pre">%UX</span> <span class="pre">YYY</span> <span class="pre">R</span></code></p></td>
+<td><p>Read tape from addr <code class="docutils literal notranslate"><span class="pre">YYY</span></code> w/o wordmarks)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LCA</span> <span class="pre">%UX</span> <span class="pre">YYY</span> <span class="pre">R</span></code></p></td>
+<td><p>Read tape, unit <code class="docutils literal notranslate"><span class="pre">X</span></code> from addr <code class="docutils literal notranslate"><span class="pre">YYY</span></code> w/wordmarks)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span> <span class="pre">%UX</span> <span class="pre">M</span></code></p></td>
+<td><p>Write tape mark</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span> <span class="pre">%UX</span> <span class="pre">E</span></code></p></td>
+<td><p>Skip and blank tape</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span> <span class="pre">%UX</span> <span class="pre">B</span></code></p></td>
+<td><p>Backspace record</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span> <span class="pre">%UX</span> <span class="pre">R</span></code></p></td>
+<td><p>Rewind tape</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CU</span> <span class="pre">%UX</span> <span class="pre">U</span></code></p></td>
+<td><p>Rewind and unload tape</p></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><p>17–22</p></td>
+<td><p>Address for A-operand (label or 4-digit actual address)</p></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>Blank, <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> to adjust A-operand by a constant</p></td>
+</tr>
+<tr class="row-odd"><td><p>24–26</p></td>
+<td><p>3-digit number to adjust A-operand by if 23 is <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>27</p></td>
+<td><p>Index (?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>28–33</p></td>
+<td><p>Address for B-operand</p></td>
+</tr>
+<tr class="row-even"><td><p>34</p></td>
+<td><p>Blank, <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>35–37</p></td>
+<td><p>3-digit number of adjust B-address by if 34 is <code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>38</p></td>
+<td><p>Index (?)</p></td>
+</tr>
+<tr class="row-odd"><td><p>39</p></td>
+<td><p>D-modifier for this instruction. Notes:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>Compare is unequal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td><p>Branch if compare equal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td><p>B is less than A</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">U</span></code></p></td>
+<td><p>B is greater than A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p>Tape read error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td><p>Tape end of reel</p></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><p>40–55</p></td>
+<td><p>Comments</p></td>
+</tr>
+</tbody>
+</table>
+<p>The SPS deck should start with an ORG operation to specify where in storage the program starts,
+and end with an END card, with an optional A-operand showing where to start execution.</p>
+<p>To assemble an SPS program,
+place the SPS source between the <code class="docutils literal notranslate"><span class="pre">SPS1.OBJ</span></code> and the <code class="docutils literal notranslate"><span class="pre">SPS2.OBJ</span></code> deck,
+and another copy of the same source after the <code class="docutils literal notranslate"><span class="pre">SPS2.OBJ</span></code> deck (SPS is a two-pass assembler).
+SPS prints a listing on LPT and punches an object deck on CDP, ready to run.</p>
+<p>A UNIX command script to assemble an SPS deck painlessly is in <code class="docutils literal notranslate"><span class="pre">sps</span></code>.
+To use the script, enter <code class="docutils literal notranslate"><span class="pre">sps</span> <span class="pre">programname</span></code>.
+The script creates <code class="docutils literal notranslate"><span class="pre">programname.lst</span></code> for the listing and <code class="docutils literal notranslate"><span class="pre">programname.obj</span></code> for the object deck.
+Windows users are out of luck, for now.</p>
+</section>
+</section>
+<section id="hp2116-16k-basic">
+<h2><span class="sectnum">1.7. </span>HP2116 16K BASIC<a class="headerlink" href="#hp2116-16k-basic" title="Permalink to this heading">¶</a></h2>
+<p>HP BASIC is a paper-tape centric implementation of BASIC for a 16KW HP2116.
+Device numbers correspond to the default simulator settings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PTR</span> <span class="o">=</span>    <span class="mi">10</span>
+<span class="n">TTY</span> <span class="o">=</span>    <span class="mi">11</span>
+<span class="n">PTP</span> <span class="o">=</span>    <span class="mi">12</span>
+</pre></div>
+</div>
+<p>The program is a complete but early BASIC and has one unusual requirement:
+all programs must include a valid <code class="docutils literal notranslate"><span class="pre">END</span></code> statement to run correctly.
+My thanks to Jeff Moffatt for providing the program.</p>
+<p>To load and run BASIC:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="n">load</span> <span class="n">basic1</span><span class="o">.</span><span class="n">abs</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">run</span> <span class="mi">100</span>
+<span class="n">READY</span>
+<span class="mi">10</span> <span class="n">PRINT</span> <span class="n">SQR</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="mi">20</span> <span class="n">END</span>
+<span class="n">RUN</span>
+ <span class="mf">1.41421</span>
+</pre></div>
+</div>
+</section>
+<section id="pdp-10-tops-10-7-03-tops-10-7-04-tops-20-v4-1">
+<h2><span class="sectnum">1.8. </span>PDP-10 TOPS-10 7.03, TOPS-10 7.04, TOPS-20 V4.1<a class="headerlink" href="#pdp-10-tops-10-7-03-tops-10-7-04-tops-20-v4-1" title="Permalink to this heading">¶</a></h2>
+<p>TOPS-10 was the primary time-shared operating system for the PDP-10.
+TOPS-20 was a popular alternative derived from the BBN TENEX system.
+Installation and distribution tapes for TOPS-10 7.03, TOPS-10 7.04, and TOPS-20 4.1 are available at <a class="reference external" href="http://pdp-10.trailing-edge.com">http://pdp-10.trailing-edge.com</a>.</p>
+</section>
+<section id="interdata-32b-systems">
+<h2><span class="sectnum">1.9. </span>Interdata 32b systems<a class="headerlink" href="#interdata-32b-systems" title="Permalink to this heading">¶</a></h2>
+<section id="interdata-7-32-unix">
+<h3><span class="sectnum">1.9.1. </span>Interdata 7/32 Unix<a class="headerlink" href="#interdata-7-32-unix" title="Permalink to this heading">¶</a></h3>
+<p>Interdata Unix V6 was the first port of Unix from its native environment on the PDP-11.
+The port was done by Richard Miller and his colleagues at the University of Wollongong, Australia, in 1976-77.
+Unix V6 and V7 for the Interdata 7/32 is provided under license, as is, without fee, by Caldera Corporation, for non-commercial use only.
+Please read the enclosed license agreement for full terms and conditions.
+This license must be reproduced with any copy of the Unix V6 and V7 disk images.
+My thanks to Richard Miller,
+without whose guidance, knowledge, and patience the recreation of Interdata Unix would not have been possible,
+and to Caldera, which provided the license.</p>
+<section id="id1">
+<h4><span class="sectnum">1.9.1.1. </span>Unix V6<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
+<p>Unix V6 is contained on a single 10MB disk image.
+To boot Unix V6:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; set ttp ena
+sim&gt; set pas dev=12
+sim&gt; set mt dev=85
+sim&gt; att -e dp0 iu6_dp0.dsk
+sim&gt; boot dp0
+?unix
+login: root
+# ls -l
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4><span class="sectnum">1.9.1.2. </span>Unix V7<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
+<p>Unix V7 is contained on two 10MB disk images.
+To boot Unix V7:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">ttp</span> <span class="n">ena</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">pas</span> <span class="n">dev</span><span class="o">=</span><span class="mi">12</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">mt</span> <span class="n">dev</span><span class="o">=</span><span class="mi">85</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="o">-</span><span class="n">e</span> <span class="n">dp0</span> <span class="n">iu7_dp0</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="o">-</span><span class="n">e</span> <span class="n">dp1</span> <span class="n">iu7_dp1</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">dp0</span>
+<span class="n">Boot</span>
+<span class="p">:</span> <span class="n">dsk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="n">unix</span>
+<span class="c1">#</span>
+</pre></div>
+</div>
+<p>Type <code class="docutils literal notranslate"><span class="pre">^D</span></code> to enable multiuser mode.
+The root password is <code class="docutils literal notranslate"><span class="pre">root</span></code>.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SimH Sample Software Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-8"><span class="sectnum">1.1. </span>PDP-8</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#esi-x"><span class="sectnum">1.1.1. </span>ESI-X</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#focal69"><span class="sectnum">1.1.2. </span>FOCAL69</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdp-8-os-8"><span class="sectnum">1.1.3. </span>PDP-8 OS/8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdp-8-tss-8"><span class="sectnum">1.1.4. </span>PDP-8 TSS/8</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-11"><span class="sectnum">1.2. </span>PDP-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unix-v5-v6-v7"><span class="sectnum">1.2.1. </span>Unix V5, V6, V7</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#unix-v5"><span class="sectnum">1.2.1.1. </span>Unix V5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unix-v6"><span class="sectnum">1.2.1.2. </span>Unix V6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unix-v7"><span class="sectnum">1.2.1.3. </span>Unix V7</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rt-11"><span class="sectnum">1.2.2. </span>RT-11</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rt-11-v4"><span class="sectnum">1.2.2.1. </span>RT-11 V4</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rt-11-v5-3"><span class="sectnum">1.2.2.2. </span>RT-11 V5.3</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#nova-and-eclipse-rdos"><span class="sectnum">1.2.3. </span>Nova and Eclipse RDOS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-1"><span class="sectnum">1.3. </span>PDP-1</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pdp-1-lisp"><span class="sectnum">1.3.1. </span>PDP-1 LISP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pdp-1-ddt"><span class="sectnum">1.3.2. </span>PDP-1 DDT</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-7"><span class="sectnum">1.4. </span>PDP-7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sim8"><span class="sectnum">1.4.1. </span>SIM8</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decsys"><span class="sectnum">1.4.2. </span>DECsys</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-9-pdp-15"><span class="sectnum">1.5. </span>PDP-9/PDP-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#focal"><span class="sectnum">1.5.1. </span>FOCAL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-software-system-keyboard-monitor"><span class="sectnum">1.5.2. </span>Advanced Software System/Keyboard Monitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-software-system-foreground-background"><span class="sectnum">1.5.3. </span>Advanced Software System/Foreground Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dos-15"><span class="sectnum">1.5.4. </span>DOS-15</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#ibm-1401"><span class="sectnum">1.6. </span>IBM 1401</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#single-card-koans"><span class="sectnum">1.6.1. </span>Single card “Koans”</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#diagnostic-tape"><span class="sectnum">1.6.2. </span>Diagnostic tape</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sps"><span class="sectnum">1.6.3. </span>SPS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hp2116-16k-basic"><span class="sectnum">1.7. </span>HP2116 16K BASIC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-10-tops-10-7-03-tops-10-7-04-tops-20-v4-1"><span class="sectnum">1.8. </span>PDP-10 TOPS-10 7.03, TOPS-10 7.04, TOPS-20 V4.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interdata-32b-systems"><span class="sectnum">1.9. </span>Interdata 32b systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interdata-7-32-unix"><span class="sectnum">1.9.1. </span>Interdata 7/32 Unix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><span class="sectnum">1.9.1.1. </span>Unix V6</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2"><span class="sectnum">1.9.1.2. </span>Unix V7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="simh_doc.html" title="previous chapter">SIMH Users’ Guide, V4.0</a></li>
+      <li>Next: <a href="simh_faq.html" title="next chapter"><span class="sectnum">1. </span>SimH FAQ</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simh_swre.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

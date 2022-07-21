@@ -1,0 +1,1094 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>1. SimH FAQ &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Nova Simulator Usage" href="nova_doc.html" />
+    <link rel="prev" title="1. SimH sample software packages" href="simh_swre.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simh-faq">
+<h1><span class="sectnum">1. </span>SimH FAQ<a class="headerlink" href="#simh-faq" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2019-05-13</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#general-questions" id="id3"><span class="sectnum">1.1. </span>General questions</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#what-is-simh" id="id4"><span class="sectnum">1.1.1. </span>What is SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#why-was-simh-written" id="id5"><span class="sectnum">1.1.2. </span>Why was SIMH written?</a></p></li>
+<li><p><a class="reference internal" href="#what-is-the-history-of-simh" id="id6"><span class="sectnum">1.1.3. </span>What is the history of SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#who-writes-and-maintains-simh" id="id7"><span class="sectnum">1.1.4. </span>Who writes and maintains SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#how-is-simh-licensed" id="id8"><span class="sectnum">1.1.5. </span>How is SIMH licensed?</a></p></li>
+<li><p><a class="reference internal" href="#how-is-simh-distributed" id="id9"><span class="sectnum">1.1.6. </span>How is SIMH distributed?</a></p></li>
+<li><p><a class="reference internal" href="#which-computer-systems-does-simh-simulate" id="id10"><span class="sectnum">1.1.7. </span>Which computer systems does SIMH simulate?</a></p></li>
+<li><p><a class="reference internal" href="#which-host-systems-does-simh-run-on" id="id11"><span class="sectnum">1.1.8. </span>Which host systems does SIMH run on?</a></p></li>
+<li><p><a class="reference internal" href="#what-software-packages-are-available-to-run-on-simh" id="id12"><span class="sectnum">1.1.9. </span>What software packages are available to run on SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#where-can-i-get-more-information-on-simh" id="id13"><span class="sectnum">1.1.10. </span>Where can I get more information on SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-search-the-simh-mailing-list-archive-for-questions-that-might-have-been-asked-and-answered-before" id="id14"><span class="sectnum">1.1.11. </span>How do I search the SIMH mailing list archive for questions that might have been asked and answered before?</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#operational-questions" id="id15"><span class="sectnum">1.2. </span>Operational questions</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#how-do-i-install-simh-on-windows" id="id16"><span class="sectnum">1.2.1. </span>How do I install SIMH on Windows?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-simh-with-ethernet-support-on-windows" id="id17"><span class="sectnum">1.2.2. </span>How do I install SIMH with Ethernet support on Windows?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-simh-on-unix-linux-macos" id="id18"><span class="sectnum">1.2.3. </span>How do I install SIMH on Unix/Linux/macOS?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-simh-on-vms" id="id19"><span class="sectnum">1.2.4. </span>How do I install SIMH on VMS?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-transcribe-a-real-cd-for-use-with-simh" id="id20"><span class="sectnum">1.2.5. </span>How do I transcribe a real CD for use with SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-transcribe-other-archival-media-for-use-with-simh" id="id21"><span class="sectnum">1.2.6. </span>How do I transcribe other archival media for use with SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#how-can-i-get-text-files-in-and-out-of-simh" id="id22"><span class="sectnum">1.2.7. </span>How can I get text files in and out of SIMH?</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#tape-input" id="id23"><span class="sectnum">1.2.7.1. </span>Tape input</a></p></li>
+<li><p><a class="reference internal" href="#serial-input-and-output" id="id24"><span class="sectnum">1.2.7.2. </span>Serial input and output</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-input-and-output" id="id25"><span class="sectnum">1.2.7.3. </span>Paper tape input and output</a></p></li>
+<li><p><a class="reference internal" href="#ethernet-input-and-output" id="id26"><span class="sectnum">1.2.7.4. </span>Ethernet input and output</a></p></li>
+<li><p><a class="reference internal" href="#printer-output" id="id27"><span class="sectnum">1.2.7.5. </span>Printer output</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#how-can-i-get-binary-files-in-and-out-of-simh" id="id28"><span class="sectnum">1.2.8. </span>How can I get binary files in and out of SIMH?</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#id1" id="id29"><span class="sectnum">1.2.8.1. </span>Serial input and output</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#can-i-connect-real-devices-on-the-host-computer-to-simh" id="id30"><span class="sectnum">1.2.9. </span>Can I connect real devices on the host computer to SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#my-windows-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why" id="id31"><span class="sectnum">1.2.10. </span>My Windows host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></p></li>
+<li><p><a class="reference internal" href="#my-linux-macos-or-other-unix-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why" id="id32"><span class="sectnum">1.2.11. </span>My Linux, macOS or other Unix host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></p></li>
+<li><p><a class="reference internal" href="#how-can-i-use-my-wireless-ethernet-card-with-simh" id="id33"><span class="sectnum">1.2.12. </span>How can I use my wireless Ethernet card with SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#why-doesn-t-simh-idling-work-on-my-unix-host" id="id34"><span class="sectnum">1.2.13. </span>Why doesn’t SIMH idling work on my Unix host?</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#writing-and-debugging-new-code" id="id35"><span class="sectnum">1.3. </span>Writing and debugging new code</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#what-resources-are-available-for-writing-new-simulators" id="id36"><span class="sectnum">1.3.1. </span>What resources are available for writing new simulators?</a></p></li>
+<li><p><a class="reference internal" href="#what-debugging-facilities-are-available-in-simh" id="id37"><span class="sectnum">1.3.2. </span>What debugging facilities are available in SIMH?</a></p></li>
+<li><p><a class="reference internal" href="#when-do-i-need-to-use-the-host-debugger-for-debugging-a-simulator" id="id38"><span class="sectnum">1.3.3. </span>When do I need to use the host debugger for debugging a simulator?</a></p></li>
+<li><p><a class="reference internal" href="#what-is-the-release-process-for-simh" id="id39"><span class="sectnum">1.3.4. </span>What is the release process for SIMH?</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#vax" id="id40"><span class="sectnum">1.4. </span>VAX</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#where-can-i-get-software-and-hobbyist-licenses-for-the-vax" id="id41"><span class="sectnum">1.4.1. </span>Where can I get software and hobbyist licenses for the VAX?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-vms" id="id42"><span class="sectnum">1.4.2. </span>How do I install VMS?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-netbsd" id="id43"><span class="sectnum">1.4.3. </span>How do I install NetBSD?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-install-ultrix" id="id44"><span class="sectnum">1.4.4. </span>How do I install Ultrix?</a></p></li>
+<li><p><a class="reference internal" href="#what-s-the-cpu-serial-number-for-my-hobbyist-license-pak" id="id45"><span class="sectnum">1.4.5. </span>What’s the CPU serial number for my hobbyist license PAK?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-import-and-make-my-hobbyist-license-paks-usable" id="id46"><span class="sectnum">1.4.6. </span>How do I import and make my hobbyist license PAKs usable?</a></p></li>
+<li><p><a class="reference internal" href="#how-do-i-change-the-simulator-from-a-vaxserver-3900-to-a-microvax-3900" id="id47"><span class="sectnum">1.4.7. </span>How do I change the simulator from a VAXserver 3900 to a MicroVAX 3900?</a></p></li>
+<li><p><a class="reference internal" href="#is-there-an-example-of-the-simulator-running-vms" id="id48"><span class="sectnum">1.4.8. </span>Is there an example of the simulator running VMS?</a></p></li>
+<li><p><a class="reference internal" href="#how-can-i-import-files-to-a-simulated-vms-environment" id="id49"><span class="sectnum">1.4.9. </span>How can I import files to a simulated VMS environment?</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#the-easy-way" id="id50"><span class="sectnum">1.4.9.1. </span>The Easy Way</a></p></li>
+<li><p><a class="reference internal" href="#alternatively" id="id51"><span class="sectnum">1.4.9.2. </span>Alternatively</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#how-do-i-make-imported-files-readable-on-a-simulated-vms-system" id="id52"><span class="sectnum">1.4.10. </span>How do I make imported files readable on a simulated VMS system?</a></p></li>
+<li><p><a class="reference internal" href="#how-can-i-export-files-from-a-simulated-vms-environment" id="id53"><span class="sectnum">1.4.11. </span>How can I export files from a simulated VMS environment?</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-11" id="id54"><span class="sectnum">1.5. </span>PDP-11</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#when-installing-rsts-e-from-simulated-magnetic-tape-the-installation-process-hangs-with-no-error-message-why" id="id55"><span class="sectnum">1.5.1. </span>When installing RSTS/E from simulated magnetic tape, the installation process hangs with no error message; why?</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="general-questions">
+<h2><span class="sectnum">1.1. </span>General questions<a class="headerlink" href="#general-questions" title="Permalink to this heading">¶</a></h2>
+<section id="what-is-simh">
+<h3><span class="sectnum">1.1.1. </span>What is SIMH?<a class="headerlink" href="#what-is-simh" title="Permalink to this heading">¶</a></h3>
+<p>SIMH is the Computer History Simulation system.
+It consists of simulators for approximately 20 different computers,
+all written around a common user interface package and set of supporting libraries.
+SIMH can be used to simulate any computer system for which sufficient detail is available,
+but the focus to date has been on simulating computer systems of historic interest.</p>
+</section>
+<section id="why-was-simh-written">
+<h3><span class="sectnum">1.1.2. </span>Why was SIMH written?<a class="headerlink" href="#why-was-simh-written" title="Permalink to this heading">¶</a></h3>
+<p>Significant portions of the computing past are being irretrievably lost,
+as old systems are scrapped, documentation and software is thrown out,
+media become obsolete or unreadable, and inventors and pioneers die.
+SIMH was written as a vehicle to allow the computing past to be made accessible to a wider audience,
+for recreational and educational purposes.
+SIMH preserves historic computers as portable software that can be run on any modern system.
+SIMH also preserves representative software packages for these systems.
+With SIMH, anyone with a desktop computer can call up and run significant samples from the computing past, at any time.</p>
+</section>
+<section id="what-is-the-history-of-simh">
+<h3><span class="sectnum">1.1.3. </span>What is the history of SIMH?<a class="headerlink" href="#what-is-the-history-of-simh" title="Permalink to this heading">¶</a></h3>
+<p>The SIMH project started in 1993, at the suggestion of Larry Stewart of DEC.
+Its immediate purpose was to preserve the fading hardware and software record of early minicomputers.
+Since then, the project has been expanded to include other important systems,
+spanning the history of computing from the late 50’s to the late 80’s.</p>
+<p>SIMH’s core design is based on an earlier simulation system called MIMIC.
+MIMIC was written in the late 1960’s at Applied Data Research, by Mike McCarthy, Len Feshkens, and Bob Supnik.
+MIMIC was a mini-computer simulator that ran on the PDP-10.
+Its purpose was to facilitate the development and debugging of real-time embedded systems by using the PDP-10 timesharing environment for program development,
+instead of the limited facilities of the native minicomputer environments.
+Ironically, given SIMH’s mission to preserve the computing record,
+all machine-readable copies of MIMIC have been lost.</p>
+</section>
+<section id="who-writes-and-maintains-simh">
+<h3><span class="sectnum">1.1.4. </span>Who writes and maintains SIMH?<a class="headerlink" href="#who-writes-and-maintains-simh" title="Permalink to this heading">¶</a></h3>
+<p>Many people have contributed, and continue to contribute, to SIMH.
+The full list of contributors can be found on the SIMH web site.
+Bob Supnik coordinates SIMH development.</p>
+</section>
+<section id="how-is-simh-licensed">
+<h3><span class="sectnum">1.1.5. </span>How is SIMH licensed?<a class="headerlink" href="#how-is-simh-licensed" title="Permalink to this heading">¶</a></h3>
+<p>SIMH is licensed under a modified X-Windows license.
+This license allows more or less unrestricted use of the sources and binaries.
+The license is included with the documentation and is also included in every source module.
+The software packages are available under various terms and conditions;
+see the documentation included with each software package.</p>
+</section>
+<section id="how-is-simh-distributed">
+<h3><span class="sectnum">1.1.6. </span>How is SIMH distributed?<a class="headerlink" href="#how-is-simh-distributed" title="Permalink to this heading">¶</a></h3>
+<p>SIMH is distributed in source form from GitHub in the form of a
+<a class="reference external" href="https://github.com/simh/simh/archive/master.zip">Zip archive</a>
+or by directly accessing the <a class="reference external" href="https://github.com/simh/simh">GitHub repository</a>.
+For Windows users, <a class="reference external" href="https://github.com/simh/Win32-Development-Binaries">pre-compiled binaries</a> are also available.</p>
+</section>
+<section id="which-computer-systems-does-simh-simulate">
+<h3><span class="sectnum">1.1.7. </span>Which computer systems does SIMH simulate?<a class="headerlink" href="#which-computer-systems-does-simh-simulate" title="Permalink to this heading">¶</a></h3>
+<p>SIMH simulates the following computer systems:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Manufacturer</p></th>
+<th class="head"><p>Model</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Digital Equipment Corporation</p></td>
+<td><p>PDP-1, PDP-4, PDP-7, PDP-8, PDP-9, PDP-10, PDP-11, PDP-15, VAX-11/780, MicroVAX 3900, VAX-11/730, VAX-11/750, VAX-8600, MicroVAX I, MicroVAX II, rtVAX 1000 (Industrial VAX 620)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Data General Corporation</p></td>
+<td><p>Nova, Eclipse</p></td>
+</tr>
+<tr class="row-even"><td><p>IBM Corporation</p></td>
+<td><p>1130, 1401, 1620, System 3, 7094 701, 704, 7010/1410, 7070/7074, 7080/702/705/7053, 7090/7094/709/704</p></td>
+</tr>
+<tr class="row-odd"><td><p>GRI Corporation</p></td>
+<td><p>GRI-909</p></td>
+</tr>
+<tr class="row-even"><td><p>Honeywell Corporation</p></td>
+<td><p>H316/516</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hewlett Packard Corporation</p></td>
+<td><p>HP2116, HP2100, HP21MX, HP3000</p></td>
+</tr>
+<tr class="row-even"><td><p>Interdata Corporation</p></td>
+<td><p>16b systems, 7/32, 8/32</p></td>
+</tr>
+<tr class="row-odd"><td><p>Scientific Data Systems</p></td>
+<td><p>SDS-940, Sigma 32b</p></td>
+</tr>
+<tr class="row-even"><td><p>MITS</p></td>
+<td><p>Altair 8080, Altair Z80</p></td>
+</tr>
+<tr class="row-odd"><td><p>Royal-Mcbee</p></td>
+<td><p>LGP-30, LGP-21</p></td>
+</tr>
+<tr class="row-even"><td><p>Lincoln Labs</p></td>
+<td><p>TX-0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Manchester University</p></td>
+<td><p>SSEM (Small Scale Experimental Machine)</p></td>
+</tr>
+<tr class="row-even"><td><p>Control Data Corporation</p></td>
+<td><p>CDC1700</p></td>
+</tr>
+<tr class="row-odd"><td><p>Burroughs</p></td>
+<td><p>B5500</p></td>
+</tr>
+</tbody>
+</table>
+<p>The documentation contains more details on supported models and peripherals.</p>
+</section>
+<section id="which-host-systems-does-simh-run-on">
+<h3><span class="sectnum">1.1.8. </span>Which host systems does SIMH run on?<a class="headerlink" href="#which-host-systems-does-simh-run-on" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Host system</p></th>
+<th class="head"><p>Compiler(s)</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OpenVMS/VAX</p></td>
+<td><p>DEC C</p></td>
+<td><p>No 64b support; no Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenVMS/Alpha</p></td>
+<td><p>DEC C</p></td>
+<td><p>Ethernet support provided in pcap-vms</p></td>
+</tr>
+<tr class="row-even"><td><p>OpenVMS/IA64</p></td>
+<td><p>DEC C</p></td>
+<td><p>Ethernet support provided in pcap-vms</p></td>
+</tr>
+<tr class="row-odd"><td><p>Windows 9x, Windows 2000, Windows XP</p></td>
+<td><p>MinGW/GCC, Visual C++</p></td>
+<td><p>Requires Winpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-even"><td><p>Windows Vista</p></td>
+<td></td>
+<td><p>Requires Npcap for Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>Windows 7</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Windows 8</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Windows 10</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>macOS</p></td>
+<td></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linux</p></td>
+<td><p>GCC</p></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-even"><td><p>Tru64 UNIX</p></td>
+<td><p>DEC C</p></td>
+<td><p>No Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>AIX</p></td>
+<td></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-even"><td><p>Solaris</p></td>
+<td></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>HP/UX</p></td>
+<td></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-even"><td><p>NetBSD</p></td>
+<td><p>GCC</p></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>OpenBSD</p></td>
+<td><p>GCC</p></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-even"><td><p>FreeBSD</p></td>
+<td><p>GCC</p></td>
+<td><p>Requires libpcap for Ethernet support</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS/2</p></td>
+<td><p>EMX</p></td>
+<td><p>No Ethernet support</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-software-packages-are-available-to-run-on-simh">
+<h3><span class="sectnum">1.1.9. </span>What software packages are available to run on SIMH?<a class="headerlink" href="#what-software-packages-are-available-to-run-on-simh" title="Permalink to this heading">¶</a></h3>
+<p>The list of available software packages can be found on the SIMH website.</p>
+</section>
+<section id="where-can-i-get-more-information-on-simh">
+<h3><span class="sectnum">1.1.10. </span>Where can I get more information on SIMH?<a class="headerlink" href="#where-can-i-get-more-information-on-simh" title="Permalink to this heading">¶</a></h3>
+<p>The SIMH web site is <a class="reference external" href="http://simh.trailing-edge.com">http://simh.trailing-edge.com</a> and via discussion on the SIMH mailing list.</p>
+</section>
+<section id="how-do-i-search-the-simh-mailing-list-archive-for-questions-that-might-have-been-asked-and-answered-before">
+<h3><span class="sectnum">1.1.11. </span>How do I search the SIMH mailing list archive for questions that might have been asked and answered before?<a class="headerlink" href="#how-do-i-search-the-simh-mailing-list-archive-for-questions-that-might-have-been-asked-and-answered-before" title="Permalink to this heading">¶</a></h3>
+<p>Google is your friend here.
+For example:</p>
+<p>Perform a Google search for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rsts</span> <span class="n">archive</span> <span class="o">-</span><span class="n">V9</span> <span class="n">site</span><span class="p">:</span><span class="n">mailman</span><span class="o">.</span><span class="n">trailing</span><span class="o">-</span><span class="n">edge</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pipermail</span><span class="o">/</span><span class="n">simh</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>This finds all messages containing <code class="docutils literal notranslate"><span class="pre">rsts</span></code> <code class="docutils literal notranslate"><span class="pre">archive</span></code> but not <code class="docutils literal notranslate"><span class="pre">V9</span></code>.</p>
+</section>
+</section>
+<section id="operational-questions">
+<h2><span class="sectnum">1.2. </span>Operational questions<a class="headerlink" href="#operational-questions" title="Permalink to this heading">¶</a></h2>
+<section id="how-do-i-install-simh-on-windows">
+<h3><span class="sectnum">1.2.1. </span>How do I install SIMH on Windows?<a class="headerlink" href="#how-do-i-install-simh-on-windows" title="Permalink to this heading">¶</a></h3>
+<p>The simplest way is to download the pre-compiled binaries.
+Unzip these into the directory where you want to run SIMH.
+You can then run whichever binary that you want.</p>
+</section>
+<section id="how-do-i-install-simh-with-ethernet-support-on-windows">
+<h3><span class="sectnum">1.2.2. </span>How do I install SIMH with Ethernet support on Windows?<a class="headerlink" href="#how-do-i-install-simh-with-ethernet-support-on-windows" title="Permalink to this heading">¶</a></h3>
+<p>The pre-compiled binaries will provide Ethernet support depending on whether or not the Npcap (or WinPCAP) package has been installed on the host computer.
+If you want to run with Ethernet support,
+you must download and install the <a class="reference external" href="https://npcap.com/#download">Npcap AutoInstaller</a>.</p>
+<p>This creates a network packet driver in Windows for SIMH to attach to.</p>
+<p>To use network support, you must either be an administrator on the Windows machine (implied in Windows 9x),
+or you must set the windows packet driver to autostart when the system boots.
+The NpcapInstaller has an option (which defaults to true) which will automatically start the Network Packet Filter Driver.</p>
+</section>
+<section id="how-do-i-install-simh-on-unix-linux-macos">
+<h3><span class="sectnum">1.2.3. </span>How do I install SIMH on Unix/Linux/macOS?<a class="headerlink" href="#how-do-i-install-simh-on-unix-linux-macos" title="Permalink to this heading">¶</a></h3>
+<p>Ethernet support is available only on Linux, macOS, NetBSD, OpenBSD, FreeBSD and Solaris.</p>
+<ul>
+<li><p>Unzip the archive of sources to a new directory.
+You must specify the <code class="docutils literal notranslate"><span class="pre">-a</span></code> switch to <code class="docutils literal notranslate"><span class="pre">unzip</span></code> for proper conversion of Windows CRLF sequences to Unix newline sequences.</p></li>
+<li><p>The makefile included in the SIMH source distribution is a GNU make makefile.
+Some systems have GNU make as the default make (i.e., Linux).
+If your system’s make is not GNU make,
+then be sure to install the GNU make package first and then use the <code class="docutils literal notranslate"><span class="pre">gmake</span></code> command instead of <code class="docutils literal notranslate"><span class="pre">make</span></code>:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>make all
+</pre></div>
+</div>
+</li>
+<li><p>If you want Ethernet support in the PDP-11, VAX or VAX780,
+you should install your OS distribution’s <code class="docutils literal notranslate"><span class="pre">libpcap-devel</span></code> package prior to building the simulator.</p></li>
+<li><p>More details about Ethernet installation and configuration can be found in the <code class="docutils literal notranslate"><span class="pre">0readme_ethernet.txt</span></code> file in the SIMH sources.</p></li>
+</ul>
+</section>
+<section id="how-do-i-install-simh-on-vms">
+<h3><span class="sectnum">1.2.4. </span>How do I install SIMH on VMS?<a class="headerlink" href="#how-do-i-install-simh-on-vms" title="Permalink to this heading">¶</a></h3>
+<p>Download the SIMH source kit, and <code class="docutils literal notranslate"><span class="pre">UNZIP</span></code> it in the directory that you want SIMH to reside in.
+Unpack it and set the file attributes as follows:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip simh-package.zip
+<span class="gp">$ </span><span class="nb">set</span> default <span class="o">[</span>.directory-containing scp.c<span class="o">]</span>
+<span class="gp">$ </span><span class="nb">set</span> file/attri<span class="o">=</span>RFM:STM makefile,*.mms,<span class="o">[</span>...<span class="o">]</span>*.c,<span class="o">[</span>...<span class="o">]</span>*.h,<span class="o">[</span>...<span class="o">]</span>*.txt
+</pre></div>
+</div>
+<p>Simulators with Ethernet network devices (all the VAX simulators and the PDP-11) can have functioning networking when running on Alpha or IA64 OpenVMS.
+In order to build and run simulators with networking support, the VMS-PCAP package must be available while building your simulator.
+The <code class="docutils literal notranslate"><span class="pre">vms-pcap.zip</span></code> file can be downloaded from <a class="reference external" href="https://github.com/downloads/simh/simh/vms-pcap.zip">https://github.com/downloads/simh/simh/vms-pcap.zip</a>.
+The <code class="docutils literal notranslate"><span class="pre">vms-pcap.zip</span></code> file should be unpacked as follows:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip -aa vms-pcap.zip
+</pre></div>
+</div>
+<p>The PCAP-VMS components are presumed (by the <code class="docutils literal notranslate"><span class="pre">descript.mms</span></code> file) to be located in a directory at the same level as the directory containing the SIMH source files.
+For example, if these exist here:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[]</span><span class="n">descrip</span><span class="o">.</span><span class="n">mms</span>
+<span class="p">[]</span><span class="n">scp</span><span class="o">.</span><span class="n">c</span>
+<span class="n">etc</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Then the following should exist:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-.</span><span class="n">PCAP</span><span class="o">-</span><span class="n">VMS</span><span class="p">]</span><span class="n">BUILD_ALL</span><span class="o">.</span><span class="n">COM</span>
+<span class="p">[</span><span class="o">-.</span><span class="n">PCAP</span><span class="o">-</span><span class="n">VMS</span><span class="o">.</span><span class="n">PCAP</span><span class="o">-</span><span class="n">VCI</span><span class="p">]</span>
+<span class="p">[</span><span class="o">-.</span><span class="n">PCAP</span><span class="o">-</span><span class="n">VMS</span><span class="o">.</span><span class="n">PCAPVCM</span><span class="p">]</span>
+<span class="n">etc</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>To build simulators on a VAX, use:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>MMx
+</pre></div>
+</div>
+<p>On Alpha &amp; IA64 hosts, use:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>MMx                        ! With Ethernet support
+<span class="gp">$ </span>MMx/MACRO<span class="o">=(</span><span class="s2">&quot;NONETWORK=1)   ! Without Ethernet support</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">UNZIP</span></code> can be found on the VMS freeware CDs, or from <cite>info-zip.org &lt;http://www.info-zip.org&gt;</cite>.
+MMS (Module Management System) can be licensed from HP/Compaq/Digital as part of the VMS Hobbyist program (it is a component of the DECSET product).
+MMK can be found on the VMS freeware CDs, or from <a class="reference external" href="http://www.kednos.com/kednos/Open_Source/MMK">http://www.kednos.com/kednos/Open_Source/MMK</a>.
+DEC C can be licensed from HP/Compaq/Digital as part of the VMS Hobbyist program.</p>
+<p>Note that the PDP-10, I7094 and Eclipse emulators cannot be built and used on VAX/VMS,
+because the DEC C compiler for VAX/VMS does not support 64-bit integers.
+OpenVMS DEC C Alpha and IA64 systems has the required 64-bit capability to build and run all of the emulators.
+Ethernet support is only available on Alpha VMS 7.3-1 and above.</p>
+</section>
+<section id="how-do-i-transcribe-a-real-cd-for-use-with-simh">
+<span id="question-2-5"></span><h3><span class="sectnum">1.2.5. </span>How do I transcribe a real CD for use with SIMH?<a class="headerlink" href="#how-do-i-transcribe-a-real-cd-for-use-with-simh" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>First, you may be able to access a real CD directly from within a simulator using RAW device mode to access the device.
+On Linux, and many Unix variants, support direct access to the CD-ROM from SIMH:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rq1</span> <span class="n">cdrom</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rq1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">cdrom_drive</span>
+</pre></div>
+</div>
+</li>
+<li><p>On Windows, the equivalent would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rq1</span> <span class="n">cdrom</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rq1</span> <span class="o">//./</span><span class="n">cdrom0</span>
+</pre></div>
+</div>
+</li>
+<li><p>As for actually making an ISO image of a CD to,
+on Unix, you can copy a CD to an ISO file with the <code class="docutils literal notranslate"><span class="pre">dd</span></code> command:</p>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">% </span>dd /if<span class="o">=</span>/dev/raw_cd_device /out<span class="o">=</span>/path/cdimage.iso
+</pre></div>
+</div>
+</li>
+<li><p>Linux, and many Unix variants, support direct access to the CD-ROM from SIMH:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rq1</span> <span class="n">cdrom</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rq1</span> <span class="o">-</span><span class="n">f</span> <span class="n">simh</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">cdrom_drive</span>
+</pre></div>
+</div>
+</li>
+<li><p>On Windows, there are quite a few products that can do this.
+The two most common products are detailed below.
+Make sure to disable any anti-virus software before proceeding.
+Anti-virus software tends to interfere with the smooth flow of data from the CD and will occasionally transform the data in strange and unexpected ways to ‘protect’ you.
+You may also need to limit the read speed.
+Some burnt CD-Rs do not read correctly at the highest rate of speed, depending on the accuracy of the burner;
+pressed CD-ROMs should not have this problem.</p>
+<ol class="arabic">
+<li><p>Roxio</p>
+<ol class="upperalpha">
+<li><dl>
+<dt>EZ-CD Creator 5.x</dt><dd><div class="line-block">
+<div class="line">Go to the the Disc menu and select Disc Info (there will be a delay).</div>
+<div class="line">Select the track shown, then click the Read Track button.</div>
+<div class="line">Enter the Save file name, then OK.</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Easy Media Creator 7.x</dt><dd><div class="line-block">
+<div class="line">Go to Creator Classic</div>
+<div class="line">Select Other Tasks | Disc and Device Utility</div>
+<div class="line">Drill down on the device until you find the data track, then select it</div>
+<div class="line">Click the ‘Read Track…’ button</div>
+<div class="line">Enter the save file name, then OK.</div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</li>
+<li><dl>
+<dt>Nero 5.5</dt><dd><div class="line-block">
+<div class="line">Select Recorder | Save Track</div>
+<div class="line">Select the track, set the output filename</div>
+<div class="line">Click GO</div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</li>
+</ul>
+</section>
+<section id="how-do-i-transcribe-other-archival-media-for-use-with-simh">
+<span id="question-2-6"></span><h3><span class="sectnum">1.2.6. </span>How do I transcribe other archival media for use with SIMH?<a class="headerlink" href="#how-do-i-transcribe-other-archival-media-for-use-with-simh" title="Permalink to this heading">¶</a></h3>
+<p>You must have access to a real system that can read the media to be transcribed
+(e.g., a system with a working DECtape drive to read a DECtape).
+Most systems have utilities to copy raw data to a disk file;
+that file can then be transferred over the console serial line to a system with an Internet link.
+Utility programs are available to convert raw data streams to SIMH format.</p>
+</section>
+<section id="how-can-i-get-text-files-in-and-out-of-simh">
+<span id="section-2-7"></span><h3><span class="sectnum">1.2.7. </span>How can I get text files in and out of SIMH?<a class="headerlink" href="#how-can-i-get-text-files-in-and-out-of-simh" title="Permalink to this heading">¶</a></h3>
+<section id="tape-input">
+<h4><span class="sectnum">1.2.7.1. </span>Tape input<a class="headerlink" href="#tape-input" title="Permalink to this heading">¶</a></h4>
+<p>Files coming into a simulated system can easily be achieved by using a simulated tape drive.
+This mechanism allows local host system files to be presented to the simulated system as a set of files on an ANSI labeled tape.
+If the simulated system’s operating system knows how to read ANSI labeled tape this is a good choice.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; att ts0 -f ANSI-VMS file.txt,file.bin,*.c
+sim&gt; att ts0 -f ANSI-RSX11 file.txt,file.bin,*.c
+sim&gt; att ts0 -f ANSI-RSTS file.txt,file.bin,*.c
+sim&gt; att ts0 -f ANSI-RT11 file.txt,file.bin,*.c
+
+$ MOUNT MSA0: SIMH
+%MOUNT-I-WRITELOCK, volume is write locked
+%MOUNT-I-MOUNTED, SIMH mounted on _MSA0:
+$ TYPE MSA0:file.txt
+</pre></div>
+</div>
+</section>
+<section id="serial-input-and-output">
+<h4><span class="sectnum">1.2.7.2. </span>Serial input and output<a class="headerlink" href="#serial-input-and-output" title="Permalink to this heading">¶</a></h4>
+<p>Since SIMH supports the universal serial interface using TELNET,
+text can be transferred using one of the serial line transfer protocols (X/Y/Zmodem, Kermit) or using standard cut and paste techniques,
+if the host’s TELNET program supports it.</p>
+<p>To use the TELNET feature,
+connect to the SIMH machine using TELNET,
+and set the target environment into a <code class="docutils literal notranslate"><span class="pre">receive</span></code> mode.
+This is usually something like running a text-editor.
+Then tell the TELNET program to <code class="docutils literal notranslate"><span class="pre">send</span></code>, <code class="docutils literal notranslate"><span class="pre">transfer</span></code>, or <code class="docutils literal notranslate"><span class="pre">paste</span></code> the text that you want sent into the SIMH system.</p>
+<p>To get text out of the system,
+have the TELNET program either log the output,
+or if the TELNET program supports a backscroll region you can use that.
+Tell the SIMH system to <code class="docutils literal notranslate"><span class="pre">type</span></code> or <code class="docutils literal notranslate"><span class="pre">cat</span></code> the text file,
+sending the output to the TELNET device,
+where you can edit it into a text file.</p>
+<p>Many TELNET programs also support transferring large files via X/Y/ZModem or Kermit,
+which you can use as long as the SIMH system has the appropriate matching program.</p>
+<p><a class="reference external" href="http://www.columbia.edu/kermit/">C-Kermit</a> from Columbia University is probably the most universal way to transfer files in and out of SIMH systems.</p>
+</section>
+<section id="paper-tape-input-and-output">
+<h4><span class="sectnum">1.2.7.3. </span>Paper tape input and output<a class="headerlink" href="#paper-tape-input-and-output" title="Permalink to this heading">¶</a></h4>
+<p>Some systems have paper tape devices which can be attached to a file on the host system and be read within the simulated system.
+Systems with a paper tape reader also have a paper tape punch which can be used for output.</p>
+</section>
+<section id="ethernet-input-and-output">
+<h4><span class="sectnum">1.2.7.4. </span>Ethernet input and output<a class="headerlink" href="#ethernet-input-and-output" title="Permalink to this heading">¶</a></h4>
+<p>If the SIMH system supports Ethernet connectivity (PDP-11, VAX),
+you can also use the various network copy programs (FTP, DECNET) to transfer files.</p>
+</section>
+<section id="printer-output">
+<h4><span class="sectnum">1.2.7.5. </span>Printer output<a class="headerlink" href="#printer-output" title="Permalink to this heading">¶</a></h4>
+<p>Finally, you can “print” text files to the simulated line printer.
+Printer output is automatically formatted as an ASCII text file.</p>
+</section>
+</section>
+<section id="how-can-i-get-binary-files-in-and-out-of-simh">
+<h3><span class="sectnum">1.2.8. </span>How can I get binary files in and out of SIMH?<a class="headerlink" href="#how-can-i-get-binary-files-in-and-out-of-simh" title="Permalink to this heading">¶</a></h3>
+<section id="id1">
+<h4><span class="sectnum">1.2.8.1. </span>Serial input and output<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
+<p>Since SIMH supports the universal serial interface using TELNET,
+binary files can be transferred using one of the serial line transfer protocols (X/Y/ZModem, Kermit)
+or by converting the binary to a text-encoded file (HEXify, UUENCODE, VMShare, etc.)
+and transferred in text mode (see <a class="reference internal" href="#section-2-7">section 2.7</a>).</p>
+<p>Many TELNET programs also support transferring large files via X/Y/ZModem or Kermit,
+which you can use as long as the SIMH system has the appropriate matching program.</p>
+<p><a class="reference external" href="http://www.columbia.edu/kermit/">C-Kermit</a> from Columbia University is probably the most universal way to transfer files in and out of SIMH systems.</p>
+</section>
+</section>
+<section id="can-i-connect-real-devices-on-the-host-computer-to-simh">
+<h3><span class="sectnum">1.2.9. </span>Can I connect real devices on the host computer to SIMH?<a class="headerlink" href="#can-i-connect-real-devices-on-the-host-computer-to-simh" title="Permalink to this heading">¶</a></h3>
+<p>Currently Ethernet devices, Serial Ports and physical disks and/or CDROMs are the devices which can be accessed directly from SIMH simulators.</p>
+</section>
+<section id="my-windows-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why">
+<h3><span class="sectnum">1.2.10. </span>My Windows host can’t communicate with the PDP-11 or VAX over Ethernet; why?<a class="headerlink" href="#my-windows-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why" title="Permalink to this heading">¶</a></h3>
+<p>Current versions of the simulators will directly allow you to communicate with both other systems on your LAN and your host computer by attaching the simulator’s XQ device to the primary network interface on your host.</p>
+</section>
+<section id="my-linux-macos-or-other-unix-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why">
+<h3><span class="sectnum">1.2.11. </span>My Linux, macOS or other Unix host can’t communicate with the PDP-11 or VAX over Ethernet; why?<a class="headerlink" href="#my-linux-macos-or-other-unix-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why" title="Permalink to this heading">¶</a></h3>
+<p>The network stacks on these systems don’t naturally receive packets which are transmitted with the <code class="docutils literal notranslate"><span class="pre">pcap_sendpacket</span></code> API.
+This issue can be accommodated in one of four ways:</p>
+<ol class="arabic simple">
+<li><p>Use NAT mode for your network connection.
+This mode only allows TCP/IP traffic to flow between the systems (No DECnet, LAT or other proprietary LAN protocols),
+which will be fine for single simulator situations.</p></li>
+<li><p>Add a second Ethernet controller,
+attach both controllers to the same switch or hub,
+and attach SIMH to the second controller.
+Don’t configure any host network protocols on the second Ethernet controller.
+The host and SIMH will now be able to communicate across the physical network connection</p></li>
+<li><p>If the host has internal (kernel-level) network bridging support,
+then the host’s network configuration can be setup to allow direct communication between the host and the simulated system.
+The SIMH networking layer can accommodate <code class="docutils literal notranslate"><span class="pre">tun</span></code>/<code class="docutils literal notranslate"><span class="pre">tap</span></code> and/or <code class="docutils literal notranslate"><span class="pre">vde</span></code> networking to achieve this.
+Details of how this is done and which hosts it can work on can be found in the <code class="docutils literal notranslate"><span class="pre">0readme_ethernet.txt</span></code> file in the SIMH zip file.</p></li>
+<li><p>Enable 2 XQ (or XU) devices in the simulator and use one in NAT mode to talk to the host system and connect the other to LAN for simulator to simulator communications and other LAN protocols.</p></li>
+</ol>
+</section>
+<section id="how-can-i-use-my-wireless-ethernet-card-with-simh">
+<h3><span class="sectnum">1.2.12. </span>How can I use my wireless Ethernet card with SIMH?<a class="headerlink" href="#how-can-i-use-my-wireless-ethernet-card-with-simh" title="Permalink to this heading">¶</a></h3>
+<p>The best approach here is to use NAT mode on your network connection.
+This will work fine for simulators using TCP/IP to talk to either their host system and/or to reach the Internet.
+Meanwhile, as for directly using the wireless network card the following are some of the considerations:</p>
+<p>Wireless Ethernet is something of a misnomer - it “works like” Ethernet.
+Wireless cards behave differently than real Ethernet cards in promiscuous mode.
+Some wireless cards can’t operate in promiscuous mode but can sometimes be successfully used with existing SIMH code.
+Sometimes this will also depend on functionality provided by the wireless router you may be connected to.
+Many wireless routers will not be well-behaved when you attempt this.</p>
+<p>One of the caveats is that the simulated machine cannot run any software which changes the simulated MAC address,
+or the network connection will stop working.
+For example, DECNET Phase IV (or Phase V in compatibility mode) tries to change the MAC of the network card to <code class="docutils literal notranslate"><span class="pre">AA-00-04-xx-xx-xx</span></code>.
+Nor can you preset the wireless MAC address to the anticipated target DECNET address using something like SMAC to get DECNET to work -
+DECNET will see the MAC already preset to the required DECNET address and generate an invalid media (duplicate address) fault.</p>
+<p>Otherwise, TCP/IP, LAT, VMS Clustering, and DECNET Phase V in non-compatibility mode work fine.</p>
+<p>To get wireless cards to work with SIMH, set the simulated MAC to be the same as the MAC of the wireless card.
+An example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">:</span>\<span class="o">&gt;</span> <span class="n">IPCONFIG</span><span class="o">/</span><span class="n">ALL</span>
+<span class="n">Windows</span> <span class="mi">2000</span> <span class="n">IP</span> <span class="n">Configuration</span>
+
+  <span class="n">Host</span> <span class="n">Name</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">LLOH3</span><span class="o">-</span><span class="n">EXP29189</span>
+  <span class="n">Primary</span> <span class="n">DNS</span> <span class="n">Suffix</span>  <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">ad</span><span class="o">.</span><span class="n">tasc</span><span class="o">.</span><span class="n">com</span>
+  <span class="n">Node</span> <span class="n">Type</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">Hybrid</span>
+  <span class="n">IP</span> <span class="n">Routing</span> <span class="n">Enabled</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">No</span>
+  <span class="n">WINS</span> <span class="n">Proxy</span> <span class="n">Enabled</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">No</span>
+  <span class="n">DNS</span> <span class="n">Suffix</span> <span class="n">Search</span> <span class="n">List</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">ad</span><span class="o">.</span><span class="n">tasc</span><span class="o">.</span><span class="n">com</span>
+
+<span class="n">Ethernet</span> <span class="n">adapter</span> <span class="n">Local</span> <span class="n">Area</span> <span class="n">Connection</span><span class="p">:</span>
+
+  <span class="n">Connection</span><span class="o">-</span><span class="n">specific</span> <span class="n">DNS</span> <span class="n">Suffix</span>  <span class="o">.</span> <span class="p">:</span>
+  <span class="n">Description</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">D</span><span class="o">-</span><span class="n">Link</span> <span class="n">DWL</span><span class="o">-</span><span class="mi">650</span><span class="o">+</span> <span class="n">Wireless</span> <span class="n">Cardbus</span>
+  <span class="n">Physical</span> <span class="n">Address</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="mi">00</span><span class="o">-</span><span class="mi">80</span><span class="o">-</span><span class="n">C8</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="n">CE</span><span class="o">-</span><span class="n">DB</span>   <span class="o">&lt;--</span> <span class="n">MAC</span> <span class="n">address</span>
+  <span class="n">DHCP</span> <span class="n">Enabled</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="n">No</span>
+  <span class="n">IP</span> <span class="n">Address</span><span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="mf">192.168.0.5</span>
+  <span class="n">Subnet</span> <span class="n">Mask</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="mf">255.255.255.0</span>
+  <span class="n">Default</span> <span class="n">Gateway</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span>
+  <span class="n">DNS</span> <span class="n">Servers</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span>
+  <span class="n">Primary</span> <span class="n">WINS</span> <span class="n">Server</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="mf">132.228.188.100</span>
+  <span class="n">Secondary</span> <span class="n">WINS</span> <span class="n">Server</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">:</span> <span class="mf">132.228.196.98</span>
+
+<span class="n">c</span><span class="p">:</span>\<span class="o">&gt;</span> <span class="n">VAX</span>
+<span class="n">VAX</span> <span class="n">simulator</span> <span class="n">V3</span><span class="mf">.2</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">DO</span> <span class="n">VAX_CONFIG</span><span class="o">.</span><span class="n">DO</span>               <span class="o">&lt;--</span> <span class="n">setup</span> <span class="n">VAX</span> <span class="k">as</span> <span class="n">normal</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">SET</span> <span class="n">XQ</span> <span class="n">MAC</span><span class="o">=</span><span class="mi">00</span><span class="o">-</span><span class="mi">80</span><span class="o">-</span><span class="n">C8</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="n">CE</span><span class="o">-</span><span class="n">DB</span>   <span class="o">&lt;--</span> <span class="nb">set</span> <span class="n">XQ</span> <span class="n">MAC</span> <span class="n">to</span> <span class="n">wireless</span> <span class="n">MAC</span> <span class="n">address</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">B</span> <span class="n">CPU</span>                          <span class="o">&lt;--</span> <span class="ow">and</span> <span class="k">continue</span><span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="why-doesn-t-simh-idling-work-on-my-unix-host">
+<h3><span class="sectnum">1.2.13. </span>Why doesn’t SIMH idling work on my Unix host?<a class="headerlink" href="#why-doesn-t-simh-idling-work-on-my-unix-host" title="Permalink to this heading">¶</a></h3>
+<p>Some host systems have default clock tick sizes which are greater than what is required to produce useful SIMH idling behavior.
+Useful idling depends on a simulators ability to sleep for intervals which are less than or equal to the simulated system’s clock tick.
+Best idling behavior is realized when sleep intervals can be as small as 1ms.
+When a simulator starts,
+SIMH determines the host system’s clock tick size and based on this determination,
+idling will be supported or not.
+The <code class="docutils literal notranslate"><span class="pre">SHOW VERSION</span></code> command will display (among other things) the host OS’s clock tick size which SIMH has determined.
+On some platforms (Windows), the host system’s clock tick size can be dynamically changed by non-privileged user mode code.
+On Windows systems, SIMH sets the OS clock tick size to 1ms so that idling can be supported.
+Changing the OS tick size on other platforms may be achieved in some system specific way.</p>
+<p>On Solaris, the file <code class="docutils literal notranslate"><span class="pre">/etc/system</span></code> contains parameters used to adjust various operating system details.
+Adding the following lines to this file and rebooting the system will set the OS clock tick to 1ms and SIMH will have idling support:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="nv">hires_tick</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">set</span> <span class="nv">hires_hz</span><span class="o">=</span><span class="m">1000</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="writing-and-debugging-new-code">
+<h2><span class="sectnum">1.3. </span>Writing and debugging new code<a class="headerlink" href="#writing-and-debugging-new-code" title="Permalink to this heading">¶</a></h2>
+<section id="what-resources-are-available-for-writing-new-simulators">
+<h3><span class="sectnum">1.3.1. </span>What resources are available for writing new simulators?<a class="headerlink" href="#what-resources-are-available-for-writing-new-simulators" title="Permalink to this heading">¶</a></h3>
+<p>The SIMH web site contains documentation on the internals of SIMH,
+as well as specific help for writing new peripherals for several of the popular simulators.
+The <code class="docutils literal notranslate"><span class="pre">doc</span></code> directory in the GitHub SIMH source code has a file <code class="docutils literal notranslate"><span class="pre">doc/simh.rst</span></code> which describes the internal APIs used by simulator writers.</p>
+</section>
+<section id="what-debugging-facilities-are-available-in-simh">
+<h3><span class="sectnum">1.3.2. </span>What debugging facilities are available in SIMH?<a class="headerlink" href="#what-debugging-facilities-are-available-in-simh" title="Permalink to this heading">¶</a></h3>
+<p>Most simulators provide the following debugging capabilities:</p>
+<ul class="simple">
+<li><p>Symbolic assembly and disassembly of memory contents.</p></li>
+<li><p>Numeric examination and modification of the data store of any simulated device.</p></li>
+<li><p>Numeric search on both memory and device data.</p></li>
+<li><p>Visibility to simulator internal structures, such as the event queue.</p></li>
+<li><p>An unlimited number of instruction breakpoints.</p></li>
+<li><p>Proceed counts on breakpoints.</p></li>
+<li><p>Automatic execution of simulator commands on a breakpoint.</p></li>
+<li><p>Stepped execution (from single step to ‘n’ steps).</p></li>
+<li><p>A PC change queue, usually 64 instructions deep.</p></li>
+<li><p>Instruction execution history recording and display.</p></li>
+</ul>
+<p>Specific simulators may provide additional features,
+such as an instruction history buffer,
+CPU and/or device logging,
+and breakpoints on memory reads and writes.</p>
+</section>
+<section id="when-do-i-need-to-use-the-host-debugger-for-debugging-a-simulator">
+<h3><span class="sectnum">1.3.3. </span>When do I need to use the host debugger for debugging a simulator?<a class="headerlink" href="#when-do-i-need-to-use-the-host-debugger-for-debugging-a-simulator" title="Permalink to this heading">¶</a></h3>
+<p>While a simulator is being debugged, its execution of instructions or debugging support code may be unreliable.
+During this process, the programmer may need to use the host debugger to stop in the middle of an instruction execution, or to trap an error condition.
+Host debugger breakpoints should be invisible to the simulator;
+with the exception of clock calibration,
+all simulator events are driven off the event queue rather than real-world events.</p>
+<p>If the programmer needs to force a simulator stop from the host debugger,
+most simulators provide an <code class="docutils literal notranslate"><span class="pre">address</span> <span class="pre">stop</span></code> global variable.
+Setting this variable to 1 will cause the simulator to stop after completing the current instruction.</p>
+</section>
+<section id="what-is-the-release-process-for-simh">
+<h3><span class="sectnum">1.3.4. </span>What is the release process for SIMH?<a class="headerlink" href="#what-is-the-release-process-for-simh" title="Permalink to this heading">¶</a></h3>
+<p>The latest development code is <a class="reference external" href="https://github.com/open-simh/simh/archive/master.zip">available</a> from the public source code repository.
+Since the latest code is always publicly available and bugs are generally fixed somewhat quickly, there hasn’t been a driving need for formal releases.</p>
+<p>Bob Supnik’s original development efforts are tracked in the Supnik-Current branch of the GitHub repository.
+Any changes that he makes there are merged directly into the master branch whenever he provides his current state.</p>
+<p>Bob’s original development activites released new versions of SIMH whenever a significant number of new features, or important bug fixes, has accumulated.
+The major version number only changes when there is a major restructuring of SIMH’s internal structures.
+The minor version number is changed when the format of the save/restore file must be updated.</p>
+</section>
+</section>
+<section id="vax">
+<h2><span class="sectnum">1.4. </span>VAX<a class="headerlink" href="#vax" title="Permalink to this heading">¶</a></h2>
+<section id="where-can-i-get-software-and-hobbyist-licenses-for-the-vax">
+<h3><span class="sectnum">1.4.1. </span>Where can I get software and hobbyist licenses for the VAX?<a class="headerlink" href="#where-can-i-get-software-and-hobbyist-licenses-for-the-vax" title="Permalink to this heading">¶</a></h3>
+<p>HP (formerly COMPAQ, formerly DEC) provides licenses to OpenVMS for hobbyist use.
+A description of the hobbyist license program can be found on <a class="reference external" href="http://www.openvmshobbyist.com">http://www.openvmshobbyist.com</a>.</p>
+</section>
+<section id="how-do-i-install-vms">
+<h3><span class="sectnum">1.4.2. </span>How do I install VMS?<a class="headerlink" href="#how-do-i-install-vms" title="Permalink to this heading">¶</a></h3>
+<p>To install VMS, you will need a distribution CD-ROM.
+Any version after VMS 5.5-2 should run on the MicroVAX 3900 simulator.</p>
+<ul>
+<li><p>Transcribe the distribution CD-ROM to an ISO-format CD image file.
+(See <a class="reference internal" href="#question-2-5">question 2.5</a> for information on how to do this).</p></li>
+<li><p>Set drive <code class="docutils literal notranslate"><span class="pre">RQ1</span></code> to be a CD-ROM.</p></li>
+<li><p>Attach the CD-ROM image file to simulated drive <code class="docutils literal notranslate"><span class="pre">RQ1</span></code>.</p></li>
+<li><p>Set drive <code class="docutils literal notranslate"><span class="pre">RQ0</span></code> to be the type of disk you want.
+Be sure that the disk is large enough to hold VMS.</p></li>
+<li><p>Attach a blank disk image file to simulated drive <code class="docutils literal notranslate"><span class="pre">RQ0</span></code>.</p></li>
+<li><p>Boot the CPU.</p></li>
+<li><p>When the self-test code completes, boot the CD-ROM.</p></li>
+<li><p>Use standalone backup to restore the CD-ROM contents to the simulated disk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sim&gt; set rq0 rd54
+sim&gt; set rq1 cdrom
+sim&gt; att rq0 new_vms.dsk
+sim&gt; att rq1 cd_rom_image.iso
+sim&gt; boot cpu
+:
+&gt;&gt;&gt; boot rq1
+
+$ (prompt from standalone backup)
+</pre></div>
+</div>
+</li>
+</ul>
+<p>A writeup on the procedure can be found on the VMS hobbyist site.</p>
+</section>
+<section id="how-do-i-install-netbsd">
+<h3><span class="sectnum">1.4.3. </span>How do I install NetBSD?<a class="headerlink" href="#how-do-i-install-netbsd" title="Permalink to this heading">¶</a></h3>
+<p>Directions for installing NetBSD can be found at the <a class="reference external" href="http://www.netbsd.org/Ports/vax/emulator-howto.html">NetBSD web site</a>.</p>
+</section>
+<section id="how-do-i-install-ultrix">
+<h3><span class="sectnum">1.4.4. </span>How do I install Ultrix?<a class="headerlink" href="#how-do-i-install-ultrix" title="Permalink to this heading">¶</a></h3>
+<p>Ultrix is not presently licensed for hobbyist use.
+If you have a valid license for Ultrix,
+and distribution tapes for a version that supports the MicroVAX 3900 series (V4 or later),
+then you should be able to install Ultrix on the simulator.</p>
+<ul>
+<li><p>Transcribe the distribution tapes to SIMH-format tape image files.
+(See <a class="reference internal" href="#question-2-6">question 2.6</a> for information on how to do this).</p></li>
+<li><p>Mount the installation tape image on simulated drive <code class="docutils literal notranslate"><span class="pre">TQ0</span></code>.</p></li>
+<li><p>Set drive <code class="docutils literal notranslate"><span class="pre">RQ0</span></code> to be the type of disk you want.
+Be sure that the disk is large enough to hold Ultrix.</p></li>
+<li><p>Mount a blank disk image file on simulated drive <code class="docutils literal notranslate"><span class="pre">RQ0</span></code>.</p></li>
+<li><p>Boot the CPU.</p></li>
+<li><p>When the self-test code completes, boot the installation tape.</p></li>
+<li><p>The installation tape will guide you through the installation of Ultrix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">rq0</span> <span class="n">rd54</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">rq0</span> <span class="n">new_vms</span><span class="o">.</span><span class="n">dsk</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">att</span> <span class="n">tq0</span> <span class="n">ultrix_install</span><span class="o">.</span><span class="n">tap</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">cpu</span>
+<span class="p">:</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">boot</span> <span class="n">mua0</span>
+
+<span class="p">(</span><span class="n">Ultrix</span> <span class="n">installation</span> <span class="n">dialog</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="what-s-the-cpu-serial-number-for-my-hobbyist-license-pak">
+<h3><span class="sectnum">1.4.5. </span>What’s the CPU serial number for my hobbyist license PAK?<a class="headerlink" href="#what-s-the-cpu-serial-number-for-my-hobbyist-license-pak" title="Permalink to this heading">¶</a></h3>
+<p>On a MicroVAX 3900, the CPU serial number is not readable and can be an arbitrary value.
+12345 will work fine.</p>
+</section>
+<section id="how-do-i-import-and-make-my-hobbyist-license-paks-usable">
+<h3><span class="sectnum">1.4.6. </span>How do I import and make my hobbyist license PAKs usable?<a class="headerlink" href="#how-do-i-import-and-make-my-hobbyist-license-paks-usable" title="Permalink to this heading">¶</a></h3>
+<p>See <a class="reference internal" href="#how-can-i-import-files-to-a-simulated-vms-environment">How can I import files to a simulated VMS environment?</a>
+and <a class="reference internal" href="#how-do-i-make-imported-files-readable-on-a-simulated-vms-system">How do I make imported files readable on a simulated VMS system?</a></p>
+</section>
+<section id="how-do-i-change-the-simulator-from-a-vaxserver-3900-to-a-microvax-3900">
+<h3><span class="sectnum">1.4.7. </span>How do I change the simulator from a VAXserver 3900 to a MicroVAX 3900?<a class="headerlink" href="#how-do-i-change-the-simulator-from-a-vaxserver-3900-to-a-microvax-3900" title="Permalink to this heading">¶</a></h3>
+<p>To change the type between a MicroVAX 3900 and a VAXServer 3900 use the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">model</span><span class="o">=</span><span class="n">VAXServer</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">cpu</span> <span class="n">model</span><span class="o">=</span><span class="n">MicroVAX</span>
+</pre></div>
+</div>
+<p>and boot the simulated VAX.</p>
+</section>
+<section id="is-there-an-example-of-the-simulator-running-vms">
+<h3><span class="sectnum">1.4.8. </span>Is there an example of the simulator running VMS?<a class="headerlink" href="#is-there-an-example-of-the-simulator-running-vms" title="Permalink to this heading">¶</a></h3>
+<p>This example assumes you are trying to emulate a MicroVAX 3900 with 64MB of memory, with a single 1GB disk drive, a CD-ROM, and an Ethernet controller.</p>
+<p>The host OS is Windows NT/2000/XP,
+and you have previously dumped the contents of the VMS Hobbyist CD to a disk file as detailed in 2.5,
+and have loaded npcap/WinPCAP on the system for Ethernet support.
+Other host OS’s will look similar but will have different filename syntax.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>c:\simh&gt; vax                         ; run VAX emulator
+sim&gt; set cpu 64m                     ; set memory size to 64MB
+sim&gt; load -r vax\ka655x.bin          ; load the MicroVAX 3900 console ROM
+sim&gt; attach NVR vax\ka655.nvr        ; create/load a Non-Volatile RAM file
+sim&gt; set LPT disable                 ; disable devices we don&#39;t want/need
+sim&gt; set TQ disable                  ;   &quot;
+sim&gt; set rq0 ra90                    ; set disk 0 to 1GB (RA90 size)
+sim&gt; attach rq0 vax\vaxsys.dsk       ; create/use disk file
+sim&gt; set rq1 rrd40                   ; set disk 1 as a cdrom
+sim&gt; attach -r rq1 vax\hobbyist.dsk  ; attach cdrom dump file as read-only
+sim&gt; set rq2 offline                 ; turn off disk rq2
+sim&gt; set rq3 offline                 ; turn off disk rq3
+sim&gt; attach xq eth0                  ; attach to host ethernet controller
+sim&gt; b cpu                           ; start (boot) VAX console
+
+KA655-B V5.3, VMB 2.7
+ 1) Dansk                            ; will not appear if the controlling
+    ..                               ; keyboard doesn&#39;t support multi-
+15) Svenska                          ; national characters!
+ (1..15): 5
+Performing normal system tests.
+40..39..38..37..36..35..34..33..32..31..30..29..28..27..26..25..
+24..23..22..21..20..19..18..17..16..15..14..13..12..11..10..9..
+8..7..6..5..4..3..
+Tests completed.
+&gt;&gt;&gt; show device                      ; tell console to show all devices
+UQSSP Disk Controller 0 (772150)
+-DUA0 (RA90)
+-DUA1 (RRD40)
+
+Ethernet Adapter 0 (774440)
+-XQA0 (08-00-2B-AA-BB-CC)
+&gt;&gt;&gt; b dua1                           ; tell console to boot cdrom
+(BOOT/R5:1 DUA1)
+
+2..1..0
+</pre></div>
+</div>
+</section>
+<section id="how-can-i-import-files-to-a-simulated-vms-environment">
+<h3><span class="sectnum">1.4.9. </span>How can I import files to a simulated VMS environment?<a class="headerlink" href="#how-can-i-import-files-to-a-simulated-vms-environment" title="Permalink to this heading">¶</a></h3>
+<section id="the-easy-way">
+<h4><span class="sectnum">1.4.9.1. </span>The Easy Way<a class="headerlink" href="#the-easy-way" title="Permalink to this heading">¶</a></h4>
+<p>Present the files to the VMS system using a pseudo tape drive with the ANSIFILES tape format.
+This approach is both easy and achieves direct access by the VMS system in a single step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">:</span>\<span class="n">simh</span><span class="o">&gt;</span> <span class="n">vax</span>                         <span class="p">;</span> <span class="n">run</span> <span class="n">VAX</span> <span class="n">emulator</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">attach</span> <span class="n">ts0</span> <span class="o">-</span><span class="n">f</span> <span class="n">ansi</span><span class="o">-</span><span class="n">vms</span> <span class="n">Hobbyist</span><span class="o">-</span><span class="n">USE</span><span class="o">-</span><span class="n">ONLY</span><span class="o">-</span><span class="n">VA</span><span class="o">.</span><span class="n">TXT</span><span class="p">,</span><span class="o">*.</span><span class="n">exe</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>Within the running simulator:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mount MSA0: SIMH
+%MOUNT-I-MOUNTED, SIMH mounted on _MSA0:
+$ @MSA0:Hobbyist-USE-ONLY-VA.TXT
+</pre></div>
+</div>
+</section>
+<section id="alternatively">
+<h4><span class="sectnum">1.4.9.2. </span>Alternatively<a class="headerlink" href="#alternatively" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>Use a CD burner program, like Easy CD Creator or Nero,
+to create an ISO 9660 CD image containing the files you want to import.
+Note that filenames are limited to DOS ‘8.3’ conventions.</p></li>
+<li><p>Attach the simulated CD image to a simulated CD drive.</p></li>
+<li><p>Mount the simulated CD as an ISO 9660 file system under VMS.</p></li>
+<li><p>Copy the files you need from the simulated CD to the simulated disk.</p></li>
+</ul>
+<p>(Thanks to Tim Stark for this suggestion).</p>
+</section>
+</section>
+<section id="how-do-i-make-imported-files-readable-on-a-simulated-vms-system">
+<h3><span class="sectnum">1.4.10. </span>How do I make imported files readable on a simulated VMS system?<a class="headerlink" href="#how-do-i-make-imported-files-readable-on-a-simulated-vms-system" title="Permalink to this heading">¶</a></h3>
+<p>Files imported using the ANSITAPE paradigm are directly usable without further manipulation.</p>
+<p>Some imported files may need to have their file attributes set appropriately in order to be easily usable in the simulated VMS system.
+This may be the case for text files which come from Unix or Windows systems that have LF or CRLF line endings and may have been transported to the VMS system via binary network transport OR via a CD image.
+<code class="docutils literal notranslate"><span class="pre">DIRECTORY/FULL</span></code> will display the file’s attributes.
+A file transferred in binary mode will likely have record attributes that say: <code class="docutils literal notranslate"><span class="pre">Fixed</span> <span class="pre">512</span> <span class="pre">byte</span> <span class="pre">records</span></code>.</p>
+<p>A file’s record attributes can be changed to handle text files with LF line endings with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ SET FILE/ATTRIBUTE=RFM:STMLF
+</pre></div>
+</div>
+<p>A file’s record attributes can be changed to handle text files with CRLF line endings with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ SET FILE/ATTRIBUTE=RFM:STM
+</pre></div>
+</div>
+<p>This will work with the latest version of VMS,
+but earlier versions didn’t have the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">FILE</span></code>/<code class="docutils literal notranslate"><span class="pre">ATTRIBUTE</span></code> command.</p>
+</section>
+<section id="how-can-i-export-files-from-a-simulated-vms-environment">
+<h3><span class="sectnum">1.4.11. </span>How can I export files from a simulated VMS environment?<a class="headerlink" href="#how-can-i-export-files-from-a-simulated-vms-environment" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Utility ODS2 (available on the Web) can read an ODS-2 disk image and copy files from that image to the host file system.</p></li>
+<li><p>Text files can be printed to the simulated line printer, as described above.</p></li>
+</ul>
+</section>
+</section>
+<section id="pdp-11">
+<h2><span class="sectnum">1.5. </span>PDP-11<a class="headerlink" href="#pdp-11" title="Permalink to this heading">¶</a></h2>
+<section id="when-installing-rsts-e-from-simulated-magnetic-tape-the-installation-process-hangs-with-no-error-message-why">
+<h3><span class="sectnum">1.5.1. </span>When installing RSTS/E from simulated magnetic tape, the installation process hangs with no error message; why?<a class="headerlink" href="#when-installing-rsts-e-from-simulated-magnetic-tape-the-installation-process-hangs-with-no-error-message-why" title="Permalink to this heading">¶</a></h3>
+<p>RSTS/E installation from magnetic tape requires that the tape be write locked.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SimH FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-questions"><span class="sectnum">1.1. </span>General questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-simh"><span class="sectnum">1.1.1. </span>What is SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-was-simh-written"><span class="sectnum">1.1.2. </span>Why was SIMH written?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-the-history-of-simh"><span class="sectnum">1.1.3. </span>What is the history of SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#who-writes-and-maintains-simh"><span class="sectnum">1.1.4. </span>Who writes and maintains SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-is-simh-licensed"><span class="sectnum">1.1.5. </span>How is SIMH licensed?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-is-simh-distributed"><span class="sectnum">1.1.6. </span>How is SIMH distributed?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#which-computer-systems-does-simh-simulate"><span class="sectnum">1.1.7. </span>Which computer systems does SIMH simulate?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#which-host-systems-does-simh-run-on"><span class="sectnum">1.1.8. </span>Which host systems does SIMH run on?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-software-packages-are-available-to-run-on-simh"><span class="sectnum">1.1.9. </span>What software packages are available to run on SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#where-can-i-get-more-information-on-simh"><span class="sectnum">1.1.10. </span>Where can I get more information on SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-search-the-simh-mailing-list-archive-for-questions-that-might-have-been-asked-and-answered-before"><span class="sectnum">1.1.11. </span>How do I search the SIMH mailing list archive for questions that might have been asked and answered before?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operational-questions"><span class="sectnum">1.2. </span>Operational questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-simh-on-windows"><span class="sectnum">1.2.1. </span>How do I install SIMH on Windows?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-simh-with-ethernet-support-on-windows"><span class="sectnum">1.2.2. </span>How do I install SIMH with Ethernet support on Windows?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-simh-on-unix-linux-macos"><span class="sectnum">1.2.3. </span>How do I install SIMH on Unix/Linux/macOS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-simh-on-vms"><span class="sectnum">1.2.4. </span>How do I install SIMH on VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-transcribe-a-real-cd-for-use-with-simh"><span class="sectnum">1.2.5. </span>How do I transcribe a real CD for use with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-transcribe-other-archival-media-for-use-with-simh"><span class="sectnum">1.2.6. </span>How do I transcribe other archival media for use with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-get-text-files-in-and-out-of-simh"><span class="sectnum">1.2.7. </span>How can I get text files in and out of SIMH?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tape-input"><span class="sectnum">1.2.7.1. </span>Tape input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#serial-input-and-output"><span class="sectnum">1.2.7.2. </span>Serial input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#paper-tape-input-and-output"><span class="sectnum">1.2.7.3. </span>Paper tape input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ethernet-input-and-output"><span class="sectnum">1.2.7.4. </span>Ethernet input and output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#printer-output"><span class="sectnum">1.2.7.5. </span>Printer output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-get-binary-files-in-and-out-of-simh"><span class="sectnum">1.2.8. </span>How can I get binary files in and out of SIMH?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><span class="sectnum">1.2.8.1. </span>Serial input and output</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#can-i-connect-real-devices-on-the-host-computer-to-simh"><span class="sectnum">1.2.9. </span>Can I connect real devices on the host computer to SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#my-windows-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why"><span class="sectnum">1.2.10. </span>My Windows host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#my-linux-macos-or-other-unix-host-can-t-communicate-with-the-pdp-11-or-vax-over-ethernet-why"><span class="sectnum">1.2.11. </span>My Linux, macOS or other Unix host can’t communicate with the PDP-11 or VAX over Ethernet; why?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-use-my-wireless-ethernet-card-with-simh"><span class="sectnum">1.2.12. </span>How can I use my wireless Ethernet card with SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#why-doesn-t-simh-idling-work-on-my-unix-host"><span class="sectnum">1.2.13. </span>Why doesn’t SIMH idling work on my Unix host?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-and-debugging-new-code"><span class="sectnum">1.3. </span>Writing and debugging new code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-resources-are-available-for-writing-new-simulators"><span class="sectnum">1.3.1. </span>What resources are available for writing new simulators?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-debugging-facilities-are-available-in-simh"><span class="sectnum">1.3.2. </span>What debugging facilities are available in SIMH?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-do-i-need-to-use-the-host-debugger-for-debugging-a-simulator"><span class="sectnum">1.3.3. </span>When do I need to use the host debugger for debugging a simulator?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-the-release-process-for-simh"><span class="sectnum">1.3.4. </span>What is the release process for SIMH?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#vax"><span class="sectnum">1.4. </span>VAX</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#where-can-i-get-software-and-hobbyist-licenses-for-the-vax"><span class="sectnum">1.4.1. </span>Where can I get software and hobbyist licenses for the VAX?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-vms"><span class="sectnum">1.4.2. </span>How do I install VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-netbsd"><span class="sectnum">1.4.3. </span>How do I install NetBSD?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-install-ultrix"><span class="sectnum">1.4.4. </span>How do I install Ultrix?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-the-cpu-serial-number-for-my-hobbyist-license-pak"><span class="sectnum">1.4.5. </span>What’s the CPU serial number for my hobbyist license PAK?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-import-and-make-my-hobbyist-license-paks-usable"><span class="sectnum">1.4.6. </span>How do I import and make my hobbyist license PAKs usable?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-change-the-simulator-from-a-vaxserver-3900-to-a-microvax-3900"><span class="sectnum">1.4.7. </span>How do I change the simulator from a VAXserver 3900 to a MicroVAX 3900?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#is-there-an-example-of-the-simulator-running-vms"><span class="sectnum">1.4.8. </span>Is there an example of the simulator running VMS?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-import-files-to-a-simulated-vms-environment"><span class="sectnum">1.4.9. </span>How can I import files to a simulated VMS environment?</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-easy-way"><span class="sectnum">1.4.9.1. </span>The Easy Way</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#alternatively"><span class="sectnum">1.4.9.2. </span>Alternatively</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#how-do-i-make-imported-files-readable-on-a-simulated-vms-system"><span class="sectnum">1.4.10. </span>How do I make imported files readable on a simulated VMS system?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-can-i-export-files-from-a-simulated-vms-environment"><span class="sectnum">1.4.11. </span>How can I export files from a simulated VMS environment?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pdp-11"><span class="sectnum">1.5. </span>PDP-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-installing-rsts-e-from-simulated-magnetic-tape-the-installation-process-hangs-with-no-error-message-why"><span class="sectnum">1.5.1. </span>When installing RSTS/E from simulated magnetic tape, the installation process hangs with no error message; why?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="simh_swre.html" title="previous chapter"><span class="sectnum">1. </span>SimH sample software packages</a></li>
+      <li>Next: <a href="nova_doc.html" title="next chapter"><span class="sectnum">1. </span>Nova Simulator Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simh_faq.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
