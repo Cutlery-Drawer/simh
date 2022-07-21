@@ -4,6 +4,8 @@ Simulator Documentation
 Each link leads to documentation about SimH, or a particular simulator:
 
 .. toctree::
+   :maxdepth: 1
+
    SimH Users' Guide <simh_doc>
    SimH Sample Software Documentation <simh_swre>
    SimH FAQ <simh_faq>
