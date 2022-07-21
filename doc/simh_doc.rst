@@ -365,9 +365,11 @@ The |RESTORE| command (abbreviation |REST|, alternately |GET|) restores a previo
 
     restore {-d} {-f} {-q} <filename>
 
--d  Avoid detaching and reattaching devices during a restore
--f  Override the date timestamp check for attached files during a restore
--q  Suppress warning messages about save file version information
+======  =====================================================================
+``-d``  Avoid detaching and reattaching devices during a restore
+``-f``  Override the date timestamp check for attached files during a restore
+``-q``  Suppress warning messages about save file version information
+======  =====================================================================
 
 Notes:
 
@@ -580,16 +582,20 @@ The "object list" consists of one or more of the following, separated by commas:
 
 Switches can be used to control the format of display information:
 
--o  Display as octal       (alias: ``-8``)
--d  Display as decimal     (alias: ``-10``)
--h  Display as hexadecimal (alias: ``-16``)
--2  Display as binary
+=================  ======================
+``-o`` or ``-8``   Display as octal
+``-d`` or ``-10``  Display as decimal
+``-h`` or ``-16``  Display as hexadecimal
+``-2``             Display as binary
+=================  ======================
 
 Simulators typically provide these additional switches for address locations:
 
--a  Display as ASCII
--c  Display as character string
--m  Display as instruction mnemonic
+======  ===============================
+``-a``  Display as ASCII
+``-c``  Display as character string
+``-m``  Display as instruction mnemonic
+======  ===============================
 
 |..| and accept symbolic input (see documentation with each simulator).
 
@@ -908,27 +914,32 @@ that action command should be enclosed in quotes so that the entire action comma
 """"""""""""""
 Switches can be used to influence the behavior of |EXPECT|_ rules.
 
--p   Expect rules default to be one shot activities.
-     That is, a rule is automatically removed when a match occurs unless the rule is designated as a persistent rule by using a ``-p`` switch when the rule is defined.
+=======  ====================================================================================
+``-p``   Expect rules default to be one shot activities.
+         That is, a rule is automatically removed when a match occurs unless the rule is
+         designated as a persistent rule by using a ``-p`` switch when the rule is defined.
 
--c   If an expect rule is defined with the ``-c`` switch,
-     it will cause all pending expect rules on the current device to be cleared when the rule matches data in the device output stream.
+``-c``   If an expect rule is defined with the ``-c`` switch,
+         it will cause all pending expect rules on the current device to be cleared when the
+         rule matches data in the device output stream.
 
--r   If an expect rule is defined with the ``-r`` switch,
-     the string is interpreted as a regular expression applied to the output data stream.
-     This regular expression may contain parentheses delimited sub-groups.
+``-r``   If an expect rule is defined with the ``-r`` switch, the string is interpreted as a
+         regular expression applied to the output data stream.
+         This regular expression may contain parentheses delimited sub-groups.
 
-     The syntax of the regular expressions available are those supported by the Perl Compatible Regular Expression package (a.k.a, PCRE).
-     As the name implies, the syntax is generally the same as `Perl regular expressions`__.
+         The syntax of the regular expressions available are those supported by the
+         Perl Compatible Regular Expression package (a.k.a, PCRE).
+         As the name implies, the syntax is generally the same as
+         `Perl regular expressions <https://perldoc.perl.org/perlre>`_.
 
-     __ https://perldoc.perl.org/perlre
+         If the PCRE package isn't available in the environment when a simulator is built,
+         the local system's regular expression package (if available) is used and the regular
+         expression syntax is limited to what may be provided there.
 
-     If the PCRE package isn't available in the environment when a simulator is built,
-     the local system's regular expression package (if available) is used and the regular expression syntax is limited to what may be provided there.
-
--i   If a regular expression expect rule is defined with the ``-i`` switch,
-     character matching for that expression will be case independent.
-     The ``-i`` switch is only valid for regular expression expect rules (``-r``).
+``-i``   If a regular expression expect rule is defined with the ``-i`` switch,
+         character matching for that expression will be case independent.
+         The ``-i`` switch is only valid for regular expression expect rules (``-r``).
+=======  ====================================================================================
 
 4.9.1.1 Escaping string data
 ''''''''''''''''''''''''''''
@@ -1982,25 +1993,27 @@ Debug message output contains a timestamp which indicates the number of simulate
 
 Debug message output can be enhanced to contain additional, potentially useful information.
 
--f  Suppress the internal logic which coalesces successive identical debug output lines
-    into one followed by an indicator of how many times the same line was output. This
-    mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.
+======  ================================================================================================
+``-f``  Suppress the internal logic which coalesces successive identical debug output lines
+        into one followed by an indicator of how many times the same line was output.
+        This mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.
 
--t  Cause debug output to contain a time-of-day displayed as ``hh:mm:ss.msec``.
+``-t``  Cause debug output to contain a time-of-day displayed as ``hh:mm:ss.msec``.
 
--a  Cause debug output to contain a time of day displayed as ``seconds.msec``.
+``-a``  Cause debug output to contain a time of day displayed as ``seconds.msec``.
 
--r  Cause the time-of-day displayed due to the ``-t`` or ``-a`` switches to be relative
-    to the start time of debugging. If neither ``-t`` or ``-a`` is explicitly specified,
-    ``-t`` is implied.
+``-r``  Cause the time-of-day displayed due to the ``-t`` or ``-a`` switches to be relative
+        to the start time of debugging. If neither ``-t`` or ``-a`` is explicitly specified,
+        ``-t`` is implied.
 
--p  Add the output of the PC (Program Counter) to each debug message.
+``-p``  Add the output of the PC (Program Counter) to each debug message.
 
--n  Cause a new/empty file to be written to. The default is to append to an existing debug log file.
+``-n``  Cause a new/empty file to be written to. The default is to append to an existing debug log file.
 
--d  Cause data blob output to also display the data as RADIX-50 characters.
+``-d``  Cause data blob output to also display the data as RADIX-50 characters.
 
--e  Cause data blob output to also display the data as EBCDIC characters.
+``-e``  Cause data blob output to also display the data as EBCDIC characters.
+======  ================================================================================================
 
 4.20.2 Device debug options
 """""""""""""""""""""""""""

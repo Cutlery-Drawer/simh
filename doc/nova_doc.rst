@@ -719,9 +719,11 @@ Symbolic display and input
 The Nova simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
--a    Display as ASCII character
--c    Display as two packed ASCII characters
--m    Display instruction mnemonics
+======  ======================================
+``-a``  Display as ASCII character
+``-c``  Display as two packed ASCII characters
+``-m``  Display instruction mnemonics
+======  ======================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 

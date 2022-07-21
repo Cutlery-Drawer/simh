@@ -184,9 +184,11 @@ Initial memory size is 16MB.
 Memory can be loaded with a binary byte stream using the ``LOAD`` command.
 The ``LOAD`` command recognizes three switches:
 
--o   Origin argument follows filename
--r   Load the boot ROM
--n   Load the non-volatile RAM
+======  ================================
+``-o``  Origin argument follows filename
+``-r``  Load the boot ROM
+``-n``  Load the non-volatile RAM
+======  ================================
 
 The CPU supports the ``BOOT`` command and is the only VAX device to do so.
 Note that the behavior of the bootstrap depends on the capabilities of the console terminal emulator.
@@ -196,20 +198,22 @@ otherwise, it will default to English.
 
 These switches are recognized when examining or depositing in CPU memory:
 
--b  Examine/deposit bytes
--w  Examine/deposit words
--l  Examine/deposit longwords
--d  Data radix is decimal
--o  Data radix is octal
--h  Data radix is hexadecimal
--m  Examine (only) VAX instructions
--p  Examine/deposit PDP-11 (compatibility mode) instructions
--r  Examine (only) RADIX50 encoded data
--v  Interpret address as virtual, current mode
--k  Interpret address as virtual, kernel mode
--e  Interpret address as virtual, executive mode
--s  Interpret address as virtual, supervisor mode
--u  Interpret address as virtual, user mode
+======  ========================================================
+``-b``  Examine/deposit bytes
+``-w``  Examine/deposit words
+``-l``  Examine/deposit longwords
+``-d``  Data radix is decimal
+``-o``  Data radix is octal
+``-h``  Data radix is hexadecimal
+``-m``  Examine (only) VAX instructions
+``-p``  Examine/deposit PDP-11 (compatibility mode) instructions
+``-r``  Examine (only) RADIX50 encoded data
+``-v``  Interpret address as virtual, current mode
+``-k``  Interpret address as virtual, kernel mode
+``-e``  Interpret address as virtual, executive mode
+``-s``  Interpret address as virtual, supervisor mode
+``-u``  Interpret address as virtual, user mode
+======  ========================================================
 
 CPU registers include the visible state of the processor as well as the control registers for the interrupt system.
 
@@ -1226,10 +1230,12 @@ Symbolic display and input
 The VAX simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
--a, -c   Display as ASCII data
--m       Display instruction mnemonics
--p       Display compatibility mode mnemonics
--r       Display RADIX50 encoding
+===============  ====================================
+``-a``, ``-c``   Display as ASCII data
+``-m``           Display instruction mnemonics
+``-p``           Display compatibility mode mnemonics
+``-r``           Display RADIX50 encoding
+===============  ====================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 

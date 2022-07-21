@@ -252,13 +252,15 @@ If memory size is increased to more than 256KB, or the bus structure is changed,
 
 These switches are recognized when examining or depositing in CPU memory:
 
--v     Interpret address as virtual
--t     If mem mgt enabled, force data space
--k     If mem mgt enabled, force kernel mode
--s     If mem mgt enabled, force supervisor mode
--u     If mem mgt enabled, force user mode
--p     If mem mgt enabled, force previous mode
--b     Display a byte at a time rather than a word
+======  ============================================
+``-v``  Interpret address as virtual
+``-t``  If mem mgt enabled, force data space
+``-k``  If mem mgt enabled, force kernel mode
+``-s``  If mem mgt enabled, force supervisor mode
+``-u``  If mem mgt enabled, force user mode
+``-p``  If mem mgt enabled, force previous mode
+``-b``  Display a byte at a time rather than a word
+======  ============================================
 
 CPU registers include the architectural state of the PDP-11 processor as well as the control registers for the interrupt system.
 
@@ -1451,9 +1453,11 @@ The TC11 is automatically disabled in a Qbus system.
 The TC11 supports supports PDP-8 format, PDP-11 format, and 18b format DECtape images.
 ``ATTACH`` assumes the image is in PDP-11 format; the user can force other choices with switches:
 
--t   PDP-8 format
--f   18b format
--a   Autoselect based on file size
+======  =============================
+``-t``  PDP-8 format
+``-f``  18b format
+``-a``  Autoselect based on file size
+======  =============================
 
 The DECtape controller is a data-only simulator;
 the timing and mark track, and block header and trailer, are not stored.
@@ -2316,9 +2320,11 @@ Symbolic display and input
 The PDP-11 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
--a  Display as ASCII character
--c  Display as two packed ASCII characters
--m  Display instruction mnemonics
+======  ======================================
+``-a``  Display as ASCII character
+``-c``  Display as two packed ASCII characters
+``-m``  Display instruction mnemonics
+======  ======================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
