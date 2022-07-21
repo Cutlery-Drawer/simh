@@ -947,9 +947,9 @@ Name            Size  Comments
 
 The DZV11 partially supports save and restore.
 A save simulator state will restore the listening sockets and serial port parameters,
-but all active incoming telnet connections will be lost.
+but all active incoming Telnet connections will be lost.
 
-All active incoming telnet connections are lost when the simulator shuts down or the DZ is detached.
+All active incoming Telnet connections are lost when the simulator shuts down or the DZ is detached.
 
 DHQ11 terminal multiplexer (VH)
 """""""""""""""""""""""""""""""

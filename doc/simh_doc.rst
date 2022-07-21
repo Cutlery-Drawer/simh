@@ -275,7 +275,7 @@ An example of hand compilation:
       $ cc scp.c,sim_*.c,[.pdp8]pdp8*.c
       $ link/exec=pdp8 scp.obj,sim_*.obj,[.pdp8]pdp8*.obj
 
-3. Simulator Conventions
+3. Simulator conventions
 ========================
 A simulator consists of a series of devices, the first of which is always the CPU.
 A device consists of named registers and one or more numbered units.
@@ -373,7 +373,7 @@ Notes:
 
 1. |SAVE| file format compresses zeroes to minimize file size.
 
-2. The simulator can't restore active incoming telnet sessions to multiplexer devices,
+2. The simulator can't restore active incoming Telnet sessions to multiplexer devices,
    but the listening ports will be restored across a save/restore.
 
 4.3 Resetting devices

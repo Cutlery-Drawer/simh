@@ -26,4 +26,4 @@ Each link leads to documentation about SimH, or a particular simulator:
    Royal-Mcbee LGP-30 (and LGP-21) <lgp_doc>
    Scientific Data Systems SDS-940 <sds_doc>
    Xerox Data Systems Sigma 32b systems <sigma_doc>
-   TX-0 Simulator Usage <tx0_doc>
+   TX-0 simulator usage <tx0_doc>

@@ -1543,7 +1543,7 @@ However it is recommended to use the following when sending traces::
 
 Related devices
 '''''''''''''''
-The DMC can facilitate communication with other simh simulators which have emulated synchronous network devices available.
+The DMC can facilitate communication with other SIMH simulators which have emulated synchronous network devices available.
 These include the following:
 
 ==============  =================================================
