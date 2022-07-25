@@ -39,6 +39,10 @@
 			marker-mid: url(#tick);
 			stroke: none;
 		}
+		
+		@media (prefers-color-scheme: dark){
+			:root { color: #ccc; }
+		}
 	</style>
 
 	<marker id="tick"
