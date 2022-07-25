@@ -30,3 +30,4 @@ Each link leads to documentation about SimH, or a particular simulator:
    The SIMH breakpoint subsystem <simh_breakpoints>
    SIMH magtape representation and handling <simh_magtape>
    Adding an I/O device to a SIMH virtual machine <simh_vmio>
+   Summary of I/O commands for the Arpanet IMP <Summary of IMP IO Device Codes>
