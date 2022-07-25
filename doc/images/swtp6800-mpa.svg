@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="676" height="565" viewBox="0 0 676 565"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xml:space="preserve"
+	xml:lang="en"
+><title>SWTP 6800 MP-A</title>
+<defs>
+	<style type="text/css">
+		line, path, polyline, polygon, rect{
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.5;
+		}
+		rect{
+			fill: #e8eef7;
+		}
+		text{
+			font: 11px Arial, Helvetica, sans-serif;
+			text-anchor: middle;
+		}
+		.title { font-size: 16px; }
+		.left  { text-anchor: start; }
+		.right { text-anchor: end; }
+		.mono  { font-family: ui-monospace, monospace; }
+		
+		.arrow{
+			marker-start: url(#arrowhead);
+			marker-end:   url(#arrowhead);
+			stroke-width: 2;
+		}
+		#arrowhead polyline{
+			stroke-linejoin: bevel;
+		}
+	</style>
+
+	<marker id="arrowhead"
+		viewBox="0 0 11 12"
+		refX="11"
+		refY="6"
+		markerWidth="11"
+		markerHeight="12"
+		markerUnits="userSpaceOnUse"
+		orient="auto-start-reverse"
+	><polyline points="0 0 11 6 0 11"/></marker>
+</defs>
+<text x="312" y="18" class="title">SWTP 6800 MP-A</text>
+<g>
+	<rect x="531" y="73" width="143" height="24"/>
+	<text x="602" y="88">EPROM file</text>
+</g>
+<line class="arrow" x1="435" y1="85" x2="530" y2="85"/>
+<g>
+	<text class="left mono" x="194" y="41">mp-a.c</text>
+	<rect x="196" y="49" width="239" height="72"/>
+	<text x="244" y="82">Internal bus<tspan x="244" y="96">(<tspan class="mono">CPU_BD_</tspan>)</tspan></text>
+	<text class="mono" x="363" y="64">m6810.c</text>
+	<text class="mono" x="364" y="89">bootrom.c</text>
+	<text class="mono" x="363" y="113">m6800.c</text>
+	<line x1="292" y1="49" x2="292" y2="121"/>
+	<line x1="292" y1="73" x2="435" y2="73"/>
+	<line x1="292" y1="97" x2="435" y2="97"/>
+</g>
+<line class="arrow" x1="100" y1="88" x2="195" y2="88"/>
+<g>
+	<text class="left mono" x="196" y="137">mp-8m.c</text>
+	<rect x="196" y="145" width="239" height="24"/>
+	<text x="243" y="155">Internal bus<tspan x="243" y="166">(<tspan class="mono">MP_8M_</tspan>)</tspan></text>
+	<text x="363" y="160">6 ea 8K RAM</text>
+	<line x1="292" y1="145" x2="292" y2="169" />
+</g>
+<line class="arrow" x1="100" y1="157" x2="195" y2="157"/>
+<g>
+	<rect x="4" y="49" width="96" height="120"/>
+	<text x="51" y="112">SS-50</text>
+</g>
+<line class="arrow" x1="52" y1="217" x2="52" y2="170"/>
+<g>
+	<text class="left mono" x="6" y="209">mp-b2.c</text>
+	<rect x="4" y="217" width="96" height="24"/>
+	<text x="51" y="233">MP-B2</text>
+</g>
+<line class="arrow" x1="54" y1="288" x2="54" y2="241"/>
+<g>
+	<rect x="4" y="289" width="96" height="275"/>
+	<text x="52" y="428">SS-30</text>
+</g>
+<line class="arrow" x1="100" y1="336" x2="195" y2="336"/>
+<g>
+	<text class="left mono" x="196" y="281">dc-4.c</text>
+	<rect x="196" y="289" width="239" height="95"/>
+	<text x="244" y="339">Internal bus</text>
+	<text x="363" y="342">1797</text>
+	<line x1="292" y1="289" x2="292" y2="384"/>
+</g>
+<line class="arrow" x1="435" y1="300" x2="530" y2="300"/>
+<g>
+	<rect x="531" y="288" width="143" height="24"/>
+	<text x="602" y="303">Disk file (drive 0)</text>
+</g>
+<line class="arrow" x1="435" y1="323" x2="530" y2="323"/>
+<g>
+	<rect x="531" y="312" width="143" height="23"/>
+	<text x="602" y="326">Disk file (drive 1)</text>
+</g>
+<line class="arrow" x1="435" y1="347" x2="530" y2="347"/>
+<g>
+	<rect x="531" y="335" width="143" height="22"/>
+	<text x="602" y="349">Disk file (drive 2)</text>
+</g>
+<line class="arrow" x1="435" y1="369" x2="530" y2="369"/>
+<g>
+	<rect x="531" y="357" width="143" height="24"/>
+	<text x="602" y="372">Disk file (drive 3)</text>
+</g>
+<line class="arrow" x1="100" y1="456" x2="195" y2="456"/>
+<g>
+	<text class="left" x="196" y="401">LFD-400</text>
+	<rect x="196" y="408" width="239" height="96"/>
+	<text x="244" y="459">Internal bus</text>
+	<text x="363" y="462">1791</text>
+	<line x1="292" y1="408" x2="292" y2="504"/>
+</g>
+<line class="arrow" x1="435" y1="420" x2="530" y2="420"/>
+<g>
+	<rect x="531" y="408" width="143" height="24"/>
+	<text x="602" y="423">Disk file (drive 0)</text>
+</g>
+<line class="arrow" x1="435" y1="443" x2="530" y2="443"/>
+<g>
+	<rect x="531" y="432" width="143" height="23"/>
+	<text x="602" y="447">Disk file (drive 1)</text>
+</g>
+<line class="arrow" x1="435" y1="467" x2="530" y2="467"/>
+<g>
+	<rect x="531" y="455" width="143" height="22"/>
+	<text x="602" y="469">Disk file (drive 2)</text>
+</g>
+<line class="arrow" x1="435" y1="489" x2="530" y2="489"/>
+<g>
+	<rect x="531" y="477" width="143" height="24"/>
+	<text x="602" y="492">Disk file (drive 3)</text>
+</g>
+<line class="arrow" x1="100" y1="539" x2="195" y2="539"/>
+<g>
+	<text class="left mono" x="194" y="521">mp-s.c</text>
+	<rect x="196" y="528" width="239" height="24"/>
+	<text x="244" y="544">Internal bus</text>
+	<text x="363" y="544">m6850</text>
+	<line x1="292" y1="528" x2="292" y2="552"/>
+</g>
+<line class="arrow" x1="435" y1="540" x2="530" y2="539"/>
+<g>
+	<rect x="531" y="528" width="143" height="24"/>
+	<text x="603" y="544">Console device</text>
+</g>
+</svg>
