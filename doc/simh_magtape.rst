@@ -230,7 +230,7 @@ PNU signifies position not updated;
 PU signifies position updated.
 
 +------------------+------------------+-------------+-----------------------+-------------+---------------+------------------------+
-| \                | Unit not         | Tape        | End of medium mark or |  Tape       | Write         | Data read or           |
+| \                | Unit not         | Tape        | End of medium mark or | Tape        | Write         | Data read or           |
 |                  | attached         | mark        | End of attached file  | runaway     | locked        | write error            |
 +==================+==================+=============+=======================+=============+===============+========================+
 | Read forward     | Error: unit      | Error: tape | Error: bad tape or    | Error: tape | ok            | Error: parity          |
