@@ -34,3 +34,4 @@ Each link leads to documentation about SimH, or a particular simulator:
    Summary of I/O commands for the Arpanet IMP <Summary of IMP IO Device Codes>
    SSEM simulator usage <ssem_doc>
    SWTP 6800 simulator usage <swtp6800_doc>
+   Writing a simulator for the SIMH system <simh>
