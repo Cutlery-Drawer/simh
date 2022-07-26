@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. SWTP 6800 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Writing a simulator for the SIMH system" href="simh.html" />
+    <link rel="prev" title="1. SSEM simulator usage" href="ssem_doc.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="swtp-6800-simulator-usage">
+<h1><span class="sectnum">1. </span>SWTP 6800 simulator usage<a class="headerlink" href="#swtp-6800-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-06-06</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id6"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#swtp-6800-features" id="id7"><span class="sectnum">1.2. </span>SWTP 6800 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#motherboard" id="id8"><span class="sectnum">1.2.1. </span>Motherboard</a></p></li>
+<li><p><a class="reference internal" href="#mp-a-cpu-card" id="id9"><span class="sectnum">1.2.2. </span>MP-A CPU card</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#bootrom-device" id="id10"><span class="sectnum">1.2.2.1. </span>BOOTROM device</a></p></li>
+<li><p><a class="reference internal" href="#cpu-device" id="id11"><span class="sectnum">1.2.2.2. </span>CPU device</a></p></li>
+<li><p><a class="reference internal" href="#m6800-registers" id="id12"><span class="sectnum">1.2.2.3. </span>M6800 registers</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#mp-a2-cpu-card" id="id13"><span class="sectnum">1.2.3. </span>MP-A2 CPU card</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#id1" id="id14"><span class="sectnum">1.2.3.1. </span>BOOTROM device</a></p></li>
+<li><p><a class="reference internal" href="#i2716-device" id="id15"><span class="sectnum">1.2.3.2. </span>I2716 device</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id16"><span class="sectnum">1.2.3.3. </span>CPU device</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id17"><span class="sectnum">1.2.3.4. </span>M6800 registers</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#programmed-i-o-devices" id="id18"><span class="sectnum">1.2.4. </span>Programmed I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#mp-s-serial-i-o-board" id="id19"><span class="sectnum">1.2.4.1. </span>MP-S serial I/O board</a></p></li>
+<li><p><a class="reference internal" href="#dc-4-quad-double-sided-single-double-density-5-14-floppy-disk-controller-board" id="id20"><span class="sectnum">1.2.4.2. </span>DC-4 quad double-sided single-/double-density 5-¼″ floppy disk controller board</a></p></li>
+<li><p><a class="reference internal" href="#lfd-400-quad-single-density-5-14-floppy-disk-controller-board" id="id21"><span class="sectnum">1.2.4.3. </span>LFD-400 quad single-density 5-¼″ floppy disk controller board</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>This memorandum documents the SWTP 6800 simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/swtp6800/common</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">bootrom.c</span></code> – Boot ROM simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dc-4.c</span></code>    – Disk controller simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">lfd-400.c</span></code> – Disk controller simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i2716.c</span></code>   – 2716 ROM simulator D</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m6800.c</span></code>   – M6800 CPU simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">m6810.c</span></code>   – M6810 RAM simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-8m.c</span></code>   – 8K RAM board simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-a.c</span></code>    – MP-A CPU board simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-a2.c</span></code>   – MP-A2 CPU board simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-b2.c</span></code>   – MP-B2 Motherboard board simulator</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-s.c</span></code>    – Serial port board simulator</div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/swtp6800/swtp6800</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-a_sys.c</span></code>  – System definitions for MP-A CPU board</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mp-a2_sys.c</span></code> – System definitions for MP-A2 CPU board</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swtp_defs.h</span></code> – System definitions for the SWTP 6800</div>
+</div>
+</dd>
+</dl>
+<p>Additional files are:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/swtp6800/swtp6800</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swtbug.bin</span></code>        – SWTBUG boot ROM code</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swtp6800mp-a.ini</span></code>  – Initialization for MP-A CPU</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swtp6800mp-a2.ini</span></code> – Initialization for MP-A2 CPU</div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="swtp-6800-features">
+<h2><span class="sectnum">1.2. </span>SWTP 6800 features<a class="headerlink" href="#swtp-6800-features" title="Permalink to this heading">¶</a></h2>
+<p>The SWTP 6800 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device names(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m6800+</span></code></p></td>
+<td><p>MP-A CPU with</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">m6810+</span></code></p></td>
+<td><ul class="simple">
+<li><p>128B of RAM and</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bootrom</span></code></p></td>
+<td><ul class="simple">
+<li><p>512 – 8192B of boot ROM</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">m6800+</span></code></p></td>
+<td><p>MP-A2 CPU with</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m6810+</span></code></p></td>
+<td><ul class="simple">
+<li><p>128B of RAM</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bootrom+</span></code></p></td>
+<td><ul class="simple">
+<li><p>512 – 8192B of boot ROM</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i2716</span></code></p></td>
+<td><p>4 each 2716 EPROMS and external RAM above 40K</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Motherboard</span></code></p></td>
+<td><p>MP-B2 with 8 SS-30 plugs and 7 SS-50 plugs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MP-8M</span></code></p></td>
+<td><p>6 each 8K byte memory board (<code class="docutils literal notranslate"><span class="pre">0-7FFFH</span></code> &amp; <code class="docutils literal notranslate"><span class="pre">A000-DFFFH</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DC-4</span></code></p></td>
+<td><p>SS-30 5-¼″ dual floppy disk controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LFD-400</span></code></p></td>
+<td><p>SS-30 5-¼″ dual floppy disk controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MP-S</span></code></p></td>
+<td><p>SS-30 serial I/O port</p></td>
+</tr>
+</tbody>
+</table>
+<p>The simulator builds as two executable files, <code class="docutils literal notranslate"><span class="pre">SWTP6800MP-A</span></code> and <code class="docutils literal notranslate"><span class="pre">SWTP6800MP-A2</span></code>,
+one for each of the processor boards available.</p>
+<p>Most devices can be disabled or enabled, by the commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">DISABLED</span>
+<span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">ENABLED</span>
+</pre></div>
+</div>
+<p>The SWTP 6800 simulator implements several unique stop conditions:</p>
+<ul class="simple">
+<li><p>If an undefined instruction is decoded, a <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+<li><p>If an undefined memory or I/O address is selected and <code class="docutils literal notranslate"><span class="pre">MTRAP</span></code> is enabled, a <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+<li><p>If an undefined interrupt occurs and <code class="docutils literal notranslate"><span class="pre">ITRAP</span></code> is enabled, a <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command supports both S19 format and BIN format tapes.
+If the file extension is <code class="docutils literal notranslate"><span class="pre">.S19</span></code>,
+or the <code class="docutils literal notranslate"><span class="pre">-h</span></code> switch is specified with <code class="docutils literal notranslate"><span class="pre">LOAD</span></code>,
+the file is assumed to be <code class="docutils literal notranslate"><span class="pre">S19</span></code> format;
+if the file extension is <code class="docutils literal notranslate"><span class="pre">.BIN</span></code>,
+or the <code class="docutils literal notranslate"><span class="pre">-b</span></code> switch is specified,
+the file is assumed to be BIN format.</p>
+<section id="motherboard">
+<h3><span class="sectnum">1.2.1. </span>Motherboard<a class="headerlink" href="#motherboard" title="Permalink to this heading">¶</a></h3>
+<p>The current simulator supports the MP-B2 motherboard.
+This board allows for inserting of the selected CPU,
+up to 6 MP-8M 8K byte memory boards,
+and one additional SS-50 board.
+It will allow the addition of up to 6 other SS-50 peripherals with the MP-S and DC-4.</p>
+<p>Addresses are fixed for each of the 6 MP-8M boards as shown below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device</p></th>
+<th class="head"><p>Base address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bd0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0000H</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bd1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2000H</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bd2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4000H</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bd3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6000H</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bd4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0A000H</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bd5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0C000H</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The simulator allows each board to be enabled or disabled individually to simulate the presence or absence of a particular board.
+This is the standard layout of memory in a SWTP 6800.</p>
+<p>If the LFD-400 FDC is enabled,
+then the bd5 MP-8M must be disabled.
+The LFD-400 used CC00-CC0FH for its I/O address space.</p>
+</section>
+<section id="mp-a-cpu-card">
+<h3><span class="sectnum">1.2.2. </span>MP-A CPU card<a class="headerlink" href="#mp-a-cpu-card" title="Permalink to this heading">¶</a></h3>
+<p>The simulator for the SWTP 6800 MP-A uses several files.
+The simulator is depicted in figure 1.</p>
+<figure class="align-center" id="id4">
+<img alt="_images/swtp6800-mpa.svg" src="_images/swtp6800-mpa.svg" /><figcaption>
+<p><span class="caption-text">Figure 1. MP-A Simulator</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The MP-A CPU has several available options.</p>
+<section id="bootrom-device">
+<h4><span class="sectnum">1.2.2.1. </span>BOOTROM device<a class="headerlink" href="#bootrom-device" title="Permalink to this heading">¶</a></h4>
+<p>The BOOTROM allows selection of the size of the ROM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">BOOTROM</span> <span class="n">NONE</span>              <span class="n">No</span> <span class="n">Boot</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2704</span>              <span class="mf">0.5</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2708</span>              <span class="mi">1</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2716</span>              <span class="mi">2</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2732</span>              <span class="mi">4</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2764</span>              <span class="mi">8</span><span class="n">K</span> <span class="n">PROM</span>
+</pre></div>
+</div>
+<p>The BOOTROM device assigns the base of the ROM image to 0E000H of simulated memory.</p>
+<p>The BOOTROM image file is attached to the BOOTROM device as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">BOOTROM</span> <span class="n">SWTBUG</span><span class="o">.</span><span class="n">BIN</span>
+</pre></div>
+</div>
+</section>
+<section id="cpu-device">
+<h4><span class="sectnum">1.2.2.2. </span>CPU device<a class="headerlink" href="#cpu-device" title="Permalink to this heading">¶</a></h4>
+<p>The CPU device allows setting the simulated behavior for interrupts and references to unimplemented memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">ITRAP</span>                 <span class="n">Trap</span> <span class="n">interrupts</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOITRAP</span>               <span class="n">Don</span><span class="s1">&#39;t trap interrupts</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">MTRAP</span>                 <span class="n">Trap</span> <span class="n">unimplemented</span> <span class="n">memory</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOMTRAP</span>               <span class="n">Don</span><span class="s1">&#39;t trap unimplemented memory</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span>               <span class="n">Enable</span> <span class="n">the</span> <span class="n">collection</span> <span class="n">of</span> <span class="n">history</span>
+</pre></div>
+</div>
+</section>
+<section id="m6800-registers">
+<h4><span class="sectnum">1.2.2.3. </span>M6800 registers<a class="headerlink" href="#m6800-registers" title="Permalink to this heading">¶</a></h4>
+<p>The CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SP</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Stack pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Accumulator A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Accumulator B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IX</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Index register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CCR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Condition code register</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU display radix can be set for octal, decimal or hexadecimal.
+The commands are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">OCT</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">DEC</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HEX</span>
+</pre></div>
+</div>
+<p>The current CPU display radix can be found with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">RADIX</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="mp-a2-cpu-card">
+<h3><span class="sectnum">1.2.3. </span>MP-A2 CPU card<a class="headerlink" href="#mp-a2-cpu-card" title="Permalink to this heading">¶</a></h3>
+<p>The simulator for the SWTP 6800 MP-A uses several files.
+The simulator is depicted in figure 2.</p>
+<figure class="align-center" id="id5">
+<img alt="_images/swtp6800-mpa2.svg" src="_images/swtp6800-mpa2.svg" /><figcaption>
+<p><span class="caption-text">Figure 2. MP-A2 Simulator</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The MP-A CPU has several available options.</p>
+<section id="id1">
+<h4><span class="sectnum">1.2.3.1. </span>BOOTROM device<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
+<p>The BOOTROM allows selection of the size of the ROM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">BOOTROM</span> <span class="n">NONE</span>              <span class="n">No</span> <span class="n">Boot</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2704</span>              <span class="mf">0.5</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2708</span>              <span class="mi">1</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2716</span>              <span class="mi">2</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2732</span>              <span class="mi">4</span><span class="n">K</span> <span class="n">PROM</span>
+<span class="n">SET</span> <span class="n">BOOTROM</span> <span class="mi">2764</span>              <span class="mi">8</span><span class="n">K</span> <span class="n">PROM</span>
+</pre></div>
+</div>
+<p>The BOOTROM device assigns the base of the ROM image to 0E000H of simulated memory.</p>
+<p>The BOOTROM image file is attached to the BOOTROM device as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">BOOTROM</span> <span class="n">SWTBUG</span><span class="o">.</span><span class="n">BIN</span>
+</pre></div>
+</div>
+</section>
+<section id="i2716-device">
+<h4><span class="sectnum">1.2.3.2. </span>I2716 device<a class="headerlink" href="#i2716-device" title="Permalink to this heading">¶</a></h4>
+<p>The i2716 device provides 4 units to simulate the 4 2716 ROM positions on the MP-A2 CPU board.
+They are i27160 to i27163.</p>
+<p>The i2716 ROM image file is attached to one of the i2716 devices as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">I27160</span> <span class="n">FILE0</span><span class="o">.</span><span class="n">BIN</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4><span class="sectnum">1.2.3.3. </span>CPU device<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
+<p>The CPU device allows setting the simulated behavior for interrupts and references to unimplemented memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">ITRAP</span>                 <span class="n">Trap</span> <span class="n">interrupts</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOITRAP</span>               <span class="n">Don</span><span class="s1">&#39;t trap interrupts</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">MTRAP</span>                 <span class="n">Trap</span> <span class="n">unimplemented</span> <span class="n">memory</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOMTRAP</span>               <span class="n">Don</span><span class="s1">&#39;t trap unimplemented memory</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4><span class="sectnum">1.2.3.4. </span>M6800 registers<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h4>
+<p>The CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SP</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Stack pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Accumulator A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Accumulator B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IX</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Index register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CCR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Condition code register</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU display radix can be set for octal, decimal or hexadecimal.
+The commands are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">OCT</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">DEC</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HEX</span>
+</pre></div>
+</div>
+<p>The current CPU display radix can be found with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">RADIX</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="programmed-i-o-devices">
+<h3><span class="sectnum">1.2.4. </span>Programmed I/O devices<a class="headerlink" href="#programmed-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<section id="mp-s-serial-i-o-board">
+<h4><span class="sectnum">1.2.4.1. </span>MP-S serial I/O board<a class="headerlink" href="#mp-s-serial-i-o-board" title="Permalink to this heading">¶</a></h4>
+<p>This driver simulates the MP-S serial I/O board for the console connection to the SWTP 6800.
+The console simulated is either an ANSI terminal or a Teletype Model 33 with paper tape reader and punch.
+The console functions work correctly but the paper tape functions do not.
+The simulator simulates the M6850 registers to the extent required to support the console.</p>
+<p>Console mode can be set as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MP</span><span class="o">-</span><span class="n">S</span> <span class="n">ANSI</span>
+<span class="n">SET</span> <span class="n">MP</span><span class="o">-</span><span class="n">S</span> <span class="n">TTY</span>
+</pre></div>
+</div>
+<p>Current console status can be shown with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">MP</span><span class="o">-</span><span class="n">S</span>
+</pre></div>
+</div>
+<p>The MP-S driver simulates the paper tape reader (PTR) and paper tape punch (PTP) devices.
+These devices need to be attached to files before use.
+If the file specified is not present, then a new file is created.
+The attach and detach commands are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">PTR</span> <span class="n">TEST</span>
+<span class="n">ATTACH</span> <span class="n">PTP</span> <span class="n">TEST1</span>
+<span class="n">DETACH</span> <span class="n">PTR</span>
+<span class="n">DETACH</span> <span class="n">PTP</span>
+</pre></div>
+</div>
+<p>Current PTP and PTR status can be shown with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">PTP</span>
+<span class="n">SHOW</span> <span class="n">PTR</span>
+</pre></div>
+</div>
+</section>
+<section id="dc-4-quad-double-sided-single-double-density-5-14-floppy-disk-controller-board">
+<h4><span class="sectnum">1.2.4.2. </span>DC-4 quad double-sided single-/double-density 5-¼″ floppy disk controller board<a class="headerlink" href="#dc-4-quad-double-sided-single-double-density-5-14-floppy-disk-controller-board" title="Permalink to this heading">¶</a></h4>
+<p>This driver simulates the DC-4 floppy disk controller board.
+Normally this board connects to a dual drive DSDD 5-¼″ floppy system.
+In this emulation, I have provided for 4 drives,
+the maximum the WD1797 can support and the emulated drive images are also increased in size to 1.44 MB.
+FLEX can handle this size drive with no problems.</p>
+<p>The DC-4 simulator provides for four drive units.
+The units are DC-40 to DC-43.
+These devices need to be attached to files before use.
+If the file specified is not present, then a new file is created.
+The units can be attached and detached to files as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">DC</span><span class="o">-</span><span class="mi">40</span> <span class="n">BOOT</span><span class="o">.</span><span class="n">IMG</span>
+<span class="n">DETACH</span> <span class="n">DC</span><span class="o">-</span><span class="mi">43</span>
+</pre></div>
+</div>
+<p>Current DC-4 status can be displayed with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">DC</span><span class="o">-</span><span class="mi">4</span>
+</pre></div>
+</div>
+</section>
+<section id="lfd-400-quad-single-density-5-14-floppy-disk-controller-board">
+<h4><span class="sectnum">1.2.4.3. </span>LFD-400 quad single-density 5-¼″ floppy disk controller board<a class="headerlink" href="#lfd-400-quad-single-density-5-14-floppy-disk-controller-board" title="Permalink to this heading">¶</a></h4>
+<p>This driver simulates the LFD-400 floppy disk controller board.
+Normally this board connects to a dual drive SSSD 5-¼″ floppy system.
+In this emulation, I have provided for 4 drives, the maximum the WD1791 can support.</p>
+<p>The LDF-400 simulator provides for four drive units.
+The units are LDF-4000 to LDF-4003.
+The LDF-400 needs to be enabled before use as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">LDS</span><span class="o">-</span><span class="mi">400</span> <span class="n">ENABLE</span>
+</pre></div>
+</div>
+<p>These devices need to be attached to files before use.
+If the file specified is not present, then a new file is created.
+The units can be attached and detached to files as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">LDF</span><span class="o">-</span><span class="mi">4000</span> <span class="n">BOOT</span><span class="o">.</span><span class="n">IMG</span>
+<span class="n">DETACH</span> <span class="n">LDS</span><span class="o">-</span><span class="mi">4002</span>
+</pre></div>
+</div>
+<p>Current DC-4 status can be displayed with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">LDF</span><span class="o">-</span><span class="mi">4000</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ssem_doc.html" title="previous chapter"><span class="sectnum">1. </span>SSEM simulator usage</a></li>
+      <li>Next: <a href="simh.html" title="next chapter"><span class="sectnum">1. </span>Writing a simulator for the SIMH system</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/swtp6800_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

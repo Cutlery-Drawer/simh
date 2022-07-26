@@ -1,0 +1,1683 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. PDP-1 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. PDP-11 simulator usage" href="pdp11_doc.html" />
+    <link rel="prev" title="1. Nova Simulator Usage" href="nova_doc.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pdp-1-simulator-usage">
+<h1><span class="sectnum">1. </span>PDP-1 simulator usage<a class="headerlink" href="#pdp-1-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2020-04-28</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id1"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#pdp-1-features" id="id2"><span class="sectnum">1.2. </span>PDP-1 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id3"><span class="sectnum">1.2.1. </span>CPU</a></p></li>
+<li><p><a class="reference internal" href="#programmed-i-o-devices" id="id4"><span class="sectnum">1.2.2. </span>Programmed I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#paper-tape-reader-ptr" id="id5"><span class="sectnum">1.2.2.1. </span>Paper tape reader (PTR)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-punch-ptp" id="id6"><span class="sectnum">1.2.2.2. </span>Paper tape punch (PTP)</a></p></li>
+<li><p><a class="reference internal" href="#console-typewriter-input-tti-output-tto" id="id7"><span class="sectnum">1.2.2.3. </span>Console typewriter input (TTI), output (TTO)</a></p></li>
+<li><p><a class="reference internal" href="#type-62-line-printer-lpt" id="id8"><span class="sectnum">1.2.2.4. </span>Type 62 line printer (LPT)</a></p></li>
+<li><p><a class="reference internal" href="#type-550-555-microtape-dectape-dt" id="id9"><span class="sectnum">1.2.2.5. </span>Type 550/555 Microtape (DECtape) (DT)</a></p></li>
+<li><p><a class="reference internal" href="#pdp-1d-timesharing-clock-clk" id="id10"><span class="sectnum">1.2.2.6. </span>PDP-1D timesharing clock (CLK)</a></p></li>
+<li><p><a class="reference internal" href="#type-630-data-communications-subsystem-dcs-dcsl" id="id11"><span class="sectnum">1.2.2.7. </span>Type 630 data communications subsystem (DCS, DCSL)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#drums" id="id12"><span class="sectnum">1.2.3. </span>Drums</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#type-24-serial-drum-drm" id="id13"><span class="sectnum">1.2.3.1. </span>Type 24 serial drum (DRM)</a></p></li>
+<li><p><a class="reference internal" href="#type-23-parallel-drum-drp" id="id14"><span class="sectnum">1.2.3.2. </span>Type 23 parallel drum (DRP)</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id15"><span class="sectnum">1.3. </span>Symbolic display and input</a></p></li>
+<li><p><a class="reference internal" href="#character-sets" id="id16"><span class="sectnum">1.4. </span>Character sets</a></p></li>
+</ul>
+</nav>
+<p>This memorandum documents the PDP-1 simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/pdp1/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_clk.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_dcs.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_drm.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_dt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_lp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_stddev.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp1_sys.c</span></code></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="pdp-1-features">
+<h2><span class="sectnum">1.2. </span>PDP-1 features<a class="headerlink" href="#pdp-1-features" title="Permalink to this heading">¶</a></h2>
+<p>The PDP-1 is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>PDP-1 CPU with up to 64KW of memory
+| optional automatic multiply/divide
+| optional 16-channel sequence break system
+| optional PDP-1D extended features</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CLK</span></code></p></td>
+<td><p>1Khz time-sharing clock (PDP-1D)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PTR</span></code>, <code class="docutils literal notranslate"><span class="pre">PTP</span></code></p></td>
+<td><p>Integral paper tape reader/punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTI</span></code>, <code class="docutils literal notranslate"><span class="pre">TTO</span></code></p></td>
+<td><p>Console typewriter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPT</span></code></p></td>
+<td><p>Type 62 line printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DRM</span></code></p></td>
+<td><p>Type 24 serial drum</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DRP</span></code></p></td>
+<td><p>Type 23 parallel drum</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT</span></code></p></td>
+<td><p>Type 550 Microtape (DECtape)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DCS</span></code>, <code class="docutils literal notranslate"><span class="pre">DCSL</span></code></p></td>
+<td><p>Type 630 Data Communications Subsystem</p></td>
+</tr>
+</tbody>
+</table>
+<p>The PDP-1 simulator implements the following unique stop conditions:</p>
+<ul class="simple">
+<li><p>An unimplemented instruction is decoded, and register <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+<li><p>More than <code class="docutils literal notranslate"><span class="pre">IND_MAX</span></code> indirect addresses are detected during memory reference address decoding</p></li>
+<li><p>More than <code class="docutils literal notranslate"><span class="pre">XCT_MAX</span></code> nested executes are detected during instruction execution</p></li>
+<li><p>I/O wait, and no I/O operations outstanding (i.e., no I/O completion will ever occur)</p></li>
+<li><p>A simulated DECtape runs off the end of its reel</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command supports RIM format tapes and BLK format tapes.
+If the file to be loaded has an extension of <code class="docutils literal notranslate"><span class="pre">.BIN</span></code>,
+or switch <code class="docutils literal notranslate"><span class="pre">-B</span></code> is specified,
+the file is assumed to be BLK format;
+otherwise, it defaults to RIM format.
+<code class="docutils literal notranslate"><span class="pre">LOAD</span></code> takes an optional argument that specifies the starting address of the field to be loaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LOAD</span> <span class="n">lisp</span><span class="o">.</span><span class="n">rim</span>                 <span class="n">Load</span> <span class="n">RIM</span> <span class="nb">format</span> <span class="n">file</span> <span class="n">lisp</span><span class="o">.</span><span class="n">rim</span>
+<span class="n">LOAD</span> <span class="n">ddt</span><span class="o">.</span><span class="n">rim</span> <span class="mi">70000</span>            <span class="n">Load</span> <span class="n">RIM</span> <span class="nb">format</span> <span class="n">file</span> <span class="n">ddt</span><span class="o">.</span><span class="n">rim</span> <span class="n">into</span>
+                              <span class="n">the</span> <span class="n">field</span> <span class="n">starting</span> <span class="n">at</span> <span class="mi">70000</span>
+<span class="n">LOAD</span> <span class="o">-</span><span class="n">B</span> <span class="n">macro</span><span class="o">.</span><span class="n">blk</span>             <span class="n">Load</span> <span class="n">BLK</span> <span class="nb">format</span> <span class="n">file</span> <span class="n">macro</span><span class="o">.</span><span class="n">blk</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">DUMP</span></code> command is not implemented.</p>
+<section id="cpu">
+<h3><span class="sectnum">1.2.1. </span>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The only CPU options are the presence of hardware multiply/divide and the size of main memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">MDV</span>                   <span class="n">Enable</span> <span class="n">multiply</span><span class="o">/</span><span class="n">divide</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOMDV</span>                 <span class="n">Disable</span> <span class="n">multiply</span><span class="o">/</span><span class="n">divide</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">SBS16</span>                 <span class="n">Enable</span> <span class="mi">16</span><span class="o">-</span><span class="n">channel</span> <span class="n">sequence</span> <span class="k">break</span> <span class="n">system</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOSBS16</span>               <span class="n">Disable</span> <span class="mi">16</span><span class="o">-</span><span class="n">channel</span> <span class="n">sequence</span> <span class="k">break</span> <span class="n">system</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">PDP1C</span>                 <span class="n">Set</span> <span class="n">CPU</span> <span class="n">to</span> <span class="n">standard</span> <span class="n">PDP</span><span class="o">-</span><span class="mi">1</span><span class="n">C</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">PDP1DS45</span>              <span class="n">Set</span> <span class="n">CPU</span> <span class="n">to</span> <span class="n">PDP</span><span class="o">-</span><span class="mi">1</span><span class="n">D</span><span class="p">,</span> <span class="n">serial</span><span class="c1"># 45 (BBN)</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">PDP1DS48</span>              <span class="n">Set</span> <span class="n">CPU</span> <span class="n">to</span> <span class="n">PDP</span><span class="o">-</span><span class="mi">1</span><span class="n">D</span><span class="p">,</span> <span class="n">serial</span><span class="c1"># 48 (Stanford)</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">4</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">8</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">8</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">12</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">16</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">16</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">20</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">24</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">24</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">28</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">28</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">32</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">32</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">48</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">48</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">64</span><span class="n">K</span>                   <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">64</span><span class="n">K</span>
+</pre></div>
+</div>
+<p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.
+Initial memory size is 64K.
+Setting the CPU to PDP-1D also enables multiply/divide and the 16-channel sequence break system.</p>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AC</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Accumulator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IO</span></code></p></td>
+<td><p>18</p></td>
+<td><p>IO register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OV</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Overflow flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PF</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Program flags&lt;1:6&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SS</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Sense switches&lt;1:6&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Address switches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TW</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Test word (front panel switches)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXTM</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Extend mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RNGM</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Ring mode (PDP-1D only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Link (PDP-1D #45 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RM</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Restrict mode (PDP-1D)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RMASK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Restrict memory mask (PDP-1D)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RTB</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Restrict trap buffer (PDP-1D #45 only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RNAME[0:3]</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Rename map (PDP-1D #45 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IOSTA</span></code></p></td>
+<td><p>18</p></td>
+<td><p>IO status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBON</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sequence break enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SBRQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sequence break request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBIP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sequence break in progress</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SBSREQ</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Pending sequence break requests</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBSENB</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Enabled sequence break levels</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SBSACT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Active sequence break levels</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IOH</span></code></p></td>
+<td><p>1</p></td>
+<td><p>I/O halt in progress</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IOS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>I/O synchronizer (completion)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PCQ[0:63]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>PC prior to last jump or interrupt; most recent PC change first</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on undefined instruction</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBS_INIT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Initial state of sequence break enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EXTM_INIT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Initial state of extend mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XCT_MAX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Maximum XCT chain</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IND_MAX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Maximum nested indirect addresses</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRU</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Interrupt character</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> and <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span>               <span class="n">Clear</span> <span class="n">history</span> <span class="n">buffer</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="mi">0</span>             <span class="n">Disable</span> <span class="n">history</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>             <span class="n">Enable</span> <span class="n">history</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span>              <span class="n">Print</span> <span class="n">CPU</span> <span class="n">history</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>            <span class="n">Print</span> <span class="n">first</span> <span class="n">n</span> <span class="n">entries</span> <span class="n">of</span> <span class="n">CPU</span> <span class="n">history</span>
+</pre></div>
+</div>
+<p>The maximum length for the history is 65536 entries.</p>
+<p>If the 16-channel sequence break system is enabled,
+devices can be assigned to any break level between 0 (the default) and 15,
+with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">SBSLVL</span><span class="o">=</span><span class="n">n</span>            <span class="n">Assign</span> <span class="n">device</span> <span class="n">to</span> <span class="n">sequence</span> <span class="k">break</span> <span class="n">level</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>Because each PDP-1 configuration was unique,
+there are no default assignments for the 16-channel sequence break system.</p>
+</section>
+<section id="programmed-i-o-devices">
+<h3><span class="sectnum">1.2.2. </span>Programmed I/O devices<a class="headerlink" href="#programmed-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<section id="paper-tape-reader-ptr">
+<h4><span class="sectnum">1.2.2.1. </span>Paper tape reader (PTR)<a class="headerlink" href="#paper-tape-reader-ptr" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape reader (PTR) reads data from or a disk file.
+The POS register specifies the number of the next data item to be read.
+Thus, by changing POS, the user can backspace or advance the reader.</p>
+<p>The paper tape reader supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+<code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">PTR</span></code> copies the RIM loader into memory and starts it running.
+<code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">PTR</span></code> loads into the field selected by <code class="docutils literal notranslate"><span class="pre">TA&lt;0:3&gt;</span></code>
+(the high order four bits of the address switches).</p>
+<p>The paper tape reader recognizes one switch at <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATT</span> <span class="o">-</span><span class="n">A</span> <span class="n">PTR</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>             <span class="n">Convert</span> <span class="nb">input</span> <span class="n">characters</span> <span class="kn">from</span> <span class="nn">ASCII</span>
+</pre></div>
+</div>
+<p>By default, the paper tape reader does no conversions on input characters.</p>
+<p>The paper tape reader implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RPLS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Return restart pulse flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the input file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>end of file</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="paper-tape-punch-ptp">
+<h4><span class="sectnum">1.2.2.2. </span>Paper tape punch (PTP)<a class="headerlink" href="#paper-tape-punch-ptp" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape punch (PTP) writes data to a disk file.
+The POS register specifies the number of the next data item to be written.
+Thus, by changing POS, the user can backspace or advance the punch.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.</p>
+<p>The paper tape punch recognizes two switches at <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> time:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATT</span> <span class="o">-</span><span class="n">A</span> <span class="n">PTP</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>             <span class="n">Output</span> <span class="n">characters</span> <span class="k">as</span> <span class="n">ASCII</span> <span class="n">text</span>
+<span class="n">ATT</span> <span class="o">-</span><span class="n">N</span> <span class="n">PTP</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span>             <span class="n">Create</span> <span class="n">a</span> <span class="n">new</span> <span class="p">(</span><span class="n">empty</span><span class="p">)</span> <span class="n">output</span> <span class="n">file</span>
+</pre></div>
+</div>
+<p>By default, the paper tape punch punches files with no conversions.</p>
+<p>The paper tape punch implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RPLS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Return restart pulse flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="console-typewriter-input-tti-output-tto">
+<h4><span class="sectnum">1.2.2.3. </span>Console typewriter input (TTI), output (TTO)<a class="headerlink" href="#console-typewriter-input-tti-output-tto" title="Permalink to this heading">¶</a></h4>
+<p>The Typewriter is a half-duplex electric typewriter
+(originally a Friden Flexowriter, later a Sorobon-modified IBM B).
+It has only a single buffer and a single carriage state but distinct input and output done and interrupt flags.
+The typewriter input (TTI) polls the console keyboard for input.
+The typewriter output (TTO) writes to the simulator console window.</p>
+<p>The Typewriter recognizes one option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TTO</span> <span class="n">ET</span>                    <span class="n">Expensive</span> <span class="n">Typewriter</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">TTO</span> <span class="n">NOET</span>                  <span class="n">Normal</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>In Expensive Typewriter mode,
+ribbon changes are output as strings (<code class="docutils literal notranslate"><span class="pre">[red]</span></code>, <code class="docutils literal notranslate"><span class="pre">[black]</span></code>) to indicate which mode the program is in
+(<code class="docutils literal notranslate"><span class="pre">red</span></code> for command, <code class="docutils literal notranslate"><span class="pre">black</span></code> for text).
+In normal mode, ribbon changes are ignored.</p>
+<p>The typewriter input implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Typewriter buffer (shared)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Upper case/lower case state (shared)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Input ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Keyboard polling interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The typewriter output implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Typewriter buffer (shared)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Upper case/lower case state (shared)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RPLS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Return restart pulse flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Output done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type-62-line-printer-lpt">
+<h4><span class="sectnum">1.2.2.4. </span>Type 62 line printer (LPT)<a class="headerlink" href="#type-62-line-printer-lpt" title="Permalink to this heading">¶</a></h4>
+<p>The line printer (LPT) writes data to a disk file.
+The POS register specifies the number of the next data item to be written.
+Thus, by changing POS, the user can backspace or advance the printer.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.
+A new file can be created if you attach with the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch.</p>
+<p>The line printer can be disabled and enabled with the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">LPT</span> <span class="pre">DISABLED</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">LPT</span> <span class="pre">ENABLED</span></code> commands, respectively.</p>
+<p>The line printer implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PNT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Printing done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Spacing done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RPLS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Return restart pulse flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BPTR</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Print buffer pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LBUF[0:119]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Line buffer</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape or paper</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type-550-555-microtape-dectape-dt">
+<h4><span class="sectnum">1.2.2.5. </span>Type 550/555 Microtape (DECtape) (DT)<a class="headerlink" href="#type-550-555-microtape-dectape-dt" title="Permalink to this heading">¶</a></h4>
+<p>The PDP-1 uses the Type 550 Microtape (later renamed DECtape), a programmed I/O controller.
+PDP-1 DECtape format has 4 18b words in its block headers and trailers.</p>
+<p>DECtapes drives are numbered 1-8;
+in the simulator, drive 8 is unit 0.
+DECtape options include the ability to make units write enabled or write locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DTn</span> <span class="n">WRITEENABLED</span>          <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+<span class="n">SET</span> <span class="n">DTn</span> <span class="n">LOCKED</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+<p>The DECtape controller can be disabled and enabled with the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DT</span> <span class="pre">DISABLED</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DT</span> <span class="pre">ENABLED</span></code> commands, respectively.</p>
+<p>The Type 550 supports PDP-8 format,
+PDP-11 format,
+and 18b format DECtape images.
+<code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> assumes the image is in 18b format;
+the user can other choices with switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-t</span></code></p></td>
+<td><p>PDP-8 format</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>PDP-11 format</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Autoselect based on file size</p></td>
+</tr>
+</tbody>
+</table>
+<p>The DECtape controller is a data-only simulator;
+the timing and mark track,
+and block header and trailer,
+are not stored.
+Thus, the <code class="docutils literal notranslate"><span class="pre">WRITE</span> <span class="pre">TIMING</span> <span class="pre">AND</span> <span class="pre">MARK</span> <span class="pre">TRACK</span></code> function is not supported;
+the <code class="docutils literal notranslate"><span class="pre">READ</span> <span class="pre">ALL</span></code> function always returns the hardware standard block header and trailer;
+and the <code class="docutils literal notranslate"><span class="pre">WRITE</span> <span class="pre">ALL</span></code> function dumps non-data words into the bit bucket.</p>
+<p>The DECtape controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DTSA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status register A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DTSB</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status register B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DTDB</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DTF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>DECtape flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BEF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Block end flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time between lines</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DCTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time to decelerate to a full stop</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SUBSTATE</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Read/write command substate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:7]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, in lines, units 0-7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STATT[0:7]</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Unit state, units 0-7</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_OFFR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on off-reel error</p></td>
+</tr>
+</tbody>
+</table>
+<p>It is critically important to maintain certain timing relationships among the DECtape parameters,
+or the DECtape simulator will fail to operate correctly.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LTIME</span></code> must be at least 6</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DCTIME</span></code> needs to be at least 100 times <code class="docutils literal notranslate"><span class="pre">LTIME</span></code></p></li>
+</ul>
+<p>Acceleration time is set to 75% of deceleration time.</p>
+</section>
+<section id="pdp-1d-timesharing-clock-clk">
+<h4><span class="sectnum">1.2.2.6. </span>PDP-1D timesharing clock (CLK)<a class="headerlink" href="#pdp-1d-timesharing-clock-clk" title="Permalink to this heading">¶</a></h4>
+<p>The PDP-1D implements a timesharing clock,
+which operates at 1Khz.
+The clock has a readable counter and generates interrupts at 32 ms and 1 minute intervals.
+There is no other visible state.
+The clock is disabled by default.</p>
+<p>The clock implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CNTR</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Clock counter, range 0-59999<sub>10</sub></p></td>
+</tr>
+</tbody>
+</table>
+<p>The clock requires the 16-channel sequence break system and is assigned to two different SBS levels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CLK</span> <span class="n">SBS32MS</span><span class="o">=</span><span class="n">n</span>             <span class="n">Assign</span> <span class="mi">32</span> <span class="n">msec</span> <span class="n">interrupt</span> <span class="n">to</span> <span class="n">SBS</span> <span class="n">level</span> <span class="n">n</span>
+<span class="n">SET</span> <span class="n">CLK</span> <span class="n">SBS1MIN</span><span class="o">=</span><span class="n">n</span>             <span class="n">Assign</span> <span class="mi">1</span> <span class="n">minute</span> <span class="n">interrupt</span> <span class="n">to</span> <span class="n">SBS</span> <span class="n">level</span> <span class="n">n</span>
+</pre></div>
+</div>
+</section>
+<section id="type-630-data-communications-subsystem-dcs-dcsl">
+<h4><span class="sectnum">1.2.2.7. </span>Type 630 data communications subsystem (DCS, DCSL)<a class="headerlink" href="#type-630-data-communications-subsystem-dcs-dcsl" title="Permalink to this heading">¶</a></h4>
+<p>The Type 630 data communications subsystem provides up to 32 asynchronous interfaces.
+The Type 630 consists of two independent devices: DCS for the scanner, and DCSL for the individual lines.
+The terminal multiplexer performs input and output through Telnet sessions connected to a user-specified port.
+The <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command specifies the port to be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">DCS</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>             <span class="n">Set</span> <span class="n">up</span> <span class="n">listening</span> <span class="n">port</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;port&gt;</span></code> is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
+The number of lines can be changed with <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DCL</span> <span class="pre">LINES</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DCS</span> <span class="n">LINES</span><span class="o">=</span><span class="n">n</span>               <span class="n">Set</span> <span class="n">number</span> <span class="n">of</span> <span class="n">lines</span> <span class="n">to</span> <span class="n">n</span><span class="p">,</span> <span class="n">where</span> <span class="n">n</span> <span class="ow">is</span> <span class="mi">1</span><span class="o">-</span><span class="mi">32</span>
+</pre></div>
+</div>
+<p>Each line (each of unit of DCSL) can be set to one of four modes: <code class="docutils literal notranslate"><span class="pre">UC</span></code>, <code class="docutils literal notranslate"><span class="pre">7P</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, or <code class="docutils literal notranslate"><span class="pre">8B</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>Lowercase converted
+to uppercase,
+high-order bit cleared</p></td>
+<td><p>Lowercase converted to uppercase,
+high-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default mode is <code class="docutils literal notranslate"><span class="pre">UC</span></code>.
+Finally, each line supports output logging.
+The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DCSLn</span> <span class="pre">LOG</span></code> command enables logging on a line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DCSLn</span> <span class="n">LOG</span><span class="o">=</span><span class="n">filename</span>        <span class="n">Log</span> <span class="n">output</span> <span class="n">of</span> <span class="n">line</span> <span class="n">n</span> <span class="n">to</span> <span class="n">filename</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DCSLn</span> <span class="pre">NOLOG</span></code> command disables logging and closes the open log file, if any.</p>
+<p>Once DCS is attached and the simulator is running,
+the multiplexer listens for connections on the specified port.
+It assumes that the incoming connections are Telnet connections.
+The connections remain open until disconnected either by the Telnet client,
+a <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">DCS</span> <span class="pre">DISCONNECT</span></code> command,
+or a <code class="docutils literal notranslate"><span class="pre">DETACH</span> <span class="pre">DCS</span></code> command.</p>
+<p>Other special commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">DCS</span> <span class="n">CONNECTIONS</span>          <span class="n">Show</span> <span class="n">current</span> <span class="n">connections</span>
+<span class="n">SHOW</span> <span class="n">DCS</span> <span class="n">STATISTICS</span>           <span class="n">Show</span> <span class="n">statistics</span> <span class="k">for</span> <span class="n">active</span> <span class="n">connections</span>
+<span class="n">SET</span> <span class="n">DCSLn</span> <span class="n">DISCONNECT</span>          <span class="n">Disconnects</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>The multiplexer scanner (DCS) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF[0:31]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Input buffer, lines 0 to 31</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLG[0:31]</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Line ready flag, lines 0 to 31</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SCNF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Scanner ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SCAN</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Scanner line number</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SEND</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Output line number</p></td>
+</tr>
+</tbody>
+</table>
+<p>The individual lines (DCSL) implement these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME[0:31]</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt, lines 0 to 31</p></td>
+</tr>
+</tbody>
+</table>
+<p>The multiplexer does not support save and restore.
+All open connections are lost when the simulator shuts down or DSC is detached.</p>
+</section>
+</section>
+<section id="drums">
+<h3><span class="sectnum">1.2.3. </span>Drums<a class="headerlink" href="#drums" title="Permalink to this heading">¶</a></h3>
+<p>The PDP-1 supports two drums:
+the Type 23 parallel drum (DRP) and the Type 24 serial drum (DRM).
+Both use device addresses 061-064;
+accordingly, only one can be enabled at a time.
+By default, the Type 24 serial drum is enabled, and the Type 23 parallel drum is disabled.
+The PDP-1D requires the Type 23 parallel drum.</p>
+<section id="type-24-serial-drum-drm">
+<h4><span class="sectnum">1.2.3.1. </span>Type 24 serial drum (DRM)<a class="headerlink" href="#type-24-serial-drum-drm" title="Permalink to this heading">¶</a></h4>
+<p>The serial drum (DRM) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DA</span></code></p></td>
+<td><p>9</p></td>
+<td><p>Drum address (sector number)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Current memory address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WLK</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Write lock switches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational latency, per word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Drum not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>Drum data files are buffered in memory;
+therefore, end of file and OS I/O errors cannot occur.</p>
+</section>
+<section id="type-23-parallel-drum-drp">
+<h4><span class="sectnum">1.2.3.2. </span>Type 23 parallel drum (DRP)<a class="headerlink" href="#type-23-parallel-drum-drp" title="Permalink to this heading">¶</a></h4>
+<p>The parallel drum (DRP) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Track address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RDF</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Read field</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RDE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Read enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WRF</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Write field</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Write enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Current memory address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device busy flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational latency, per word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Drum not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>Drum data files are buffered in memory;
+therefore, end of file and OS I/O errors cannot occur.</p>
+</section>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The PDP-1 simulator implements symbolic display and input.
+Display is controlled by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display as ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as three packed FIODEC characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics</p></td>
+</tr>
+</tbody>
+</table>
+<p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Three packed FIODEC characters</p></td>
+</tr>
+<tr class="row-odd"><td><p>Alphabetic</p></td>
+<td><p>Instruction mnemonic</p></td>
+</tr>
+<tr class="row-even"><td><p>Numeric</p></td>
+<td><p>Octal number</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instruction input uses modified PDP-1 assembler syntax.
+There are six instruction classes:
+memory reference,
+shift,
+skip,
+operate,
+<code class="docutils literal notranslate"><span class="pre">IOT</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">LAW</span></code>.</p>
+<p>Memory reference instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memref</span> <span class="p">{</span><span class="n">I</span><span class="p">}</span> <span class="n">address</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">I</span></code> signifies indirect reference.
+The <code class="docutils literal notranslate"><span class="pre">address</span></code> is an octal number in the range 0 - 0177777.</p>
+<p>Shift instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shift</span> <span class="n">shift_count</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">shift_count</span></code> is an octal number in the range 0-9.</p>
+<p>Skip instructions consist of single mnemonics, e.g., <code class="docutils literal notranslate"><span class="pre">SZA</span></code>, <code class="docutils literal notranslate"><span class="pre">SZS4</span></code>.
+Skip instructions may be or’d together</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">skip</span> <span class="n">skip</span> <span class="n">skip</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>The sense of a <code class="docutils literal notranslate"><span class="pre">skip</span></code> can be inverted by including the mnemonic <code class="docutils literal notranslate"><span class="pre">I</span></code>.</p>
+<p>Operate instructions consist of single mnemonics, e.g., <code class="docutils literal notranslate"><span class="pre">CLA</span></code>, <code class="docutils literal notranslate"><span class="pre">CLI</span></code>.
+Operate instructions may be or’d together</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">opr</span> <span class="n">opr</span> <span class="n">opr</span><span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">IOT</span></code> instructions consist of single mnemonics, e.g., <code class="docutils literal notranslate"><span class="pre">TYI</span></code>, <code class="docutils literal notranslate"><span class="pre">TYO</span></code>.
+<code class="docutils literal notranslate"><span class="pre">IOT</span></code> instructions may include an octal numeric modifier or the modifier <code class="docutils literal notranslate"><span class="pre">I</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iot</span> <span class="n">modifier</span>
+</pre></div>
+</div>
+<p>The simulator does not check the legality of skip, operate, or <code class="docutils literal notranslate"><span class="pre">IOT</span></code> combinations.</p>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">LAW</span></code> instruction has the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LAW</span> <span class="p">{</span><span class="n">I</span><span class="p">}</span> <span class="n">immediate</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">immediate</span></code> is in the range 0 to 07777.</p>
+</section>
+<section id="character-sets">
+<h2><span class="sectnum">1.4. </span>Character sets<a class="headerlink" href="#character-sets" title="Permalink to this heading">¶</a></h2>
+<p>The PDP-1’s first console was a Frieden Flexowriter;
+its character encoding was known as FIODEC.
+The PDP-1’s line printer used a modified Hollerith character set.
+The following table provides equivalences between ASCII characters and the PDP-1’s I/O devices.
+In the console table, <code class="docutils literal notranslate"><span class="pre">UC</span></code> stands for uppercase.
+The console table also applies to ASCII mode for the paper tape reader and punch.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ASCII</p></th>
+<th class="head"><p>PDP-1 console</p></th>
+<th class="head"><p>PDP-1 line printer</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>000 - 007</p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>BS</p></td>
+<td><p>075</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p>TAB</p></td>
+<td><p>036</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>012 - 013</p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p>FF</p></td>
+<td><p>013</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>CR</p></td>
+<td><p>077</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p>016 - 037</p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>Space</p></td>
+<td><p>000</p></td>
+<td><p>000</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">!</span></code></p></td>
+<td><p>{OR} <code class="docutils literal notranslate"><span class="pre">UC</span></code>+005</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+001</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">#</span></code></p></td>
+<td><p>{IMPLIES} <code class="docutils literal notranslate"><span class="pre">UC</span></code>+004</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">$</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></p></td>
+<td><p>{AND} <code class="docutils literal notranslate"><span class="pre">UC</span></code>+006</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+002</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
+<td><p>057</p></td>
+<td><p>057</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
+<td><p>055</p></td>
+<td><p>055</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+<td><p>{TIMES} <code class="docutils literal notranslate"><span class="pre">UC</span></code>+073</p></td>
+<td><p>072</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+054</p></td>
+<td><p>074</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
+<td><p>033</p></td>
+<td><p>033</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+<td><p>054</p></td>
+<td><p>054</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+<td><p>073</p></td>
+<td><p>073</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>021</p></td>
+<td><p>021</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>020</p></td>
+<td><p>020</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>001</p></td>
+<td><p>001</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>002</p></td>
+<td><p>002</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p>003</p></td>
+<td><p>003</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p>004</p></td>
+<td><p>004</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>005</p></td>
+<td><p>005</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p>006</p></td>
+<td><p>006</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p>007</p></td>
+<td><p>007</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p>010</p></td>
+<td><p>010</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p>011</p></td>
+<td><p>011</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">:</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">;</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+007</p></td>
+<td><p>034</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+033</p></td>
+<td><p>053</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+010</p></td>
+<td><p>034</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">?</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+021</p></td>
+<td><p>037</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+<td><p>{MID DOT} 040</p></td>
+<td><p>{MID DOT} 040</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+061</p></td>
+<td><p>061</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+062</p></td>
+<td><p>062</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">C</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+063</p></td>
+<td><p>063</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+064</p></td>
+<td><p>064</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">E</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+065</p></td>
+<td><p>065</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">F</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+066</p></td>
+<td><p>066</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">G</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+067</p></td>
+<td><p>067</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">H</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+070</p></td>
+<td><p>070</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+071</p></td>
+<td><p>071</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">J</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+041</p></td>
+<td><p>041</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+042</p></td>
+<td><p>042</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+043</p></td>
+<td><p>043</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+044</p></td>
+<td><p>044</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">N</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+045</p></td>
+<td><p>045</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">O</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+046</p></td>
+<td><p>046</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+047</p></td>
+<td><p>047</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+050</p></td>
+<td><p>050</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+051</p></td>
+<td><p>051</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+022</p></td>
+<td><p>022</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+023</p></td>
+<td><p>023</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">U</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+024</p></td>
+<td><p>024</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">V</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+025</p></td>
+<td><p>025</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">W</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+026</p></td>
+<td><p>026</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+027</p></td>
+<td><p>027</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Y</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+030</p></td>
+<td><p>030</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Z</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+031</p></td>
+<td><p>031</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">[</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+057</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">\</span></code></p></td>
+<td><p>{OVERLINE} 056</p></td>
+<td><p>{OVERLINE} 056</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+055</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">^</span></code></p></td>
+<td><p>{UP ARROW} UC+011</p></td>
+<td><p>{UP ARROW} 035</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+040</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+040</p></td>
+</tr>
+<tr class="row-odd"><td><p>`</p></td>
+<td><p>{RT ARROW} <code class="docutils literal notranslate"><span class="pre">UC</span></code>+020</p></td>
+<td><p>036</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">a</span></code></p></td>
+<td><p>061</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">b</span></code></p></td>
+<td><p>062</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">c</span></code></p></td>
+<td><p>063</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">d</span></code></p></td>
+<td><p>064</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">e</span></code></p></td>
+<td><p>065</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">f</span></code></p></td>
+<td><p>066</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+<td><p>067</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h</span></code></p></td>
+<td><p>070</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i</span></code></p></td>
+<td><p>071</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">j</span></code></p></td>
+<td><p>041</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k</span></code></p></td>
+<td><p>042</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">l</span></code></p></td>
+<td><p>043</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">m</span></code></p></td>
+<td><p>044</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
+<td><p>045</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">o</span></code></p></td>
+<td><p>046</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">p</span></code></p></td>
+<td><p>047</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">q</span></code></p></td>
+<td><p>050</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">r</span></code></p></td>
+<td><p>051</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s</span></code></p></td>
+<td><p>022</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">t</span></code></p></td>
+<td><p>023</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">u</span></code></p></td>
+<td><p>024</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">v</span></code></p></td>
+<td><p>025</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">w</span></code></p></td>
+<td><p>026</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">x</span></code></p></td>
+<td><p>027</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">y</span></code></p></td>
+<td><p>030</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">z</span></code></p></td>
+<td><p>031</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">{</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+056</p></td>
+<td><p>076</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">}</span></code></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">~</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code>+003</p></td>
+<td><p>013</p></td>
+</tr>
+<tr class="row-even"><td><p>DEL</p></td>
+<td><p>075</p></td>
+<td><p>none</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="nova_doc.html" title="previous chapter"><span class="sectnum">1. </span>Nova Simulator Usage</a></li>
+      <li>Next: <a href="pdp11_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-11 simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/pdp1_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

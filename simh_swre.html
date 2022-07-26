@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. SimH sample software packages &#8212; Python  documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css" />
@@ -765,7 +765,7 @@ SPS decks are not free-format, but operands must be placed in columns:</p>
 <tr class="row-odd"><td><p>1–5</p></td>
 <td><p>Line count (optional)</p></td>
 </tr>
-<tr class="row-even"><td><p>6-7</p></td>
+<tr class="row-even"><td><p>6–7</p></td>
 <td><p>Count (number of characters when defining a constant).</p></td>
 </tr>
 <tr class="row-odd"><td><p>8–13</p></td>
@@ -959,7 +959,7 @@ and end with an END card, with an optional A-operand showing where to start exec
 place the SPS source between the <code class="docutils literal notranslate"><span class="pre">SPS1.OBJ</span></code> and the <code class="docutils literal notranslate"><span class="pre">SPS2.OBJ</span></code> deck,
 and another copy of the same source after the <code class="docutils literal notranslate"><span class="pre">SPS2.OBJ</span></code> deck (SPS is a two-pass assembler).
 SPS prints a listing on LPT and punches an object deck on CDP, ready to run.</p>
-<p>A UNIX command script to assemble an SPS deck painlessly is in <code class="docutils literal notranslate"><span class="pre">sps</span></code>.
+<p>A Unix command script to assemble an SPS deck painlessly is in <code class="docutils literal notranslate"><span class="pre">sps</span></code>.
 To use the script, enter <code class="docutils literal notranslate"><span class="pre">sps</span> <span class="pre">programname</span></code>.
 The script creates <code class="docutils literal notranslate"><span class="pre">programname.lst</span></code> for the listing and <code class="docutils literal notranslate"><span class="pre">programname.obj</span></code> for the object deck.
 Windows users are out of luck, for now.</p>
@@ -1065,9 +1065,19 @@ The root password is <code class="docutils literal notranslate"><span class="pre
 <li class="toctree-l1 current"><a class="current reference internal" href="#">SimH Sample Software Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
 </ul>
 
 <div class="relations">
@@ -1105,7 +1115,7 @@ The root password is <code class="docutils literal notranslate"><span class="pre
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

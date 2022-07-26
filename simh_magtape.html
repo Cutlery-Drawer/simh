@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>SIMH magtape representation and handling &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Adding an I/O device to a SIMH virtual machine" href="simh_vmio.html" />
+    <link rel="prev" title="The SIMH breakpoint subsystem" href="simh_breakpoints.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="simh-magtape-representation-and-handling">
+<h1>SIMH magtape representation and handling<a class="headerlink" href="#simh-magtape-representation-and-handling" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2017-05-05</p>
+</dd>
+<dt class="field-even">Author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bob Supnik</p>
+</dd>
+<dt class="field-odd">Revision<span class="colon">:</span></dt>
+<dd class="field-odd"><p>$Format:%H$</p>
+</dd>
+<dt class="field-even">Copyright<span class="colon">:</span></dt>
+<dd class="field-even"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<section id="magtape-representation">
+<h2>Magtape representation<a class="headerlink" href="#magtape-representation" title="Permalink to this heading">¶</a></h2>
+<p>SIMH represents magnetic tapes as disk files.
+Each disk file contains a series of objects.
+Objects are either metadata markers,
+like tape mark or end-of-medium,
+or they are data records.
+Location 0 of the file is interpreted as beginning of tape;
+end-of-file is interpreted as end-of-medium.
+Pictorially:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Location 0:    ┌────────┐
+               │  data  │
+               │ record │
+               ├────────┤
+               │  data  │
+               │ record │
+               └────────┘
+                    :
+               ┌────────┐
+               │  tape  │
+               │  mark  │
+               ├────────┤
+               │  data  │
+               │ record │
+               └────────┘
+                    :
+end of file:
+</pre></div>
+</div>
+<p>Metadata markers are 4 bytes stored in little-endian order.
+The currently defined metadata markers are:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0xFFFFFFFF</span></code></p></td>
+<td><p>End of medium</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0xFFFFFFFE</span></code></p></td>
+<td><p>Erase gap</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0xFF000000</span></code>:<code class="docutils literal notranslate"><span class="pre">0xFFFFFFFD</span></code></p></td>
+<td><p>Reserved</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></p></td>
+<td><p>Tape mark</p></td>
+</tr>
+</tbody>
+</table>
+<p>Data records consist of an initial 4 byte record length <code class="docutils literal notranslate"><span class="pre">n</span></code>,
+<span class="math notranslate nohighlight">\((n + 1) &amp; ~1\)</span> bytes of data,
+and a trailing 4 byte record length <code class="docutils literal notranslate"><span class="pre">n</span></code> that must be the same as the initial record length:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>bytes 0:3      ┌────────┐
+               │ record │
+               │ length │
+               ├────────┤
+bytes 4:n+3    │  data  │
+               │    :   │
+               │    :   │
+               ├────────┤
+bytes n+4:n+7  │ record │
+               │ length │
+               └────────┘
+</pre></div>
+</div>
+<p>Note that the size of the data allocation is rounded to an even number of bytes,
+while the record length indicates the exact number of bytes in the record.
+If the record length is odd,
+the extra byte is undefined but should be 0.</p>
+<p>Record lengths are 4 bytes stored in little-endian order.
+The high-order bit is a flag,
+indicating whether the record contains an error;
+the next 7 bits must be zero;
+the low 24 bits are the record length:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bit&lt;31&gt;</span></code></p></td>
+<td><div class="line-block">
+<div class="line">1 = record contains an error</div>
+<div class="line">0 = record is error-free</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bits&lt;30:24&gt;</span></code></p></td>
+<td><p>Must be zero</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bits&lt;23:0&gt;</span></code></p></td>
+<td><p>Record length, must be non-zero</p></td>
+</tr>
+</tbody>
+</table>
+<p>The leading and trailing record lengths allow a record to be accessed either forward or backward.</p>
+</section>
+<section id="magtape-operations">
+<h2>Magtape operations<a class="headerlink" href="#magtape-operations" title="Permalink to this heading">¶</a></h2>
+<p>Magnetic tape drives can perform the following operations:</p>
+<ul class="simple">
+<li><p>Read forward</p></li>
+<li><p>Read backward</p></li>
+<li><p>Write forward</p></li>
+<li><p>Space forward record(s)</p></li>
+<li><p>Space backward record(s)</p></li>
+<li><p>Space forward file(s)</p></li>
+<li><p>Space backward file(s)</p></li>
+<li><p>Write tape mark</p></li>
+<li><p>Security erase</p></li>
+<li><p>Write erase gap</p></li>
+<li><p>Erase a data record or tape mark forward</p></li>
+<li><p>Erase a data record or tape mark backward</p></li>
+</ul>
+<p>On a real magtape, all operations are implicitly sequential,
+that is, they start from the current position of the tape medium.
+SIMH implements this with the concept of the <em>current tape position</em>,
+kept in the pos field of the tape drive’s UNIT structure.
+SIMH starts all magtape operations at the current position and updates the current position to reflect the results of the operation:</p>
+<ul class="simple">
+<li><p><strong>Read forward.</strong>
+Starting at the current position,
+read the next 4 bytes from the file,
+skipping any intervening gap.
+If those bytes are a valid record length,
+read the data record and position the tape past the trailing record length.
+If they are a tape mark,
+signal tape mark and position the tape past the tape mark.
+If they are end of medium,
+or an end of file occurs,
+signal no more data (“long gap” or “bad tape”) and do not change the tape position.</p></li>
+<li><p><strong>Read reverse.</strong>
+If the current position is beginning of tape, signal <code class="docutils literal notranslate"><span class="pre">BOT</span></code>.
+Otherwise, starting at the current position,
+read the preceding 4 bytes from the file, skipping any intervening gap.
+If those bytes are a valid record length,
+read the data record and position the tape before the initial record length.
+If they are a tape mark,
+signal tape mark and position the tape before the tape mark.
+If they are end of medium,
+or an end of file occurs,
+signal no more data (“long gap” or “bad tape”) and position the tape before the end of medium marker.</p></li>
+<li><p><strong>Write.</strong>
+Starting at the current position,
+write the initial record length,
+followed by the data record,
+followed by the trailing record length.
+Position the tape after the trailing record length.</p></li>
+<li><p><strong>Space forward record(s).</strong>
+Starting at the current position,
+read the next 4 bytes from the file,
+skipping any intervening gap.
+If those bytes are a valid record length,
+position the tape past the trailing record length and continue until operation count exhausted or metadata encountered.
+If those bytes are a tape mark,
+signal tape mark and position the tape after the tape mark.
+If they are end of medium,
+or an end of file occurs,
+signal no more data (“long gap” or “bad tape”) and do not change the tape position.</p></li>
+<li><p><strong>Space reverse record(s).</strong>
+If the current position is beginning of tape, signal <code class="docutils literal notranslate"><span class="pre">BOT</span></code>.
+Otherwise, starting at the current position,
+read the preceding 4 bytes from the file, skipping any intervening gap.
+If those bytes are a valid record length,
+position the tape before the initial record length and continue until operation count exhausted, <code class="docutils literal notranslate"><span class="pre">BOT</span></code>, or metadata encountered.
+If they are a tape mark, signal tape mark and position the tape before the tape mark.
+If they are end of medium, or an end of file occurs,
+signal no more data (<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">gap</span></code> or <code class="docutils literal notranslate"><span class="pre">bad</span> <span class="pre">tape</span></code>) and position the tape before the end of medium marker.</p></li>
+<li><p><strong>Space forward file(s).</strong>
+Starting at the current position,
+read the next 4 bytes from the file, skipping any intervening gap.
+If those bytes are a valid record length,
+position the tape past the trailing record length and continue.
+If those bytes are a tape mark,
+signal tape mark,
+position the tape after the tape mark,
+and continue until operation count exhausted.
+If they are end of medium, or an end of file occurs,
+signal no more data (“long gap” or “bad tape”) and do not change the tape position.</p></li>
+<li><p><strong>Space reverse file(s).</strong>
+If the current position is beginning of tape, signal <code class="docutils literal notranslate"><span class="pre">BOT</span></code>.
+Otherwise, starting at the current position,
+read the preceding 4 bytes from the file,
+skipping any intervening gap.
+If those bytes are a valid record length,
+position the tape before the initial record length and continue.
+If they are a tape mark, position the tape before the tape mark and continue until operation count exhausted or <code class="docutils literal notranslate"><span class="pre">BOT</span></code>.
+If they are end of medium, or an end of file occurs,
+signal no more data (“long gap” or “bad tape”) and position the tape before the end of medium marker.</p></li>
+<li><p><strong>Write tape mark.</strong>
+Starting at the current position,
+write a tape mark marker.
+Position the tape beyond the new tape mark.</p></li>
+<li><p><strong>Security erase.</strong>
+Starting at the current position,
+write an end of medium marker.
+Do not update the tape position.</p></li>
+<li><p><strong>Write erase gap.</strong>
+Starting at the current position,
+erase the amount of tape indicated by the specified length.
+If the end of the gap overwrites an existing record,
+shorten that record appropriately.
+Position the tape after the gap.</p></li>
+<li><p><strong>Erase record forward.</strong>
+Starting at the current position,
+erase the amount of tape corresponding to a data record of the specified size or to a tape mark.
+Position the tape after the gap.</p></li>
+<li><p><strong>Erase record backward.</strong>
+If the current position is beginning of tape, signal <code class="docutils literal notranslate"><span class="pre">BOT</span></code>.
+Otherwise, starting at the current position,
+erase in the reverse direction the amount of tape corresponding to a data record of the specified size or to a tape mark.
+Position the tape before the gap.</p></li>
+</ul>
+<p>A simulator that supports writing erase gaps must first set the tape density.
+Once this is done, all reading and spacing operations will monitor the length of any intervening gap and will stop the operation and signal tape runaway if the length exceeds the maximum allowed by the applicable ANSI/ECMA standards for the density selected.
+If the tape density is not set,
+then the write erase gap operation is not allowed,
+and gaps of any length that are present in the tape image will be skipped transparently.</p>
+<p>It is not necessary to set the tape density before erasing records,
+as the size of the erasure is specified in the call.
+However, the size specified must match the size of the record at the current tape position,
+or an error will occur.</p>
+</section>
+<section id="magtape-error-handling">
+<h2>Magtape error handling<a class="headerlink" href="#magtape-error-handling" title="Permalink to this heading">¶</a></h2>
+<p>The following matrix defines error responses versus events for simulated magtapes.
+PNU signifies position not updated;
+PU signifies position updated.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Unit not
+attached</p></th>
+<th class="head"><p>Tape
+mark</p></th>
+<th class="head"><p>End of medium mark or
+End of attached file</p></th>
+<th class="head"><p>Tape
+runaway</p></th>
+<th class="head"><p>Write
+locked</p></th>
+<th class="head"><p>Data read or
+write error</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Read forward</p></td>
+<td><p>Error: unit
+not ready, PNU</p></td>
+<td><p>Error: tape
+mark, PU</p></td>
+<td><p>Error: bad tape or
+runaway tape, PNU</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Read reverse</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>Error: tape
+mark, PU</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-even"><td><p>Write forward</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: unit
+write locked,
+PNU</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Space records
+forward</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>Error: tape
+mark, PU</p></td>
+<td><p>Error: bad or runaway
+tape, PNU</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-even"><td><p>Space records
+reverse</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>ok</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity or data,
+PNU if error on record
+length, otherwise PU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Space files
+forward</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>Error: tape
+mark, PU</p></td>
+<td><p>Error: bad or runaway
+tape, PNU</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-even"><td><p>Space files
+reverse</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>ok</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: tape
+runaway, PU</p></td>
+<td><p>ok</p></td>
+<td><p>Error: parity or data,
+PNU if error on record
+length, otherwise PU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Write tape mark</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: unit
+write locked,
+PNU</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-even"><td><p>Erase</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: unit
+write locked,
+PNU</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+<tr class="row-odd"><td><p>Write gap</p></td>
+<td><p>Error: unit not
+ready, PNU</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>n/a</p></td>
+<td><p>Error: unit
+write locked,
+PNU</p></td>
+<td><p>Error: parity
+or data, PNU</p></td>
+</tr>
+</tbody>
+</table>
+<p>The behavior of simulated tapes mirrors that of real tapes,
+except for errors that make determination of the record length impossible.
+On a real tape, a read or write error would update the position of the tape.
+On a simulated tape, this isn’t possible; the length of the record is unknown.
+Real tape drivers would try to recover from the error by backspacing over the erroneous record and trying again.
+This won’t work on a simulated tape.</p>
+<p>For intelligent tapes,
+like the TK50 and the TS11,
+this problem is handled by reporting “position lost”.
+This status tells the tape driver that tape position is no longer known,
+and normal error recovery isn’t possible.
+Older tapes do not have this status.
+Accordingly, these tapes implement a limited form of state “memory” for error recovery.
+If an error occurs on a forward operation,
+and the position is not updated,
+the simulated tape unit “remembers” this fact.
+If the next operation is a backspace record,
+the first backspace is skipped,
+because the simulated tape is still positioned at the start of the erroneous record.
+If a read is then attempted,
+the tape will read the record that caused the original error.</p>
+</section>
+<section id="magtape-emulation-library">
+<h2>Magtape emulation library<a class="headerlink" href="#magtape-emulation-library" title="Permalink to this heading">¶</a></h2>
+<p>SIMH provides a support library, <code class="docutils literal notranslate"><span class="pre">sim_tape.c</span></code>
+(and its header file <code class="docutils literal notranslate"><span class="pre">sim_tape.h</span></code>),
+that implements the standard tape format and functions.
+The library is described in detail in the associated document,
+<a class="reference external" href="simh.rst">Writing a simulator for the SIMH system</a>.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="simh_breakpoints.html" title="previous chapter">The SIMH breakpoint subsystem</a></li>
+      <li>Next: <a href="simh_vmio.html" title="next chapter"><span class="sectnum">1. </span>Adding an I/O device to a SIMH virtual machine</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simh_magtape.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="760" height="230" viewBox="0 0 760 230"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xml:space="preserve"
+	xml:lang="en"
+><title>Input/output instruction format</title>
+<defs>
+	<style type="text/css">
+		line, path, polyline, polygon, rect{
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 3;
+			stroke-linecap: inherit;
+		}
+		text{
+			fill: currentColor;
+			font: bold 27px
+				Arial Rounded MT Bold,
+				ArialRoundedMTBold,
+				Arial Rounded MT,
+				ArialRoundedMT,
+				Arial Rounded,
+				Arial,
+				Helvetica,
+				sans-serif;
+			font-synthesis: none;
+			text-anchor: middle;
+			text-transform: uppercase;
+		}
+			.left  { text-anchor: start; }
+			.right { text-anchor: end; }
+
+		#frame{
+			stroke-width: 4;
+		}
+		#ticks{
+			clip-path: url(#tick-clip);
+			marker-mid: url(#tick);
+			stroke: none;
+		}
+		
+		@media (prefers-color-scheme: dark){
+			:root { color: #ccc; }
+		}
+	</style>
+
+	<marker id="tick"
+		viewBox="-1.5 0 3 100"
+		refX="0"
+		refY="100"
+		markerWidth="3"
+		markerHeight="100"
+		markerUnits="userSpaceOnUse"
+		orient="-180deg"
+	><line y2="100"/></marker>
+	
+	<clipPath id="tick-clip">
+		<use xlink:href="#frame"/>
+	</clipPath>
+</defs>
+
+<rect id="frame" x="2" y="2" width="756" height="98" rx="4" ry="4"/>
+<polyline id="ticks" points="
+	2   0
+	44  80
+	86  80
+	128 52
+	170 80
+	212 80
+	255 0
+	310 80
+	366 52
+	422 80
+	477 0
+	524 80
+	571 80
+	618 52
+	664 80
+	711 80
+	758 0
+"/>
+<text x="10"  y="133" class="left">1</text>
+<text x="241" y="133" class="right">6</text>
+<text x="263" y="133" class="left">7</text>
+<text x="468" y="133" class="right">10</text>
+<text x="485" y="133" class="left">11</text>
+<text x="750" y="133" class="right">16</text>
+<g stroke-linecap="round">
+	<path d="M1.5,127.2c0,3.9,1.3,16.5,14.2,16.5l97.6,0c9.7,0,14.9,10.3,14.9,10.3s5.2-10.3,14.9-10.3l97.1,0c12.9,0,14.2-12.5,14.2-16.5"/>
+	<path d="M477.1,127.2c0,3.9-1.3,16.5-14.2,16.5l-82.1,0c-9.7,0-14.9,10.3-14.9,10.3s-5.2-10.3-14.9-10.3l-83.5,0c-11.6,0-12.8-12.5-12.8-16.5"/>
+	<path d="M477.1,127.2c0,3.9,1.5,16.5,16.6,16.5h106.4c11.3,0,17.4,10.3,17.4,10.3s6.3-10.3,18-10.3l105.2,0c15.6,0,17.2-12.5,17.2-16.5"/>
+</g>
+<text x="128" y="192">Op code</text>
+<text x="366" y="192">Function<tspan x="366" y="224">code</tspan></text>
+<text x="618" y="192">Device<tspan x="618" y="224">address</tspan></text>
+</svg>

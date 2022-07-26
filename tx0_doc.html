@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. TX-0 simulator usage &#8212; Python  documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css" />
@@ -16,6 +16,8 @@
     <script src="static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The SIMH breakpoint subsystem" href="simh_breakpoints.html" />
+    <link rel="prev" title="1. VAX (MicroVAX 3900) simulator usage" href="vax_doc.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
   
@@ -83,7 +85,12 @@ in this Software without prior written authorization from the Authors.</p>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#tx-0-usage-examples" id="id10"><span class="sectnum">1.3. </span>TX-0 usage examples</a></p></li>
+<li><p><a class="reference internal" href="#tx-0-usage-examples" id="id10"><span class="sectnum">1.3. </span>TX-0 usage examples</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#tic-tac-toe-game" id="id11"><span class="sectnum">1.3.1. </span>Tic-tac-toe game</a></p></li>
+<li><p><a class="reference internal" href="#mouse-game" id="id12"><span class="sectnum">1.3.2. </span>MOUSE game</a></p></li>
+</ul>
+</li>
 </ul>
 </nav>
 <p>This memorandum documents the TX-0 simulator.</p>
@@ -143,7 +150,7 @@ in this Software without prior written authorization from the Authors.</p>
 <td><p>FlexoWriter output</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DPY</span></code></p></td>
-<td><p>512x512 7” high-persistence phosphor CRT Display</p></td>
+<td><p>512×512 7″ high-persistence phosphor CRT Display</p></td>
 </tr>
 </tbody>
 </table>
@@ -423,7 +430,7 @@ On output, the TTO converts the Flexowriter code to ASCII for display on the sim
 <h4><span class="sectnum">1.2.2.4. </span>Display (DPY)<a class="headerlink" href="#display-dpy" title="Permalink to this heading">¶</a></h4>
 <p>In 1957, a 10-inch, electro-static deflection,
 cathode ray tube, having 512 by 512 addressable locations,
-in a 7 × 7 inch raster, point-by-point display system was installed on the TX-0.
+in a 7×7-inch raster, point-by-point display system was installed on the TX-0.
 In simulation, the display is accomplished using a separate graphical display window.</p>
 <p>The display is accessed via the <code class="docutils literal notranslate"><span class="pre">DIS</span></code> order,
 with the coordinate specified in the <code class="docutils literal notranslate"><span class="pre">AC</span></code>.
@@ -448,6 +455,8 @@ the light-pen is implemented using a computer mouse or touch screen.</p>
 <section id="tx-0-usage-examples">
 <h2><span class="sectnum">1.3. </span>TX-0 usage examples<a class="headerlink" href="#tx-0-usage-examples" title="Permalink to this heading">¶</a></h2>
 <p>Several example tapes can be used to test the TX-0 simulation.</p>
+<section id="tic-tac-toe-game">
+<h3><span class="sectnum">1.3.1. </span>Tic-tac-toe game<a class="headerlink" href="#tic-tac-toe-game" title="Permalink to this heading">¶</a></h3>
 <p>The tic-tac-toe game can be run using the <code class="docutils literal notranslate"><span class="pre">tic.simh</span></code> startup script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">;</span> <span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="n">Initialization</span> <span class="n">file</span> <span class="k">for</span> <span class="n">the</span> <span class="n">tic</span><span class="o">-</span><span class="n">tac</span><span class="o">-</span><span class="n">toe</span> <span class="n">game</span>
 <span class="nb">set</span> <span class="n">dpy</span> <span class="n">enable</span>
@@ -458,6 +467,9 @@ the light-pen is implemented using a computer mouse or touch screen.</p>
 </div>
 <p>In this game, you simply use the light-pen (mouse) to select where you want to place the “X” (the TX-0 is “O.”).
 You must click right on top of or very close to the dot in the center of the square you want to place your “X” into.</p>
+</section>
+<section id="mouse-game">
+<h3><span class="sectnum">1.3.2. </span>MOUSE game<a class="headerlink" href="#mouse-game" title="Permalink to this heading">¶</a></h3>
 <p>The MOUSE game,
 written by John E. Ward is a more complex game with requires involvement not only with the light pen,
 but also the <code class="docutils literal notranslate"><span class="pre">TAC</span></code>.
@@ -483,6 +495,27 @@ the <code class="docutils literal notranslate"><span class="pre">TAC</span></cod
 <span class="n">boot</span> <span class="n">petr</span>
 </pre></div>
 </div>
+<p>When this game starts, it is in “Erase Wall” mode.
+Use this mode to create the maze, by using the computer mouse to erase unwanted walls from the grid.
+When done, press Control-E to get to the simulator command prompt,
+and change to “Write Cheese” mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span><span class="n">TX</span><span class="o">-</span><span class="mf">0.</span><span class="n">exe</span> <span class="n">mouse</span><span class="o">.</span><span class="n">simh</span>
+
+<span class="n">TX</span><span class="o">-</span><span class="mi">0</span> <span class="n">simulator</span> <span class="n">V4</span><span class="mf">.0</span><span class="o">-</span><span class="mi">0</span>
+<span class="n">mouse</span><span class="o">.</span><span class="n">simh</span><span class="o">-</span><span class="mi">16</span><span class="o">&gt;</span> <span class="n">boot</span> <span class="n">petr</span>
+
+<span class="n">Simulation</span> <span class="n">stopped</span><span class="p">,</span> <span class="n">PC</span><span class="p">:</span> <span class="mi">000161</span> <span class="p">(</span><span class="n">trn</span> <span class="mi">00275</span> <span class="p">(</span><span class="n">Transfer</span> <span class="n">Negative</span><span class="p">))</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">d</span> <span class="n">tac</span> <span class="mi">400021</span>
+<span class="n">sim</span><span class="o">&gt;</span> <span class="n">g</span>
+</pre></div>
+</div>
+<p>Next place the cheese with the computer mouse,
+and then repeat the procedure above to change the <code class="docutils literal notranslate"><span class="pre">TAC</span></code> to “do mouse” mode.
+The TX-0 should then solve the maze.
+Sometimes the mouse gets stuck and is not able to find the cheese.
+I tend to believe this is a bug in the simulation,
+but I have not been able to find it yet.</p>
+</section>
 </section>
 </section>
 
@@ -503,20 +536,32 @@ the <code class="docutils literal notranslate"><span class="pre">TAC</span></cod
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="vax_doc.html" title="previous chapter"><span class="sectnum">1. </span>VAX (MicroVAX 3900) simulator usage</a></li>
+      <li>Next: <a href="simh_breakpoints.html" title="next chapter">The SIMH breakpoint subsystem</a></li>
   </ul></li>
 </ul>
 </div>
@@ -546,7 +591,7 @@ the <code class="docutils literal notranslate"><span class="pre">TAC</span></cod
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

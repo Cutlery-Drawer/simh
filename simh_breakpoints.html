@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The SIMH breakpoint subsystem &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SIMH magtape representation and handling" href="simh_magtape.html" />
+    <link rel="prev" title="1. TX-0 simulator usage" href="tx0_doc.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="the-simh-breakpoint-subsystem">
+<h1>The SIMH breakpoint subsystem<a class="headerlink" href="#the-simh-breakpoint-subsystem" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Bob Supnik</p>
+</dd>
+<dt class="field-even">Date<span class="colon">:</span></dt>
+<dd class="field-even"><p>2016-09-09</p>
+</dd>
+<dt class="field-odd">Revision<span class="colon">:</span></dt>
+<dd class="field-odd"><p>$Format:%H$</p>
+</dd>
+<dt class="field-even">Copyright<span class="colon">:</span></dt>
+<dd class="field-even"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>SIMH provides a highly flexible and extensible breakpoint subsystem to assist in debugging simulated code.
+Its features include:</p>
+<ul class="simple">
+<li><p>Up to 26 different kinds of breakpoints <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+<li><p>Unlimited numbers of breakpoints</p></li>
+<li><p>Proceed counts for each breakpoint</p></li>
+<li><p>Automatic execution of commands when a breakpoint is taken</p></li>
+</ul>
+<p>If debugging is going to be a major activity on a simulator,
+implementation of a full-featured breakpoint facility will be of immense help to users.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Breakpoint type C should probably be avoided since the <code class="docutils literal notranslate"><span class="pre">-C</span></code>
+switch is used by the <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">BREAK</span> <span class="pre">-C</span></code> command to display currently defined
+breakpoints as commands which can be entered in a subsequent invocation
+of the simulator to recreate the same breakpoint set.</p>
+</aside>
+</aside>
+</section>
+<section id="breakpoint-basics">
+<h2>Breakpoint basics<a class="headerlink" href="#breakpoint-basics" title="Permalink to this heading">¶</a></h2>
+<p>SIMH breakpoints are characterized by a type,
+an address,
+a class,
+a proceed count,
+and an action string.
+Breakpoint types are arbitrary and are defined by the virtual machine.
+Each breakpoint type is assigned a unique letter.
+All simulators to date provide execution (“E”) breakpoints.
+A useful extension would be to provide breakpoints on read (“R”) and write (“W”) data access.
+Even finer gradations are possible,
+e.g., physical versus virtual addressing, DMA versus CPU access, and so on.</p>
+<p>Breakpoints can be assigned to devices other than the CPU,
+but breakpoints don’t contain a device pointer.
+Thus, each device must have its own unique set of breakpoint types.
+For example, if a simulator contained a programmable graphics processor,
+it would need a separate instruction breakpoint type (e.g., type G rather than E).</p>
+<p>The virtual machine defines the valid breakpoint types to SIMH through two variables:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sim_brk_types</span></code></dt><dd><p>Initialized by the VM (usually in the CPU reset routine) to a mask of all supported breakpoints;
+bit 0 (low order bit) corresponds to type “A”, bit 1 to type “B”, etc.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim_brk_dflt</span></code></dt><dd><p>Initialized by the VM to the mask for the default breakpoint type.</p>
+</dd>
+</dl>
+<p>SIMH in turn provides the virtual machine with a summary of all the breakpoint types that currently have active breakpoints:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">sim_brk_summ</span></code></dt><dd><p>Maintained by SIMH; provides a bit mask summary of whether any breakpoints of a particular type have been defined.</p>
+</dd>
+</dl>
+<p>When the virtual machine reaches the point in its execution cycle corresponding to a breakpoint type,
+it tests to see if any breakpoints of that type are active.
+If so, it calls <code class="docutils literal notranslate"><span class="pre">sim_brk_test</span></code> to see if a breakpoint of a specified type (or types) is set at the current address.
+Here is an example from the fetch phase,
+testing for an execution breakpoint:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Test for breakpoint before fetching next instruction */</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">sim_brk_summ</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">     </span><span class="n">sim_brk_test</span><span class="w"> </span><span class="p">(</span><span class="n">PC</span><span class="p">,</span><span class="w"> </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">)))</span><span class="w"> </span><span class="o">&lt;</span><span class="n">execution</span><span class="w"> </span><span class="k">break</span><span class="o">&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>If the virtual machine implements only one kind of breakpoint,
+then testing <code class="docutils literal notranslate"><span class="pre">sim_brk_summ</span></code> for non-zero suffices.
+Even if there are multiple breakpoint types,
+a simple non-zero test distinguishes the no-breakpoints case (normal run mode) from debugging mode and provides sufficient efficiency.</p>
+<p>When a breakpoint match is detected by <code class="docutils literal notranslate"><span class="pre">sim_brk_test</span></code> the global variables <code class="docutils literal notranslate"><span class="pre">sim_brk_match_type</span></code> and <code class="docutils literal notranslate"><span class="pre">sim_brk_match_addr</span></code> are set to reflect the details of the match that was found.
+Simulator code can use this information directly or SimH provides internal facilities to report the details of breakpoints which have been matched.
+For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">BRKTYPTAB</span><span class="w"> </span><span class="n">cpu_breakpoints</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">,</span><span class="s">&quot;Execute Instruction at Virtual Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;P&#39;</span><span class="p">,</span><span class="s">&quot;Execute Instruction at Physical Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="s">&quot;Read from Virtual Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;S&#39;</span><span class="p">,</span><span class="s">&quot;Read from Physical Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;W&#39;</span><span class="p">,</span><span class="s">&quot;Write to Virtual Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="n">BRKTYPE</span><span class="p">(</span><span class="sc">&#39;X&#39;</span><span class="p">,</span><span class="s">&quot;Write to Physical Address&quot;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="n">t_stat</span><span class="w"> </span><span class="nf">cpu_reset</span><span class="w"> </span><span class="p">(</span><span class="n">DEVICE</span><span class="w"> </span><span class="o">*</span><span class="n">dptr</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="cm">/* ... */</span><span class="w"></span>
+<span class="w">    </span><span class="n">sim_brk_dflt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sim_brk_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_brk_dflt</span><span class="o">|</span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;P&#39;</span><span class="p">)</span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;R&#39;</span><span class="p">)</span><span class="o">|</span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;S&#39;</span><span class="p">)</span><span class="o">|</span><span class="w"></span>
+<span class="w">                    </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;W&#39;</span><span class="p">)</span><span class="o">|</span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;X&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sim_brk_type_desc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cpu_breakpoints</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="cm">/* ... */</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>In the breakpoint dispatch code something like:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STOP_IBKPT</span><span class="p">;</span><span class="w"></span>
+<span class="n">sim_messagef</span><span class="w"> </span><span class="p">(</span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sim_brk_message</span><span class="p">());</span><span class="w"></span>
+<span class="cm">/* and then sim_instr() returns with: */</span><span class="w"></span>
+<span class="k">return</span><span class="w"> </span><span class="n">reason</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Or, if it is desirable to suppress the standard message produced when returning to SCP, the following may be used:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">STOP_IBKPT</span><span class="p">;</span><span class="w"></span>
+<span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sim_messagef</span><span class="w"> </span><span class="p">(</span><span class="n">reason</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sim_brk_message</span><span class="p">());</span><span class="w"></span>
+<span class="cm">/* and then sim_instr() returns with: */</span><span class="w"></span>
+<span class="k">return</span><span class="w"> </span><span class="n">reason</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sim_messagef</span></code> produces a message which contains either the breakpoint type and the matched breakpoint address
+(if <code class="docutils literal notranslate"><span class="pre">sim_brk_type_desc</span></code> is not set),
+or the type mapped to it related description as indicated in the <code class="docutils literal notranslate"><span class="pre">BRKTYPTAB</span></code> pointed to by <code class="docutils literal notranslate"><span class="pre">sim_brk_typ_desc</span></code>.</p>
+</section>
+<section id="testing-for-breakpoints">
+<h2>Testing for breakpoints<a class="headerlink" href="#testing-for-breakpoints" title="Permalink to this heading">¶</a></h2>
+<p>Breakpoint testing must be done at every point in the instruction decode and execution cycle where an event relating to a breakpoint type occurs.
+If a virtual machine implements data breakpoints,
+it simplifies implementation if data reads and writes are centralized in subroutines,
+rather than scattered throughout the code.
+For this reason (among others), it is good practice to perform memory access through subroutines,
+rather than by direct access to the memory array.</p>
+<p>As an example, consider a virtual machine with a central memory read subroutine.
+This routine takes an additional parameter,
+the type of read (often required for memory protection):</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define IF  0   </span><span class="cm">/* fetch */</span><span class="cp"></span>
+<span class="cp">#define ID  1   </span><span class="cm">/* indirect */</span><span class="cp"></span>
+<span class="cp">#define RD  2   </span><span class="cm">/* data read */</span><span class="cp"></span>
+<span class="cp">#define WR  3   </span><span class="cm">/* data write */</span><span class="cp"></span>
+
+<span class="n">t_stat</span><span class="w"> </span><span class="nf">Read</span><span class="w"> </span><span class="p">(</span><span class="n">uint32</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">uint32</span><span class="w"> </span><span class="o">*</span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="n">uint32</span><span class="w"> </span><span class="n">acctyp</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">     </span><span class="k">static</span><span class="w"> </span><span class="n">uint32</span><span class="w"> </span><span class="n">bkpt_type</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">         </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;N&#39;</span><span class="p">),</span><span class="w"></span>
+<span class="w">         </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;R&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">SWMASK</span><span class="w"> </span><span class="p">(</span><span class="sc">&#39;W&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="p">};</span><span class="w"></span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">sim_brk_summ</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">bkpt_type</span><span class="p">[</span><span class="n">acctyp</span><span class="p">])</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">          </span><span class="n">sim_brk_test</span><span class="w"> </span><span class="p">(</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">bkpt_type</span><span class="p">[</span><span class="n">acctyp</span><span class="p">]))</span><span class="w"></span>
+<span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="n">STOP_BKPT</span><span class="p">;</span><span class="w"></span>
+<span class="w">     </span><span class="k">else</span><span class="w"> </span><span class="o">*</span><span class="n">dat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">M</span><span class="p">[</span><span class="n">addr</span><span class="p">];</span><span class="w"></span>
+<span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="n">SCPE_OK</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This routine provides differentiated breakpoints for execution,
+indirect addresses, and data reads, with a single test.</p>
+</section>
+<section id="the-replay-problem">
+<h2>The replay problem<a class="headerlink" href="#the-replay-problem" title="Permalink to this heading">¶</a></h2>
+<p>When a breakpoint is taken, control returns to the SIMH control package.
+Depending on the code structure of the simulated system and the particular type of breakpoint,
+a breakpoint may be taken before or after a specific activity has completed.
+If it is taken before the operation has actually been performed, when execution resumes,
+the same breakpoint will be reached and taken again immediately.
+This could result in an endless loop,
+with the simulator never progressing beyond a breakpoint.</p>
+<p>To address this problem, when a breakpoint is taken,
+SIMH remembers the breakpoint that was taken and the instruction executed count when that particular breakpoint was taken.
+If the next breakpoint test for that breakpoint type is to the same address and the instruction execution count is the same, SIMH suppresses the breakpoint.
+Thus, the simulator can make progress past the breakpoint but will take the breakpoint again if control returns to the same address.</p>
+<p>In order to properly suppress replay breakpoints it is important that the bookkeeping that a simulator does to record the instructions actually executed not be done when a breakpoint is taken.
+This bookkeeping is done by adjustments to <code class="docutils literal notranslate"><span class="pre">sim_interval</span></code> and subsequent calls to <code class="docutils literal notranslate"><span class="pre">sim_process_event</span></code>.
+If a simulator returns from <code class="docutils literal notranslate"><span class="pre">sim_instr()</span></code> due to a breakpoint,
+either the adjustment to <code class="docutils literal notranslate"><span class="pre">sim_interval</span></code> should be done after all breakpoint checking,
+or the return logic that handles breakpoints should unwind any <code class="docutils literal notranslate"><span class="pre">sim_interval</span></code> adjustment that may have happened.</p>
+<p>Most simulators will implement a CPU execution breakpoint concept such that the breakpoint appears to be taken prior to the instruction at the breakpoint address having executed.
+This allows for the user to continue execution from breakpoint and the simulator will produce precisely the same results as if the breakpoint hadn’t been there.
+In order for this to be true, when a breakpoint is taken,
+not only must <code class="docutils literal notranslate"><span class="pre">sim_interval</span></code> be restored to its value prior to the breakpoint,
+but all other simulator specific state must also be retained.
+This state includes program counter,
+the contents of registers,
+condition codes,
+and memory that may have already changed prior to the call to <code class="docutils literal notranslate"><span class="pre">sim_brk_test</span></code> that causes the breakpoint to be taken.
+Achieving this is simplest with basic PC based execution breakpoints and gets more complicated with breakpoints based on various memory reference activities.</p>
+<p>In most cases, <em>all</em> visible state changes made by the instruction before the breakpoint occurs should be reverted as part of the breakpoint processing.
+This avoids confusing users by having an instruction that appears not to have executed yet,
+but part of its effect is nevertheless already visible.
+For example, if a data write breakpoint is set for the second word of a double-word store instruction,
+the first word may have been written by the simulator before the breakpoint is recognized.
+If so, that first word should be restored.
+If fully restoring the visible state is impractical for some reason,
+it may be acceptable to restore less.
+If so, this needs to be clearly documented in the user documentation for the simulator.
+Also, in every case enough state must be restored that the instruction can be replayed correctly.
+For example, an <code class="docutils literal notranslate"><span class="pre">add</span> <span class="pre">carry</span></code> instruction that may encounter a breakpoint must preserve the carry,
+otherwise the replay will produce the wrong answer.</p>
+<p>Some processors implement interruptible instructions,
+where intermediate state is held in registers and/or memory,
+and there is some state flag to indicate an interrupt occurred partway through.
+For example the PDP11 CIS instructions do this,
+using the First Part Done flag in the processor status word.
+For such instructions, breakpoint processing may take advantage of that mechanism;
+in effect the breakpoint looks like an interrupt partway through the execution.</p>
+<p>If memory access breakpoints are implemented,
+write breakpoint testing is best done before the write,
+so the write can be skipped (rather than have to be explicitly reverted) on a match.
+The same may be useful for read breakpoints,
+since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side effect.</p>
+<p>If memory access breakpoints are implemented,
+write breakpoint testing is best done before the write,
+so the write can be skipped (rather than have to be explicitly reverted) on a match.
+The same may be useful for read breakpoints,
+since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side effect.</p>
+</section>
+<section id="breakpoint-classes">
+<h2>Breakpoint classes<a class="headerlink" href="#breakpoint-classes" title="Permalink to this heading">¶</a></h2>
+<p>SIMH implements up to 8 breakpoint classes.
+Each breakpoint class has its own state.
+Thus, if the E, R, and W breakpoints are assigned to separate classes,
+each will be suppressed in turn until the next breakpoint test on that class that fails or that uses a different address.</p>
+<p>Breakpoint classes are arbitrary identifiers and can be assigned by the simulator writer as desired.
+The class is specified as part of the breakpoint type in the call to <code class="docutils literal notranslate"><span class="pre">sim_brk_test</span></code>:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;31:29&gt;</span></code></p></td>
+<td><p>Class number (0 by default)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;25:0&gt;</span></code></p></td>
+<td><p>Bit mask of breakpoint types</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that breakpoint classes and breakpoint types are orthogonal.
+Thus, classes can be used to distinguish different cases of the same breakpoint type.
+For example, in an SMP system with <code class="docutils literal notranslate"><span class="pre">n</span></code> processors,
+classes <span class="math notranslate nohighlight">\(0..n-1\)</span> could be used for E-breakpoints for processors <span class="math notranslate nohighlight">\(0..n-1\)</span>.
+Or in a VAX, classes 1..6 could be used for data breakpoints on operands 1..6,
+with 0 reserved for the CPU’s E-breakpoints.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tx0_doc.html" title="previous chapter"><span class="sectnum">1. </span>TX-0 simulator usage</a></li>
+      <li>Next: <a href="simh_magtape.html" title="next chapter">SIMH magtape representation and handling</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simh_breakpoints.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

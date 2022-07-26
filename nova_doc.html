@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. Nova Simulator Usage &#8212; Python  documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css" />
@@ -16,7 +16,7 @@
     <script src="static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. PDP-11 simulator usage" href="pdp11_doc.html" />
+    <link rel="next" title="1. PDP-1 simulator usage" href="pdp1_doc.html" />
     <link rel="prev" title="1. SimH FAQ" href="simh_faq.html" />
    
   <link rel="stylesheet" href="static/custom.css" type="text/css" />
@@ -276,6 +276,7 @@ The <code class="docutils literal notranslate"><span class="pre">DUMP</span></co
 </tr>
 </tbody>
 </table>
+<aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id5" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>MDV = unsigned multiply/divide instructions</p>
@@ -291,6 +292,7 @@ The <code class="docutils literal notranslate"><span class="pre">DUMP</span></co
 <aside class="footnote brackets" id="id8" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
 <p>Keronix = unsigned multiply/divide, extended 64KW mode</p>
+</aside>
 </aside>
 <p>If memory size is being reduced, and the memory being truncated contains non-zero data, the simulator asks for confirmation.
 Data in the truncated portion of memory is lost.
@@ -1562,17 +1564,19 @@ The magnetic tape controller supports the <code class="docutils literal notransl
 <h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
 <p>The Nova simulator implements symbolic display and input.
 Display is controlled by command-line switches:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-a</span></kbd></dt>
-<dd><p>Display as ASCII character</p>
-</dd>
-<dt><kbd><span class="option">-c</span></kbd></dt>
-<dd><p>Display as two packed ASCII characters</p>
-</dd>
-<dt><kbd><span class="option">-m</span></kbd></dt>
-<dd><p>Display instruction mnemonics</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display as ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as two packed ASCII characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics</p></td>
+</tr>
+</tbody>
+</table>
 <p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
 <table class="docutils align-default">
 <tbody>
@@ -1687,9 +1691,19 @@ The syntax for addresses and indices is as follows:</p>
 <li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
 </ul>
 
 <div class="relations">
@@ -1697,7 +1711,7 @@ The syntax for addresses and indices is as follows:</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="simh_faq.html" title="previous chapter"><span class="sectnum">1. </span>SimH FAQ</a></li>
-      <li>Next: <a href="pdp11_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-11 simulator usage</a></li>
+      <li>Next: <a href="pdp1_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-1 simulator usage</a></li>
   </ul></li>
 </ul>
 </div>
@@ -1727,7 +1741,7 @@ The syntax for addresses and indices is as follows:</p>
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

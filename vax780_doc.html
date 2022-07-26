@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. VAX-11/780 simulator usage &#8212; Python  documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css" />
@@ -348,62 +348,66 @@ MS780E controllers supported 4MB-64MB per controller.</p></li>
 <p>Initial memory size is 8MB.</p>
 <p>Memory can be loaded with a binary byte stream using the <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command.
 The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command recognizes three switches:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-o</span></kbd></dt>
-<dd><p>Origin argument follows filename</p>
-</dd>
-<dt><kbd><span class="option">-r</span></kbd></dt>
-<dd><p>Load ROM in memory controller 0</p>
-</dd>
-<dt><kbd><span class="option">-s</span></kbd></dt>
-<dd><p>Load ROM in memory controller 1</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-o</span></code></p></td>
+<td><p>Origin argument follows filename</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Load ROM in memory controller 0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>Load ROM in memory controller 1</p></td>
+</tr>
+</tbody>
+</table>
 <p>These switches are recognized when examining or depositing in CPU memory:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-b</span></kbd></dt>
-<dd><p>Examine/deposit bytes</p>
-</dd>
-<dt><kbd><span class="option">-w</span></kbd></dt>
-<dd><p>Examine/deposit words</p>
-</dd>
-<dt><kbd><span class="option">-l</span></kbd></dt>
-<dd><p>Examine/deposit longwords</p>
-</dd>
-<dt><kbd><span class="option">-d</span></kbd></dt>
-<dd><p>Data radix is decimal</p>
-</dd>
-<dt><kbd><span class="option">-o</span></kbd></dt>
-<dd><p>Data radix is octal</p>
-</dd>
-<dt><kbd><span class="option">-h</span></kbd></dt>
-<dd><p>Data radix is hexadecimal</p>
-</dd>
-<dt><kbd><span class="option">-m</span></kbd></dt>
-<dd><p>Examine (only) VAX instructions</p>
-</dd>
-<dt><kbd><span class="option">-p</span></kbd></dt>
-<dd><p>Examine/deposit PDP-11 (compatibility mode) instructions</p>
-</dd>
-<dt><kbd><span class="option">-r</span></kbd></dt>
-<dd><p>Examine (only) RADIX50 encoded data</p>
-</dd>
-<dt><kbd><span class="option">-v</span></kbd></dt>
-<dd><p>Interpret address as virtual, current mode</p>
-</dd>
-<dt><kbd><span class="option">-k</span></kbd></dt>
-<dd><p>Interpret address as virtual, kernel mode</p>
-</dd>
-<dt><kbd><span class="option">-e</span></kbd></dt>
-<dd><p>Interpret address as virtual, executive mode</p>
-</dd>
-<dt><kbd><span class="option">-s</span></kbd></dt>
-<dd><p>Interpret address as virtual, supervisor mode</p>
-</dd>
-<dt><kbd><span class="option">-u</span></kbd></dt>
-<dd><p>Interpret address as virtual, user mode</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-b</span></code></p></td>
+<td><p>Examine/deposit bytes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-w</span></code></p></td>
+<td><p>Examine/deposit words</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-l</span></code></p></td>
+<td><p>Examine/deposit longwords</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code></p></td>
+<td><p>Data radix is decimal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-o</span></code></p></td>
+<td><p>Data radix is octal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-h</span></code></p></td>
+<td><p>Data radix is hexadecimal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Examine (only) VAX instructions</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Examine/deposit PDP-11 (compatibility mode) instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Examine (only) RADIX50 encoded data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<td><p>Interpret address as virtual, current mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-k</span></code></p></td>
+<td><p>Interpret address as virtual, kernel mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-e</span></code></p></td>
+<td><p>Interpret address as virtual, executive mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>Interpret address as virtual, supervisor mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-u</span></code></p></td>
+<td><p>Interpret address as virtual, user mode</p></td>
+</tr>
+</tbody>
+</table>
 <p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
 <table class="docutils align-default">
 <thead>
@@ -2897,7 +2901,7 @@ e.g., from ULTRIX or DSM.</p>
 </section>
 <section id="related-devices">
 <h5><span class="sectnum">1.2.6.4.7. </span>Related devices<a class="headerlink" href="#related-devices" title="Permalink to this heading">¶</a></h5>
-<p>The DMC can facilitate communication with other simh simulators which have emulated synchronous network devices available.
+<p>The DMC can facilitate communication with other SIMH simulators which have emulated synchronous network devices available.
 These include the following:</p>
 <table class="docutils align-default">
 <tbody>
@@ -2924,6 +2928,7 @@ These include the following:</p>
 </tr>
 </tbody>
 </table>
+<aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id4" role="note">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
 <span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>)</span>
@@ -2934,6 +2939,7 @@ the emulated device makes a TCP/IP connection to another emulated device and sen
 each message representing a single buffer passed to the DMC11.
 The DMC11 can be used for point-to-point DDCMP connections carrying DECnet and other types of networking,
 e.g., from ULTRIX or DSM.</p>
+</aside>
 </aside>
 </section>
 <section id="cr11-card-reader-cr">
@@ -3107,20 +3113,22 @@ Instead the controller signals a reader check to the CPU.</p>
 <h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
 <p>The VAX simulator implements symbolic display and input.
 Display is controlled by command-line switches:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-a</span>, <span class="option">-c</span></kbd></dt>
-<dd><p>Display as ASCII data</p>
-</dd>
-<dt><kbd><span class="option">-m</span></kbd></dt>
-<dd><p>Display instruction mnemonics</p>
-</dd>
-<dt><kbd><span class="option">-p</span></kbd></dt>
-<dd><p>Display compatibility mode mnemonics</p>
-</dd>
-<dt><kbd><span class="option">-r</span></kbd></dt>
-<dd><p>Display RADIX50 encoding</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code>, <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as ASCII data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Display compatibility mode mnemonics</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Display RADIX50 encoding</p></td>
+</tr>
+</tbody>
+</table>
 <p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
 <table class="docutils align-default">
 <tbody>
@@ -3287,9 +3295,19 @@ the simulator chooses the mode automatically.</p>
 <li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
 </ul>
 
 <div class="relations">
@@ -3327,7 +3345,7 @@ the simulator chooses the mode automatically.</p>
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

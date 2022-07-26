@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>SIMH Users’ Guide, V4.0 &#8212; Python  documentation</title>
     <link rel="stylesheet" type="text/css" href="static/pygments.css" />
@@ -73,113 +73,113 @@ in this Software without prior written authorization from the Authors.</p>
 </aside>
 <nav class="contents local" id="contents">
 <ul class="simple">
-<li><p><a class="reference internal" href="#introduction" id="id8">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#running-a-simulator" id="id9">1. Running a simulator</a></p></li>
-<li><p><a class="reference internal" href="#compiling-a-simulator" id="id10">2. Compiling a simulator</a></p>
+<li><p><a class="reference internal" href="#introduction" id="id7">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#running-a-simulator" id="id8">1. Running a simulator</a></p></li>
+<li><p><a class="reference internal" href="#compiling-a-simulator" id="id9">2. Compiling a simulator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#compiling-under-unix-linux-macos" id="id11">2.1 Compiling under Unix/Linux/macOS</a></p></li>
-<li><p><a class="reference internal" href="#compiling-under-windows" id="id12">2.2 Compiling under Windows</a></p>
+<li><p><a class="reference internal" href="#compiling-under-unix-linux-macos" id="id10">2.1 Compiling under Unix/Linux/macOS</a></p></li>
+<li><p><a class="reference internal" href="#compiling-under-windows" id="id11">2.2 Compiling under Windows</a></p>
 <ul>
-<li><p><a class="reference internal" href="#compiling-with-ethernet-support" id="id13">2.2.1 Compiling with Ethernet support</a></p></li>
-<li><p><a class="reference internal" href="#compiling-under-visual-c" id="id14">2.2.2 Compiling under Visual C++</a></p></li>
-<li><p><a class="reference internal" href="#compiling-under-mingw" id="id15">2.2.3 Compiling under MinGW</a></p></li>
+<li><p><a class="reference internal" href="#compiling-with-ethernet-support" id="id12">2.2.1 Compiling with Ethernet support</a></p></li>
+<li><p><a class="reference internal" href="#compiling-under-visual-c" id="id13">2.2.2 Compiling under Visual C++</a></p></li>
+<li><p><a class="reference internal" href="#compiling-under-mingw" id="id14">2.2.3 Compiling under MinGW</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#compiling-under-openvms" id="id16">2.3 Compiling under OpenVMS</a></p></li>
+<li><p><a class="reference internal" href="#compiling-under-openvms" id="id15">2.3 Compiling under OpenVMS</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#simulator-conventions" id="id17">3. Simulator Conventions</a></p></li>
-<li><p><a class="reference internal" href="#commands" id="id18">4. Commands</a></p>
+<li><p><a class="reference internal" href="#simulator-conventions" id="id16">3. Simulator conventions</a></p></li>
+<li><p><a class="reference internal" href="#commands" id="id17">4. Commands</a></p>
 <ul>
-<li><p><a class="reference internal" href="#loading-and-saving-programs" id="id19">4.1 Loading and saving programs</a></p></li>
-<li><p><a class="reference internal" href="#saving-and-restoring-state" id="id20">4.2 Saving and restoring state</a></p></li>
-<li><p><a class="reference internal" href="#resetting-devices" id="id21">4.3 Resetting devices</a></p></li>
-<li><p><a class="reference internal" href="#connecting-and-disconnecting-devices" id="id22">4.4 Connecting and disconnecting devices</a></p></li>
-<li><p><a class="reference internal" href="#examining-and-changing-state" id="id23">4.5 Examining and changing state</a></p></li>
-<li><p><a class="reference internal" href="#evaluating-instructions" id="id24">4.6 Evaluating instructions</a></p></li>
-<li><p><a class="reference internal" href="#running-a-simulated-program" id="id25">4.7 Running a simulated program</a></p>
+<li><p><a class="reference internal" href="#loading-and-saving-programs" id="id18">4.1 Loading and saving programs</a></p></li>
+<li><p><a class="reference internal" href="#saving-and-restoring-state" id="id19">4.2 Saving and restoring state</a></p></li>
+<li><p><a class="reference internal" href="#resetting-devices" id="id20">4.3 Resetting devices</a></p></li>
+<li><p><a class="reference internal" href="#connecting-and-disconnecting-devices" id="id21">4.4 Connecting and disconnecting devices</a></p></li>
+<li><p><a class="reference internal" href="#examining-and-changing-state" id="id22">4.5 Examining and changing state</a></p></li>
+<li><p><a class="reference internal" href="#evaluating-instructions" id="id23">4.6 Evaluating instructions</a></p></li>
+<li><p><a class="reference internal" href="#running-a-simulated-program" id="id24">4.7 Running a simulated program</a></p>
 <ul>
-<li><p><a class="reference internal" href="#controlling-the-simulation-rate" id="id26">4.7.1 Controlling the simulation rate</a></p></li>
+<li><p><a class="reference internal" href="#controlling-the-simulation-rate" id="id25">4.7.1 Controlling the simulation rate</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#stopping-the-simulator" id="id27">4.8 Stopping the simulator</a></p>
+<li><p><a class="reference internal" href="#stopping-the-simulator" id="id26">4.8 Stopping the simulator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#simulator-detected-stop-conditions" id="id28">4.8.1 Simulator detected stop conditions</a></p></li>
-<li><p><a class="reference internal" href="#user-specified-stop-conditions" id="id29">4.8.2 User-specified stop conditions</a></p></li>
-<li><p><a class="reference internal" href="#breakpoints" id="id30">4.8.3 Breakpoints</a></p></li>
-<li><p><a class="reference internal" href="#execution-time-limits" id="id31">4.8.4 Execution time limits</a></p></li>
+<li><p><a class="reference internal" href="#simulator-detected-stop-conditions" id="id27">4.8.1 Simulator detected stop conditions</a></p></li>
+<li><p><a class="reference internal" href="#user-specified-stop-conditions" id="id28">4.8.2 User-specified stop conditions</a></p></li>
+<li><p><a class="reference internal" href="#breakpoints" id="id29">4.8.3 Breakpoints</a></p></li>
+<li><p><a class="reference internal" href="#execution-time-limits" id="id30">4.8.4 Execution time limits</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#halt-on-output-data" id="id32">4.9 Halt on output data</a></p>
+<li><p><a class="reference internal" href="#halt-on-output-data" id="id31">4.9 Halt on output data</a></p>
 <ul>
-<li><p><a class="reference internal" href="#switches" id="id33">4.9.1 Switches</a></p></li>
-<li><p><a class="reference internal" href="#determining-which-output-matched" id="id34">4.9.2 Determining which output matched</a></p></li>
+<li><p><a class="reference internal" href="#switches" id="id32">4.9.1 Switches</a></p></li>
+<li><p><a class="reference internal" href="#determining-which-output-matched" id="id33">4.9.2 Determining which output matched</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#injecting-input-data" id="id35">4.10 Injecting input data</a></p>
+<li><p><a class="reference internal" href="#injecting-input-data" id="id34">4.10 Injecting input data</a></p>
 <ul>
-<li><p><a class="reference internal" href="#delay" id="id36">4.10.1 Delay</a></p></li>
-<li><p><a class="reference internal" href="#after" id="id37">4.10.2 After</a></p></li>
-<li><p><a class="reference internal" href="#id3" id="id38">4.10.3 Escaping string data</a></p></li>
+<li><p><a class="reference internal" href="#delay" id="id35">4.10.1 Delay</a></p></li>
+<li><p><a class="reference internal" href="#after" id="id36">4.10.2 After</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id37">4.10.3 Escaping string data</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#setting-device-parameters" id="id39">4.11 Setting device parameters</a></p></li>
-<li><p><a class="reference internal" href="#displaying-parameters-and-status" id="id40">4.12 Displaying parameters and status</a></p></li>
-<li><p><a class="reference internal" href="#altering-the-simulated-configuration" id="id41">4.13 Altering the simulated configuration</a></p></li>
-<li><p><a class="reference internal" href="#console-options" id="id42">4.14 Console options</a></p></li>
-<li><p><a class="reference internal" href="#remote-console" id="id43">4.15 Remote console</a></p>
+<li><p><a class="reference internal" href="#setting-device-parameters" id="id38">4.11 Setting device parameters</a></p></li>
+<li><p><a class="reference internal" href="#displaying-parameters-and-status" id="id39">4.12 Displaying parameters and status</a></p></li>
+<li><p><a class="reference internal" href="#altering-the-simulated-configuration" id="id40">4.13 Altering the simulated configuration</a></p></li>
+<li><p><a class="reference internal" href="#console-options" id="id41">4.14 Console options</a></p></li>
+<li><p><a class="reference internal" href="#remote-console" id="id42">4.15 Remote console</a></p>
 <ul>
-<li><p><a class="reference internal" href="#master-mode" id="id44">4.15.1 Master mode</a></p></li>
+<li><p><a class="reference internal" href="#master-mode" id="id43">4.15.1 Master mode</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#executing-command-files" id="id45">4.16 Executing command files</a></p>
+<li><p><a class="reference internal" href="#executing-command-files" id="id44">4.16 Executing command files</a></p>
 <ul>
-<li><p><a class="reference internal" href="#default-command-file-executed-on-simulator-startup" id="id46">4.16.1 Default command file executed on simulator startup</a></p></li>
-<li><p><a class="reference internal" href="#change-command-execution-flow" id="id47">4.16.2 Change command execution flow</a></p></li>
-<li><p><a class="reference internal" href="#subroutine-calls" id="id48">4.16.3 Subroutine calls</a></p></li>
-<li><p><a class="reference internal" href="#pausing-command-execution" id="id49">4.16.4 Pausing command execution</a></p></li>
-<li><p><a class="reference internal" href="#displaying-arbitrary-text" id="id50">4.16.5 Displaying arbitrary text</a></p></li>
-<li><p><a class="reference internal" href="#testing-simulator-state" id="id51">4.16.6 Testing simulator state</a></p></li>
-<li><p><a class="reference internal" href="#trapping-on-command-completion-conditions" id="id52">4.16.7 Trapping on command completion conditions</a></p></li>
-<li><p><a class="reference internal" href="#command-arguments" id="id53">4.16.8 Command arguments</a></p></li>
-<li><p><a class="reference internal" href="#command-aliases" id="id54">4.16.9 Command aliases</a></p></li>
+<li><p><a class="reference internal" href="#default-command-file-executed-on-simulator-startup" id="id45">4.16.1 Default command file executed on simulator startup</a></p></li>
+<li><p><a class="reference internal" href="#change-command-execution-flow" id="id46">4.16.2 Change command execution flow</a></p></li>
+<li><p><a class="reference internal" href="#subroutine-calls" id="id47">4.16.3 Subroutine calls</a></p></li>
+<li><p><a class="reference internal" href="#pausing-command-execution" id="id48">4.16.4 Pausing command execution</a></p></li>
+<li><p><a class="reference internal" href="#displaying-arbitrary-text" id="id49">4.16.5 Displaying arbitrary text</a></p></li>
+<li><p><a class="reference internal" href="#testing-simulator-state" id="id50">4.16.6 Testing simulator state</a></p></li>
+<li><p><a class="reference internal" href="#trapping-on-command-completion-conditions" id="id51">4.16.7 Trapping on command completion conditions</a></p></li>
+<li><p><a class="reference internal" href="#command-arguments" id="id52">4.16.8 Command arguments</a></p></li>
+<li><p><a class="reference internal" href="#command-aliases" id="id53">4.16.9 Command aliases</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#executing-system-commands" id="id55">4.17 Executing system commands</a></p></li>
-<li><p><a class="reference internal" href="#getting-help" id="id56">4.18 Getting help</a></p></li>
-<li><p><a class="reference internal" href="#recording-simulator-activities" id="id57">4.19 Recording simulator activities</a></p>
+<li><p><a class="reference internal" href="#executing-system-commands" id="id54">4.17 Executing system commands</a></p></li>
+<li><p><a class="reference internal" href="#getting-help" id="id55">4.18 Getting help</a></p></li>
+<li><p><a class="reference internal" href="#recording-simulator-activities" id="id56">4.19 Recording simulator activities</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id6" id="id58">4.19.1 Switches</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id57">4.19.1 Switches</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#controlling-debugging" id="id59">4.20 Controlling debugging</a></p>
+<li><p><a class="reference internal" href="#controlling-debugging" id="id58">4.20 Controlling debugging</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id7" id="id60">4.20.1 Switches</a></p></li>
-<li><p><a class="reference internal" href="#device-debug-options" id="id61">4.20.2 Device debug options</a></p></li>
-<li><p><a class="reference internal" href="#displaying-debug-settings" id="id62">4.20.3 Displaying debug settings</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id59">4.20.1 Switches</a></p></li>
+<li><p><a class="reference internal" href="#device-debug-options" id="id60">4.20.2 Device debug options</a></p></li>
+<li><p><a class="reference internal" href="#displaying-debug-settings" id="id61">4.20.3 Displaying debug settings</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#exiting-the-simulator" id="id63">4.21 Exiting the simulator</a></p></li>
-<li><p><a class="reference internal" href="#manipulating-files-within-the-simulator" id="id64">4.22 Manipulating files within the simulator</a></p>
+<li><p><a class="reference internal" href="#exiting-the-simulator" id="id62">4.21 Exiting the simulator</a></p></li>
+<li><p><a class="reference internal" href="#manipulating-files-within-the-simulator" id="id63">4.22 Manipulating files within the simulator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#manipulating-file-archives" id="id65">4.22.1 Manipulating file archives</a></p></li>
-<li><p><a class="reference internal" href="#transferring-data-from-the-web" id="id66">4.22.2 Transferring data from the web</a></p></li>
+<li><p><a class="reference internal" href="#manipulating-file-archives" id="id64">4.22.1 Manipulating file archives</a></p></li>
+<li><p><a class="reference internal" href="#transferring-data-from-the-web" id="id65">4.22.2 Transferring data from the web</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#appendix-1-file-representations" id="id67">Appendix 1: File Representations</a></p>
+<li><p><a class="reference internal" href="#appendix-1-file-representations" id="id66">Appendix 1: File Representations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#a-1-hard-disks" id="id68">A.1 Hard disks</a></p></li>
-<li><p><a class="reference internal" href="#a-2-floppy-disks" id="id69">A.2 Floppy disks</a></p></li>
-<li><p><a class="reference internal" href="#a-3-magnetic-tapes" id="id70">A.3 Magnetic tapes</a></p></li>
-<li><p><a class="reference internal" href="#a-4-line-printers" id="id71">A.4 Line printers</a></p></li>
-<li><p><a class="reference internal" href="#a-5-dectapes" id="id72">A.5 DECtapes</a></p></li>
+<li><p><a class="reference internal" href="#a-1-hard-disks" id="id67">A.1 Hard disks</a></p></li>
+<li><p><a class="reference internal" href="#a-2-floppy-disks" id="id68">A.2 Floppy disks</a></p></li>
+<li><p><a class="reference internal" href="#a-3-magnetic-tapes" id="id69">A.3 Magnetic tapes</a></p></li>
+<li><p><a class="reference internal" href="#a-4-line-printers" id="id70">A.4 Line printers</a></p></li>
+<li><p><a class="reference internal" href="#a-5-dectapes" id="id71">A.5 DECtapes</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#appendix-2-debug-status" id="id73">Appendix 2: Debug status</a></p></li>
-<li><p><a class="reference internal" href="#revision-history-covering-rev-2-0-to-rev-3-5" id="id74">Revision history (covering Rev 2.0 to Rev 3.5)</a></p></li>
-<li><p><a class="reference internal" href="#acknowledgements" id="id75">Acknowledgements</a></p></li>
+<li><p><a class="reference internal" href="#appendix-2-debug-status" id="id72">Appendix 2: Debug status</a></p></li>
+<li><p><a class="reference internal" href="#revision-history-covering-rev-2-0-to-rev-3-5" id="id73">Revision history (covering Rev 2.0 to Rev 3.5)</a></p></li>
+<li><p><a class="reference internal" href="#acknowledgements" id="id74">Acknowledgements</a></p></li>
 </ul>
 </nav>
 <section id="introduction">
@@ -287,7 +287,7 @@ There may be some compilation warnings.</p></li>
 <p>The sources originate on a Windows system and have CRLF line endings.
 For use on other systems, the sources may need to be converted to LF line endings.
 This can be done with the <code class="docutils literal notranslate"><span class="pre">unzip</span></code> utility (<code class="docutils literal notranslate"><span class="pre">unzip</span> <span class="pre">-a</span></code>).</p>
-<p>The supplied makefile will compile the simulators for UNIX and Unix-like systems.
+<p>The supplied makefile will compile the simulators for Unix and Unix-like systems.
 The VAX and PDP-11 can be compiled with or without Ethernet support.
 The makefile will automatically build these simulators with Ethernet support if the necessary network components are available on the system which is doing the building.
 The recommended libpcap components are those packaged and provided by the host operating system vendor.
@@ -414,7 +414,7 @@ An example of hand compilation:</p>
 </section>
 </section>
 <section id="simulator-conventions">
-<h2>3. Simulator Conventions<a class="headerlink" href="#simulator-conventions" title="Permalink to this heading">¶</a></h2>
+<h2>3. Simulator conventions<a class="headerlink" href="#simulator-conventions" title="Permalink to this heading">¶</a></h2>
 <p>A simulator consists of a series of devices, the first of which is always the CPU.
 A device consists of named registers and one or more numbered units.
 Registers correspond to device state, units to device address spaces.
@@ -468,21 +468,23 @@ This includes the contents of main memory and all registers, and the I/O connect
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">restore</span> <span class="p">{</span><span class="o">-</span><span class="n">d</span><span class="p">}</span> <span class="p">{</span><span class="o">-</span><span class="n">f</span><span class="p">}</span> <span class="p">{</span><span class="o">-</span><span class="n">q</span><span class="p">}</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<dl class="option-list">
-<dt><kbd><span class="option">-d</span></kbd></dt>
-<dd><p>Avoid detaching and reattaching devices during a restore</p>
-</dd>
-<dt><kbd><span class="option">-f</span></kbd></dt>
-<dd><p>Override the date timestamp check for attached files during a restore</p>
-</dd>
-<dt><kbd><span class="option">-q</span></kbd></dt>
-<dd><p>Suppress warning messages about save file version information</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code></p></td>
+<td><p>Avoid detaching and reattaching devices during a restore</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>Override the date timestamp check for attached files during a restore</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-q</span></code></p></td>
+<td><p>Suppress warning messages about save file version information</p></td>
+</tr>
+</tbody>
+</table>
 <p>Notes:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">SAVE</span></code> file format compresses zeroes to minimize file size.</p></li>
-<li><p>The simulator can’t restore active incoming telnet sessions to multiplexer devices,
+<li><p>The simulator can’t restore active incoming Telnet sessions to multiplexer devices,
 but the listening ports will be restored across a save/restore.</p></li>
 </ol>
 </section>
@@ -657,32 +659,36 @@ rather than of the device/unit.</p>
 </tbody>
 </table>
 <p>Switches can be used to control the format of display information:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-o</span></kbd></dt>
-<dd><p>Display as octal       (alias: <code class="docutils literal notranslate"><span class="pre">-8</span></code>)</p>
-</dd>
-<dt><kbd><span class="option">-d</span></kbd></dt>
-<dd><p>Display as decimal     (alias: <code class="docutils literal notranslate"><span class="pre">-10</span></code>)</p>
-</dd>
-<dt><kbd><span class="option">-h</span></kbd></dt>
-<dd><p>Display as hexadecimal (alias: <code class="docutils literal notranslate"><span class="pre">-16</span></code>)</p>
-</dd>
-<dt><kbd><span class="option">-2</span></kbd></dt>
-<dd><p>Display as binary</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-o</span></code> or <code class="docutils literal notranslate"><span class="pre">-8</span></code></p></td>
+<td><p>Display as octal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code> or <code class="docutils literal notranslate"><span class="pre">-10</span></code></p></td>
+<td><p>Display as decimal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-h</span></code> or <code class="docutils literal notranslate"><span class="pre">-16</span></code></p></td>
+<td><p>Display as hexadecimal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-2</span></code></p></td>
+<td><p>Display as binary</p></td>
+</tr>
+</tbody>
+</table>
 <p>Simulators typically provide these additional switches for address locations:</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-a</span></kbd></dt>
-<dd><p>Display as ASCII</p>
-</dd>
-<dt><kbd><span class="option">-c</span></kbd></dt>
-<dd><p>Display as character string</p>
-</dd>
-<dt><kbd><span class="option">-m</span></kbd></dt>
-<dd><p>Display as instruction mnemonic</p>
-</dd>
-</dl>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display as ASCII</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as character string</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display as instruction mnemonic</p></td>
+</tr>
+</tbody>
+</table>
 <p>… and accept symbolic input (see documentation with each simulator).</p>
 <p>Examples:</p>
 <table class="docutils align-default">
@@ -926,30 +932,38 @@ that action command should be enclosed in quotes so that the entire action comma
 <section id="switches">
 <h4>4.9.1 Switches<a class="headerlink" href="#switches" title="Permalink to this heading">¶</a></h4>
 <p>Switches can be used to influence the behavior of <a class="reference internal" href="#expect"><code class="docutils literal notranslate"><span class="pre">EXPECT</span></code></a> rules.</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-p</span></kbd></dt>
-<dd><p>Expect rules default to be one shot activities.
-That is, a rule is automatically removed when a match occurs unless the rule is designated as a persistent rule by using a <code class="docutils literal notranslate"><span class="pre">-p</span></code> switch when the rule is defined.</p>
-</dd>
-<dt><kbd><span class="option">-c</span></kbd></dt>
-<dd><p>If an expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch,
-it will cause all pending expect rules on the current device to be cleared when the rule matches data in the device output stream.</p>
-</dd>
-<dt><kbd><span class="option">-r</span></kbd></dt>
-<dd><p>If an expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-r</span></code> switch,
-the string is interpreted as a regular expression applied to the output data stream.
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Expect rules default to be one shot activities.
+That is, a rule is automatically removed when a match occurs unless the rule is
+designated as a persistent rule by using a <code class="docutils literal notranslate"><span class="pre">-p</span></code> switch when the rule is defined.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>If an expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-c</span></code> switch,
+it will cause all pending expect rules on the current device to be cleared when the
+rule matches data in the device output stream.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>If an expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-r</span></code> switch, the string is interpreted as a
+regular expression applied to the output data stream.
 This regular expression may contain parentheses delimited sub-groups.</p>
-<p>The syntax of the regular expressions available are those supported by the Perl Compatible Regular Expression package (a.k.a, PCRE).
-As the name implies, the syntax is generally the same as <a class="reference external" href="https://perldoc.perl.org/perlre">Perl regular expressions</a>.</p>
+<p>The syntax of the regular expressions available are those supported by the
+Perl Compatible Regular Expression package (a.k.a, PCRE).
+As the name implies, the syntax is generally the same as
+<a class="reference external" href="https://perldoc.perl.org/perlre">Perl regular expressions</a>.</p>
 <p>If the PCRE package isn’t available in the environment when a simulator is built,
-the local system’s regular expression package (if available) is used and the regular expression syntax is limited to what may be provided there.</p>
-</dd>
-<dt><kbd><span class="option">-i</span></kbd></dt>
-<dd><p>If a regular expression expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-i</span></code> switch,
+the local system’s regular expression package (if available) is used and the regular
+expression syntax is limited to what may be provided there.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-i</span></code></p></td>
+<td><p>If a regular expression expect rule is defined with the <code class="docutils literal notranslate"><span class="pre">-i</span></code> switch,
 character matching for that expression will be case independent.
-The <code class="docutils literal notranslate"><span class="pre">-i</span></code> switch is only valid for regular expression expect rules (<code class="docutils literal notranslate"><span class="pre">-r</span></code>).</p>
-</dd>
-</dl>
+The <code class="docutils literal notranslate"><span class="pre">-i</span></code> switch is only valid for regular expression expect rules (<code class="docutils literal notranslate"><span class="pre">-r</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
 <section id="escaping-string-data">
 <h5>4.9.1.1 Escaping string data<a class="headerlink" href="#escaping-string-data" title="Permalink to this heading">¶</a></h5>
 <p>The following character escapes are explicitly supported when expect rules are defined NOT using regular expression match patterns:</p>
@@ -1053,8 +1067,8 @@ The <em>after</em> parameter value can be set by itself with:</p>
 <p>If the <em>after</em> parameter isn’t explicitly set,
 it defaults to the value of the <em>delay</em> parameter.</p>
 </section>
-<section id="id3">
-<span id="id4"></span><h4>4.10.3 Escaping string data<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h4>
+<section id="id2">
+<span id="id3"></span><h4>4.10.3 Escaping string data<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
 <p>The following character escapes are explicitly supported:</p>
 <table class="docutils align-default">
 <tbody>
@@ -1179,7 +1193,7 @@ typically, one time unit represents one instruction execution.</p>
 <p>In most simulators, the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;device&gt;</span> <span class="pre">DISABLED</span></code> command removes the specified device from the configuration.
 A <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code> device is invisible to running programs.
 The device can still be <a class="reference internal" href="#reset"><code class="docutils literal notranslate"><span class="pre">RESET</span></code></a>, but it cannot be
-<a class="reference internal" href="#attach"><code class="docutils literal notranslate"><span class="pre">ATTACH</span></code></a> ed, <a class="reference internal" href="#detach"><code class="docutils literal notranslate"><span class="pre">DETACH</span></code></a> ed, or <a class="reference internal" href="#boot"><code class="docutils literal notranslate"><span class="pre">BOOT</span></code></a> ed.
+<a class="reference internal" href="#attach"><code class="docutils literal notranslate"><span class="pre">ATTACH</span></code></a>ed, <a class="reference internal" href="#detach"><code class="docutils literal notranslate"><span class="pre">DETACH</span></code></a>ed, or <a class="reference internal" href="#boot"><code class="docutils literal notranslate"><span class="pre">BOOT</span></code></a>ed.
 <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">&lt;device&gt;</span> <span class="pre">ENABLED</span></code> restores a disabled device to a configuration.</p>
 <p>Most multi-unit devices allow units to be enabled or disabled:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="o">&lt;</span><span class="n">unit</span><span class="o">&gt;</span> <span class="n">ENABLED</span>
@@ -1476,8 +1490,8 @@ This may be used to provide spacing in the console display or log.</p>
 <p>If there is no argument, <code class="docutils literal notranslate"><span class="pre">ECHOF</span></code> prints a blank line.
 The <code class="docutils literal notranslate"><span class="pre">-n</span></code> switch suppresses the output of a newline character.
 If the string to be output is surrounded by quotes,
-the string within the quotes is interpreted as described in <a class="reference internal" href="#id3">4.10.3</a> prior to being output (without the surrounding quotes).</p>
-<p>A command alias can be used to replace the <code class="docutils literal notranslate"><span class="pre">ECHO</span></code> command with the <code class="docutils literal notranslate"><span class="pre">ECHOF</span></code> command as described in <a class="reference internal" href="#id5">4.16.9</a>.</p>
+the string within the quotes is interpreted as described in <a class="reference internal" href="#id2">4.10.3</a> prior to being output (without the surrounding quotes).</p>
+<p>A command alias can be used to replace the <code class="docutils literal notranslate"><span class="pre">ECHO</span></code> command with the <code class="docutils literal notranslate"><span class="pre">ECHOF</span></code> command as described in <a class="reference internal" href="#id4">4.16.9</a>.</p>
 </section>
 </section>
 <section id="testing-simulator-state">
@@ -1507,7 +1521,7 @@ An optional <code class="docutils literal notranslate"><span class="pre">ELSE</s
 <p>If <code class="docutils literal notranslate"><span class="pre">&lt;dev&gt;</span></code> is not specified, CPU is assumed.
 <code class="docutils literal notranslate"><span class="pre">&lt;reg&gt;</span></code> is a register (scalar or subscripted) belonging to the indicated device.
 The <code class="docutils literal notranslate"><span class="pre">&lt;conditional-op&gt;</span></code> and optional <code class="docutils literal notranslate"><span class="pre">&lt;logical-op&gt;</span></code> are the same as those used for “search specifiers” by the <a class="reference internal" href="#examine"><code class="docutils literal notranslate"><span class="pre">EXAMINE</span></code></a> and <a class="reference internal" href="#deposit"><code class="docutils literal notranslate"><span class="pre">DEPOSIT</span></code></a> commands (see above).
-The <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> s are expressed in the radix specified for <code class="docutils literal notranslate"><span class="pre">&lt;reg&gt;</span></code>, not in the radix for the device.</p>
+The <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>s are expressed in the radix specified for <code class="docutils literal notranslate"><span class="pre">&lt;reg&gt;</span></code>, not in the radix for the device.</p>
 <p>If the <code class="docutils literal notranslate"><span class="pre">&lt;logical-op&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> are specified, the target register value is first altered as indicated.
 The result is then compared to the <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code> via the <code class="docutils literal notranslate"><span class="pre">&lt;conditional-op&gt;</span></code>.
 If the <code class="docutils literal notranslate"><span class="pre">NOT</span></code> unary operator precedes the expression, the results value is inverted.</p>
@@ -2056,7 +2070,7 @@ For example:</p>
 </section>
 </section>
 <section id="command-aliases">
-<span id="id5"></span><h4>4.16.9 Command aliases<a class="headerlink" href="#command-aliases" title="Permalink to this heading">¶</a></h4>
+<span id="id4"></span><h4>4.16.9 Command aliases<a class="headerlink" href="#command-aliases" title="Permalink to this heading">¶</a></h4>
 <p>Commands can be aliases with environment variables.
 For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sim</span><span class="o">&gt;</span> <span class="nb">set</span> <span class="n">env</span> <span class="n">echo</span><span class="o">=</span><span class="n">echof</span>
@@ -2101,8 +2115,8 @@ The output produced by a console Telnet session can also be written to the simul
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CONSOLE</span> <span class="n">TELNET</span><span class="o">=</span><span class="n">LOG</span><span class="o">=</span><span class="n">LOG</span>  <span class="n">Direct</span> <span class="n">log</span> <span class="n">output</span> <span class="n">to</span> <span class="n">log</span> <span class="n">file</span>
 </pre></div>
 </div>
-<section id="id6">
-<h4>4.19.1 Switches<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
+<section id="id5">
+<h4>4.19.1 Switches<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
 <p>By default, log output is written at the end of the specified log file.
 A new log file can be created if the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch is used on the command-line.</p>
 </section>
@@ -2118,40 +2132,42 @@ Debug output may be sent to a variety of places, or disabled entirely:</p>
 <span class="n">SET</span> <span class="n">NODEBUG</span>                 <span class="n">Disable</span> <span class="n">debug</span> <span class="n">output</span>
 </pre></div>
 </div>
-<section id="id7">
-<h4>4.20.1 Switches<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h4>
+<section id="id6">
+<h4>4.20.1 Switches<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
 <p>Debug message output contains a timestamp which indicates the number of simulated instructions which have been executed prior to the debug event.</p>
 <p>Debug message output can be enhanced to contain additional, potentially useful information.</p>
-<dl class="option-list">
-<dt><kbd><span class="option">-f</span></kbd></dt>
-<dd><p>Suppress the internal logic which coalesces successive identical debug output lines
-into one followed by an indicator of how many times the same line was output. This
-mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.</p>
-</dd>
-<dt><kbd><span class="option">-t</span></kbd></dt>
-<dd><p>Cause debug output to contain a time-of-day displayed as <code class="docutils literal notranslate"><span class="pre">hh:mm:ss.msec</span></code>.</p>
-</dd>
-<dt><kbd><span class="option">-a</span></kbd></dt>
-<dd><p>Cause debug output to contain a time of day displayed as <code class="docutils literal notranslate"><span class="pre">seconds.msec</span></code>.</p>
-</dd>
-<dt><kbd><span class="option">-r</span></kbd></dt>
-<dd><p>Cause the time-of-day displayed due to the <code class="docutils literal notranslate"><span class="pre">-t</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code> switches to be relative
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>Suppress the internal logic which coalesces successive identical debug output lines
+into one followed by an indicator of how many times the same line was output.
+This mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-t</span></code></p></td>
+<td><p>Cause debug output to contain a time-of-day displayed as <code class="docutils literal notranslate"><span class="pre">hh:mm:ss.msec</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Cause debug output to contain a time of day displayed as <code class="docutils literal notranslate"><span class="pre">seconds.msec</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-r</span></code></p></td>
+<td><p>Cause the time-of-day displayed due to the <code class="docutils literal notranslate"><span class="pre">-t</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code> switches to be relative
 to the start time of debugging. If neither <code class="docutils literal notranslate"><span class="pre">-t</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code> is explicitly specified,
-<code class="docutils literal notranslate"><span class="pre">-t</span></code> is implied.</p>
-</dd>
-<dt><kbd><span class="option">-p</span></kbd></dt>
-<dd><p>Add the output of the PC (Program Counter) to each debug message.</p>
-</dd>
-<dt><kbd><span class="option">-n</span></kbd></dt>
-<dd><p>Cause a new/empty file to be written to. The default is to append to an existing debug log file.</p>
-</dd>
-<dt><kbd><span class="option">-d</span></kbd></dt>
-<dd><p>Cause data blob output to also display the data as RADIX-50 characters.</p>
-</dd>
-<dt><kbd><span class="option">-e</span></kbd></dt>
-<dd><p>Cause data blob output to also display the data as EBCDIC characters.</p>
-</dd>
-</dl>
+<code class="docutils literal notranslate"><span class="pre">-t</span></code> is implied.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Add the output of the PC (Program Counter) to each debug message.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+<td><p>Cause a new/empty file to be written to. The default is to append to an existing debug log file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code></p></td>
+<td><p>Cause data blob output to also display the data as RADIX-50 characters.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-e</span></code></p></td>
+<td><p>Cause data blob output to also display the data as EBCDIC characters.</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="device-debug-options">
 <h4>4.20.2 Device debug options<a class="headerlink" href="#device-debug-options" title="Permalink to this heading">¶</a></h4>
@@ -2928,7 +2944,7 @@ Real DECtapes that are read forward will generate data in normal form for blocks
 <li><p>Fixed bug in PDP-11 DIV overflow check</p></li>
 <li><p>Fixed bugs in PDP-11 magnetic tape bootstrap</p></li>
 <li><p>Fixed bug in PDP-11 magnetic tape unit select</p></li>
-<li><p>Replaced UNIX V7 disk images</p></li>
+<li><p>Replaced Unix V7 disk images</p></li>
 </ul>
 </dd>
 <dt>Rev 2.3b, May, 98</dt><dd><ul class="simple">
@@ -2954,7 +2970,7 @@ Real DECtapes that are read forward will generate data in normal form for blocks
 <dt>Rev 2.3, Mar, 97</dt><dd><ul class="simple">
 <li><p>Added PDP-11 RP</p></li>
 <li><p>Added PDP-1</p></li>
-<li><p>Changed UNIX terminal I/O to TERMIOS</p></li>
+<li><p>Changed Unix terminal I/O to TERMIOS</p></li>
 <li><p>Changed magnetic tape format to double ended</p></li>
 <li><p>Changed PDP-8 current page mnemonic from T to C</p></li>
 <li><p>Added endian independent I/O routines</p></li>
@@ -3150,7 +3166,7 @@ all of whom donated their time and talent to this “computer archaeology” pro
 <td><p>HP 2100 debugging, 12565A simulator</p></td>
 </tr>
 <tr class="row-odd"><td><p>Scott McGregor</p></td>
-<td><p>PDP-11 UNIX legal permissions</p></td>
+<td><p>PDP-11 Unix legal permissions</p></td>
 </tr>
 <tr class="row-even"><td><p>Jeff Moffatt</p></td>
 <td><p>HP 2100 information, documentation, and software</p></td>
@@ -3237,7 +3253,7 @@ all of whom donated their time and talent to this “computer archaeology” pro
 <td><p>VMS character-by-character I/O routines</p></td>
 </tr>
 <tr class="row-even"><td><p>Warren Toomey</p></td>
-<td><p>PDP-11 UNIX software</p></td>
+<td><p>PDP-11 Unix software</p></td>
 </tr>
 <tr class="row-odd"><td><p>Deb Toivonen</p></td>
 <td><p>DEC documentation</p></td>
@@ -3246,7 +3262,7 @@ all of whom donated their time and talent to this “computer archaeology” pro
 <td><p>DEC documentation, H316 documentation and schematics</p></td>
 </tr>
 <tr class="row-odd"><td><p>Leendert van Doorn</p></td>
-<td><p>PDP-11 UNIX V6 debugging, TERMIOS implementation</p></td>
+<td><p>PDP-11 Unix V6 debugging, TERMIOS implementation</p></td>
 </tr>
 <tr class="row-even"><td><p>Fred van Kempen</p></td>
 <td><p>Ethernet code, RK611 emulator, PDP-11 debugging, VAX/Ultrix debugging</p></td>
@@ -3309,9 +3325,19 @@ all of whom donated their time and talent to this “computer archaeology” pro
 <li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
 </ul>
 
 <div class="relations">
@@ -3349,7 +3375,7 @@ all of whom donated their time and talent to this “computer archaeology” pro
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

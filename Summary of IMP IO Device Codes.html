@@ -1,0 +1,1668 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Summary of I/O commands for the Arpanet IMP &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
+    <script src="static/jquery.js"></script>
+    <script src="static/underscore.js"></script>
+    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. SSEM simulator usage" href="ssem_doc.html" />
+    <link rel="prev" title="Simulators: virtual machines of the past and future" href="simulators_acm_queue_2004.html" />
+   
+  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="summary-of-i-o-commands-for-the-arpanet-imp">
+<h1>Summary of I/O commands for the Arpanet IMP<a class="headerlink" href="#summary-of-i-o-commands-for-the-arpanet-imp" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2013-11-19</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this heading">¶</a></h2>
+<p>This document will describe the I/O addresses, commands and interrupts as currently employed in the IMP 3050 listing from 1973-09-16.
+This summary is based on an analysis of the listing and other documents related to the structure of the IMP.</p>
+<p>The IMP is based on the Honeywell DDP516 processor.
+In addition to the usual complement of peripherals, the IMP has been augmented with some specifically designed cards.
+At present, it is believed that the IMP that supports the 3050 IMP listing included at least:</p>
+<ul class="simple">
+<li><p>Honeywell DDP516 (or possibly 316) processor</p></li>
+<li><p>A TTY interface</p></li>
+<li><p>A light panel – a custom device that indicates the status of the attached lines</p></li>
+<li><p>Real Time Clock – A custom device that counts 100 usec clock ticks</p></li>
+<li><p>Certain custom “sense” options related to configuration</p></li>
+<li><p>Possibly a custom hardware interrupt to handle task dispatching</p></li>
+<li><p>DMC – a direct memory controller for transferring words from selected I/O devices to memory</p></li>
+</ul>
+<p>I/O instructions in the DDP516 have the following format:</p>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="_images/figure.1-5.svg"><img alt="Bits 1-6 = op code | Bits 7-10 = function code | Bits 11-16 = device address" src="_images/figure.1-5.svg" width="770" /></a>
+<figcaption>
+<p><span class="caption-text">Figure 1-5. Input/output instruction format</span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>Opcode – Defines the I/O instruction</p></li>
+<li><p>Function code – Selects a line to pulse (one of 16)</p></li>
+<li><p>Device code – Address of the device to control</p></li>
+</ul>
+<p>The opcode may be one of:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Opcode</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>54</p></td>
+<td><p>Input to A-register<a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>14</p></td>
+<td><p>Output control pulse as designated by function code</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>74</p></td>
+<td><p>Output to device<a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>34</p></td>
+<td><p>Skip if ready line set</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMK</span></code></p></td>
+<td><p>74</p></td>
+<td><p>Special Mask - transfer A to interrupt control register</p></td>
+</tr>
+</tbody>
+</table>
+<p>Where the opcode in the table above is shown as two octal digits,
+but in a typical listing the opcode is broken across three octal digits.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Operation of this opcode is complex.
+The readiness of the device is tested before the device is read.
+If the device is not ready the next instruction is executed immediately.
+If the device is ready the data from the device is read into A and the next instruction is skipped.
+This allows the construction of simple ready wait loops.</p>
+</aside>
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Operation with respect to device ready is similar to above.</p>
+</aside>
+</aside>
+</section>
+<section id="device-addresses">
+<h2>Device addresses<a class="headerlink" href="#device-addresses" title="Permalink to this heading">¶</a></h2>
+<p>The following device addresses (octal) have been gleaned from the 3050 listing.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Address</p></th>
+<th class="head"><p>Device</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">04</span></code></p></td>
+<td><p>TTY</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">20</span></code></p></td>
+<td><p>Standard interrupt unit &amp; extension</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">26</span></code></p></td>
+<td><p>Watchdog timer and status light box, proc. type</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">40</span></code></p></td>
+<td><p>Real time 100 usec clock</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">41</span></code></p></td>
+<td><p>Set task interrupt/IMP number</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">42</span></code></p></td>
+<td><p>IMP or TIP indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">50</span></code></p></td>
+<td><p>Host interface 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">51</span></code></p></td>
+<td><p>Host interface 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p></td>
+<td><p>Host interface 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">70</span></code></p></td>
+<td><p>Host interface 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">71</span></code></p></td>
+<td><p>Modem interface 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">72</span></code></p></td>
+<td><p>Modem interface 2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">73</span></code></p></td>
+<td><p>Modem interface 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">74</span></code></p></td>
+<td><p>Modem interface 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">75</span></code></p></td>
+<td><p>Modem interface 5</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="device-descriptions">
+<h2>Device descriptions<a class="headerlink" href="#device-descriptions" title="Permalink to this heading">¶</a></h2>
+<section id="teletype">
+<h3>Teletype<a class="headerlink" href="#teletype" title="Permalink to this heading">¶</a></h3>
+<p>The teletype is device address <code class="docutils literal notranslate"><span class="pre">04</span></code>.
+The following are the macros used to access the TTY in the listing.
+It appears that there are provisions for two TTY units, but only TTY A is used.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030004</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTSIM</span></code> – Set TTY input mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030104</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>10</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTSOM</span></code> – Set TTY output mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070004</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>00</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTSRDY</span></code> – Skip on TTY ready</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">070104</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>10</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTSNBZ</span></code> – Skip on TTY not buzy</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070504</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>05</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTSNSC</span></code> - Skip if stop code not read</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>00</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTINA</span></code> – Input in ASCII</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>02</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTINB</span></code> – Input in Binary</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">131004</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>10</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTINAC</span></code> – Get input character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">131204</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTINBC</span></code> – Binary input (unused)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">170004</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>00</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTOTA</span></code> – Output to TTY</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">170204</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>02</p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TTOTB</span></code> - Binary output (unused)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The TTY chart from the <cite>DDP519 Programmers’ Reference Manual</cite> (page D-3):</p>
+<table class="docutils align-default" id="id10">
+<caption><span class="caption-text">ASR33/35 Model 316/516-53/55</span><a class="headerlink" href="#id10" title="Permalink to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0004</span></code></p></td>
+<td><p>Enable ASR-33/35 in input mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0104</span></code></p></td>
+<td><p>Enable ASR-33/35 in output mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0004</span></code></p></td>
+<td><p>Skip if ASR-33/35 is ready</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0104</span></code></p></td>
+<td><p>Skip if ASR-33/35 is not busy</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0404</span></code></p></td>
+<td><p>Skip if ASR-33/35 is not interrupting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0504</span></code></p></td>
+<td><p>Skip if stop code was not read on ASR-33/35</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0004</span></code></p></td>
+<td><p>Input in ASCII from ASR-33/35</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0204</span></code></p></td>
+<td><p>Input in Binary from ASR-33/35</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1004</span></code></p></td>
+<td><p>Clear register A and input in ASCII from ASR-33/35</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1204</span></code></p></td>
+<td><p>Clear register A and input in Binary from ASR-33/35</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0004</span></code></p></td>
+<td><p>Output in ASCII to ASR-33/35</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0204</span></code></p></td>
+<td><p>Output in Binary to ASR-33/35</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMK</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0020</span></code></p></td>
+<td><p>Set interrupt mask (A11)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="interrupt-unit">
+<h3>Interrupt unit<a class="headerlink" href="#interrupt-unit" title="Permalink to this heading">¶</a></h3>
+<p>Device address <code class="docutils literal notranslate"><span class="pre">20</span></code> is used to set interrupt masks per the <code class="docutils literal notranslate"><span class="pre">SMK</span></code> instruction.
+The function code controls which bank of interrupts is to be set from the A register.
+In addition to the standard interrupt level,
+the IMP apparently includes the next interrupt level the IMP includes an extension to allow interrupts on lines 1-16.
+This probably is where the “task” interrupt enters the system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">170020</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>00</p></td>
+<td><p>20</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SMK</span></code> – Set “standard” interrupt mask</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">170120</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>00</p></td>
+<td><p>20</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SMK</span></code> – Set extension interrupt mask lines 1-16</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Octal code</p></th>
+<th class="head"><p>Instruction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head" colspan="2"><p>Execution time µs</p></th>
+<th class="head"><p>Page</p></th>
+</tr>
+<tr class="row-even"><th class="head" colspan="4"><p>Priority interrupt - Model 316/516-25</p></th>
+<th class="head"><p>DDP-516</p></th>
+<th class="head"><p>H316</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0020</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170020</span></code></p></td>
+<td><p>Set standard interrupt mask</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0120</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170120</span></code></p></td>
+<td><p>Set interrupt mask lines 1-16</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0220</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170220</span></code></p></td>
+<td><p>Set interrupt mask lines 17-32</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0320</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170320</span></code></p></td>
+<td><p>Set interrupt mask lines 33-48</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="watch-dog-timer-and-status-light-box">
+<h3>Watch dog timer and status light box<a class="headerlink" href="#watch-dog-timer-and-status-light-box" title="Permalink to this heading">¶</a></h3>
+<p>Presently, the exact structure of this unit is unknown.
+It appears that the watch dog timer (WDT) generates an interrupt if it is not given an OCP pulse at periodic intervals (interval unknown).
+The light box appears to be 16 lights controlled by a register and is used to display modem and host status (see listing &#64;3355).
+There is an <code class="docutils literal notranslate"><span class="pre">SKS</span></code> function at this address, which appears to be a bit that indicates the type of processor.
+This function is defined, but is not used in the code.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030026</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p>26</p></td>
+<td><p>Reset watch dog timer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">170026</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OTA</span></code></p></td>
+<td><p>00</p></td>
+<td><p>26</p></td>
+<td><p>Set status lights</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070026</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>00</p></td>
+<td><p>26</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AMI512</span></code> – Machine type</p>
+<ul class="simple">
+<li><p>0 = Other (316??)</p></li>
+<li><p>1 = 516</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="real-time-clock">
+<h3>Real time clock<a class="headerlink" href="#real-time-clock" title="Permalink to this heading">¶</a></h3>
+<p>This appears to be a custom hardware that counts 100 µsec pulses.
+From analysis of the code it appears that the RTC interrupt, <code class="docutils literal notranslate"><span class="pre">CLOKIL</span></code>, occurs on the carry of the eighth bit.
+This would correspond to 25.600 msec.
+It appears that the clock can only be read and that it is initialized to zero on power up.
+Not sure whether the clock counts up or down.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030040</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p>40</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLKON</span></code> – Turn clock on</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">031040</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>10</p></td>
+<td><p>40</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLKOFF</span></code> – Stop real time clock</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">131040</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>10</p></td>
+<td><p>40</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RDCLOK</span></code> – Read current time</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="task-interrupt-imp-number">
+<h3>Task interrupt/IMP number<a class="headerlink" href="#task-interrupt-imp-number" title="Permalink to this heading">¶</a></h3>
+<p>This appears to be a control pulse that can be used to set an external interrupt to indicate that a task has been posted to the task queue.
+The IMP number appears to be a hardwired number of the particular IMP.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030041</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p>41</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TASK</span></code> – Set task interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">131041</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INA</span></code></p></td>
+<td><p>10</p></td>
+<td><p>41</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RDIMPN</span></code> – Probably hardwired IMP number</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">RDIMPN</span></code> instruction is a form of the INA instruction.
+If the IMP number is not available, the code executes the next instruction.
+If the IMP number is available, the next instruction is skipped.
+Presumably the IMP number is always available.</p>
+</section>
+<section id="modem-tip-configuration-flag">
+<h3>Modem/tip configuration flag<a class="headerlink" href="#modem-tip-configuration-flag" title="Permalink to this heading">¶</a></h3>
+<p>Allows the code to determine if the machine is an IMP or a TIP (multi-line controller).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Dev</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070042</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>00</p></td>
+<td><p>42</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AMIMLC</span></code><a class="footnote-reference brackets" href="#id6" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> –</p>
+<ul class="simple">
+<li><p>0 = IMP</p></li>
+<li><p>1 = MLC (multi-line controller)</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">3</a><span class="fn-bracket">]</span></span>
+<p><code class="docutils literal notranslate"><span class="pre">AMIMLC</span></code> probably means <em>“Am I a multi-line controller?”</em></p>
+</aside>
+</aside>
+</section>
+<section id="host-interface">
+<h3>Host interface<a class="headerlink" href="#host-interface" title="Permalink to this heading">¶</a></h3>
+<p>As shown above, the host device addresses are not sequential,
+probably because there are other important Honeywell devices already assigned to this area.
+In the following table, <code class="docutils literal notranslate"><span class="pre">x</span></code> is the device number that may vary from 1 to 4.
+The actual device address is shown above.
+MIDAS macros on page 4 of the listing show the construction of host instructions.</p>
+<p>It appears that these controls go to the host interface.
+Data for the host is transferred through DMC channels.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Listing</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">303060</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxROUT</span></code> – Host “regular” output – start output to host</p></td>
+<td><p>17056</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030170</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>01</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxIN</span></code> – Start host input</p></td>
+<td><p>13200</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030270</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>02</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxFOUT</span></code> – Host final output – final output to host</p></td>
+<td><p>16124</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030370</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>03</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxXP</span></code> – Cross patch host (see listing p. 179)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030470</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxUNXP</span></code> – Un-cross patch host (see listing p. 179)</p></td>
+<td><p>01170</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030570</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>05</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxENAB</span></code> – Enable host ??</p></td>
+<td><p>16316</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070070</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>00</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxERR</span></code> – Skip on host error</p></td>
+<td><p>13172</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">070071</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>01</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxRDY</span></code> – Skip on host ready</p></td>
+<td><p>21664</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">070072</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>02</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxEOM</span></code> – Skip on host end-of-message (unused ??)</p></td>
+<td><p>13303</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">070075</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HxFULL</span></code> – Skip on host buffer full ?? (unused ??)</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="modem-interface">
+<h3>Modem interface<a class="headerlink" href="#modem-interface" title="Permalink to this heading">¶</a></h3>
+<p>The following controls go to the modem (<code class="docutils literal notranslate"><span class="pre">M1</span></code>, <code class="docutils literal notranslate"><span class="pre">M2</span></code>, <code class="docutils literal notranslate"><span class="pre">M3</span></code>, <code class="docutils literal notranslate"><span class="pre">M4</span></code>, <code class="docutils literal notranslate"><span class="pre">M5</span></code>).
+The actual data is transferred through the DMC.
+Modem addresses are given in the table above.
+Instruction codes are examples for particular modems.
+Page 4 of the listing gives the macros used to generate the instructions.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>FC</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Listing</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030071</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>00</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxOUT</span></code> – Start modem output</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">01062</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030171</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>01</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxUNXP</span></code> – Un-cross patch modem (see listing p. 179)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">01266</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030172</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>02</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxLXP</span></code> – Set line cross patch (see listing p. 179)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">21631</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">030173</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>03</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxIXP</span></code> – Set interface cross patch (see listing p. 179)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">21632</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">030471</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OCP</span></code></p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxIN</span></code> – Start modem input (see listing p. 179)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">01223</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">070471</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SKS</span></code></p></td>
+<td><p>04</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MxERR</span></code> – Skip on modem error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10052</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="interrupt-entry-point-addresses">
+<h2>Interrupt entry point addresses<a class="headerlink" href="#interrupt-entry-point-addresses" title="Permalink to this heading">¶</a></h2>
+<p>It appears that the interrupts vectors for the IMP peripherals have replaced those associated with the generic DDP 516.
+The basic interrupt structure of the DDP 516 is that there are 12 groups of four interrupt address,
+starting at <code class="docutils literal notranslate"><span class="pre">000064</span></code> and extending upward in block of four (probably this is related to packaging of the circuitry).
+There is a group “0” of four interrupts from <code class="docutils literal notranslate"><span class="pre">000060</span></code> to <code class="docutils literal notranslate"><span class="pre">000063</span></code>, which are fixed.
+Here is a table from the <cite>Programmer’s Reference Manual</cite> related to the interrupt groups:</p>
+<table class="docutils align-default" id="id11">
+<caption><span class="caption-text">Table 2-19. Dedicated locations for the 12 groups of priority interrupt lines</span><a class="headerlink" href="#id11" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Priority interrupt group</p></th>
+<th class="head"><p>Dedicated locations (octal codes)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00064</span></code> – <code class="docutils literal notranslate"><span class="pre">00067</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00070</span></code> – <code class="docutils literal notranslate"><span class="pre">00073</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00074</span></code> – <code class="docutils literal notranslate"><span class="pre">00077</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00100</span></code> – <code class="docutils literal notranslate"><span class="pre">00103</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00104</span></code> – <code class="docutils literal notranslate"><span class="pre">00107</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00110</span></code> – <code class="docutils literal notranslate"><span class="pre">00113</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00114</span></code> – <code class="docutils literal notranslate"><span class="pre">00117</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00120</span></code> – <code class="docutils literal notranslate"><span class="pre">00123</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00124</span></code> – <code class="docutils literal notranslate"><span class="pre">00127</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00130</span></code> – <code class="docutils literal notranslate"><span class="pre">00133</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00134</span></code> – <code class="docutils literal notranslate"><span class="pre">00137</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00140</span></code> – <code class="docutils literal notranslate"><span class="pre">00143</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The IMP uses interrupt groups 1 through 4.
+As shown below.
+(these addresses have not all been verified).</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Address</p></th>
+<th class="head"><p>MACRO</p></th>
+<th class="head"><p>Device</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Group</p></th>
+<th class="head"><p>Line</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000060</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PFIL</span></code></p></td>
+<td><p>Power fail</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000061</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SWDTIL</span></code></p></td>
+<td><p>Watch dog ??</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000062</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">WDTIL</span></code></p></td>
+<td><p>Watch dog ??</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000063</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">STDIL</span></code></p></td>
+<td><p>Standard interrupt</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000064</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M1INTL</span></code></p></td>
+<td><p>Modem 1 IN</p></td>
+<td><p>Modem 1 input ready</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000065</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M2INTL</span></code></p></td>
+<td><p>Modem 2 IN</p></td>
+<td><p>Modem 2 input ready</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000066</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M3INTL</span></code></p></td>
+<td><p>Modem 3 IN</p></td>
+<td><p>Modem 3 input ready</p></td>
+<td><p>1</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">00067</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M4INTL</span></code></p></td>
+<td><p>Modem 4 IN</p></td>
+<td><p>Modem 4 input ready</p></td>
+<td><p>1</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">H4OTIL</span></code></p></td>
+<td><p>Host 4 Out (=<code class="docutils literal notranslate"><span class="pre">M4INTL</span></code>)</p></td>
+<td><p>Host 4 output complete</p></td>
+<td><p>1</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000070</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M5INTL</span></code></p></td>
+<td><p>Modem 5 IN</p></td>
+<td><p>Modem 5 input ready</p></td>
+<td><p>2</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">H3OTIL</span></code></p></td>
+<td><p>Host 3 Out (=<code class="docutils literal notranslate"><span class="pre">M5INIL</span></code>)</p></td>
+<td><p>Host 3 output complete</p></td>
+<td><p>2</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000071</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M1OTIL</span></code></p></td>
+<td><p>Modem 1 OUT</p></td>
+<td><p>Modem 1 output complete</p></td>
+<td><p>2</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000072</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M2OTIL</span></code></p></td>
+<td><p>Modem 2 OUT</p></td>
+<td><p>Modem 2 output complete</p></td>
+<td><p>2</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000073</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M3OTIL</span></code></p></td>
+<td><p>Modem 3 OUT</p></td>
+<td><p>Modem 3 output complete</p></td>
+<td><p>2</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000074</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M4OTIL</span></code></p></td>
+<td><p>Modem 4 OUT</p></td>
+<td><p>Modem 4 output complete</p></td>
+<td><p>3</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">H4INIL</span></code></p></td>
+<td><p>Host 4 IN (=<code class="docutils literal notranslate"><span class="pre">M4OTIL</span></code>)</p></td>
+<td><p>Host 4 input ready</p></td>
+<td><p>3</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000075</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M5OTIL</span></code></p></td>
+<td><p>Modem 5 OUT</p></td>
+<td><p>Modem 5 output complete</p></td>
+<td><p>3</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">H3INIL</span></code></p></td>
+<td><p>Host 3<a class="footnote-reference brackets" href="#id8" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> IN (=<code class="docutils literal notranslate"><span class="pre">M5OTIL</span></code>)</p></td>
+<td><p>Host 3 input ready</p></td>
+<td><p>3</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000076</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H1OTIL</span></code></p></td>
+<td><p>Host 1 Out</p></td>
+<td><p>Host 1 output complete</p></td>
+<td><p>3</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000077</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H2OTIL</span></code></p></td>
+<td><p>Host 2 Out</p></td>
+<td><p>Host 2 output complete</p></td>
+<td><p>3</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000100</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H1INIL</span></code></p></td>
+<td><p>Host 1 IN</p></td>
+<td><p>Host 1 input ready</p></td>
+<td><p>4</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000101</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H2INIL</span></code></p></td>
+<td><p>Host 2 IN</p></td>
+<td><p>Host 2 input ready</p></td>
+<td><p>4</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000102</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CLOKIL</span></code></p></td>
+<td><p>Real time clock</p></td>
+<td><p>25.600 msec interrupt ??</p></td>
+<td><p>4</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000103</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TASKIL</span></code></p></td>
+<td><p>Task ready</p></td>
+<td><p>Set dynamically by the program when
+tasks are added to the task queue</p></td>
+<td><p>4</p></td>
+<td><p>16</p></td>
+</tr>
+</tbody>
+</table>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">4</a><span class="fn-bracket">]</span></span>
+<p>Only certain configurations of host and modem are allowed, so some interrupts overlap.</p>
+</aside>
+</aside>
+<p>Masking of the interrupts is as shown in the table below
+(from the <cite>Programmer’s Reference Manual</cite>).
+The IMP makes use only of the interrupt lines 1–16
+(shown in the <em>“SMK ‘0120”</em> column below).</p>
+<table class="docutils align-default" id="id12">
+<caption><span class="caption-text">Table 2-20. Priority interrupt mask assignments</span><a class="headerlink" href="#id12" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>A-Register bit no.</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">SMK '0120</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">SMK '0220</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">SMK '0320</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="16"><p><strong>Interrupt
+line
+number</strong></p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>17</p></td>
+<td><p>33</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>18</p></td>
+<td><p>34</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>19</p></td>
+<td><p>35</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>20</p></td>
+<td><p>36</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>5</p></td>
+<td><p>21</p></td>
+<td><p>37</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>6</p></td>
+<td><p>22</p></td>
+<td><p>38</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>7</p></td>
+<td><p>23</p></td>
+<td><p>39</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>24</p></td>
+<td><p>40</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>9</p></td>
+<td><p>25</p></td>
+<td><p>41</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>26</p></td>
+<td><p>42</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>11</p></td>
+<td><p>27</p></td>
+<td><p>43</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>12</p></td>
+<td><p>28</p></td>
+<td><p>44</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>13</p></td>
+<td><p>29</p></td>
+<td><p>45</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>14</p></td>
+<td><p>30</p></td>
+<td><p>46</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>15</p></td>
+<td><p>31</p></td>
+<td><p>47</p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>32</p></td>
+<td><p>48</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that some interrupt locations are assigned to two different devices (e.g., <code class="docutils literal notranslate"><span class="pre">H4OTIL</span></code> = <code class="docutils literal notranslate"><span class="pre">M4INIL</span></code>).
+These are shown in gray shading above.
+Certain configurations of host and modems are not allowed,
+so these interrupts will go to the particular device configured.
+For example, four hosts and four modems do not appear to be an allowed combination.
+This allows the interrupt to be shared.
+Listing page 43 is probably an enumeration of allowed host/modem configurations.</p>
+</section>
+<section id="dedicated-locations">
+<h2>Dedicated locations<a class="headerlink" href="#dedicated-locations" title="Permalink to this heading">¶</a></h2>
+<p>The DDP516 has certain low memory locations that area dedicated as shown in the table below.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Octal address</p></th>
+<th class="head" colspan="2"><p>Assignment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00000</span></code></p></td>
+<td colspan="2"><p>Index register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">00001</span></code> – <code class="docutils literal notranslate"><span class="pre">00017</span></code></p></td>
+<td colspan="2"><p>Protected fill program</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00020</span></code></p></td>
+<td><p>Starting</p></td>
+<td rowspan="2"><p>Addresses
+DMC channel 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">00021</span></code></p></td>
+<td><p>Final</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00022</span></code> – <code class="docutils literal notranslate"><span class="pre">00057</span></code></p></td>
+<td colspan="2"><p>DMC channels 2 – 16</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">00060</span></code></p></td>
+<td colspan="2"><p>Power failure interrupt link</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00061</span></code></p></td>
+<td colspan="2"><p>Real-time clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">00062</span></code></p></td>
+<td colspan="2"><p>Memory lockout violation int. link</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00063</span></code></p></td>
+<td colspan="2"><p>Standard interrupt link</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">00064</span></code></p></td>
+<td colspan="2"><p>Optional PI No. 1 link</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">00065</span></code> – <code class="docutils literal notranslate"><span class="pre">00143</span></code></p></td>
+<td colspan="2"><p>Optional PI No. 2 – 48 links</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="interrupt-masks">
+<h2>Interrupt masks<a class="headerlink" href="#interrupt-masks" title="Permalink to this heading">¶</a></h2>
+<p>Interrupts are organized into four banks.
+The first bank is standard and the following three banks are optional.
+The standard bank appears to be devoted to standard Honeywell peripherals.
+In the IMP, the second bank is used to provide interrupts for the modems, host, program and timer.
+The table below shows the organization of the interrupt banks in reference to the set mask instructions that control each bank.</p>
+<p>Mask bits in the standard interrupt bank are applied according to the following table:</p>
+<table class="docutils align-default" id="id13">
+<caption><span class="caption-text">Table 2-9. Standard interrupt mask assignments</span><a class="headerlink" href="#id13" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>OTB bit no.</p></th>
+<th class="head"><p>Device</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Mag tape control unit no. 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Mag tape control unit no. 2</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>(Unassigned)</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Moving head disc file</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>I/O channel no. 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>I/O channel no. 2</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>I/O channel no. 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Small mass store</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>Paper tape reader</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Paper tape punch</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>ASR-33/35</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>Card reader</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>(Unassigned)</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>Line printer</p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>Memory parity (DDP-516)</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>Unassigned (H316)</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>Real time clock</p></td>
+</tr>
+</tbody>
+</table>
+<p>The interrupts for the IMP specific devices are related to their device address as shown in the table of IMP special interrupts.
+Interrupts for a particular input are enabled if the bit is set to <code class="docutils literal notranslate"><span class="pre">0</span></code> they are disabled (“masked”) if the corresponding bit is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Address</p></th>
+<th class="head"><p>Mask bit</p></th>
+<th class="head"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000064</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Modem 1 IN</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000065</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Modem 2 IN</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000066</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p>Modem 3 IN</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000067</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p>Modem 4 IN or Host 4 OUT</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000070</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Modem 5 IN or Host 3 OUT</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000071</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p>Modem 1 OUT</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000072</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p>Modem 2 OUT</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000073</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p>Modem 3 OUT</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000074</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p>Modem 4 OUT or Host 4 IN</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000075</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Modem 5 OUT or Host 3 IN</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000076</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p>Host 1 Out</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000077</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p>Host 2 Out</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000100</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p>Host 1 IN</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000101</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p>Host 2 IN</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">000102</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p>Real time clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000103</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p>Task ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that certain interrupts and interrupt addresses are shared between modems and hosts.
+This means that only certain configurations are allowed.
+Specifically:</p>
+<ul class="simple">
+<li><p>5 modems and 2 hosts</p></li>
+<li><p>4 modems and 3 hosts</p></li>
+<li><p>3 modems and 4 hosts</p></li>
+</ul>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Octal code</p></th>
+<th class="head"><p>Instruction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head" colspan="2"><p>Execution time µs</p></th>
+<th class="head"><p>Page</p></th>
+</tr>
+<tr class="row-even"><th class="head" colspan="4"><p>Priority interrupt - Model 316/516-25</p></th>
+<th class="head"><p>DDP-516</p></th>
+<th class="head"><p>H316</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0020</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170020</span></code></p></td>
+<td><p>Set standard interrupt mask</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0120</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170120</span></code></p></td>
+<td><p>Set interrupt mask lines 1-16</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0220</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170220</span></code></p></td>
+<td><p>Set interrupt mask lines 17-32</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SMK '0320</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">170320</span></code></p></td>
+<td><p>Set interrupt mask lines 33-48</p></td>
+<td><p>IO</p></td>
+<td><p>1.92</p></td>
+<td><p>3.2</p></td>
+<td><p>2–36</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dmc-channel-numbers">
+<h2>DMC channel numbers<a class="headerlink" href="#dmc-channel-numbers" title="Permalink to this heading">¶</a></h2>
+<p>The DDP516 supports 16 channels assignments according to the following table from the <cite>Programmer’s Reference</cite>.
+Normally, these would be allocated to various devices, like the tape, printer and disk.
+However, the IMP does not include any of these peripherals,
+so they channel assignments are freed up for use by the host and modems as shown following this table.</p>
+<table class="docutils align-default" id="id14">
+<caption><span class="caption-text">Table 2-16. DMC start and terminal memory address locations (DDP-516)</span><a class="headerlink" href="#id14" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Channel number</p></th>
+<th class="head"><p>Starting address</p></th>
+<th class="head"><p>Ending address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00020</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00021</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00022</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00023</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00024</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00025</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00026</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00027</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00030</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00031</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00032</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00033</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00034</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00035</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00036</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00037</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00040</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00041</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00042</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00043</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00044</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00045</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00046</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00047</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00050</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00051</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00052</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00053</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>15</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00054</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00055</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>16</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00056</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">00057</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>DMC pointers occur in pairs.
+For each DMC channel there are two consecutive words.
+The first word is the starting address for the channel and the second word is the ending address.
+For the modems and host attached to the IMP the address word pairs are stored as follows.
+For each device there is an input and output pointer designated as <code class="docutils literal notranslate"><span class="pre">xx</span> <span class="pre">INBP</span></code> and <code class="docutils literal notranslate"><span class="pre">xxOTBP</span></code>, respectively.
+The pointers for the modem and host DMC channels are defined on listing page 4 using MIDAS macros.</p>
+<p>As with the interrupt address the DMC address for certain hosts and modems overlap.
+This is possible because the configurations are limited and conflicting host and modem configurations are not allowed.
+For example, there cannot be 4 hosts and 5 modems.
+Whether a channel represents an input or output channel is determined by the structure of the hardware and by the value of the high bit (bit 1) of the starting address.
+A value of <code class="docutils literal notranslate"><span class="pre">1</span></code> indicates the channel is setup for input.
+A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> indicates the channel is setup for output.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>Function</p></th>
+<th class="head"><p>Channel</p></th>
+<th class="head"><p>Code Page</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M1INBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000020</span></code></p></td>
+<td><p>Modem 1 input start address</p></td>
+<td><p>1</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000021</span></code></p></td>
+<td><p>Modem 1 input end address</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M2INBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000022</span></code></p></td>
+<td><p>Modem 2 input start address</p></td>
+<td><p>2</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000023</span></code></p></td>
+<td><p>Modem 2 input end address</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M3INBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000024</span></code></p></td>
+<td><p>Modem 3 input start address</p></td>
+<td><p>3</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000025</span></code></p></td>
+<td><p>Modem 3 input end address</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M4INBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000026</span></code></p></td>
+<td><p>Modem 4 input start address</p></td>
+<td><p>4</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000027</span></code></p></td>
+<td><p>Modem 4 end start address</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M5INBP</span></code></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000030</span></code></p></td>
+<td><p>Modem 5 input start address</p></td>
+<td rowspan="2"><p>5</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">H4OTBP</span></code></p></td>
+<td><p>Host 4 output start address</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000031</span></code></p></td>
+<td><p>Modem 5 input end address</p></td>
+<td rowspan="2"><p>5</p></td>
+<td rowspan="2"></td>
+</tr>
+<tr class="row-odd"><td><p>Host 4 output end address</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">M1OTBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000032</span></code></p></td>
+<td><p>Modem 1 output start address</p></td>
+<td><p>6</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000033</span></code></p></td>
+<td><p>Modem 1 output end address</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">M2OTBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000034</span></code></p></td>
+<td><p>Modem 2 output start address</p></td>
+<td><p>7</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000035</span></code></p></td>
+<td><p>Modem 2 output end address</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">M3OTBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000036</span></code></p></td>
+<td><p>Modem 3 output start address</p></td>
+<td><p>8</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000037</span></code></p></td>
+<td><p>Modem 3 output end address</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">M4OTBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000040</span></code></p></td>
+<td><p>Modem 4 output start address</p></td>
+<td><p>9</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000041</span></code></p></td>
+<td><p>Modem 4 output end address</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M5OTBP</span></code></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000042</span></code></p></td>
+<td><p>Modem 5 output start address</p></td>
+<td rowspan="2"><p>10</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">H4INBP</span></code></p></td>
+<td><p>Host 4 input start address</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">000043</span></code></p></td>
+<td><p>Modem 5 output end address</p></td>
+<td rowspan="2"><p>10</p></td>
+<td rowspan="2"></td>
+</tr>
+<tr class="row-odd"><td><p>Host 4 input end address</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H1OTPB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000044</span></code></p></td>
+<td><p>Host 1 output start address</p></td>
+<td><p>11</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000045</span></code></p></td>
+<td><p>Host 1 output end address</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H2OTPB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000046</span></code></p></td>
+<td><p>Host 2 output start address</p></td>
+<td><p>12</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000047</span></code></p></td>
+<td><p>Host 2 output end address</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H2INPB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000050</span></code></p></td>
+<td><p>Host 1 input start address</p></td>
+<td><p>13</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000051</span></code></p></td>
+<td><p>Host 1 input end address</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H2INPB</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000052</span></code></p></td>
+<td><p>Host 2 input start address</p></td>
+<td><p>14</p></td>
+<td rowspan="2"><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000053</span></code></p></td>
+<td><p>Host 2 input end address</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H3OTBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000054</span></code></p></td>
+<td><p>Host 3 output start address</p></td>
+<td><p>15</p></td>
+<td rowspan="2"><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000055</span></code></p></td>
+<td><p>Host 3 output end address</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">H3INBP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000056</span></code></p></td>
+<td><p>Host 3 input start address</p></td>
+<td><p>16</p></td>
+<td rowspan="2"><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">000057</span></code></p></td>
+<td></td>
+<td><p>16</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="simulators_acm_queue_2004.html" title="previous chapter">Simulators: virtual machines of the past and future</a></li>
+      <li>Next: <a href="ssem_doc.html" title="next chapter"><span class="sectnum">1. </span>SSEM simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Summary of IMP IO Device Codes.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
