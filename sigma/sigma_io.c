@@ -23,6 +23,8 @@
    used in advertising or otherwise to promote the sale, use or other dealings
    in this Software without prior written authorization from Robert M Supnik.
 
+   23-Jul-2022  RMS     Made chan_ctl_time accessible as a register
+   21-Jul-2022  RMS     Added numeric channel numbers to SET/SHOW
    07-Jul-2022  RMS     Fixed dangling else in read/write direct (Ken Rector)
    05-Mar-2020  RMS     Fixed s5x0_ireg size declaration (Mark Pizzolato)
    09-Mar-2017  RMS     Fixed unspecified return value in HIO (COVERITY)
@@ -176,6 +178,7 @@ REG chana_reg[] = {
     { BRDATA (CHF, chan[0].chf, 16, 16, CHAN_N_DEV) },
     { BRDATA (CHI, chan[0].chi, 16, 8, CHAN_N_DEV) },
     { BRDATA (CHSF, chan[0].chsf, 16, 8, CHAN_N_DEV) },
+    { DRDATA (CTIME, chan_ctl_time, 4), REG_NZ+REG_HIDDEN+PV_LEFT },
     { NULL }
     };
 
@@ -1395,15 +1398,19 @@ t_stat io_set_dvc (UNIT* uptr, int32 val, CONST char *cptr, void *desc)
 int32 num;
 DEVICE *dptr;
 dib_t *dibp;
+t_stat r;
 
 if (((dptr = find_dev_from_unit (uptr)) == NULL) ||
     ((dibp = (dib_t *) dptr->ctxt) == NULL))
     return SCPE_IERR;
-if ((cptr == NULL) || (*cptr == 0) || (*(cptr + 1) != 0))
+if ((cptr == NULL) || (*cptr == 0))
     return SCPE_ARG;
-num = *cptr - 'A';
-if ((num < 0) || (num >= (int32) chan_num))
+num = (int32) get_uint (cptr, 10, cpu_tab[cpu_model].chan_max, &r);
+if (r != SCPE_OK) {
+    num = *cptr - 'A';
+    if ((num < 0) || (num >= (int32) cpu_tab[cpu_model].chan_max))
     return SCPE_ARG;
+    }
 dibp->dva = (dibp->dva & ~DVA_CHAN) | (num << DVA_V_CHAN);
 return SCPE_OK;
 }
@@ -1412,11 +1419,13 @@ t_stat io_show_dvc (FILE *st, UNIT *uptr, int32 val, CONST void *desc)
 {
 DEVICE *dptr;
 dib_t *dibp;
+uint32 dvc;
 
 if (((dptr = find_dev_from_unit (uptr)) == NULL) ||
     ((dibp = (dib_t *) dptr->ctxt) == NULL))
     return SCPE_IERR;
-fprintf (st, "channel=%c", DVA_GETCHAN (dibp->dva) + 'A');
+dvc = DVA_GETCHAN (dibp->dva);
+fprintf (st, "channel=%d (%c)", dvc, (dvc + 'A'));
 return SCPE_OK;
 }
 
