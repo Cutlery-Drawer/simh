@@ -44,6 +44,22 @@
 # If debugging is desired, then GNU make can be invoked with
 # DEBUG=1 on the command line.
 #
+# When building compiler optimized binaries with the gcc or clang 
+# compilers, invoking GNU make with LTO=1 on the command line will 
+# cause the build to use Link Time Optimization to maximally optimize 
+# the results.  Link Time Optimization can report errors which aren't 
+# otherwise detected and will also take significantly longer to 
+# complete.  Additionally, non debug builds default to build with an
+# optimization level of -O2.  This optimization level can be changed 
+# by invoking GNU OPTIMIZE=-O3 (or whatever optimize value you want) 
+# on the command line if desired.
+#
+# The default setup will fail simulator build(s) if the compile 
+# produces any warnings.  These should be cleaned up before new 
+# or changd code is accepted into the code base.  This option 
+# can be overridden if GNU make is invoked with WARNINGS=ALLOWED
+# on the command line.
+#
 # The default build will run per simulator tests if they are 
 # available.  If building without running tests is desired, 
 # then GNU make should be invoked with TESTS=0 on the command 
@@ -257,6 +273,7 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
         endif
       endif
     else
+      OS_CCDEFS += $(if $(findstring ALLOWED,$(WARNINGS)),,-Werror)
       ifeq (,$(findstring ++,${GCC}))
         CC_STD = -std=gnu99
       else
@@ -264,6 +281,7 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
       endif
     endif
   else
+    OS_CCDEFS += $(if $(findstring ALLOWED,$(WARNINGS)),,-Werror)
     ifeq (Apple,$(shell ${GCC} -v /dev/null 2>&1 | grep 'Apple' | awk '{ print $$1 }'))
       COMPILER_NAME = $(shell ${GCC} -v /dev/null 2>&1 | grep 'Apple' | awk '{ print $$1 " " $$2 " " $$3 " " $$4 }')
       CLANG_VERSION = $(word 4,$(COMPILER_NAME))
@@ -483,7 +501,7 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
                 endif
                 OS_CCDEFS += -D_HPUX_SOURCE -D_LARGEFILE64_SOURCE
                 OS_LDFLAGS += -Wl,+b:
-                NO_LTO = 1
+                override LTO =
               else
                 LIBEXT = a
               endif
@@ -507,14 +525,6 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
     endif
     export CPATH = $(subst $() $(),:,$(INCPATH))
     export LIBRARY_PATH = $(subst $() $(),:,$(LIBPATH))
-    # Some gcc versions don't support LTO, so only use LTO when the compiler is known to support it
-    ifeq (,$(NO_LTO))
-      ifneq (,$(GCC_VERSION))
-        ifeq (,$(shell ${GCC} -v /dev/null 2>&1 | grep '\-\-enable-lto'))
-          LTO_EXCLUDE_VERSIONS += $(GCC_VERSION)
-        endif
-      endif
-    endif
   endif
   $(info lib paths are: ${LIBPATH})
   $(info include paths are: ${INCPATH})
@@ -607,6 +617,18 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
       endif
     endif
   endif
+  ifneq (,$(call find_include,editline/readline))
+    OS_CCDEFS += -DHAVE_EDITLINE
+    OS_LDFLAGS += -ledit
+    ifneq (Darwin,$(OSTYPE))
+      # The doc says termcap is needed, though reality suggests
+      # otherwise.  Put it in anyway, it can't hurt.
+      ifneq (,$(call find_lib,termcap))
+        OS_LDFLAGS += -ltermcap
+      endif
+    endif
+    $(info using libedit: $(call find_include,editline/readline))
+  endif
   ifneq (,$(call find_include,utime))
     OS_CCDEFS += -DHAVE_UTIME
   endif
@@ -649,12 +671,8 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
     endif
     ifneq (,$(call find_include,SDL2/SDL))
       ifneq (,$(call find_lib,SDL2))
-        ifneq (,$(findstring Haiku,$(OSTYPE)))
-          ifneq (,$(shell which sdl2-config))
-            SDLX_CONFIG = sdl2-config
-          endif
-        else
-          SDLX_CONFIG = $(realpath $(dir $(call find_include,SDL2/SDL))../../bin/sdl2-config)
+        ifneq (,$(shell which sdl2-config))
+          SDLX_CONFIG = sdl2-config
         endif
         ifneq (,$(SDLX_CONFIG))
           VIDEO_CCDEFS += -DHAVE_LIBSDL -DUSE_SIM_VIDEO `$(SDLX_CONFIG) --cflags`
@@ -669,6 +687,64 @@ ifeq (${WIN32},)  #*nix Environments (&& cygwin)
           $(info using libSDL2: $(call find_include,SDL2/SDL))
           ifeq (Darwin,$(OSTYPE))
             VIDEO_CCDEFS += -DSDL_MAIN_AVAILABLE
+          endif
+          ifneq (,$(and $(BESM6_BUILD), $(or $(and $(call find_include,SDL2/SDL_ttf),$(call find_lib,SDL2_ttf)), $(and $(call find_include,SDL/SDL_ttf),$(call find_lib,SDL_ttf)))))
+            FONTPATH += /usr/share/fonts /Library/Fonts /usr/lib/jvm /System/Library/Frameworks/JavaVM.framework/Versions /System/Library/Fonts C:/Windows/Fonts
+            FONTPATH := $(dir $(foreach dir,$(strip $(FONTPATH)),$(wildcard $(dir)/.)))
+            FONTNAME += DejaVuSans.ttf LucidaSansRegular.ttf FreeSans.ttf AppleGothic.ttf tahoma.ttf
+            $(info font paths are: $(FONTPATH))
+            $(info font names are: $(FONTNAME))
+            find_fontfile = $(strip $(firstword $(foreach dir,$(strip $(FONTPATH)),$(wildcard $(dir)/$(1))$(wildcard $(dir)/*/$(1))$(wildcard $(dir)/*/*/$(1))$(wildcard $(dir)/*/*/*/$(1)))))
+            find_font = $(abspath $(strip $(firstword $(foreach font,$(strip $(FONTNAME)),$(call find_fontfile,$(font))))))
+            ifneq (,$(call find_font))
+              FONTFILE=$(call find_font)
+            else
+              $(info ***)
+              $(info *** No font file available, BESM-6 video panel disabled.)
+              $(info ***)
+              $(info *** To enable the panel display please specify one of:)
+              $(info ***          a font path with FONTPATH=path)
+              $(info ***          a font name with FONTNAME=fontname.ttf)
+              $(info ***          a font file with FONTFILE=path/fontname.ttf)
+              $(info ***)
+            endif
+          endif
+          ifeq (,$(and ${VIDEO_LDFLAGS}, ${FONTFILE}, $(BESM6_BUILD)))
+            $(info *** No SDL ttf support available.  BESM-6 video panel disabled.)
+            $(info ***)
+            ifeq (Darwin,$(OSTYPE))
+              ifeq (/opt/local/bin/port,$(shell which port))
+                $(info *** Info *** Install the MacPorts libSDL2-ttf development package to provide this)
+                $(info *** Info *** functionality for your OS X system:)
+                $(info *** Info ***       # port install libsdl2-ttf-dev)
+              endif
+              ifeq (/usr/local/bin/brew,$(shell which brew))
+                ifeq (/opt/local/bin/port,$(shell which port))
+                  $(info *** Info ***)
+                  $(info *** Info *** OR)
+                  $(info *** Info ***)
+                endif
+                $(info *** Info *** Install the HomeBrew sdl2_ttf package to provide this)
+                $(info *** Info *** functionality for your OS X system:)
+                $(info *** Info ***       $$ brew install sdl2_ttf)
+              endif
+            else
+              ifneq (,$(and $(findstring Linux,$(OSTYPE)),$(call find_exe,apt-get)))
+                $(info *** Info *** Install the development components of libSDL2-ttf)
+                $(info *** Info *** packaged for your Linux operating system distribution:)
+                $(info *** Info ***        $$ sudo apt-get install libsdl2-ttf-dev)
+              else
+                $(info *** Info *** Install the development components of libSDL2-ttf packaged by your)
+                $(info *** Info *** operating system distribution and rebuild your simulator to)
+                $(info *** Info *** enable this extra functionality.)
+              endif
+            endif
+          else
+            ifneq (,$(call find_include,SDL2/SDL_ttf),$(call find_lib,SDL2_ttf))
+              $(info using libSDL2_ttf: $(call find_lib,SDL2_ttf) $(call find_include,SDL2/SDL_ttf))
+              $(info ***)
+              BESM6_PANEL_OPT = -DFONTFILE=${FONTFILE} $(filter-out -DSDL_MAIN_AVAILABLE,${VIDEO_CCDEFS}) ${VIDEO_LDFLAGS} -lSDL2_ttf
+            endif
           endif
         endif
       endif
@@ -1196,22 +1272,18 @@ endif
 ifneq (,$(UNSUPPORTED_BUILD))
   CFLAGS_GIT += -DSIM_BUILD=Unsupported=$(UNSUPPORTED_BUILD)
 endif
+OPTIMIZE ?= -O2
 ifneq ($(DEBUG),)
   CFLAGS_G = -g -ggdb -g3
   CFLAGS_O = -O0
   BUILD_FEATURES = - debugging support
+  LTO =
 else
   ifneq (,$(findstring clang,$(COMPILER_NAME))$(findstring LLVM,$(COMPILER_NAME)))
-    CFLAGS_O = -O2 -fno-strict-overflow
-    GCC_OPTIMIZERS_CMD = ${GCC} --help
-    NO_LTO = 1
+    CFLAGS_O = $(OPTIMIZE) -fno-strict-overflow
+    GCC_OPTIMIZERS_CMD = ${GCC} --help 2>&1
   else
-    NO_LTO = 1
-    ifeq (Darwin,$(OSTYPE))
-      CFLAGS_O += -O4 -flto -fwhole-program
-    else
-      CFLAGS_O := -O2
-    endif
+    CFLAGS_O := $(OPTIMIZE)
   endif
   LDFLAGS_O = 
   GCC_MAJOR_VERSION = $(firstword $(subst  ., ,$(GCC_VERSION)))
@@ -1226,9 +1298,6 @@ else
   endif
   ifneq (,$(GCC_COMMON_CMD))
     GCC_OPTIMIZERS += $(shell $(GCC_COMMON_CMD))
-  endif
-  ifneq (,$(findstring $(GCC_VERSION),$(LTO_EXCLUDE_VERSIONS)))
-    NO_LTO = 1
   endif
   ifneq (,$(findstring -finline-functions,$(GCC_OPTIMIZERS)))
     CFLAGS_O += -finline-functions
@@ -1248,13 +1317,16 @@ else
   ifneq (,$(findstring -fstrict-overflow,$(GCC_OPTIMIZERS)))
     CFLAGS_O += -fno-strict-overflow
   endif
-  ifeq (,$(NO_LTO))
+  ifneq (,$(findstring $(GCC_VERSION),$(LTO_EXCLUDE_VERSIONS)))
+    override LTO =
+  endif
+  ifneq (,$(LTO))
     ifneq (,$(findstring -flto,$(GCC_OPTIMIZERS)))
-      CFLAGS_O += -flto -fwhole-program
-      LDFLAGS_O += -flto -fwhole-program
+      CFLAGS_O += -flto
+      LTO_FEATURE = , with Link Time Optimization,
     endif
   endif
-  BUILD_FEATURES = - compiler optimizations and no debugging support
+  BUILD_FEATURES = - compiler optimizations$(LTO_FEATURE) and no debugging support
 endif
 ifneq (3,$(GCC_MAJOR_VERSION))
   ifeq (,$(GCC_WARNINGS_CMD))
@@ -1374,8 +1446,10 @@ PDP11 = ${PDP11D}/pdp11_fp.c ${PDP11D}/pdp11_cpu.c ${PDP11D}/pdp11_dz.c \
 	${PDP11D}/pdp11_ke.c ${PDP11D}/pdp11_dc.c ${PDP11D}/pdp11_dmc.c \
 	${PDP11D}/pdp11_kmc.c ${PDP11D}/pdp11_dup.c ${PDP11D}/pdp11_rs.c \
 	${PDP11D}/pdp11_vt.c ${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_io_lib.c \
-	${PDP11D}/pdp11_rom.c ${PDP11D}/pdp11_ch.c ${DISPLAYL} ${DISPLAYVT} \
-	${PDP11D}/pdp11_ng.c ${PDP11D}/pdp11_daz.c ${DISPLAYNG}
+	${PDP11D}/pdp11_rom.c ${PDP11D}/pdp11_ch.c ${PDP11D}/pdp11_dh.c \
+	${PDP11D}/pdp11_ng.c ${PDP11D}/pdp11_daz.c ${PDP11D}/pdp11_tv.c \
+	${PDP11D}/pdp11_mb.c \
+	${DISPLAYL} ${DISPLAYNG} ${DISPLAYVT}
 PDP11_OPT = -DVM_PDP11 -I ${PDP11D} ${NETWORK_OPT} ${DISPLAY_OPT}
 
 
@@ -1502,7 +1576,7 @@ VAX730 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
 	${PDP11D}/pdp11_hk.c ${PDP11D}/pdp11_vh.c ${PDP11D}/pdp11_dmc.c \
 	${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_tc.c ${PDP11D}/pdp11_rk.c \
 	${PDP11D}/pdp11_io_lib.c ${PDP11D}/pdp11_ch.c ${PDP11D}/pdp11_dup.c
-VAX730_OPT = -DVM_VAX -DVAX_730 -DUSE_INT64 -DUSE_ADDR64 -I VAX -I ${PDP11D} ${NETWORK_OPT}
+VAX730_OPT = -DVM_VAX -DVAX_730 -DUSE_INT64 -DUSE_ADDR64 -I ${VAXD} -I ${PDP11D} ${NETWORK_OPT}
 
 
 VAX750 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
@@ -1518,7 +1592,7 @@ VAX750 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
 	${PDP11D}/pdp11_vh.c ${PDP11D}/pdp11_dmc.c ${PDP11D}/pdp11_dup.c \
 	${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_tc.c ${PDP11D}/pdp11_rk.c \
 	${PDP11D}/pdp11_io_lib.c ${PDP11D}/pdp11_ch.c
-VAX750_OPT = -DVM_VAX -DVAX_750 -DUSE_INT64 -DUSE_ADDR64 -I VAX -I ${PDP11D} ${NETWORK_OPT}
+VAX750_OPT = -DVM_VAX -DVAX_750 -DUSE_INT64 -DUSE_ADDR64 -I ${VAXD} -I ${PDP11D} ${NETWORK_OPT}
 
 
 VAX780 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
@@ -1534,7 +1608,7 @@ VAX780 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
 	${PDP11D}/pdp11_vh.c ${PDP11D}/pdp11_dmc.c ${PDP11D}/pdp11_dup.c \
 	${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_tc.c ${PDP11D}/pdp11_rk.c \
 	${PDP11D}/pdp11_io_lib.c ${PDP11D}/pdp11_ch.c
-VAX780_OPT = -DVM_VAX -DVAX_780 -DUSE_INT64 -DUSE_ADDR64 -I VAX -I ${PDP11D} ${NETWORK_OPT}
+VAX780_OPT = -DVM_VAX -DVAX_780 -DUSE_INT64 -DUSE_ADDR64 -I ${VAXD} -I ${PDP11D} ${NETWORK_OPT}
 
 
 VAX8200 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
@@ -1549,7 +1623,7 @@ VAX8200 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
 	${PDP11D}/pdp11_hk.c ${PDP11D}/pdp11_vh.c ${PDP11D}/pdp11_dmc.c \
 	${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_tc.c ${PDP11D}/pdp11_rk.c \
 	${PDP11D}/pdp11_io_lib.c ${PDP11D}/pdp11_ch.c ${PDP11D}/pdp11_dup.c
-VAX8200_OPT = -DVM_VAX -DVAX_820 -DUSE_INT64 -DUSE_ADDR64 -I VAX -I ${PDP11D} ${NETWORK_OPT}
+VAX8200_OPT = -DVM_VAX -DVAX_820 -DUSE_INT64 -DUSE_ADDR64 -I ${VAXD} -I ${PDP11D} ${NETWORK_OPT}
 
 
 VAX8600 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
@@ -1565,7 +1639,7 @@ VAX8600 = ${VAXD}/vax_cpu.c ${VAXD}/vax_cpu1.c ${VAXD}/vax_fpa.c \
 	${PDP11D}/pdp11_vh.c ${PDP11D}/pdp11_dmc.c ${PDP11D}/pdp11_dup.c \
 	${PDP11D}/pdp11_td.c ${PDP11D}/pdp11_tc.c ${PDP11D}/pdp11_rk.c \
 	${PDP11D}/pdp11_io_lib.c ${PDP11D}/pdp11_ch.c
-VAX8600_OPT = -DVM_VAX -DVAX_860 -DUSE_INT64 -DUSE_ADDR64 -I VAX -I ${PDP11D} ${NETWORK_OPT}
+VAX8600_OPT = -DVM_VAX -DVAX_860 -DUSE_INT64 -DUSE_ADDR64 -I ${VAXD} -I ${PDP11D} ${NETWORK_OPT}
 
 
 PDP10D = ${SIMHD}/PDP10
@@ -1785,9 +1859,10 @@ ALTAIRZ80 = ${ALTAIRZ80D}/altairz80_cpu.c ${ALTAIRZ80D}/altairz80_cpu_nommu.c \
 	${ALTAIRZ80D}/s100_tarbell.c \
 	${ALTAIRZ80D}/wd179x.c ${ALTAIRZ80D}/s100_hdc1001.c \
 	${ALTAIRZ80D}/s100_if3.c ${ALTAIRZ80D}/s100_adcs6.c \
-	${ALTAIRZ80D}/m68kcpu.c ${ALTAIRZ80D}/m68kdasm.c ${ALTAIRZ80D}/m68kasm.c \
-	${ALTAIRZ80D}/m68kopac.c ${ALTAIRZ80D}/m68kopdm.c \
-	${ALTAIRZ80D}/m68kopnz.c ${ALTAIRZ80D}/m68kops.c ${ALTAIRZ80D}/m68ksim.c
+	${ALTAIRZ80D}/m68k/m68kcpu.c ${ALTAIRZ80D}/m68k/m68kdasm.c ${ALTAIRZ80D}/m68k/m68kasm.c \
+	${ALTAIRZ80D}/m68k/m68kopac.c ${ALTAIRZ80D}/m68k/m68kopdm.c \
+	${ALTAIRZ80D}/m68k/softfloat/softfloat.c \
+	${ALTAIRZ80D}/m68k/m68kopnz.c ${ALTAIRZ80D}/m68k/m68kops.c ${ALTAIRZ80D}/m68ksim.c
 ALTAIRZ80_OPT = -I ${ALTAIRZ80D}
 
 
@@ -1893,7 +1968,7 @@ B5500D = ${SIMHD}/B5500
 B5500 = ${B5500D}/b5500_cpu.c ${B5500D}/b5500_io.c ${B5500D}/b5500_sys.c \
 	${B5500D}/b5500_dk.c ${B5500D}/b5500_mt.c ${B5500D}/b5500_urec.c \
 	${B5500D}/b5500_dr.c ${B5500D}/b5500_dtc.c
-B5500_OPT = -I.. -DUSE_INT64 -DB5500 -DUSE_SIM_CARD
+B5500_OPT = -I${B5500D} -DUSE_INT64 -DB5500 -DUSE_SIM_CARD
 
 BESM6D = ${SIMHD}/BESM6
 BESM6 = ${BESM6D}/besm6_cpu.c ${BESM6D}/besm6_sys.c ${BESM6D}/besm6_mmu.c \
@@ -1901,92 +1976,7 @@ BESM6 = ${BESM6D}/besm6_cpu.c ${BESM6D}/besm6_sys.c ${BESM6D}/besm6_mmu.c \
         ${BESM6D}/besm6_tty.c ${BESM6D}/besm6_panel.c ${BESM6D}/besm6_printer.c \
         ${BESM6D}/besm6_pl.c ${BESM6D}/besm6_mg.c \
         ${BESM6D}/besm6_punch.c ${BESM6D}/besm6_punchcard.c ${BESM6D}/besm6_vu.c
-
-ifneq (,$(BESM6_BUILD))
-    BESM6_OPT = -I ${BESM6D} -DUSE_INT64 $(BESM6_PANEL_OPT)
-    ifneq (,$(and ${SDLX_CONFIG},${VIDEO_LDFLAGS}, $(or $(and $(call find_include,SDL2/SDL_ttf),$(call find_lib,SDL2_ttf)), $(and $(call find_include,SDL/SDL_ttf),$(call find_lib,SDL_ttf)))))
-        FONTPATH += /usr/share/fonts /Library/Fonts /usr/lib/jvm /System/Library/Frameworks/JavaVM.framework/Versions C:/Windows/Fonts
-        FONTPATH := $(dir $(foreach dir,$(strip $(FONTPATH)),$(wildcard $(dir)/.)))
-        FONTNAME += DejaVuSans.ttf LucidaSansRegular.ttf FreeSans.ttf AppleGothic.ttf tahoma.ttf
-#cmake-insert:set(BESM6_FONT)
-#cmake-insert:foreach (fdir IN ITEMS
-#cmake-insert:            "/usr/share/fonts" "/Library/Fonts" "/usr/lib/jvm"
-#cmake-insert:            "/System/Library/Frameworks/JavaVM.framework/Versions"
-#cmake-insert:            "$ENV{WINDIR}/Fonts")
-#cmake-insert:    foreach (font IN ITEMS
-#cmake-insert:                "DejaVuSans.ttf" "LucidaSansRegular.ttf" "FreeSans.ttf" "AppleGothic.ttf" "tahoma.ttf")
-#cmake-insert:        if (EXISTS ${fdir})
-#cmake-insert:            file(GLOB_RECURSE found_font ${fdir}/${font})
-#cmake-insert:            if (found_font)
-#cmake-insert:                get_filename_component(fontfile ${found_font} ABSOLUTE)
-#cmake-insert:                list(APPEND BESM6_FONT ${fontfile})
-#cmake-insert:            endif ()
-#cmake-insert:        endif ()
-#cmake-insert:    endforeach()
-#cmake-insert:endforeach()
-#cmake-insert:
-#cmake-insert:if (NOT BESM6_FONT)
-#cmake-insert:    message("No font file available, BESM-6 video panel disabled")
-#cmake-insert:    set(BESM6_PANEL_OPT)
-#cmake-insert:endif ()
-#cmake-insert:
-#cmake-insert:if (BESM6_FONT AND WITH_VIDEO)
-#cmake-insert:    list(GET BESM6_FONT 0 BESM6_FONT)
-#cmake-insert:endif ()
-        $(info font paths are: $(FONTPATH))
-        $(info font names are: $(FONTNAME))
-        find_fontfile = $(strip $(firstword $(foreach dir,$(strip $(FONTPATH)),$(wildcard $(dir)/$(1))$(wildcard $(dir)/*/$(1))$(wildcard $(dir)/*/*/$(1))$(wildcard $(dir)/*/*/*/$(1)))))
-        find_font = $(abspath $(strip $(firstword $(foreach font,$(strip $(FONTNAME)),$(call find_fontfile,$(font))))))
-        ifneq (,$(call find_font))
-            FONTFILE=$(call find_font)
-        else
-            $(info ***)
-            $(info *** No font file available, BESM-6 video panel disabled.)
-            $(info ***)
-            $(info *** To enable the panel display please specify one of:)
-            $(info ***          a font path with FONTPATH=path)
-            $(info ***          a font name with FONTNAME=fontname.ttf)
-            $(info ***          a font file with FONTFILE=path/fontname.ttf)
-            $(info ***)
-        endif
-    endif
-    ifeq (,$(and ${VIDEO_LDFLAGS}, ${FONTFILE}, $(BESM6_BUILD)))
-        $(info *** No SDL ttf support available.  BESM-6 video panel disabled.)
-        $(info ***)
-        ifeq (Darwin,$(OSTYPE))
-          ifeq (/opt/local/bin/port,$(shell which port))
-            $(info *** Info *** Install the MacPorts libSDL2-ttf development package to provide this)
-            $(info *** Info *** functionality for your OS X system:)
-            $(info *** Info ***       # port install libsdl2-ttf-dev)
-          endif
-          ifeq (/usr/local/bin/brew,$(shell which brew))
-            ifeq (/opt/local/bin/port,$(shell which port))
-              $(info *** Info ***)
-              $(info *** Info *** OR)
-              $(info *** Info ***)
-            endif
-            $(info *** Info *** Install the HomeBrew sdl2_ttf package to provide this)
-            $(info *** Info *** functionality for your OS X system:)
-            $(info *** Info ***       $$ brew install sdl2_ttf)
-          endif
-        else
-          ifneq (,$(and $(findstring Linux,$(OSTYPE)),$(call find_exe,apt-get)))
-            $(info *** Info *** Install the development components of libSDL2-ttf)
-            $(info *** Info *** packaged for your Linux operating system distribution:)
-            $(info *** Info ***        $$ sudo apt-get install libsdl2-ttf-dev)
-          else
-            $(info *** Info *** Install the development components of libSDL2-ttf packaged by your)
-            $(info *** Info *** operating system distribution and rebuild your simulator to)
-            $(info *** Info *** enable this extra functionality.)
-          endif
-        endif
-        BESM6_OPT = -I ${BESM6D} -DUSE_INT64 
-    else ifneq (,$(and $(findstring sdl2,${VIDEO_LDFLAGS}),$(call find_include,SDL2/SDL_ttf),$(call find_lib,SDL2_ttf)))
-        $(info using libSDL2_ttf: $(call find_lib,SDL2_ttf) $(call find_include,SDL2/SDL_ttf))
-        $(info ***)
-        BESM6_PANEL_OPT = -DFONTFILE=${FONTFILE} ${VIDEO_CCDEFS} ${VIDEO_LDFLAGS} -lSDL2_ttf
-    endif
-endif
+BESM6_OPT = -I ${BESM6D} -DUSE_INT64 $(BESM6_PANEL_OPT)
 
 PDP6D = ${SIMHD}/PDP10
 ifneq (,${DISPLAY_OPT})
@@ -2012,7 +2002,7 @@ KA10 = ${KA10D}/kx10_cpu.c ${KA10D}/kx10_sys.c ${KA10D}/kx10_df.c \
 	${KA10D}/kx10_rh.c ${KA10D}/kx10_imp.c ${KA10D}/ka10_tk10.c \
 	${KA10D}/ka10_mty.c ${KA10D}/ka10_imx.c ${KA10D}/ka10_ch10.c \
 	${KA10D}/ka10_stk.c ${KA10D}/ka10_ten11.c ${KA10D}/ka10_auxcpu.c \
-	$(KA10D)/ka10_pmp.c ${KA10D}/ka10_dkb.c ${KA10D}/pdp6_dct.c \
+	${KA10D}/ka10_pmp.c ${KA10D}/ka10_dkb.c ${KA10D}/pdp6_dct.c \
 	${KA10D}/pdp6_dtc.c ${KA10D}/pdp6_mtc.c ${KA10D}/pdp6_dsk.c \
 	${KA10D}/pdp6_dcs.c ${KA10D}/ka10_dpk.c ${KA10D}/kx10_dpy.c \
 	${KA10D}/ka10_ai.c ${KA10D}/ka10_iii.c ${KA10D}/kx10_disk.c \
@@ -2066,25 +2056,25 @@ KS10_OPT = -DKS=1 -DUSE_INT64 -I $(KS10D) -I $(PDP11D) ${NETWORK_OPT}
 
 ATT3B2D = ${SIMHD}/3B2
 ATT3B2M400 = ${ATT3B2D}/3b2_cpu.c ${ATT3B2D}/3b2_sys.c \
-	${ATT3B2D}/3b2_rev2_sys.c ${ATT3B2D}/3b2_rev2_mmu.c \
-	${ATT3B2D}/3b2_rev2_mau.c ${ATT3B2D}/3b2_rev2_csr.c \
-	${ATT3B2D}/3b2_rev2_timer.c ${ATT3B2D}/3b2_stddev.c \
-	${ATT3B2D}/3b2_mem.c ${ATT3B2D}/3b2_iu.c \
-	${ATT3B2D}/3b2_if.c ${ATT3B2D}/3b2_id.c \
-	${ATT3B2D}/3b2_dmac.c ${ATT3B2D}/3b2_io.c \
-	${ATT3B2D}/3b2_ports.c ${ATT3B2D}/3b2_ctc.c \
-	${ATT3B2D}/3b2_ni.c
+    ${ATT3B2D}/3b2_rev2_sys.c ${ATT3B2D}/3b2_rev2_mmu.c \
+    ${ATT3B2D}/3b2_mau.c ${ATT3B2D}/3b2_rev2_csr.c \
+    ${ATT3B2D}/3b2_timer.c ${ATT3B2D}/3b2_stddev.c \
+    ${ATT3B2D}/3b2_mem.c ${ATT3B2D}/3b2_iu.c \
+    ${ATT3B2D}/3b2_if.c ${ATT3B2D}/3b2_id.c \
+    ${ATT3B2D}/3b2_dmac.c ${ATT3B2D}/3b2_io.c \
+    ${ATT3B2D}/3b2_ports.c ${ATT3B2D}/3b2_ctc.c \
+    ${ATT3B2D}/3b2_ni.c
 ATT3B2M400_OPT = -DUSE_INT64 -DUSE_ADDR64 -DREV2 -I ${ATT3B2D} ${NETWORK_OPT}
 
-ATT3B2M600 = ${ATT3B2D}/3b2_cpu.c ${ATT3B2D}/3b2_sys.c \
-	${ATT3B2D}/3b2_rev3_sys.c ${ATT3B2D}/3b2_rev3_mmu.c \
-	${ATT3B2D}/3b2_rev2_mau.c ${ATT3B2D}/3b2_rev3_csr.c \
-	${ATT3B2D}/3b2_rev3_timer.c ${ATT3B2D}/3b2_stddev.c \
-	${ATT3B2D}/3b2_mem.c ${ATT3B2D}/3b2_iu.c \
-	${ATT3B2D}/3b2_if.c ${ATT3B2D}/3b2_dmac.c \
-	${ATT3B2D}/3b2_io.c ${ATT3B2D}/3b2_ports.c \
-	${ATT3B2D}/3b2_scsi.c ${ATT3B2D}/3b2_ni.c
-ATT3B2M600_OPT = -DUSE_INT64 -DUSE_ADDR64 -DREV3 -I ${ATT3B2D} ${NETWORK_OPT}
+ATT3B2M700 = ${ATT3B2D}/3b2_cpu.c ${ATT3B2D}/3b2_sys.c \
+    ${ATT3B2D}/3b2_rev3_sys.c ${ATT3B2D}/3b2_rev3_mmu.c \
+    ${ATT3B2D}/3b2_mau.c ${ATT3B2D}/3b2_rev3_csr.c \
+    ${ATT3B2D}/3b2_timer.c ${ATT3B2D}/3b2_stddev.c \
+    ${ATT3B2D}/3b2_mem.c ${ATT3B2D}/3b2_iu.c \
+    ${ATT3B2D}/3b2_if.c ${ATT3B2D}/3b2_dmac.c \
+    ${ATT3B2D}/3b2_io.c ${ATT3B2D}/3b2_ports.c \
+    ${ATT3B2D}/3b2_scsi.c ${ATT3B2D}/3b2_ni.c
+ATT3B2M700_OPT = -DUSE_INT64 -DUSE_ADDR64 -DREV3 -I ${ATT3B2D} ${NETWORK_OPT}
 
 SIGMAD = ${SIMHD}/sigma
 SIGMA = ${SIGMAD}/sigma_cpu.c ${SIGMAD}/sigma_sys.c ${SIGMAD}/sigma_cis.c \
@@ -2155,13 +2145,13 @@ ALL = pdp1 pdp4 pdp7 pdp8 pdp9 pdp15 pdp11 pdp10 \
 	nova eclipse hp2100 hp3000 i1401 i1620 s3 altair altairz80 gri \
 	i7094 ibm1130 id16 id32 sds lgp h316 cdc1700 \
 	swtp6800mp-a swtp6800mp-a2 tx-0 ssem b5500 intel-mds \
-	scelbi 3b2 i701 i704 i7010 i7070 i7080 i7090 \
+	scelbi 3b2 3b2-700 i701 i704 i7010 i7070 i7080 i7090 \
 	sigma uc15 pdp10-ka pdp10-ki pdp10-kl pdp10-ks pdp6 i650 \
 	imlac tt2500 sel32 
 
 all : ${ALL}
 
-EXPERIMENTAL = cdc1700 3b2-600
+EXPERIMENTAL = alpha pdq3 sage
 
 experimental : ${EXPERIMENTAL}
 
@@ -2273,7 +2263,7 @@ endif
 
 pdp11 : ${BIN}pdp11${EXE}
 
-${BIN}pdp11${EXE} : ${PDP11} ${SIM}
+${BIN}pdp11${EXE} : ${PDP11} ${SIM} ${BUILD_ROMS}
 	${MKDIRBIN}
 	${CC} ${PDP11} ${SIM} ${PDP11_OPT} ${CC_OUTSPEC} ${LDFLAGS}
 ifneq (,$(call find_test,${PDP11D},pdp11))
@@ -2593,7 +2583,7 @@ ifneq (,$(call find_test,${S3D},s3))
 	$@ $(call find_test,${S3D},s3) ${TEST_ARG}
 endif
 
-sel32: $(BIN)sel32$(EXE)
+sel32: ${BIN}sel32${EXE}
 
 ${BIN}sel32${EXE}: ${SEL32} ${SIM}
 	${MKDIRBIN}
@@ -2806,22 +2796,29 @@ ifneq (,$(call find_test,${B5500D},b5500))
 	$@ $(call find_test,${B5500D},b5500) ${TEST_ARG}
 endif
 
+3b2-400 : 3b2
+
 3b2 : ${BIN}3b2${EXE}
  
-${BIN}3b2${EXE} : ${ATT3B2M400} ${SIM} ${BUILD_ROMS}
+${BIN}3b2${EXE} : ${ATT3B2M400} ${SIM}
 	${MKDIRBIN}
 	${CC} ${ATT3B2M400} ${SIM} ${ATT3B2M400_OPT} ${CC_OUTSPEC} ${LDFLAGS}
+ifeq (${WIN32},)
+	cp ${BIN}3b2${EXE} ${BIN}3b2-400${EXE}
+else
+	copy $(@D)\3b2${EXE} $(@D)\3b2-400${EXE}
+endif
 ifneq (,$(call find_test,${ATT3B2D},3b2))
 	$@ $(call find_test,${ATT3B2D},3b2) ${TEST_ARG}
 endif
 
-3b2-600 : ${BIN}3b2-600${EXE}
+3b2-700 : ${BIN}3b2-700${EXE}
 
-${BIN}3b2-600${EXE} : ${ATT3B2M600} ${SIM} ${BUILD_ROMS}
+${BIN}3b2-700${EXE} : ${ATT3B2M700} ${SIM}
 	${MKDIRBIN}
-	${CC} ${ATT3B2M600} ${SCSI} ${SIM} ${ATT3B2M600_OPT} ${CC_OUTSPEC} ${LDFLAGS}
-ifneq (,$(call find_test,${ATT3B2D},3b2-600))
-	$@ $(call find_test,${ATT3B2D},3b2-600) ${TEST_ARG}
+	${CC} ${ATT3B2M700} ${SCSI} ${SIM} ${ATT3B2M700_OPT} ${CC_OUTSPEC} ${LDFLAGS}
+ifneq (,$(call find_test,${ATT3B2D},3b2-700))
+	$@ $(call find_test,${ATT3B2D},3b2-700) ${TEST_ARG}
 endif
 
 i7090 : ${BIN}i7090${EXE}

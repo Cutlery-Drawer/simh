@@ -87,6 +87,7 @@ extern DEVICE dco_dev;
 extern DEVICE tdc_dev;
 extern DEVICE dz_dev;
 extern DEVICE vh_dev;
+extern DEVICE dh_dev;
 extern DEVICE dt_dev;
 extern DEVICE rc_dev;
 extern DEVICE rf_dev;
@@ -121,7 +122,9 @@ extern DEVICE ch_dev;
 #ifdef USE_DISPLAY
 extern DEVICE ng_dev;
 extern DEVICE daz_dev;
+extern DEVICE tv_dev;
 #endif
+extern DEVICE mb_dev;
 extern REG cpu_reg[];
 extern int32 saved_PC;
 
@@ -167,6 +170,7 @@ DEVICE *sim_devices[] = {
     &dco_dev,
     &dz_dev,
     &vh_dev,
+    &dh_dev,
     &rc_dev,
     &rf_dev,
     &rk_dev,
@@ -204,7 +208,9 @@ DEVICE *sim_devices[] = {
 #ifdef USE_DISPLAY
     &ng_dev,
     &daz_dev,
+    &tv_dev,
 #endif
+    &mb_dev,
 #else
     &clk_dev,
     &tti_dev,
