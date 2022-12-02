@@ -1701,6 +1701,10 @@ Monitor control records
 This section lists the available Monitor Control Records.
 Column numbers are shown below fields that have a fixed location.
 
+.. _// JOB T:
+..    _JOB T:
+.. |// JOB T| replace:: ``// JOB T``
+..    |JOB T| replace::    ``JOB T``
 .. parsed-literal::
    :class: control-record column-numbers
    :name:  // JOB
@@ -1708,7 +1712,7 @@ Column numbers are shown below fields that have a fixed location.
    **// JOB T**  *crt0* *crt1* *crt2* *crt3* *crt4* *crtc* *crtw* *crtu* *hhhhhhhh* *ee*
    │  │   │  │    │    │    │    │    │    │    │    │        │
    1  4   8  11   16   21   26   31   36   41   46   51       60
-.. |// JOB| replace:: ``// JOB``
+.. |// JOB|   replace:: ``// JOB``
 
 Begin a new job.
 The optional parameters are:
@@ -1750,151 +1754,201 @@ See the description of the ``*EQUAT`` monitor control record later in this manua
    While another ``//JOB`` record can't hurt,
    it's not necessary to use one with the `www.ibm1130.org`_ online emulator as each job begins with a cold start.
 
-.. |// FOR| replace:: ``// FOR``
 .. parsed-literal::
    :class: control-record
    :name:  // FOR
 
    **// FOR**
-..
+.. |// FOR| replace:: ``// FOR``
 
-    Run the Fortran compiler.
-    Fortran Control Records and Fortran source cards follow this record.
-    The Fortran compiler reads source records up to the ``END`` statement.
-    An |// XEQ|_ or |// DUP|_ monitor control record should follow the ``END`` statement.
+Run the Fortran compiler.
+Fortran Control Records and Fortran source cards follow this record.
+The Fortran compiler reads source records up to the ``END`` statement.
+An |// XEQ|_ or |// DUP|_ monitor control record should follow the ``END`` statement.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // ASM
+
+   **// ASM**
 .. |// ASM| replace:: ``// ASM``
-.. _// ASM:
 
-:html:`<code><b>// ASM</b></code>`
-    Run the Macro Assembler.
-    Assembler Control Records and Assembler source cards follow this.
-    The assembler reads source records up to the ``END`` statement.
-    An |// XEQ|_ or |// DUP|_ monitor control record should follow the ``END`` statement.
+Run the Macro Assembler.
+Assembler Control Records and Assembler source cards follow this.
+The assembler reads source records up to the ``END`` statement.
+An |// XEQ|_ or |// DUP|_ monitor control record should follow the ``END`` statement.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // RPG
+
+   **// RPG**
 .. |// RPG| replace:: ``// RPG``
-.. _// RPG:
 
-:html:`<code><b>// RPG</b></code>`
-    Run the RPG compiler (not currently available)
+Run the RPG compiler (not currently available).
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // COBOL
+
+   **// COBOL**
 .. |// COBOL| replace:: ``// COBOL``
-.. _// COBOL:
 
-:html:`<code><b>// COBOL</b></code>`
-    Run the COBOL compiler (not currently available)
+Run the COBOL compiler (not currently available).
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // DUP
+
+   **// DUP**
 .. |// DUP| replace:: ``// DUP``
-.. _// DUP:
 
-:html:`<code><b>// DUP</b></code>`
-    Run the Disk Utility Program.
-    |DUP| Control records follow this record.
-    See `Disk Utility Program (DUP)`_ for more information.
+Run the Disk Utility Program.
+|DUP| Control records follow this record.
+See `Disk Utility Program (DUP)`_ for more information.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // *
+
+   **// *** *REMARKS*...
 .. |// *| replace:: ``// *``
-.. _// *:
 
-:html:`<code><b>// *</b> <var><ins>REMARKS</ins></var>...</code>`
-    Print ``remarks`` on the primary printer.
+Print ``remarks`` on the primary printer.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  // XEQ
+
+   **// XEQ** *pname* **L** *nn* *D* *cart* **X** **X**
+   │  │   │     │ │  │ │    │ │
+   1  4   8    14 │ 19 21  26 28
+                 16
 .. |// XEQ| replace:: ``// XEQ``
-.. _// XEQ:
 
-:html:`<code><b>//</b> <b>XEQ</b> <var><ins>pname</ins></var> <b>L</b> <var><ins>nn</ins></var> <b>D</b> <var><ins>cart</ins></var> <b>X</b> <b>X</b></code>`
-    :Column numbers:
-        .. parsed-literal::
+Execute a program from Working storage or the User area.
+The optional parameters are:
 
-           **// XEQ** *pname* **L** *nn* *D* *cart* **X** **X**
-           │  │   │     │ │  │ │    │ │
-           1  4   8    14 │ 19 21  26 28
-                         16
+=====================================  ============================================================================================================
+:html:`<code><var>pname</var></code>`  Name of program to execute. If omitted, the program in working storage is run.
+:html:`<code><var>L</var></code>`      If ``L`` is punched in column 14, a core load map is printed
+:html:`<code><var>nn</var></code>`     Number (right-justified) of supervisor control records that follow
+:html:`<code><var>D</var></code>`      Disk routine to use:
+                                       if blank or ``Z``, ``DISKZ`` is used.
+                                       If 0 or 1, ``DISK1`` is used.
+                                       If ``N``, ``DISKN`` is used.
+:html:`<code><var>cart</var></code>`   If specified, the cartridge on which the program is to be found
+:html:`<code><var>X</var></code>`      If there is a punch in column 26, ``LOCALS`` may call other ``LOCALS``
+:html:`<code><var>X</var></code>`      If there is a punch in column 28, the special ``ILS``\ s are used,
+                                       the routines with ``X`` in their names: ``ILSX4``, etc.
+=====================================  ============================================================================================================
 
-    Execute a program from Working storage or the User area.
-    The optional parameters are:
+.. parsed-literal::
+   :class: control-record
+   :name:  // PAUS
 
-    =====================================  ============================================================================================================
-    :html:`<code><var>pname</var></code>`  Name of program to execute. If omitted, the program in working storage is run.
-    :html:`<code><var>L</var></code>`      If ``L`` is punched in column 14, a core load map is printed
-    :html:`<code><var>nn</var></code>`     Number (right-justified) of supervisor control records that follow
-    :html:`<code><var>D</var></code>`      Disk routine to use:
-                                           if blank or ``Z``, ``DISKZ`` is used.
-                                           If 0 or 1, ``DISK1`` is used.
-                                           If ``N``, ``DISKN`` is used.
-    :html:`<code><var>cart</var></code>`   If specified, the cartridge on which the program is to be found
-    :html:`<code><var>X</var></code>`      If there is a punch in column 26, ``LOCALS`` may call other ``LOCALS``
-    :html:`<code><var>X</var></code>`      If there is a punch in column 28, the special ``ILS``\ s are used,
-                                           the routines with ``X`` in their names: ``ILSX4``, etc.
-    =====================================  ============================================================================================================
-
-.. class:: control-record
+   **// PAUS**
 .. |// PAUS| replace:: ``// PAUS``
-.. _// PAUS:
 
-:html:`<code><b>// PAUS</b></code>`
-    Halt the processor until the user presses PROGRAM START [emulator: ``go``].
-    This permits one to change cartridges, add cards, etc.
+Halt the processor until the user presses PROGRAM START [emulator: ``go``].
+This permits one to change cartridges, add cards, etc.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // TYP
+
+   **// TYP**
 .. |// TYP| replace:: ``// TYP``
-.. _// TYP:
 
-:html:`<code><b>// TYP</b></code>`
-    Make the console keyboard the principal input device.
+Make the console keyboard the principal input device.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // TEND
+
+   **// TEND**
 .. |// TEND| replace:: ``// TEND``
-.. _// TEND:
 
-:html:`<code><b>// TEND</b></code>`
-    End console keyboard input, and make the card reader the principal input device.
+End console keyboard input, and make the card reader the principal input device.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // EJECT
+
+   **// EJECT**
 .. |// EJECT| replace:: ``// EJECT``
-.. _// EJECT:
 
-:html:`<code><b>// EJECT</b></code>`
-    Issue a form feed to the principal output device.
+Issue a form feed to the principal output device.
 
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record
+   :name:  // CPRINT
+
+   **// CPRINT**
 .. |// CPRINT| replace:: ``// CPRINT``
-.. _// CPRINT:
 
-:html:`<code><b>// CPRINT</b></code>`
-    Make the console printer the principal output device.
+Make the console printer the principal output device.
 
-.. class:: control-record
-.. |// CEND| replace:: ``// CEND``
-.. _// CEND:
+.. parsed-literal::
+   :class: control-record
+   :name:  // CEND
 
-:html:`<code><b>// CEND</b></code>`
-    End console printer output, and restore the primary printer as principal output device.
+   **// CEND**
+.. |// CEND| replace:: ``// CEND``
+
+End console printer output, and restore the primary printer as principal output device.
 
 Supervisor control records
 --------------------------
 .. attention::
    This section is not yet written.
 
-:html:`<code><b>*LOCAL</b><var>main1</var><b>,</b><var>sub1</var><b>,</b><var>sub2</var>,...,sub<var>n</var></code>`
-    X
+.. parsed-literal::
+   :class: control-record
+   :name:  *LOCAL
 
-:html:`<code><b>*NOCAL</b><var>main1</var><b>,</b><var>sub1</var><b>,</b><var>sub2</var>,...,sub<var>n</var></code>`
-    X
+   ***LOCAL**\ *main1*\ **,**\ *sub1*\ **,**\ *sub2*\ ,...,sub\ *n*
+.. |*LOCAL| replace:: ``*LOCAL``
 
-:html:`<code><b>*FILES(</b>file1,name1)<b>,</b>...<b>,(</b>filen,namen<b>)</b>[<b>,</b>]</code>` |br|\ :html:`<code><b>*FILES(</b>file1,name1,car1)<b>,</b>...<b>,(</b>filen,namen,carn<b>)</b>[<b>,</b>]</code>` |br|\ :html:`<code><b>*FILES(</b>file1,,car1)<b>,</b>...<b>,(</b>filen,,carn<b>)</b>[<b>,</b>]</code>`
-    X
+X
 
-:html:`<code><b>*G2250</b>pname U N N N N</code>`
-    X
+.. parsed-literal::
+   :class: control-record
+   :name:  *NOCAL
 
-:html:`<code><b>*EQUAT(</b><var>sub1</var><b>,</b><var>sub2</var><b>),</b>...<b>,(</b><var>subn</var><b>,</b><var>subm</var><b>)</b></code>`
-    X
+   ***NOCAL**\ *main1*\ **,**\ *sub1*\ **,**\ *sub2*\ ,...,sub\ *n*
+.. |*NOCAL| replace:: ``*NOCAL``
+
+X
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *FILES
+
+   ***FILES(**\ file1,name1)\ **,**\ ...\ **,(**\ filen,namen\ **)**\ [**,**]
+   ***FILES(**\ file1,name1,car1)\ **,**\ ...\ **,(**\ filen,namen,carn\ **)**\ [\ **,**\ ]
+   ***FILES(**\ file1,,car1)\ **,**\ ...\ **,(**\ filen,,carn\ **)**\ [**,**\ ]
+.. |*FILES| replace:: ``*FILES``
+
+X
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *G2250
+
+   ***G2250**\ pname U N N N N
+.. |*G2250| replace:: ``*G2250``
+
+X
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *EQUAT
+
+   ***EQUAT(**\ *sub1*\ **,**\ *sub2*\ **),**\ ...\ **,(**\ *subn*\ **,**\ *subm*\ **)**
+.. |*EQUAT| replace:: ``*EQUAT``
+
+X
 
 Disk utility program (|DUP|)
 ============================
@@ -1964,364 +2018,2192 @@ the monitor uses the master cartridge.
 
 DUP control records
 -------------------
-.. class:: control-record
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DUMP
+
+   ***DUMP**       *fm*  *to*  *fname*     *fmid*  *toid*
+   │           │   │   │         │     │
+   1           13  17  21        31    37
 .. |*DUMP| replace:: ``*DUMP``
-.. _*DUMP:
 
-:html:`<code><b>*DUMP</b> <var><ins>fm</ins></var> <var><ins>to</ins></var> <var><ins>fname</ins></var> <var><ins>fmid</ins></var> <var><ins>toid</ins></var></code>`
-    :Column numbers:
-        .. parsed-literal::
+Dump data from location ``fm`` to location ``to``.
+The program to be dumped is ``fname``,
+which may omitted when dumping from WS to PR.
+The optional ``fmid`` and ``toid`` parameters specify the source and destination cartridges,
+if applicable.
 
-           ***DUMP**       *fm*  *to*  *fname*     *fmid*  *toid*
-           │           │   │   │         │     │
-           1           13  17  21        31    37
+The following format conversions will take place:
 
-    Dump data from location ``fm`` to location ``to``.
-    The program to be dumped is ``fname``,
-    which may omitted when dumping from WS to PR.
-    The optional ``fmid`` and ``toid`` parameters specify the source and destination cartridges,
-    if applicable.
++--------------------------+-----------+-------------+------------------------+
+| FM location              | FM format | TO location | Resulting TO format    |
++==========================+===========+=============+========================+
+| ``UA``                   | ``DSF``   | ``WS``      | ``DSF``                |
++--------------------------+-----------+-------------+------------------------+
+| ``UA`` or ``WS``         | ``DSF``   | ``CD``      | ``CDS``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PT``      | ``PTS``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PR``      | ``PRD``                |
++--------------------------+-----------+-------------+------------------------+
+| ``UA`` or ``FX``         | ``DDF``   | ``WS``      | ``DDF``                |
++--------------------------+-----------+-------------+------------------------+
+| ``UA``, ``FX`` or ``WS`` | ``DDF``   | ``CD``      | ``CDD``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PT``      | ``PTD``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PR``      | ``PRD``                |
++--------------------------+-----------+-------------+------------------------+
+| ``UA`` or ``FX``         | ``DCI``   | ``WS``      | ``DCI``                |
++--------------------------+-----------+-------------+------------------------+
+| ``UA``, ``FX`` or ``WS`` | ``DCI``   | ``CD``      | ``CDC``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PT``      | ``PTC``                |
++--------------------------+-----------+-------------+------------------------+
+|                          |           | ``PR``      | ``PRD``                |
++--------------------------+-----------+-------------+------------------------+
 
-    The following format conversions will take place:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DUMPDATA
 
-    +--------------------------+-----------+-------------+------------------------+
-    | FM location              | FM format | TO location | Resulting TO format    |
-    +==========================+===========+=============+========================+
-    | ``UA``                   | ``DSF``   | ``WS``      | ``DSF``                |
-    +--------------------------+-----------+-------------+------------------------+
-    | ``UA`` or ``WS``         | ``DSF``   | ``CD``      | ``CDS``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PT``      | ``PTS``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PR``      | ``PRD``                |
-    +--------------------------+-----------+-------------+------------------------+
-    | ``UA`` or ``FX``         | ``DDF``   | ``WS``      | ``DDF``                |
-    +--------------------------+-----------+-------------+------------------------+
-    | ``UA``, ``FX`` or ``WS`` | ``DDF``   | ``CD``      | ``CDD``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PT``      | ``PTD``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PR``      | ``PRD``                |
-    +--------------------------+-----------+-------------+------------------------+
-    | ``UA`` or ``FX``         | ``DCI``   | ``WS``      | ``DCI``                |
-    +--------------------------+-----------+-------------+------------------------+
-    | ``UA``, ``FX`` or ``WS`` | ``DCI``   | ``CD``      | ``CDC``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PT``      | ``PTC``                |
-    +--------------------------+-----------+-------------+------------------------+
-    |                          |           | ``PR``      | ``PRD``                |
-    +--------------------------+-----------+-------------+------------------------+
-
-.. class:: control-record
+   ***DUMPDATA**   *fm*  *to*  *fname* *nnnn*\ *fmid*  *toid*
+   │           │   │   │     │   │     │
+   1           13  17  21    27  31    37
 .. |*DUMPDATA| replace:: ``*DUMPDATA``
-.. _*DUMPDATA:
 
-:html:`<code><b>*DUMPDATA</b> <var><ins>fm</ins></var> <var><ins>to</ins></var> <var><ins>fname</ins></var> <var><ins>nnnn</ins></var> <var><ins>fmid</ins></var> <var><ins>toid</ins></var></code>`
-    :Column numbers:
-        .. parsed-literal::
+Like |*DUMP|_, but the output is always in Data format.
+The count parameter ``nnnn`` indicates the number of sectors to dump.
 
-           ***DUMPDATA**   *fm*  *to*  *fname* *nnnnfmid*  *toid*
-           │           │   │   │     │   │     │
-           1           13  17  21    27  31    37
+The following format conversions will take place:
 
-    Like |*DUMP|_, but the output is always in Data format.
-    The count parameter ``nnnn`` indicates the number of sectors to dump.
++--------------------------+-----------+-------------+---------------------+
+| FM location              | FM format | TO location | Resulting TO format |
++==========================+===========+=============+=====================+
+| ``UA``                   | ``DSF``   | ``WS``      | ``DDF``             |
++--------------------------+-----------+-------------+---------------------+
+| ``UA`` or ``WS``         | ``DSF``   | ``CD``      | ``CDD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PT``      | ``PTD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PR``      | ``PRD``             |
++--------------------------+-----------+-------------+---------------------+
+| ``UA`` or ``FX``         | ``DDF``   | ``WS``      | ``DDF``             |
++--------------------------+-----------+-------------+---------------------+
+| ``UA``, ``FX`` or ``WS`` | ``DDF``   | ``CD``      | ``CDD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PT``      | ``PTD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PR``      | ``PRD``             |
++--------------------------+-----------+-------------+---------------------+
+| ``UA`` or ``FX``         | ``DCI``   | ``WS``      | ``DDF``             |
++--------------------------+-----------+-------------+---------------------+
+| ``UA``, ``FX`` or ``WS`` | ``DCI``   | ``CD``      | ``CDD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PT``      | ``PTD``             |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PR``      | ``PRD``             |
++--------------------------+-----------+-------------+---------------------+
 
-    The following format conversions will take place:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DUMPDATA E
 
-    +--------------------------+-----------+-------------+---------------------+
-    | FM location              | FM format | TO location | Resulting TO format |
-    +==========================+===========+=============+=====================+
-    | ``UA``                   | ``DSF``   | ``WS``      | ``DDF``             |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA`` or ``WS``         | ``DSF``   | ``CD``      | ``CDD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PT``      | ``PTD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PR``      | ``PRD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA`` or ``FX``         | ``DDF``   | ``WS``      | ``DDF``             |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA``, ``FX`` or ``WS`` | ``DDF``   | ``CD``      | ``CDD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PT``      | ``PTD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PR``      | ``PRD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA`` or ``FX``         | ``DCI``   | ``WS``      | ``DDF``             |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA``, ``FX`` or ``WS`` | ``DCI``   | ``CD``      | ``CDD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PT``      | ``PTD``             |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PR``      | ``PRD``             |
-    +--------------------------+-----------+-------------+---------------------+
+   ***DUMPDATA E** *fm*  *to*  *fname* *nnnn*\ *fmid*  *toid*
+   │         │ │   │   │     │   │     │
+   1        11 13  17  21    27  31    37
+.. |*DUMPDATA E| replace:: ``*DUMPDATA E``
 
-.. |DUMPDATA E| replace:: ``DUMPDATA E``
-.. _DUMPDATA E:
+Copy data in packed |EBCDIC| format (40 words per 80 card positions) from disk to card or printer.
+Data is copied to WS without any conversion.
 
-:html:`<code><b>*DUMPDATA E</b> <var>fm</var> <var>to</var> <var>fname</var> <var>nnnn</var> <var>fmid</var> <var>toid</var></code>`
-    Copy data in packed |EBCDIC| format (40 words per 80 card positions) from disk to card or printer.
-    Data is copied to WS without any conversion.
++--------------------------+-----------+-------------+---------------------+
+| FM location              | FM format | TO location | Resulting TO format |
++==========================+===========+=============+=====================+
+| ``UA`` or ``FX``         | Any       | ``WS``      | Same                |
++--------------------------+-----------+-------------+---------------------+
+| ``UA``, ``FX`` or ``WS`` | |EBCDIC|  | ``CD``      | Hollerith text      |
++--------------------------+-----------+-------------+---------------------+
+|                          |           | ``PR``      | Printed text        |
++--------------------------+-----------+-------------+---------------------+
 
-    Column numbers:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DUMPLET
 
-    .. parsed-literal::
+   ***DUMPLET**            *fname*     *cart*
+   │                   │         │
+   1                   21        31
+.. |*DUMPLET| replace:: ``*DUMPLET``
 
-       ***DUMPDATA E** *fm*  *to*  *fname* *nnnnfmid*  *toid*
-       │         │ │   │   │     │   │     │
-       1        11 13  17  21    27  31    37
+Display the location equivalence table (user area directory) of the specified cartridge,
+or if ``cart`` is omitted,
+all cartridges.
+The listing is limited to a specific file if a filename ``fname`` is specified,
+otherwise all files are listed.
+If a fixed area is listed,
+the FLET is listed as well.
 
-    +--------------------------+-----------+-------------+---------------------+
-    | FM location              | FM format | TO location | Resulting TO format |
-    +==========================+===========+=============+=====================+
-    | ``UA`` or ``FX``         | Any       | ``WS``      | Same                |
-    +--------------------------+-----------+-------------+---------------------+
-    | ``UA``, ``FX`` or ``WS`` | |EBCDIC|  | ``CD``      | Hollerith text      |
-    +--------------------------+-----------+-------------+---------------------+
-    |                          |           | ``PR``      | Printed text        |
-    +--------------------------+-----------+-------------+---------------------+
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DUMPFLET
 
-.. |DUMPLET| replace:: ``DUMPLET``
-.. _DUMPLET:
+   ***DUMPFLET**           *fname*     *cart*
+   │                   │         │
+   1                   21        31
+.. |*DUMPFLET| replace:: ``*DUMPFLET``
 
-:html:`<code><b>*DUMPLET</b> <var>fname</var> <var>cart</var></code>`
-    Display the location equivalence table (user area directory) of the specified cartridge,
-    or if ``cart`` is omitted,
-    all cartridges.
-    The listing is limited to a specific file if a filename ``fname`` is specified,
-    otherwise all files are listed.
-    If a fixed area is listed,
-    the FLET is listed as well.
+Display the fixed location equivalence table (fixed area directory) of the specified cartridge,
+or if ``cart`` is omitted,
+all cartridges.
+The listing is limited to a specific file if a filename ``fname`` is specified,
+otherwise all files are listed.
 
-    Column numbers:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STORE
 
-    .. parsed-literal::
+   ***STORE**    *s* *fm*  *to*  *fname*     *fmid*  *toid*
+   │         │ │   │   │         │     │
+   1        11 13  17  21        31    37
+.. |*STORE| replace:: ``*STORE``
 
-       ***DUMPLET**            *fname*     *cart*
-       │                   │         │
-       1                   21        31
-
-.. |DUMPFLET| replace:: ``DUMPFLET``
-.. _DUMPFLET:
-
-:html:`<code><b>*DUMPFLET</b> <var>fname</var> <var>cart</var></code>`
-    Display the fixed location equivalence table (fixed area directory) of the specified cartridge,
-    or if ``cart`` is omitted,
-    all cartridges.
-    The listing is limited to a specific file if a filename ``fname`` is specified,
-    otherwise all files are listed.
-
-    Column numbers:
-
-    .. parsed-literal::
-
-       ***DUMPFLET**           *fname*     *cart*
-       │                   │         │
-       1                   21        31
-
-.. |STORE| replace:: ``STORE``
-.. _STORE:
-
-:html:`<code><b>*STORE</b> <var>s</var> <var>fm</var> <var>to</var> <var>fname</var> <var>fmid</var> <var>toid</var></code>`
-    Save a file.
-    Typically ``fm`` is WS for Working Storage,
-    ``to`` is UA for the User Area,
-    and ``fname`` is the name to be given to the file.
-
-    Column numbers:
-
-    .. parsed-literal::
-
-       ***STORE**    *s* *fm*  *to*  *fname*     *fmid*  *toid*
-       │         │ │   │   │         │     │
-       1        11 13  17  21        31    37
+Save a file.
+Typically ``fm`` is WS for Working Storage,
+``to`` is UA for the User Area,
+and ``fname`` is the name to be given to the file.
 
 .. attention::
    This section is not yet complete.
 
-.. |STOREDATA| replace:: ``STOREDATA``
-.. _STOREDATA:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STOREDATA
 
-:html:`<code><b>*STOREDATA</b> <var>fm</var> <var>to</var> <var>fname</var> <var>fmid</var> <var>toid</var></code>`
-    .. XXX: Missing description
+   ***STOREDATA**  *fm*  *to*  *fname*     *fmid*  *toid*
+   │           │   │   │         │     │
+   1           13  17  21        31    37
+.. |*STOREDATA| replace:: ``*STOREDATA``
 
-    Column numbers:
+XXX
 
-    .. parsed-literal::
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STOREDATAE
 
-       ***STOREDATA**  *fm*  *to*  *fname*     *fmid*  *toid*
-       │           │   │   │         │     │
-       1           13  17  21        31    37
+   ***STOREDATAE** *fm*  *to*  *fname* *nnnn*\ *fmid*  *toid*
+   │           │   │   │     │   │     │
+   1           13  17  21    27  31    37
+.. |*STOREDATAE| replace:: ``*STOREDATAE``
 
-.. |STOREDATAE| replace:: ``STOREDATAE``
-.. _STOREDATAE:
+XXX
 
-:html:`<code><b>*STOREDATAE</b> <var>fm</var> <var>to</var> <var>fname</var> <var>nnnn</var> <var>fmid</var> <var>toid</var></code>`
-    .. XXX: Missing description
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STOREDATACI
 
-    Column numbers:
+   ***STOREDATACI**\ *fm*  *to*  *fname* *nnnn*\ *fmid*  *toid*
+   │           │   │   │     │   │     │
+   1           13  17  21    27  31    37
+.. |*STOREDATACI| replace:: ``*STOREDATACI``
 
-    .. parsed-literal::
+XXX
 
-       ***STOREDATAE** *fm*  *to*  *fname* *nnnnfmid*  *toid*
-       │           │   │   │     │   │     │
-       1           13  17  21    27  31    37
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STORECI
 
-.. |STOREDATACI| replace:: ``STOREDATACI``
-.. _STOREDATACI:
+   ***STORECI**\ *d* **XX**\ *fm*  *to*  *fname* *nnnn*\ *fmid*  *toid* **N**
+   │       │ │ │   │   │     │   │     │    │
+   1       9 │ 13  17  21    27  31    37   42
+             11
+.. |*STORECI| replace:: ``*STORECI``
 
-:html:`<code><b>*STOREDATACI</b> <var>fm</var> <var>to</var> <var>fname</var> <var>nnnn</var> <var>fmid</var> <var>toid</var></code>`
-    .. XXX: Missing description
+XXX
 
-    Column numbers:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *STOREMOD
 
-    .. parsed-literal::
+   ***STOREMOD**   *fm*  *to*  *fname*     *fmid*  *toid*
+   │           │   │   │         │     │
+   1           13  17  21        31    37
+.. |*STOREMOD| replace:: ``*STOREMOD``
 
-       ***STOREDATACI**\ *fm*  *to*  *fname* *nnnnfmid*  *toid*
-       │           │   │   │     │   │     │
-       1           13  17  21    27  31    37
+XXX
 
-.. |STORECI| replace:: ``STORECI``
-.. _STORECI:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DELETE
 
-:html:`<code><b>*STORECI</b> <var>d</var> <b>XX</b> <var>fm</var> <var>to</var> <var>fname</var> <var>nnnn</var> <var>fmid</var> <var>toid</var> <b>N</b></code>`
-    .. XXX: Missing description
+   ***DELETE**             *fname*     *fmid*
+   │                   │         │
+   1                   21        31
+.. |*DELETE| replace:: ``*DELETE``
 
-    Column numbers:
+Delete a specified file from the LET directory.
+``fname`` is the name of the file to delete.
+The optional cartridge ID ``fmid`` specifies which cartridge contains the file.
 
-    .. parsed-literal::
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DEFINE CORE SIZE
 
-       ***STORECI**\ *d* **XX**\ *fm*  *to*  *fname* *nnnnfmid*  *toid* **N**
-       │       │ │ │   │   │     │   │     │    │
-       1       9 │ 13  17  21    27  31    37   42
-                 11
+   ***DEFINE CORE SIZE** *xxx*
+   │                 │
+   1                 19
+.. |*DEFINE CORE SIZE| replace:: ``*DEFINE CORE SIZE``
 
-.. |STOREMOD| replace:: ``STOREMOD``
-.. _STOREMOD:
+Change the system core size value in COMMA (the supervisor data storage area,
+which is kept in core and mirrored on the master cartridge).
+This value sets the upper limit of storage which the system is permitted to use.
+The value must be specified as :literal:`"4K "`, :literal:`"8K "`, :literal:`"16K"` or :literal:`"32K"`,
+left-adjusted.
 
-:html:`<code><b>*STOREMOD</b> <var>fm</var> <var>to</var> <var>fname</var> <var>fmid</var> <var>toid</var></code>`
-    .. XXX: Missing description
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DEFINE FIXED AREA
 
-    Column numbers:
+   ***DEFINE FIXED AREA**        *nnnn*\ **-**     *cart*
+   │                         │   │     │
+   1                         27  31    37
+.. |*DEFINE FIXED AREA| replace:: ``*DEFINE FIXED AREA``
 
-    .. parsed-literal::
+Create a file storage area called the "fixed area" on the specified cartridge.
+(The fixed area is not automatically defragmented when files are deleted,
+as the normal file storage area is).
+The number of cylinders to reserve for the fixed area is specified in columns 27 through 30.
+The minimum number of cylinders is two.
 
-       ***STOREMOD**   *fm*  *to*  *fname*     *fmid*  *toid*
-       │           │   │   │         │     │
-       1           13  17  21        31    37
+If a fixed area already exists,
+this directive increases or decreases the fixed area by the specified number of cylinders.
+To decrease the size,
+punch a ``-`` sign in column 31.
 
-.. |DELETE| replace:: ``DELETE``
-.. _DELETE:
+.. _*DEFINE PRINC PRINT:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DEFINE PRINC INPUT
 
-:html:`<code><b>*DELETE</b> <var>fname</var> <var>fmid</var></code>`
-    Delete a specified file from the LET directory.
-    ``fname`` is the name of the file to delete.
-    The optional cartridge ID ``fmid`` specifies which cartridge contains the file.
+   ***DEFINE PRINC INPUT** *xxxx*
+   ***DEFINE PRINC PRINT** *xxxx*
+   │                   │
+   1                   21
+.. |*DEFINE PRINC INPUT| replace:: ``*DEFINE PRINC INPUT``
+.. |*DEFINE PRINC PRINT| replace:: ``*DEFINE PRINC PRINT``
 
-    Column numbers:
+Define the principal printer used for system output or the principal input used for card input.
+The argument to |*DEFINE PRINC PRINT| can be ``1403`` to specify the 1403 printer,
+``1132`` to specify the 1132 printer,
+or blank to specify the console printer.
+The argument to |*DEFINE PRINC INPUT| can be ``1442`` to specify the 1442 card read/punch,
+or ``2501`` to specify the 2501 reader.
 
-    .. parsed-literal::
+These directives copy the appropriate device I/O routines to fixed locations on the master cartridge,
+from where they are loaded when the monitor needs to perform I/O.
 
-       ***DELETE**             *fname*     *fmid*
-       │                   │         │
-       1                   21        31
+.. _*DEFINE VOID FORTRAN:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DEFINE VOID ASSEMBLER
 
-.. |DEFINE CORE SIZE| replace:: ``DEFINE CORE SIZE``
-.. _DEFINE CORE SIZE:
+   ***DEFINE VOID ASSEMBLER**
+   ***DEFINE VOID FORTRAN**
+   │
+   1
+.. |*DEFINE VOID ASSEMBLER| replace:: ``*DEFINE VOID ASSEMBLER``
+.. |*DEFINE VOID FORTRAN|   replace:: ``*DEFINE VOID FORTRAN``
 
-:html:`<code><b>*DEFINE CORE SIZE</b> <var>xxx</var></code>`
-    Change the system core size value in COMMA (the supervisor data storage area,
-    which is kept in core and mirrored on the master cartridge).
-    This value sets the upper limit of storage which the system is permitted to use.
-    The value must be specified as :literal:`"4K "`, :literal:`"8K "`, :literal:`"16K"` or :literal:`"32K"`,
-    left-adjusted.
+Delete the Assembler or Fortran compiler from the System Area on the master cartridge.
+The system area is then packed to recover the space occupied by the deleted program.
+(This must be done before defining a Fixed Area on the disk).
 
-    Column numbers:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DFILE
 
-    .. parsed-literal::
+   ***DFILE**          *to*  *fname* *nnnn*      *toid*
+   │               │   │     │         │
+   1               17  21    27        37
+.. |*DFILE| replace:: ``*DFILE``
 
-       ***DEFINE CORE SIZE** *xxx*
-       │                 │
-       1                 19
+XXX
 
-.. |DEFINE FIXED AREA| replace:: ``DEFINE FIXED AREA``
-.. _DEFINE FIXED AREA:
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *DWADR
 
-:html:`<code><b>*DEFINE FIXED AREA</b> <var>nnnn</var> <b>-</b> <var>cart</var></code>`
-    Create a file storage area called the "fixed area" on the specified cartridge.
-    (The fixed area is not automatically defragmented when files are deleted,
-    as the normal file storage area is).
-    The number of cylinders to reserve for the fixed area is specified in columns 27 through 30.
-    The minimum number of cylinders is two.
+   ***DWADR**                              *cart*
+   │                                   │
+   1                                   37
+.. |*DWADR| replace:: ``*DWADR``
 
-    If a fixed area already exists,
-    this directive increases or decreases the fixed area by the specified number of cylinders.
-    To decrease the size,
-    punch a ``-`` sign in column 31.
+Write sector addresses on each sector in Working Storage,
+used to repair the disk after an errant program has mangled these sectors.
+The contents of Working Storage are destroyed.
 
-    Column numbers:
+(The first word of each sector of a DMS disk must contain the sector address.
+This information is used to verify the position of the read head after track-to-track seeks.
+Fortran I/O routines will not overwrite sector addresses,
+but it's possible for a program that does direct disk I/O using assembly routines to do so;
+this renders the disk useless until it is repaired by ``DWADR`` or reformatting).
 
-    .. parsed-literal::
+.. parsed-literal::
+   :class: control-record column-numbers
+   :name:  *MACRO UPDATE
 
-       ***DEFINE FIXED AREA**        *nnnn*\ **-**     *cart*
-       │                         │   │     │
-       1                         27  31    37
+   ***MACRO UPDATE**
+.. |*MACRO UPDATE| replace:: ``*MACRO UPDATE``
 
-.. |DEFINE PRINC INPUT| replace:: ``DEFINE PRINC INPUT``
-.. |DEFINE PRINC PRINT| replace:: ``DEFINE PRINC PRINT``
-.. _DEFINE PRINC INPUT:
-.. _DEFINE PRINC PRINT:
+XXX
 
-:html:`<code><b>*DEFINE PRINC INPUT</b> <var>xxxx</var></code>` |br|\ :html:`<code><b>*DEFINE PRINC PRINT</b> <var>xxxx</var></code>`
-    Define the principal printer used for system output or the principal input used for card input.
-    The argument to |DEFINE PRINC PRINT| can be ``1403`` to specify the 1403 printer,
-    ``1132`` to specify the 1132 printer,
-    or blank to specify the console printer.
-    The argument to |DEFINE PRINC INPUT| can be ``1442`` to specify the 1442 card read/punch,
-    or ``2501`` to specify the 2501 reader.
+.. note::
+   A zero punched in column 35 of a |DUP| control record causes |DUP| to print core dumps during its execution,
+   for debugging purposes.
+   Other digits in column 35 cause core dumps to be generated when specific phases are in control.
+   See `IBM 1130 Disk Monitor Programming System, Version 2 Program Logic Manual`, file number 1130-36, page 63).
 
-    These directives copy the appropriate device I/O routines to fixed locations on the master cartridge,
-    from where they are loaded when the monitor needs to perform I/O.
+Temporary mode restrictions
+---------------------------
+When temporary mode was specified on the current |// JOB| monitor control record,
+the following ``DUP`` restrictions apply:
 
-    Column numbers:
+================  =================
+|DUP| operation   Restrictions
+================  =================
+|*STORECI|_       To UA only
+|*STOREDATA|_     To UA and WS only
+|*STOREDATACI|_   To UA only
+|*STOREMOD|_      Not allowed
+|*DWADR|_         Not allowed
+|*DELETE|_        Not allowed
+``*DEFINE`` ...   Not allowed
+|*DFILE|_         To UA only
+|*MACRO UPDATE|_  Not allowed
+================  =================
 
-    .. parsed-literal::
+At the end of the job,
+the dividing line between the User Area and WS is slid back to its original location,
+effectively deleting any files saved to UA during the job.
+This is convenient when developing programs with subroutines,
+as the subroutines will not accumulate on the disk between runs.
 
-       ***DEFINE PRINC INPUT** *xxxx*
-       ***DEFINE PRINC PRINT** *xxxx*
-       │                   │
-       1                   21
+IBM 1130 Fortran
+================
+The Fortran compiler included with DMS R2 is a FORTRAN-66 compiler.
+Arithmetic ``if``\ s,
+``do``\ s can't run backwards,
+one-trip ``do``\ s,
+5-letter variable names, etc.
 
-.. |DEFINE VOID ASSEMBLER| replace:: ``DEFINE VOID ASSEMBLER``
-.. |DEFINE VOID FORTRAN|   replace:: ``DEFINE VOID FORTRAN``
-.. _DEFINE VOID ASSEMBLER:
-.. _DEFINE VOID FORTRAN:
+Using functions and subroutines
+-------------------------------
+Function subprograms are strictly prohibited from producing "side effects" and may not modify dummy variables (parameters) or variables in |COMMON|_.
 
-:html:`<code><b>*DEFINE VOID ASSEMBLER</b></code>` |br|\ :html:`<code><b>*DEFINE VOID FORTRAN</b></code>`
-    Delete the Assembler or Fortran compiler from the System Area on the master cartridge.
-    The system area is then packed to recover the space occupied by the deleted program.
-    (This must be done before defining a Fixed Area on the disk).
+In addition:
 
-    Column numbers:
+* Functions *must* have at least one argument.
+  (Note: if you forget this and attempt to call a function with no arguments,
+  you will get a syntax error,
+  but the wrong statement will be flagged due to a bug in the compiler).
+* Functions may not be called recursively.
+* Calling a function or subroutine with the wrong number of arguments will cause a horrific crash.
 
-    .. parsed-literal::
+Mainline programs and subprograms must be compiled separately.
+Functions and subroutines are compiled first and stored on the disk in the User Area.
+When the main program has been compiled,
+the |// XEQ|_ control card will invoke the Core Load Builder (linker) which will pull in the subprograms.
+The general order of a job deck looks like this:
 
-       ***DEFINE VOID ASSEMBLER**
-       ***DEFINE VOID FORTRAN**
-       │
-       1
+.. parsed-literal::
 
-.. |DFILE| replace:: ``DFILE``
-.. _DFILE:
+   **// JOB T**
+   **// FOR**
+   *(first subprogram)*
+   **// DUP**
+   ***STORE**      **WS**  **UA**  *subn1*
+               │   │   └─ column 21
+               │   └─ column 17
+               └─ column 13
+   **// FOR**
+   *(second subprogram)*
+   **// DUP**
+   ***STORE**      **WS**  **UA**  *subn2*
+   **// FOR**
+   *(mainline program)*
+   **// XEQ**
+   *(input cards, if any)*
 
-:html:`<code><b>*DFILE</b> <var>to</var> <var>fname</var> <var>nnnn</var> <var>toid</var></code>`
-    .. XXX: Missing description
+During initial development,
+you will probably want to recompile the subprograms with each run.
+In this case,
+use the |// JOB T|_ option to delete the routines from the disk at the end of the job,
+or use a |*DELETE|_ |DUP| control record before the |*STORE|_ record to delete the previous version from the disk before attempting to store a new one.
+In other words,
+the deck should follow the deck outline above,
+or omit the |JOB T|_ option and use |*DELETE|_ controls:
 
-    Column numbers:
+.. parsed-literal::
 
-    .. parsed-literal::
+   **// JOB**
+   **// FOR**
+   *(first subprogram)*
+   **// DUP**
+   ***DELETE**             *subn1*
+   ***STORE**      **WS**  **UA**  *subn1*
+   ...
 
-       ***DFILE**          *to*  *fname* *nnnn*      *toid*
-       │               │   │     │         │
-       1               17  21    27        37
+Once development has stabilized,
+you may use the compiled subroutines already stored on the disk and omit them from future compile and run jobs.
+
+Fortran control records
+-----------------------
+Fortran compiler control records are placed at the beginning of a source deck just after the |// FOR|_ monitor control record and before the first line of Fortran source code.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *IOCS
+
+   ***IOCS(name, name, ...)**
+.. |*IOCS| replace:: ``*IOCS``
+
+(Mainline programs only).
+Specify hardware devices that the program will use.
+The IOCS record causes Fortran to include references to the required I/O device subroutines.
+The device names are listed in the following table.
+
+================  ===========================  ===============  ===================
+IOCS device name  Generates support for        Subroutine used  Logical unit number
+================  ===========================  ===============  ===================
+``DISK``          Disk (direct access)         ``DISKZ``        \*
+``UDISK``         Unformatted disk I/O         ``DISKZ``        \*
+``TYPEWRITER``    Console printer              ``TYPEZ``        1
+``CARD``          1442 card read/punch models  ``CARDZ``        2
+                  6 or 7 used as a reader
+``1132 PRINTER``  1132 printer                 ``PRNTZ``        3
+
+``PAPER TAPE``    1134/1055 paper tape         ``PAPTZ``        4
+                  reader/punch
+``1403 PRINTER``  1403 printer                 ``PRNZ``         5
+``KEYBOARD``      Console keyboard             ``WRTYZ``        6
+``PLOTTER``       1627 plotter                 ``PLOTX``        7
+``2501 READER``   2501 card reader             ``READZ``        8
+``1442 PUNCH``    1442 card punch model 5 or   ``PNCHZ``        9
+                  read/punch models 6 or 7
+                  used as a punch
+================  ===========================  ===============  ===================
+
+A Fortran program cannot use the 1442 as both a reader and a punch within the same program.
+(Emulator note: the emulator does not yet support using both the 2501 and the 1403 as readers in the same run).
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST SOURCE PROGRAM
+
+   ***LIST SOURCE PROGRAM**
+.. |*LIST SOURCE PROGRAM| replace:: ``*LIST SOURCE PROGRAM``
+
+Direct the compiler to list the Fortran source code as it compiles the program or subprogram.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST SUBPROGRAM NAMES
+
+   ***LIST SUBPROGRAM NAMES**
+.. |*LIST SUBPROGRAM NAMES| replace:: ``*LIST SUBPROGRAM NAMES``
+
+Direct the compiler to list the names of all subroutines and functions referenced by the compiled program or subprogram.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST SYMBOL TABLE
+
+   ***LIST SYMBOL TABLE**
+.. |*LIST SYMBOL TABLE| replace:: ``*LIST SYMBOL TABLE``
+
+Direct the compiler to list the program's symbol table.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST ALL
+
+   ***LIST ALL**
+.. |*LIST ALL| replace:: ``*LIST ALL``
+
+Direct the compiler to generate all of the optional listings.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *EXTENDED PRECISION
+
+   ***EXTENDED PRECISION**
+.. |*EXTENDED PRECISION| replace:: ``*EXTENDED PRECISION``
+
+Direct the compiler to use 48-bit (three word) floating point numbers,
+rather than the default 32-bit (two word) numbers.
+Extended precision numbers have a 31 significant bit fraction and an 8-bit binary exponent. Standard precision numbers have a 23 significant bit fraction and an 8-bit exponent.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *ONE WORD INTEGERS
+
+   ***ONE WORD INTEGERS**
+.. |*ONE WORD INTEGERS| replace:: ``*ONE WORD INTEGERS``
+
+Direct the compiler to use one word per integer,
+rather than to have integers match the size of floating point numbers
+(2 words with standard precision,
+or 3 words with extended precision).
+1130 Fortran uses only 16 bits of the allocated space in any case,
+so the integer range is always -32,768 to +32,767.
+If your application does not depend on having the size of integer and real numbers be equal,
+you can save core by specifying 1-word integers.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *NAME
+
+   ***NAME** *xxxxx*
+.. |*NAME| replace:: ``*NAME``
+
+(Mainline programs only).
+Specify the name of the mainline program.
+The name may consist of one to five characters.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  **title
+
+   ******\ *title* *string*\ ...
+.. |**title| replace:: ``**title``
+
+Display the title string in columns 3 through 72 at the top of each page of the listing.
+A new page is cranked up when the first statement of the program is read.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *ARITHMETIC TRACE
+
+   ***ARITHMETIC TRACE**
+.. |*ARITHMETIC TRACE| replace:: ``*ARITHMETIC TRACE``
+
+Direct the compiled program to print the value assigned to each variable during program execution while Console Entry Switch 15 is raised.
+A printer device must be specified in IOCS control record.
+The fastest specified printer is used.
+(Emulator note: use ``DEP CES 1`` to raise switch 15,
+or ``DEP CES 0`` to lower it).
+You may programmatically limit tracing with ``CALL TSTOP`` and ``CALL TSTART`` statements.
+By default,
+tracing is enabled (``TSTART`` is assumed).
+Each displayed value is preceded by an asterisk.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *TRANSFER TRACE
+
+   ***TRANSFER TRACE**
+.. |*TRANSFER TRACE| replace:: ``*TRANSFER TRACE``
+
+Direct the compiled program to print the expression value computed by each ``IF`` statement and computed ``GO TO`` statement during program execution.
+Output may be controlled by Console Entry Switch 15 and the ``TSTOP``/``TSTART`` subroutines as discussed above.
+Each displayed value is preceded by two asterisks.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *ORIGIN
+
+   ***ORIGIN** *ddddd* or
+   ***ORIGIN** **/**\ *xxxx*
+.. |*ORIGIN| replace:: ``*ORIGIN``
+
+(Mainline programs only).
+Direct the compiler to compile the program starting at an absolute address,
+specified as either :html:`<samp><var>ddddd</var></samp>` (in decimal)
+or :html:`<b>/</b><samp><var>xxxx</var></samp>` (in hexadecimal).
+The specified origin must past the end of the disk I/O routine.
+The minimum ``ORIGIN`` values are
+``510`` (**/**\ ``01FE``) with ``DISKZ``,
+``690`` (**/**\ ``02B2``) with ``DISK1``, or
+``960`` (**/**\ ``03C0``) with ``DISKN``.
+
+Fortran declaration statements
+------------------------------
+.. parsed-literal::
+   :class: fortran-decl
+   :name: COMMON
+
+   **COMMON** *var1*\ [\ **(**\ *n*\ **)**\ ][\ **,** *var2*\ [\ **(**\ *n*\ **)**\ ]\ **,** ...]
+.. |COMMON| replace:: ``COMMON``
+
+(There is no named common).
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: DATA
+
+   **DATA** *var1*\ [\ **,** *var2*\ **,** ...] /\ *val1*\ [\ **,** *val2*\ **,** ...]/
+.. |DATA| replace:: ``DATA``
+
+Data statements may not be used to initialize variables in |COMMON|_.
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: DEFINE FILE
+
+   **DEFINE FILE** *n* **(**\ *nrec*\ **,** *recl*\ **,** **U,** *ivar*\ **)**
+.. |DEFINE FILE| replace:: ``DEFINE FILE``
+
+X
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: DIMENSION
+
+   **DIMENSION** *var1*\ **(**\ *n*\ **)** [\ **,** *var2*\ **(**\ *n*\ **)**\ ]
+.. |DIMENSION| replace:: ``DIMENSION``
+
+X
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: EXTERNAL
+
+   **EXTERNAL** *name1* [\ **,** *name2*\ **,** ...]
+.. |EXTERNAL| replace:: ``EXTERNAL``
+
+X
+
+.. _EQUIVALENCED:
+.. parsed-literal::
+   :class: fortran-decl
+   :name: EQUIVALENCE
+
+   **EQUIVALENCE**
+.. |EQUIVALENCE|  replace:: ``EQUIVALENCE``
+.. |EQUIVALENCED| replace:: ``EQUIVALENCED``
+
+X
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: FUNCTION
+
+   **FUNCTION** *name* [\ **(**\ *arg1*\ [\ **,** *arg2*\ **,** ...]\ **)**\ ]
+.. |FUNCTION| replace:: ``FUNCTION``
+
+The function's return value is set by assigning a value to the variable :html:`<samp><var>name</var></samp>`.
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: INTEGER
+
+   **INTEGER** *var1*\ [\ **(**\ *n*\ **)**\ ][\ **,** *var2*\ [\ **(**\ *n*\ **)**\ ]]
+.. |INTEGER| replace:: ``INTEGER``
+
+X
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name: REAL
+
+   **REAL** *var1*\ [\ **(**\ *n*\ **)**\ ][\ **,** *var2*\ [\ **(**\ *n*\ **)**\ ]]
+.. |REAL| replace:: ``REAL``
+
+X
+
+.. parsed-literal::
+   :class: fortran-decl
+   :name:  SUBROUTINE
+
+   **SUBROUTINE** *name* [\ **(**\ *arg1*\ [\ **,** *arg2*\ **,** ...]\ **)**\ ]
+.. |SUBROUTINE| replace:: ``SUBROUTINE``
+
+X
+
+Fortran program statements
+--------------------------
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  BACKSPACE
+
+   **BACKSPACE** *iunit*
+.. |BACKSPACE| replace:: ``BACKSPACE``
+
+Not supported?
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  CALL
+
+   **CALL** *name* [\ *arg1*\ **,** *arg2*\ **,** ...]
+.. |CALL| replace:: ``CALL``
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  CONTINUE
+
+   **CONTINUE**
+.. |CONTINUE| replace:: ``CONTINUE``
+
+A no-op statement;
+usually carries a numeric statement label to serve as the closing statement of a ``DO`` loop or the target of an ``IF`` or ``GOTO`` statement.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  DO
+
+   **DO** *label* *var* **=** *i1*\ **,** *i2*\ [\ **,** *i3*\ ]
+.. |DO| replace:: ``DO``
+
+Value :html:`<code><var>i1</var></code>` cannot be zero,
+and :html:`<code><var>i3</var></code>` cannot be negative.
+The loop statements are executed at least once,
+even if the condition test fails on the first iteration
+(hence the term *­one-trip do loops*\ ).
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  END
+
+   **END**
+.. |END| replace:: ``END``
+
+End compilation.
+Must be followed by a `monitor control record <Monitor control records>`_,
+usually |// XEQ|_ or |// DUP|_.
+(Programs and subprograms must each be compiled and stored separately).
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  END FILE
+
+   **END FILE** *iunit*
+.. |END FILE| replace:: ``END FILE``
+
+Not supported?
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name: FIND
+
+   **FIND** **(**\ *iunit'irec*\ **)**
+.. |FIND| replace:: ``FIND``
+
+X
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  FORMAT
+
+   **FORMAT** **(**\ ...\ **)**
+.. |FORMAT| replace:: ``FORMAT``
+
+X
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  GO TO
+
+   **GO TO** *label*
+   **GOTO** *label*
+.. |GO TO| replace:: ``GO TO``
+
+Jump to the indicated statement number.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  GOTO
+
+   **GOTO** **(**\ *lab1*\ **,** *lab2*\ **,** *lab3*\ ...\ **)** *ival*
+.. |GOTO| replace:: ``GOTO``
+
+X
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  IF
+
+   **IF** **(**\ *expr*\ **)** *labn*\ **,** *labz*\ **,** *labp*
+.. |IF| replace:: ``IF``
+
+Evaluate the integer or floating point expression :html:`<code><var>expr</var></code>` and jumps to one of the three statement numbers:
+:html:`<code><var>labn</var></code>` if the expression is negative,
+:html:`<code><var>labz</var></code>` if the expression is zero, or
+:html:`<code><var>labp</var></code>` if the expression is positive.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  PAUSE
+
+   **PAUSE** [\ *ival*\ ]
+.. |PAUSE| replace:: ``PAUSE``
+
+Halt the processor with the integer value :html:`<code><var>ival</var></code>` in the accumulator and thus displayed on the console lamps.
+:html:`<code><var>Ival</var></code>` must be between 0 and 9999,
+as it's converted to binary-coded decimal
+(that is, ``1234`` would be displayed as ``0001 0010 0011 0100``).
+Pressing Program Start lets the program resume with the next statement.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  READ
+
+   **READ** **(**\ *iunit*\ **)** *list*\ ...
+   **READ** **(**\ *iunit*\ **,**\ *lab*\ **)** *list*\ ...
+.. |READ| replace:: ``READ``
+
+Implied ``do`` loops are permitted.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  RETURN
+
+   **RETURN**
+.. |RETURN| replace:: ``RETURN``
+
+X
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  REWIND
+
+   **REWIND** *iunit*
+.. |REWIND| replace:: ``REWIND``
+
+Not supported?
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  STOP
+
+   **STOP** [\ *ival*\ ]
+.. |STOP| replace:: ``STOP``
+
+Halt the processor with the integer value :html:`<code><var>ival</var></code>` in the accumulator.
+(See the discussion of :html:`<code><var>ival</var></code>` under |PAUSE|_).
+Pressing Program Start returns control to the Disk Monitor System.
+
+.. parsed-literal::
+   :class: fortran-prog
+   :name:  WRITE
+
+   **WRITE** **(**\ *iunit*\ **)** *list*\ ...
+   **WRITE** **(**\ *iunit*\ ,\ *lab*\ **)** *list*\ ...
+.. |WRITE| replace:: ``WRITE``
+
+Implied ``do`` loops are permitted.
+
+Fortran subroutine library
+--------------------------
+The Fortran library is documented in the IBM publication `IBM 1130 Subroutine Library`,
+file no. 1130-30,
+form C26-5929-2,
+which is available in PDF format from `www.ibm1130.org <http://media.ibm1130.org/E0024.pdf>`__.
+The library routines are summarized in this section.
+
+.. warning::
+   Be very careful about the data type of arguments you pass to subroutines and functions.
+   The compiler does not have enough information to automatically convert values you supply to the type expected by a subprogram,
+   so if you pass an integer where a real value is expected or vice versa,
+   the results will be incorrect or the program may crash.
+
+Floating point functions
+""""""""""""""""""""""""
+The following real-valued library functions may be called by 1130 Fortran programs.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  ABS
+
+   **ABS(**\ *X*\ **)**
+.. |ABS| replace:: ``ABS``
+
+Return the absolute value of :html:`<code><var>X</var></code>`.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  ALOG
+
+   **ALOG(**\ *X*\ **)**
+.. |ALOG| replace:: ``ALOG``
+
+Return the natural logarithm of :html:`<code><var>X</var></code>`.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  ATAN
+
+   **ATAN(**\ *X*\ **)**
+.. |ATAN| replace:: ``ATAN``
+
+Return the arctangent of :html:`<code><var>X</var></code>`.
+The result is expressed in radians,
+in the range ±π/2.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  COS
+
+   **COS(**\ *THETA*\ **)**
+.. |COS| replace:: ``COS``
+
+Return the cosine of angle :html:`<code><var>THETA</var></code>`,
+expressed in radians.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  EXP
+
+   **EXP(**\ *X*\ **)**
+.. |EXP| replace:: ``EXP``
+
+Return *e*\ :sup:`X`.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  FLOAT
+
+   **FLOAT(**\ *IVAL*\ **)**
+.. |FLOAT| replace:: ``FLOAT``
+
+Convert integer :html:`<code><var>IVAL</var></code>` to a real value.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  SIGN
+
+   **SIGN(**\ *XVAL*\ **,** *XSGN*\ **)**
+.. |SIGN| replace:: ``SIGN``
+
+Apply the sign of :html:`<code><var>XSGN</var></code>` to value :html:`<code><var>XVAL</var></code>`.
+For example, ``SIGN(3.5, -5.2)`` returns -3.5.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  SIN
+
+   **SIN(**\ *THETA*\ **)**
+.. |SIN| replace:: ``SIN``
+
+Return the sine of angle :html:`<code><var>THETA</var></code>`,
+expressed in radians.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  SQRT
+
+   **SQRT(**\ *X*\ **)**
+.. |SQRT| replace:: ``SQRT``
+
+Return the square root of :html:`<code><var>X</var></code>`.
+:html:`<code><var>X</var></code>` must be non-negative.
+
+.. parsed-literal::
+   :class: fortran-lib float-function
+   :name:  TANH
+
+   **TANH(**\ *X*\ **)**
+.. |TANH| replace:: ``TANH``
+
+Return the hyperbolic tangent of :html:`<code><var>X</var></code>`.
+
+Integer functions
+"""""""""""""""""
+The following integer-valued library functions may be called by 1130 Fortran programs.
+
+.. parsed-literal::
+   :class: fortran-lib int-function
+   :name:  IABS
+
+   **IABS(**\ *IVAL*\ **)**
+.. |IABS| replace:: ``IABS``
+
+Return the absolute value of integer :html:`<code><var>IVAL</var></code>`.
+
+.. parsed-literal::
+   :class: fortran-lib int-function
+   :name:  IFIX
+
+   **IFIX(**\ *X*\ **)**
+.. |IFIX| replace:: ``IFIX``
+
+Convert real value :html:`<code><var>X</var></code>` to an integer value by truncating the fractional part.
+The effect is to round down,
+so 1.5 is converted to 1 and -1.5 is converted to -2.
+
+.. parsed-literal::
+   :class: fortran-lib int-function
+   :name:  ISIGN
+
+   **ISIGN(**\ *IVAL*\ **,** *ISGN*\ **)**
+.. |ISIGN| replace:: ``ISIGN``
+
+Apply the sign of :html:`<code><var>ISGN</var></code>` to value :html:`<code><var>IVAL</var></code>`.
+For example, ``ISIGN(3, -5)`` returns -3.
+
+Subroutines
+"""""""""""
+The following library subroutines may be called by 1130 Fortran programs.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL CHAIN
+
+   **CALL CHAIN**
+.. |CALL CHAIN| replace:: ``CALL CHAIN``
+
+XXX
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL DVCHK
+
+   **CALL DVCHK(**\ *J*\ **)**
+.. |CALL DVCHK| replace:: ``CALL DVCHK``
+
+Test an error indicator to determine if the previous floating point calculation resulted in an attempt to divide by zero.
+If a division by zero occurred,
+:html:`<code><var>J</var></code>` is set to 1.
+If no division by zero occurred,
+:html:`<code><var>J</var></code>` is set to 2.
+After the call,
+the error indicator is reset.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL DATSW
+
+   **CALL DATSW(**\ *I*\ **,** *J*\ **)**
+.. |CALL DATSW| replace:: ``CALL DATSW``
+
+Test data entry switch (console sense switch) :html:`<code><var>I</var></code>`,
+where :html:`<code><var>I</var></code>` is in the range 0 to 15.
+:html:`<code><var>J</var></code>` is set to 1 if the switch is on,
+or 2 if the switch is off.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL EXIT
+
+   **CALL EXIT**
+.. |CALL EXIT| replace:: ``CALL EXIT``
+
+Terminate the program and immediately return control to the Disk Monitor System.
+(This is in contrast to the |STOP|_ statement,
+which halts the processor and returns control to the monitor only after the operator presses Program Start).
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL FCTST
+
+   **CALL FCTST(**\ *I*\ **,** *J*\ **)**
+.. |CALL FCTST(I, J)| replace:: ``CALL FCTST(I, J)``
+
+Test an error indicator to determine if the previous Fortran-supplied function subprogram resulted in an error.
+If an error occured,
+:html:`<code><var>J</var></code>` is set to 1.
+If no error occurred,
+:html:`<code><var>J</var></code>` is set to 2.
+After the call,
+the error indicator is reset.
+Errors detected include arguments out-of-range, etc.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL OVERFL
+
+   **CALL OVERFL(**\ *J*\ **)**
+.. |CALL OVERFL| replace:: ``CALL OVERFL``
+
+Test an error indicator to determine if the previous floating point calculation resulted in overflow or underflow.
+:html:`<code><var>J</var></code>` is set to one of the following values:
+
+=====  ========================================================================
+Value  Interpretation
+=====  ========================================================================
+1      A previous calculation resulted in overflow
+       (a result was greater in magnitude than 2\ :sup:`127`,
+       approximately 10\ :sup:`38`).
+2      There were no overflows or underflows since the last call to ``OVERFL``.
+3      A previous operation resulted in underflow
+       (a result greater in magnitude than zero but less than 10\ :sup:`-128`,
+       approximately 10\ :sup:`-39`).
+=====  ========================================================================
+
+After the call,
+the error indicator is reset.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL PDUMP
+
+   **CALL PDUMP(**\ *VAR1*\ **,** *VAR2*\ **,** *IFMT*\ [\ **,** ...]\ **)**
+.. |CALL PDUMP| replace:: ``CALL PDUMP``
+
+Dump memory to the primary printer device.
+Storage addresses from the location of variable :html:`<code><var>var1</var></code>` to :html:`<code><var>var2</var></code>` are dumped.
+Integer value :html:`<code><var>IFMT</var></code>` controls the data format:
+0 displays values in hexadecimal format,
+4 in integer format,
+or 5 in floating point format.
+(If the address of :html:`<code><var>var2</var></code>` is less than that of :html:`<code><var>var1</var></code>`,
+``PDUMP`` reverses the addresses).
+Multiple address ranges can be dumped by repeating sets of three arguments.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL SLITE
+
+   **CALL SLITE(**\ *I*\ **)**
+.. |CALL SLITE| replace:: ``CALL SLITE``
+
+Turn on sense light :html:`<code><var>I</var></code>`,
+where :html:`<code><var>I</var></code>` is 1, 2, 3 or 4.
+If :html:`<code><var>I</var></code>` is 0,
+all sense lights are turned off.
+
+.. parsed-literal::
+   :class: fortran-lib subroutine
+   :name:  CALL SLITET
+
+   **CALL SLITET(**\ *I*\ **,** *J*\ **)**
+.. |CALL SLITET| replace:: ``CALL SLITET``
+
+Test the status of sense light :html:`<code><var>I</var></code>`,
+where :html:`<code><var>I</var></code>` is 1, 2, 3 or 4,
+and turns the light off.
+:html:`<code><var>J</var></code>` is set to 1 if the light was on,
+or 2 if the light was off.
+
+Plotter library
+"""""""""""""""
+
+.. parsed-literal::
+   :class: fortran-lib plot-function
+   :name:  CALL ECHAR
+
+   **CALL ECHAR(**\ *x0*\ **,** *y0*\ **,** *xs*\ **,** *ys*\ **,** *theta*\ **)**
+.. |CALL ECHAR| replace:: ``CALL ECHAR``
+
+.. XXX: Missing description
+
+.. parsed-literal::
+   :class: fortran-lib plot-function
+   :name:  CALL EGRID
+
+   **CALL EGRID(**\ *ictrl*\ **,** *x*\ **,** *y*\ **,** *delta*\ **,** *numbr*\ **)**
+.. |CALL EGRID| replace:: ``CALL EGRID``
+
+etc.
+
+Fortran compiler error codes
+""""""""""""""""""""""""""""
+Fortran compiler errors are listed after the source code listing, if any.
+Error codes are listed in the following format:
+
+.. parsed-literal::
+
+   C *errnum* ERROR AT STATEMENT NUMBER *stnum*\ +\ *offset*
+
+where *errnum* is a Fortran compiler error code,
+*stnum* is the number of the last numbered statement,
+and *offset* is the offset in lines from the numbered statement.
+Blank and comment lines are not counted.
+Before the first numbered statement,
+*stnum* is 0 and offset starts with 1.
+For example, ::
+
+    INVALID STATEMENTS
+     C 36 ERROR AT STATEMENT NUMBER 00000+008
+
+indicates error number 36 at the 8th line in the program
+(not counting blanks and comments).
+The message ::
+
+    C 36 ERROR AT STATEMENT NUMBER 00010+001
+
+would indicate error number 36 at the first statement after statement number 10.
+
+======  =========================================================================
+Error   Description
+======  =========================================================================
+_`C01`  Non-numeric character in statement number
+_`C02`  More than 5 continuation cards, or continuation card out-of-sequence
+_`C03`  Syntax error in ``CALL LINK`` or |CALL EXIT|_ statement
+_`C04`  Unrecognizable, misspelled, or incorrectly-formed statement
+_`C05`  Statement out-of-sequence
+_`C06`  Unreachable statement
+_`C07`  Name longer than 5 characters, or name not starting with alphabetic character
+_`C08`  Incorrect or missing subscript within dimension information
+_`C09`  Duplicate statement number
+_`C10`  Syntax error 
+_`C11`  Duplicate name in |COMMON|_ statement
+_`C12`  Syntax error in |FUNCTION|_ or |SUBROUTINE|_ statement
+_`C13`  Parameter (dummy argument) appears in |COMMON|_ statement
+_`C14`  Name appears twice as a parameter in |SUBROUTINE|_ or |FUNCTION|_ statement
+_`C15`  |*IOCS|_ control record in a subroutine or function
+_`C16`  Syntax error in |DIMENSION|_ statement
+_`C17`  Subprogram name in |DIMENSION|_ statement
+_`C18`  Name dimensioned more than once or not dimensioned in first appearance
+_`C19`  Syntax error in |REAL|_, |INTEGER|_, or |EXTERNAL|_ statement
+_`C20`  Subprogram name in |REAL|_ or |INTEGER|_ statement, or a function contains its own name in an |EXTERNAL|_ statement
+_`C21`  Name in |EXTERNAL|_ that is also in |COMMON|_ or |DIMENSION|_ statement
+_`C22`  |IFIX|_ or |FLOAT|_ in |EXTERNAL|_ statement
+_`C23`  Invalid real constant
+_`C24`  Invalid integer constant
+_`C25`  More than 15 dummy arguments, or duplicate dummy argument
+_`C26`  Right parenthesis missing from a subscript expression
+_`C27`  Syntax error in |FORMAT|_ statement
+_`C28`  |FORMAT|_ statement without statement number
+_`C29`  Field width specification greater than 145
+_`C30`  In a |FORMAT|_ specification, ``E`` or ``F`` conversion is wider than 127 or has more than 31 decimal places
+_`C31`  Syntax error in |EQUIVALENCE|_ statement
+_`C32`  Subscripted variable in a statement function
+_`C33`  Incorrectly formed subscript expression
+_`C34`  Undefined variable in subscript expression
+_`C35`  Number and/or range of subscripts does not agree with |DIMENSION|_
+_`C36`  Invalid arithmetic statement or variable; or, in a |FUNCTION|_ subprogram the left side of the arithmetic statement is a dummy argument or in |COMMON|_
+_`C37`  Syntax error in an |IF|_ statement
+_`C38`  Invalid expression in an |IF|_ statement
+_`C39`  Syntax error or invalid simple argument in |CALL|_ statement
+_`C40`  Invalid expression in |CALL|_ statement
+_`C41`  Invalid expression to the left of an equal sign in a statement function
+_`C42`  Invalid expression to the right of an equal sign in a statement function
+_`C43`  In an |IF|_, |GO TO|_ or |DO|_ statement, a statement number is missing or is the number of a |FORMAT|_ statement
+_`C44`  Syntax error in |READ|_, |WRITE|_ or |FIND|_ statement
+_`C45`  |READ|_ or |WRITE|_ statement requires an |*IOCS|_ record (mainline only)
+_`C46`  |FORMAT|_ statement number missing or incorrect in a |READ|_ or |WRITE|_
+_`C47`  Syntax error in input/output list, or a list element is invalid, or in a |FUNCTION|_ subprogram an input item is a dummy argument or is in |COMMON|_
+_`C48`  Syntax error in |GO TO|_ statement
+_`C49`  Index of a computed |GO TO|_ is missing, invalid, or not preceded by a comma
+_`C50`  |*TRANSFER TRACE|_ or |*ARITHMETIC TRACE|_ or |CALL PDUMP|_ requires an |*IOCS|_ control record in a mainline program
+_`C51`  Incorrect nesting of |DO|_ statements, or terminal statement of |DO|_ is a |GO TO|_, |IF|_, |RETURN|_, |FORMAT|_, |STOP|_, |PAUSE|_, or |DO|_ statement.
+_`C52`  More than 25 nested |DO|_ statements
+_`C53`  Syntax error in a |DO|_ statement
+_`C54`  Initial value in a |DO|_ statement is zero
+_`C55`  In a |FUNCTION|_, the index of |DO|_ is a dummy argument or is in |COMMON|_
+_`C56`  Syntax error in |BACKSPACE|_ statement
+_`C57`  Syntax error in |REWIND|_ statement
+_`C58`  Syntax error in |END FILE|_ statement
+_`C59`  Syntax error in |STOP|_ statement
+_`C60`  Syntax error in |PAUSE|_ statement
+_`C61`  Integer constant in |STOP|_ or |PAUSE|_ statement greater than 9999
+_`C62`  Last executable statement before |END|_ is not a |STOP|_, |GO TO|_, |IF|_, |CALL EXIT|_, ``CALL LINK``, or |RETURN|_ statement
+_`C63`  Statement contains more than 15 different subscript expressions
+_`C64`  Statement too long because of subscript expansion or temporary storage use
+_`C65`  All variables undefined in an |EQUIVALENCE|_ statement
+_`C66`  |EQUIVALENCE|_ of an array element causes array to extend beyond end of |COMMON|_
+_`C67`  Two variables or array elements in |COMMON|_ are |EQUIVALENCED|_, or the relative location of two variables or array elements are assigned more than once, or a standard precision real number is assigned to an odd address by means of an |EQUIVALENCE|_.
+_`C68`  Syntax error in an |EQUIVALENCE|_ statement, or invalid variable name used
+_`C69`  |RETURN|_ statement missing from subprogram or present in mainline program
+_`C70`  No |DEFINE FILE|_ statement found in a program that uses disk I/O statements
+_`C71`  Syntax error in a |DEFINE FILE|_ statement
+_`C72`  Duplicate or more than 75 |DEFINE FILE|_ statements, or |DEFINE FILE|_ in subprogram
+_`C73`  Syntax error in record number of disk |READ|_, |WRITE|_, or |FIND|_ statement
+_`C74`  Defined file exceeds disk storage size
+_`C75`  Syntax error in |DATA|_ statement
+_`C76`  Names and constants in a |DATA|_ statement are not in a one-to-one correspondence
+_`C77`  Mixed mode in |DATA|_ statement
+_`C78`  Invalid Hollerith constant in |DATA|_ statement
+_`C79`  Invalid hexadecimal specification in a |DATA|_ statement
+_`C80`  Variable in a |DATA|_ statement not used, or argument appears in |DATA|_ statement
+_`C81`  |COMMON|_ variable loaded by a |DATA|_ statement
+_`C82`  |DATA|_ statement too long due to compiler limitations
+_`C85`  |*ORIGIN|_ record appeared in a subprogram
+_`C86`  |*ORIGIN|_ causes output to exceed address 7FFF hexadecimal
+_`C96`  Working storage on disk is too small to hold compiled program
+_`C97`  The program is too large to be compiled due to compiler limitations
+_`C98`  The code used to initialize the addresses of dummy arguments in a subroutine has exceeded the limit of 511 words. In general, the number of arguments plus the number of times arguments are used in the subroutine must not exceed 506.
+_`C99`  Total core requirements exceed 32767 words
+======  =========================================================================
+
+Fortran program I/O error wait codes
+------------------------------------
+Runtime errors in Fortran programs cause a processor halt.
+The program can be resumed by pressing ``PROGRAM START``;
+the action taken is indicated in the following table by the following letters:
+
+===  ======================================================================
+A    The actual format specification will be used
+E    All remaining variables in the I/O statement will be treated as errors
+N    Execution continues with next statement
+U    UFIO updated
+u    UFIO not updated
+X    Program exits
+Z    Value is read or written as zero
+===  ======================================================================
+
+=========  ==================================================================================  ======
+ACC        Description                                                                         Action
+=========  ==================================================================================  ======
+_`F000`    No |*IOCS|_ was specified, but I/O was attempted                                    X
+_`F001`    Local unit defined incorrectly, or no |*IOCS| for specified device                  N
+_`F002`    Requested record exceeds buffer size                                                E
+_`F003`    Illegal character encountered in input record                                       Z
+_`F004`    Exponent too large or too small in input                                            Z
+_`F005`    More than one exponent encountered in input                                         Z
+_`F006`    More than one sign encountered in input                                             Z
+_`F007`    More than one decimal point encountered in input                                    Z
+_`F008`    Read of output-only device, or write to input-only device                           N
+_`F009`    Real variable transmitted with ``I`` format,                                        A
+           or integer transmitted with ``E`` or ``F``
+_`F020`    Illegal unit reference                                                              u
+_`F021`    Read list exceeds length of write list                                              U
+_`F022`    Record does not exist in read list                                                  U
+_`F023`    Maximum length of $$$$$ area on disk has been exceeded                              X
+_`F024`    |*IOCS|_ (UDISK) was not specified                                                  X
+_`F100`    File not defined by |DEFINE FILE|_ statement                                        X
+_`F101`    File record number too large, zero, or negative                                     X
+_`F102`    Read error on disk                                                                  X
+_`F103`    |*IOCS|_\ (DISK) was not specified                                                  X
+_`F104`    Write error on disk                                                                 X
+_`F105`    Length of a list element exceeds record length in |DEFINE FILE|_                    X
+_`F106`    Read-after-write failed                                                             X
+_`F107`    Attempt to read or write an invalid sector address                                  X
+           (may occur if a core image program is run with too little room in working storage)
+_`F108`    Seek error                                                                          X
+_`F10A`    Define file table and/or core image header corrupted,                               X
+           probably by an out-of-bounds array subscript
+=========  ==================================================================================  ======
+
+Macro assembler
+===============
+
+Assembler control records
+-------------------------
+
+.. _TWO PASS MODE:
+.. parsed-literal::
+   :class: control-record
+   :name:  *TWO PASS MODE
+
+   ***TWO PASS MODE**
+.. |*TWO PASS MODE| replace:: ``*TWO PASS MODE``
+.. |TWO PASS MODE|  replace::  ``TWO PASS MODE``
+
+Request that the assembler perform a two-pass assembly *by reading the source deck twice*.
+By default, the assembler stores intermediate output in WS,
+and actually does perform two logical passes,
+so |TWO PASS MODE|_ is not needed in most cases.
+It's only needed when you really **NEED** to physically run the source deck through twice,
+as when you want to punch the object code onto the source cards.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST
+
+   ***LIST**
+.. |*LIST| replace:: ``*LIST``
+
+Request that the assembler print a source listing (with object code values).
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *XREF
+
+   ***XREF**
+.. |*XREF| replace:: ``*XREF``
+
+Request that the assembler print a cross-reference listing after the assembly.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST DECK
+
+   ***LIST DECK**
+.. |*LIST DECK| replace:: ``*LIST DECK``
+
+XXX
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LIST DECK E
+
+   ***LIST DECK E**
+.. |*LIST DECK E| replace:: ``*LIST DECK E``
+
+XXX
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *PRINT SYMBOL TABLE
+
+   ***PRINT SYMBOL TABLE**
+.. |*PRINT SYMBOL TABLE| replace:: ``*PRINT SYMBOL TABLE``
+
+Request that the assembler print a symbol table listing after the assembly.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *PUNCH SYMBOL TABLE
+
+   ***PUNCH SYMBOL TABLE**
+.. |*PUNCH SYMBOL TABLE| replace:: ``*PUNCH SYMBOL TABLE``
+
+XXX
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *SAVE SYMBOL TABLE
+
+   ***SAVE SYMBOL TABLE**
+.. |*SAVE SYMBOL TABLE| replace:: ``*SAVE SYMBOL TABLE``
+
+Request that the symbol table be stored to disk as the System Symbol Table after assembly.
+(The System Symbol table occupies a fixed location on the disk in one of the assembler phases,
+and so does not appear in the LET or FLET).
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *SYSTEM SYMBOL TABLE
+
+   ***SYSTEM SYMBOL TABLE**
+.. |*SYSTEM SYMBOL TABLE| replace:: ``*SYSTEM SYMBOL TABLE``
+
+Request that the System Symbol Table be read-in prior to assembly.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *LEVEL
+
+   ***LEVEL** *n*
+.. |*LEVEL| replace:: ``*LEVEL``
+
+XXX
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *OVERFLOW SECTORS
+
+   ***OVERFLOW SECTORS** *n1*\ **,**\ *n2*\ **,**\ *n3*
+.. |*OVERFLOW SECTORS| replace:: ``*OVERFLOW SECTORS``
+
+XXX
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *COMMON
+
+   ***COMMON** *nnnnn*
+.. |*COMMON| replace:: ``*COMMON``
+
+Request that when linked,
+:html:`<code><var>nnnnn</var></code>` words of common be allocated.
+Used when creating assembler modules that are to be linked with Fortran modules.
+
+.. parsed-literal::
+   :class: control-record
+   :name:  *MACLIB
+
+   ***MACLIB** *libnm*
+.. |*MACLIB| replace:: ``*MACLIB``
+
+XXX
+
+Assembler statement format
+--------------------------
+After any Assembler Control statements,
+Assembler coding statements are formatted in columns 21 through 72.
+Columns 1 through 20 and 73 through 80 are ignored.
+The statement fields are indicated below.
+
+.. parsed-literal::
+   :class: column-numbers
+   :name:  asm-format
+
+   21    27   32 35                                  72 73    80
+   │     │    │  ├────────────────────────────────────┤ ├──────┤
+   **label opcd FT operarand(s)...               comments sequence**
+
+Most instructions follow the following field conventions:
+
+============  =========  ========================================================================================================================
+Field         Column(s)  Description
+============  =========  ========================================================================================================================
+``label``     21-25      An optional symbolic address definition of up to five letters.
+                         The characters allowed are ``A-Z``, ``0-9``, ``@``, ``#``, ``$``, and the single quote ``'``.
+                         The label must start with a non-numeric character.
+``opcd``      27-30      An opcode or assembler directive.
+``F``         32         The Format field controls the instruction mode and length and can be one of the following characters:
+
+                         =============================  =========================================================================================
+                         *blank*                        **Short**\ —The instruction will be one word long (except as noted).
+                                                        The difference between the current location and the operand value will
+                                                        be as the instruction's displacement field.
+                         :html:`<samp><b>X</b></samp>`  **Absolute short**\ —The instruction will be one word long (except as noted).
+                                                        The operand value will be used directly as the instruction's displacement field.
+                         :html:`<samp><b>L</b></samp>`  **Long**\ —The instruction will be two words long.
+                                                        The operand value will be placed in the second word of the instruction (except as noted).
+                         :html:`<samp><b>I</b></samp>`  **Indirect**\ —The instruction will be two words long.
+                                                        The operand value will be placed in the second word of the instruction and will indicate
+                                                        the address from which the actual instruction data will be retrieved.
+                         =============================  =========================================================================================
+
+``T``         33         The Tag field indicates an index register for indexed instructions.
+                         The tag can be one of the following values:
+
+                         =============================  ==============================================
+                         *blank*                        The instruction will not use an index register
+                         :html:`<samp><b>1</b></samp>`  The instruction will use index register 1
+                         :html:`<samp><b>2</b></samp>`  The instruction will use index register 2
+                         :html:`<samp><b>3</b></samp>`  The instruction will use index register 3
+                         =============================  ==============================================
+
+``operands``  35...      Any required operands begin in column 35.
+                         The first blank column usually terminates the operand field,
+                         except in the case of DMES and in the case of the character constant (period blank).
+``comments``  ...72      Comments may follow the operand field after one or more blanks.
+``sequence``  73-80      A sequence number may be punched in columns 73 through 80.
+============  =========  ========================================================================================================================
+
+Assembler constants and expressions
+-----------------------------------
+Format of constants and expressions:
+
+=====================================================================================================  ============================================
+:html:`<samp><b>/</b><var>xxxx</var></samp>`                                                           Hexadecimal value
+:html:`<samp><b>.</b><var>x</var></samp>`                                                              Character value (|EBCDIC| code, in low byte)
+:html:`<samp><var>label</var></samp>`                                                                  Label value
+:html:`<samp>±<var>nnn</var></samp>`                                                                   Decimal integer
+:html:`<samp>±<var>nnn</var><b>.</b><var>nnn</var></samp>`                                             Floating point value
+:html:`<samp>±<var>nnn</var><b>.</b><var>nnn</var><b>E</b>±<var>nn</var></samp>`                       Floating point value, exponential
+:html:`<samp>±<var>nnn</var><b>.</b><var>nnn</var><b>B</b><var>nn</var></samp>`                        Fixed point value
+:html:`<samp>±<var>nnn</var><b>.</b><var>nnn</var><b>E</b>±<var>nn</var><b>B</b><var>nn</var></samp>`  Fixed point value, exponential
+=====================================================================================================  ============================================
+
+Arithmetic expressions use standard algebraic precedence.
+Are parentheses allowed?
+
+Assembler directives and pseudo-ops
+-----------------------------------
+
+.. list-table::
+
+   * - :html:`<samp>      <b>ABS</b></samp>`
+     - Absolute assemble
+   * - :html:`<samp><var>label</var> <b>AGO</b>     <var>dest</var></samp>`
+     - Unconditional assembly branch
+   * - :html:`<samp><var>label</var> <b>AGOB</b>    <var>dest</var></samp>`
+     - Unconditional assembly branch back
+   * - :html:`<samp><var>label</var> <b>AIF</b>     <var>cnd</var><b>,</b><var>dest</var></samp>`
+     - Assemble if
+   * - :html:`<samp><var>label</var> <b>AIFB</b>    <var>cnd</var><b>,</b><var>dest</var></samp>`
+     - Assemble if back
+   * - :html:`<samp><var>label</var> <b>ANOP</b></samp>`
+     - Assembler no-op
+   * - :html:`<samp><var>label</var> <b>BES</b>  <var>f</var>  <var>nwords</var></samp>`
+     - Block ended by symbol
+
+       Reserves *nwords* words of memory.
+       The label is defined as the address of the last word.
+       If *f* is ``E``, the memory block starts at an even address.
+   * - :html:`<samp><var>label</var> <b>BSS</b>  <var>f</var>  <var>nwords</var></samp>`
+     - Block started by symbol
+   * - :html:`<samp><var>label</var> <b>DC</b>      <var>value</var></samp>`
+     - Define constant
+
+       Places the value *value* in memory.
+       *Value* can be a constant or an expression.
+   * - :html:`<samp><var>label</var> <b>DEC</b>     <var>value</var></samp>`
+     - Define decimal constant
+   * - :html:`<samp><var>label</var> <b>DMES</b>  <var>t</var> <var>message</var></samp>`
+     - Define message
+   * - :html:`<samp><var>label</var> <b>DN</b>      <var>xxxxx</var></samp>`
+     - Define name
+   * - :html:`<samp><var>label</var> <b>DSA</b>     <var>xxxxx</var></samp>`
+     - Disk sector address
+   * - :html:`<samp><var>label</var> <b>DUMP</b>    <var>saddr</var>[<b>,</b><var>eaddr</var>]</samp>`
+     - Dump and terminate execution
+   * - :html:`<samp><var>label</var> <b>EBC</b>     <b>.</b><var>characters</var><b>.</b></samp>`
+     - Extended binary coded information
+   * - :html:`<samp><var>label</var> <b>EJCT</b></samp>`
+     - Eject page
+   * - :html:`<samp><var>label</var> <b>END</b>     <var>dest</var></samp>`
+     - End assembly
+   * - :html:`<samp>      <b>ENT</b>     <var>dest</var></samp>`
+     - Define subroutine entry point
+   * - :html:`<samp>      <b>EPR</b></samp>`
+     - Extended precision assemble
+   * - :html:`<samp><var>label</var> <b>EQU</b>     <var>value</var></samp>`
+     - Equate symbol
+   * - :html:`<samp><var>label</var> <b>EXIT</b></samp>`
+     - Return control to the supervisor
+   * - :html:`<samp><var>label</var> <b>FILE</b>    <var>unit</var><b>,</b><var>nrec</var><b>,</b><var>recl</var><b>,U,</b><var>dest</var></samp>`
+     - Define disk file
+   * - :html:`<samp>      <b>HDNG</b>    <var>text</var>...</samp>`
+     - Set page heading
+   * - :html:`<samp>      <b>ILS</b>  <var>nn</var></samp>`
+     - Define interrupt-level subroutine
+   * - :html:`<samp>      <b>ISS</b>  <var>nn</var> <var>dest</var></samp>`
+     - Define interrupt service subroutine
+   * - :html:`<samp>      <b>LIBF</b>    <var>dest</var></samp>`
+     - Call transfer vector subroutine
+   * - :html:`<samp>      <b>LIBR</b></samp>`
+     - Define transfer vector subroutine
+   * - :html:`<samp><var>label</var> <b>LINK</b>    <var>xxxxx</var></samp>`
+     - Load and execute another program
+   * - :html:`<samp>      <b>LIST</b>   [<b>ON</b>|<b>OFF</b>]</samp>`
+     - Listing on / off
+   * - :html:`<samp>      <b>MAC</b>    [<var>x</var>]</samp>`
+     - Define temporary macro
+   * - :html:`<samp>      <b>MEND</b></samp>`
+     - Macro end
+   * - :html:`<samp><var>label</var> <b>ORG</b>    <var>value</var></samp>`
+     - Define origin
+   * - :html:`<samp><var>label</var> <b>PDMP</b>    <var>saddr</var>[<b>,</b><var>eaddr</var>]</samp>`
+     - Print dump and continue execution
+   * - :html:`<samp><var>label</var> <b>PURG</b>    <b>'</b><var>name</var><b>'</b></samp>`
+     - Remove macro name from library
+   * - :html:`<samp><var>label</var> <b>SET</b>     <var>value</var></samp>`
+     - Set symbol
+   * - :html:`<samp>      <b>SMAC</b>   [<var>x</var>]</samp>`
+     - Define stored macro
+   * - :html:`<samp>      <b>SPAC</b>    <var>nlines</var></samp>`
+     - Space listing
+   * - :html:`<samp>      <b>SPR</b></samp>`
+     - Single-precision assemble mode
+   * - :html:`<samp><var>label</var> <b>XFLC</b>    <var>value</var></samp>`
+     - Define extended floating point constant
+
+Instruction opcodes
+-------------------
+
+.. list-table::
+
+   * - :html:`<samp><var>label</var> <b>A</b>    <var>ft</var> <var>operand</var></samp>`
+     - Add
+   * - :html:`<samp><var>label</var> <b>AND</b>  <var>ft</var> <var>operand</var></samp>`
+     - Logical AND
+   * - :html:`<samp><var>label</var> <b>B</b>    <var>ft</var> <var>dest</var></samp>`
+     - Branch
+   * - :html:`<samp><var>label</var> <b>BC</b>   <var>ft</var> <var>dest</var></samp>`
+     - Branch if carry set
+   * - :html:`<samp><var>label</var> <b>BN</b>   <var>ft</var> <var>dest</var></samp>`
+     - Branch if negative
+   * - :html:`<samp><var>label</var> <b>BNN</b>  <var>ft</var> <var>dest</var></samp>`
+     - Branch if not negative
+   * - :html:`<samp><var>label</var> <b>BNP</b>  <var>ft</var> <var>dest</var></samp>`
+     - Branch if not positive
+   * - :html:`<samp><var>label</var> <b>BNZ</b>  <var>ft</var> <var>dest</var></samp>`
+     - Branch if not zero
+   * - :html:`<samp><var>label</var> <b>BO</b>   <var>ft</var> <var>dest</var></samp>`
+     - Branch if overflow set
+   * - :html:`<samp><var>label</var> <b>BOD</b>  <var>ft</var> <var>dest</var></samp>`
+     - Branch if odd
+   * - | :html:`<samp><var>label</var> <b>BOSC</b>  <var>t</var> <var>cnds</var></samp>`
+       | :html:`<samp><var>label</var> <b>BOSC</b> <var>ft</var> <var>dest</var>[<b>,</b><var>cnds</var>]</samp>`
+     - Branch out or skip on condition
+   * - :html:`<samp><var>label</var> <b>BP</b>   <var>ft</var> <var>dest</var></samp>`
+     - Branch if positive
+   * - | :html:`<samp><var>label</var> <b>BSC</b>   <var>t</var> <var>cnds</var></samp>`
+       | :html:`<samp><var>label</var> <b>BSC</b>  <var>ft</var> <var>dest</var>[<b>,</b><var>cnds</var>]</samp>`
+     - Branch out or skip on condition
+   * - | :html:`<samp><var>label</var> <b>BSI</b>   <var>t</var> <var>cnds</var></samp>`
+       | :html:`<samp><var>label</var> <b>BSI</b>  <var>ft</var> <var>dest</var>[<b>,</b><var>cnds</var>]</samp>`
+     - Branch and store instruction address register
+   * - :html:`<samp><var>label</var> <b>D</b>    <var>ft</var> <var>dest</var></samp>`
+     - Divide
+   * - :html:`<samp><var>label</var> <b>EOR</b>  <var>ft</var> <var>dest</var></samp>`
+     - Logical exclusive OR
+   * - :html:`<samp><var>label</var> <b>LD</b>   <var>ft</var> <var>dest</var></samp>`
+     - Load accumulator
+   * - :html:`<samp><var>label</var> <b>LDD</b>  <var>ft</var> <var>dest</var></samp>`
+     - Load double
+   * - :html:`<samp><var>label</var> <b>LDS</b>     <var>value</var></samp>`
+     - Load status
+   * - :html:`<samp><var>label</var> <b>M</b>    <var>ft</var> <var>dest</var></samp>`
+     - Multiply
+   * - :html:`<samp><var>label</var> <b>MDM</b>     <var>dest</var>,<var>incr</var></samp>`
+     - Modify memory and skip
+   * - | :html:`<samp><var>label</var> <b>MDX</b>  <var>ft</var> <var>incr</var></samp>`
+       | :html:`<samp><var>label</var> <b>MDX</b>  <var>f</var>  <var>dest</var><b>,</b><var>incr</var></samp>`
+     - Modify index and skip
+   * - :html:`<samp><var>label</var> <b>NOP</b></samp>`
+     - No operation
+   * - :html:`<samp><var>label</var> <b>OR</b>   <var>ft</var> <var>dest</var></samp>`
+     - Logical OR
+   * - :html:`<samp><var>label</var> <b>RTE</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Rotate right accumulator and extension
+   * - :html:`<samp><var>label</var> <b>S</b>    <var>ft</var> <var>dest</var></samp>`
+     - Subtract
+   * - :html:`<samp><var>label</var> <b>SD</b>   <var>ft</var> <var>dest</var></samp>`
+     - Subtract double
+   * - :html:`<samp><var>label</var> <b>SKP</b>     <var>cnds</var></samp>`
+     - Skip on condition
+   * - :html:`<samp><var>label</var> <b>SLA</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Shift left accumulator
+   * - :html:`<samp><var>label</var> <b>SLC</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Shift left and count accumulator and extension
+   * - :html:`<samp><var>label</var> <b>SLCA</b> <var>ft</var> <var>nbits</var></samp>`
+     - Shift left and count accumulator
+   * - :html:`<samp><var>label</var> <b>SLT</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Shift left accumulator and extension
+   * - :html:`<samp><var>label</var> <b>SRA</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Shift right accumulator
+   * - :html:`<samp><var>label</var> <b>SRT</b>  <var>ft</var> <var>nbits</var></samp>`
+     - Shift right accumulator and extension
+   * - :html:`<samp><var>label</var> <b>STD</b>  <var>ft</var> <var>dest</var></samp>`
+     - Store double
+   * - :html:`<samp><var>label</var> <b>STO</b>  <var>ft</var> <var>dest</var></samp>`
+     - Store accumulator
+   * - :html:`<samp><var>label</var> <b>STS</b>  <var>ft</var> <var>dest</var></samp>`
+     - Store status
+   * - :html:`<samp><var>label</var> <b>STX</b>  <var>ft</var> <var>dest</var></samp>`
+     - Store index
+   * - :html:`<samp><var>label</var> <b>WAIT</b></samp>`
+     - Wait
+   * - :html:`<samp><var>label</var> <b>XCH</b></samp>`
+     - Exchange accumulator and extension
+   * - :html:`<samp><var>label</var> <b>XIO</b>  <var>ft</var> <var>dest</var></samp>`
+     - Execute I/O
+
+Macro assembler error flags
+---------------------------
+
+=====  =================================================================================
+Flag   Description
+=====  =================================================================================
+``A``  An attempt has been made to specify a displacement outside the range -128 to +127
+``C``  A character other than ``+``, ``-``, ``Z``, ``E``, ``C``, or ``O`` was detected in the first operand of a short branch or in the second operand of a long ``BSC``, ``BOSC``, or ``BSI``
+``F``  A character other than ``L``, ``I``, or ``X`` was found in column 32,
+       or ``L`` or ``I`` was specified for an instruction valid only in short form,
+       or ``I`` was used inappropriately
+``L``  An invalid character was detected in the label field
+``M``  Multiply defined label
+``O``  Operation code is invalid, or pseudo-op incorrectly placed.
+       (An assembler bug makes ``LIBR`` and ``ILS`` invalid after a ``HDNG``!)
+``Q``  Questionable instruction, used on ``MDX`` with displacement of zero
+       (which is valid but apparently suspect)
+``R``  Relation error: an expression does not have a valid relocation,
+       an absolute displacement was not specified,
+       an absolute origin was specified in a relocatable program,
+       a relocatable operand was specified as a ``BSS`` or ``BES`` parameter,
+       the target of the ``END`` statement in relocatable program was not a relocatable value,
+       or the operand of an ``ENT`` statement was not relocatable
+``S``  Syntax error: an invalid expression was used,
+       an invalid character was detected,
+       ``END`` missing start address in a mainline program,
+       ``EBC`` missing delimiter or has zero character count,
+       invalid label in ``ENT`` or ``ISS``,
+       or label appears in more than one ``ENT``.
+``T``  Tag error: column 33 contains character other than blank, ``0``, ``1``, ``2``, or ``3``
+       (Note: in ``ISS`` and ``ILS`` statements, columns 32 and 33 can contain other digits)
+``U``  Undefined symbol
+``W``  An X and/or Y coordinate is not within specified range, or invalid operand
+``X``  A character other than ``R`` or ``I`` is in column 32,
+       or a character other than ``D`` or ``N`` is in column 33
+``Z``  An invalid condition was specified in a conditional branch or interrupt order
+=====  =================================================================================
+
+Loading a DMS disk image
+========================
+.. attention::
+   This section is not yet written.
+
+Batch file mkdms builds the components.
+
+Job deck loaddms loads the components onto a cartridge.
+
+Probably will not work on Unix/Linux until all files are renamed in lowercase.
+
+Interestingly, the 1130's assembler cannot be used for several reasons:
+no support for SBRK cards,
+poor floating point constant precision (!),
+and bugs which are tripped up by a ``LIBR`` directive after a ``HDNG`` directive.
+
+Required files
+--------------
+
+Required utilities
+------------------
+
+Assembling DMS and components
+-----------------------------
+
+Building DMS for a 1132 printer
+-------------------------------
+
+Building DMS for a 1403 printer
+-------------------------------
+
+Building DMS for alternate memory configurations
+------------------------------------------------
+
+Data formats
+============
+This section lists 1130 numeric data representations.
+
+Single-word integer format
+--------------------------
+Single-word integers are two's complement 16-bit values stored in one word.
+The format is:
+
+.. figure:: images/int-single.svg
+   :alt: Bit 0 = Sign; Bit 1 = MSB; Bits 2-14 = Integer value; Bit 15 = LSB
+
+Double-word integer format
+--------------------------
+Double-word integers are two's complement 32-bit values stored in two words.
+The first word must be stored at an even address.
+The most significant word is stored first.
+The ``LDD`` instruction loads the first word into the accumulator and the second word into the extension register.
+(Double word integers are used only by assembly language programs.
+Fortran programs always perform 16-bit integer arithmetic.
+When the |*ONE WORD INTEGERS|_ control record is not used,
+Fortran stores integers in two or three words to match the size of real numbers,
+but uses only the first word for data).
+
+.. figure:: images/int-double-1.svg
+   :alt: Bit 0 = Sign; Bit 1 = MSB; Bits 2-15 = Integer value
+
+   Even address *A*
+
+.. figure:: images/int-double-2.svg
+   :alt: Bits 0-14 = Integer value; Bit 15 = LSB
+
+   Odd address *A*\ +1
+
+Standard precision floating point format
+----------------------------------------
+Standard precision floating point numbers are stored in two words.
+The first word must be stored at an even address.
+The 24-bit mantissa is stored as a two's complement signed value, with an implied binary point between bits 0 and 1 of the first word.
+The characteristic (binary exponent) is offset by 128.
+Numbers are stored in normalized form,
+so bit 1 is always 1 for positive numbers,
+and bit 1 is always 0 for negative numbers.
+Zero is represented as all 32 bits set to 0.
+
+.. figure:: images/float-std-1.svg
+   :alt: Bit 0 = Sign; Bit 1 = MSB; Bits 2-15 = Mantissa
+
+   Even address *A*
+
+.. figure:: images/float-std-2.svg
+   :alt: Bits 0-6 = Mantissa; Bit 7 = LSB; Bits 8-15 = Characteristic (offset 128)
+
+   Odd address *A*\ +1
+
+Extended precision floating point format
+----------------------------------------
+Extended precision floating point numbers are stored in three words with no address restrictions.
+The 32-bit mantissa is stored as a two's complement signed value with an implied binary point between bits 0 and 1 of the second word.
+The characteristic (binary exponent) is offset by 128.
+Numbers are stored in normalized form,
+so bit 1 is always 1 for positive numbers,
+and bit 1 is always 0 for negative numbers.
+Zero is represented as all 48 bits set to 0.
+
+.. figure:: images/float-ext-1.svg
+   :alt: Bits 0-7 = Unused; Bits 8-15 = Characteristic (offset 128)
+
+   Address *A*
+
+.. figure:: images/float-ext-2.svg
+   :alt: Bit 0 = Sign; Bit 1 = MSB; Bits 2-15 = Mantissa
+
+   Address *A*\ +1
+
+.. figure:: images/float-ext-3.svg
+   :alt: Bits 0-14 = Mantissa; Bit 15 = LSB
+
+   Address *A*\ +2
+
+Fixed-point format
+------------------
+Assembly language programs can specify fixed-point real constants.
+These numbers are stored as two's complement numbers in two words,
+with the first word at an even address.
+The position of the binary point is *not* encoded in the stored value,
+and must be tracked by the program.
+The assembler syntax for such numbers is ±\ *nnn.nnn*\ **B**\ *bb* or ±\ *n.nnn*\ **E**\ ±\ *ee*\ **B**\ *bb*\ ,
+where *bb* specifes the number of binary digits to the left of the implied binary point.
+The specifier B0 places the binary point between bits 0 and 1 of the first word;
+B31 places it after the least-significant bit and results in a standard double-word integer.
+The illustration below shows the interpretation of B5 format.
+
+.. figure:: images/fixed-point-1.svg
+   :alt: Bit 0 = Sign; Bit 1 = MSB; Bits 2-5 = Integer part; Bits 6-15 = Fractional part (first half)
+
+   Even address *A*
+
+.. figure:: images/fixed-point-2.svg
+   :alt: Bits 0-14 = Fractional part (second half); Bit 15 = LSB
+
+   Odd address *A*\ +1
+
+Character codes
+===============
+The following table lists the 1130 character codes.
+The console keyboard generates Card Code values.
+Card code values are stored in the uppermost 12 bits of a word according to the following diagram.
+Eight-bit codes are stored in the lower 8 bits of a word,
+or are packed two characters to a word.
+The 1403 printer codes are actually 6-bit codes with a parity bit to ensure odd parity.
+
+.. csv-table::
+   :stub-columns: 1
+   :align: right
+
+   "Bit:",   "0",  "1",  "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"
+   "Punch:", "12", "11", "0", "1", "2", "3", "4", "5", "6", "7", "8",  "9",  "",   "",   "",   ""
+
++---------------------+-----------+------+----------+----------+------------+---------+
+|                     |           | IBM  | 1132     |          | Paper      | 1403    |
+|                     |           | card | printer  | Console  | tape       | printer |
+|                     | |EBCDIC|  | code | subset   | printer  | PTTC/8     | code    |
+|                     +-----+-----+------+----------+----------+------------+---------+
+| Character           | Dec | Hex | Hex  | Hex [*]_ | Hex      | Hex        | Hex     |
++=====================+=====+=====+======+==========+==========+============+=========+
+| ``NUL``             | 0   | 00  | B030 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``PF``  Punch off   | 4   | 04  | 8210 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``HT``  Horiz tab   | 5   | 05  | 8110 |          | 41       | 6D         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``LC``  Lowercase   | 6   | 06  | 8090 |          |          | 6E         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``DEL`` Delete      | 7   | 07  | 8050 |          |          | 7F         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``RES`` Restore     | 20  | 14  | 4210 |          | 05 [#]_  | 4C         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``NL``  New line    | 21  | 15  | 4110 |          | 81 [#]_  | DD         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``BS``  Backspace   | 22  | 16  | 4090 |          | 11       | 5E         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``IDL`` Idle        | 23  | 17  | 4050 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``BYP`` Bypass      | 36  | 24  | 2210 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``LF``  Line feed   | 37  | 25  | 2110 |          | 03       | 3D         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``EOB`` End of blk  | 38  | 26  | 2090 |          |          | 3E         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``PRE`` Prefix      | 39  | 27  | 2050 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``PN``  Punch on    | 52  | 34  | 0210 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``RS``  Reader stop | 53  | 35  | 0110 |          | 09 [#]_  | 0D         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``UC``  Uppercase   | 54  | 36  | 0090 |          |          | 0E         |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``EOT`` End of xmit | 55  | 37  | 0050 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| Space               | 64  | 40  | 0000 |          | 21       | 10         | 7F      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``¢``               | 74  | 4A  | 8820 |          | 02       | 20 (U) [*]_|         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``.`` (period)      | 75  | 4B  | 8420 | 4B       | 00       | 6B (L)     | 6E      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``<``               | 76  | 4C  | 8220 |          | DE       | 02 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``(``               | 77  | 4D  | 8120 | 4D       | FE       | 19 (U)     | 57      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``+``               | 78  | 4E  | 80A0 | 4E       | DA       | 70 (U)     | 6D      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``|``               | 79  | 4F  | 8060 |          | C6       | 3B (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``&``               | 80  | 50  | 8000 | 50       | 44       | 70 (L)     | 15      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``!``               | 90  | 5A  | 4820 |          | 42       | 5B (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``$``               | 91  | 5B  | 4420 | 5B       | 40       | 5B (L)     | 62      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``*`` (caret)       | 92  | 5C  | 4220 | 5C       | D6       | 08 (U)     | 23      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``)``               | 93  | 5D  | 4110 | 5D       | F6       | 1A (U)     | 2F      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``;`` (semicolon)   | 94  | 5E  | 40A0 |          | D2       | 13 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``¬`` (not)         | 95  | 5F  | 4060 |          | F2       | 6B (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``-`` (dash)        | 96  | 60  | 4000 | 60       | 84       | 40 (L)     | 61      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``/``               | 97  | 61  | 3000 | 61       | BC       | 31 (L)     | 4C      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``,`` (comma)       | 107 | 6B  | 2420 | 6B       | 80       | 3B (L)     | 16      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``%``               | 108 | 6C  | 2220 |          | 06       | 15 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``_`` (underscore)  | 109 | 6D  | 2120 |          | BE       | 40 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``>``               | 110 | 6E  | 20A0 |          | 46       | 07 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``?``               | 111 | 6F  | 2060 |          | 86       | 31 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``:`` (colon)       | 122 | 7A  | 0820 |          | 82       | 04 (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``#``               | 123 | 7B  | 0420 |          | C0       | 0B (L)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``@``               | 124 | 7C  | 0220 |          | 04       | 20 (L)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``'`` (apostrophe)  | 125 | 7D  | 0120 | 7D       | E6       | 16 (U)     | 0B      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``=``               | 126 | 7E  | 00A0 | 7E       | C2       | 01 (U)     | 4A      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``"`` (quotation)   | 127 | 7F  | 0060 |          | E2       | 0B (U)     |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``a``               | 129 | 81  | B000 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``b``               | 130 | 82  | A800 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``c``               | 131 | 83  | A400 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``d``               | 132 | 84  | A200 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``e``               | 133 | 85  | A100 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``f``               | 134 | 86  | A080 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``g``               | 135 | 87  | A040 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``h``               | 136 | 88  | A020 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``i``               | 137 | 89  | A010 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``j``               | 145 | 91  | D000 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``k``               | 146 | 92  | C800 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``l``               | 147 | 93  | C400 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``m``               | 148 | 94  | C200 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``n``               | 149 | 95  | C100 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``o``               | 150 | 96  | C080 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``p``               | 151 | 97  | C040 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``q``               | 152 | 98  | C020 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``r``               | 153 | 99  | C010 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``s``               | 162 | A2  | 6800 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``t``               | 163 | A3  | 6400 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``u``               | 164 | A4  | 6200 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``v``               | 165 | A5  | 6110 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``w``               | 166 | A6  | 6080 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``x``               | 167 | A7  | 6040 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``y``               | 168 | A8  | 6020 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``z``               | 169 | A9  | 6010 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ( + zero)           | 192 | C0  | A000 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``A``               | 193 | C1  | 9000 | C1       | 3C or 3E | 61 (U)     | 64      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``B``               | 194 | C2  | 8800 | C2       | 18 or 1A | 62 (U)     | 25      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``C``               | 195 | C3  | 8400 | C3       | 1C or 1E | 73 (U)     | 26      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``D``               | 196 | C4  | 8200 | C4       | 30 or 32 | 64 (U)     | 67      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``E``               | 197 | C5  | 8110 | C5       | 34 or 36 | 75 (U)     | 68      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``F``               | 198 | C6  | 8080 | C6       | 10 or 12 | 76 (U)     | 29      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``G``               | 199 | C7  | 8040 | C7       | 14 or 16 | 67 (U)     | 2A      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``H``               | 200 | C8  | 8020 | C8       | 24 or 26 | 68 (U)     | 6B      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``I``               | 201 | C9  | 8010 | C9       | 20 or 22 | 79 (U)     | 2C      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| (- zero)            | 208 | D0  | 6000 |          |          |            |         |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``J``               | 209 | D1  | 5000 | D1       | 7C or 7E | 51 (U)     | 58      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``K``               | 210 | D2  | 4800 | D2       | 5B or 5A | 52 (U)     | 19      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``L``               | 211 | D3  | 4400 | D3       | 5C or 5E | 43 (U)     | 1A      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``M``               | 212 | D4  | 4200 | D4       | 70 or 72 | 54 (U)     | 5B      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``N``               | 213 | D5  | 4100 | D5       | 74 or 76 | 45 (U)     | 1C      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``O``               | 214 | D6  | 4080 | D6       | 50 or 52 | 46 (U)     | 5D      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``P``               | 215 | D7  | 4040 | D7       | 54 or 56 | 57 (U)     | 5E      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``Q``               | 216 | D8  | 4020 | D8       | 64 or 66 | 58 (U)     | 1F      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``R``               | 217 | D9  | 4010 | D9       | 60 or 62 | 49 (U)     | 20      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``S``               | 226 | E2  | 2800 | E2       | 98 or 9A | 32 (U)     | 0D      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``T``               | 227 | E3  | 2400 | E3       | 9C or 9E | 23 (U)     | 0E      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``U``               | 228 | E4  | 2200 | E4       | B0 or B2 | 34 (U)     | 4F      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``V``               | 229 | E5  | 2100 | E5       | B4 or B6 | 25 (U)     | 10      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``W``               | 230 | E6  | 2080 | E6       | 90 or 92 | 26 (U)     | 51      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``X``               | 231 | E7  | 2040 | E7       | 94 or 96 | 37 (U)     | 52      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``Y``               | 232 | E8  | 2020 | E8       | A4 or A6 | 38 (U)     | 13      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``Z``               | 233 | E9  | 2010 | E9       | A0 or A2 | 29 (U)     | 54      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``0``               | 240 | F0  | 2000 | F0       | C4       | 1A (L)     | 49      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``1``               | 241 | F1  | 1000 | F1       | FC       | 01 (L)     | 40      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``2``               | 242 | F2  | 0800 | F2       | D8       | 02 (L)     | 01      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``3``               | 243 | F3  | 0400 | F3       | DC       | 13 (L)     | 02      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``4``               | 244 | F4  | 0200 | F4       | F0       | 04 (L)     | 43      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``5``               | 245 | F5  | 0100 | F5       | F4       | 15 (L)     | 04      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``6``               | 246 | F6  | 0080 | F6       | D0       | 16 (L)     | 45      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``7``               | 247 | F7  | 0040 | F7       | D4       | 07 (L)     | 46      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``8``               | 248 | F8  | 0020 | F8       | E4       | 08 (L)     | 07      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+| ``9``               | 249 | F9  | 0010 | F9       | E0       | 19 (L)     | 08      |
++---------------------+-----+-----+------+----------+----------+------------+---------+
+
+.. [*] Any unlisted code will be printed as a space by the ``PRNT1`` subroutine
+.. [*] ``(U)`` or ``(L)`` mean that the code is defined in uppercase mode or lowercase mode, respectively
+.. [#] Black ribbon
+.. [#] Carriage return
+.. [#] Red ribbon
+
+Known problems/limitations
+==========================
+Simulator issues
+----------------
+* The serial communications adapter is not yet functional.
+* You cannot currently have both an 1132 and 1403 printer at the same time.
+
+DMS issues
+----------
+* The DMS macro assembler does not like some of the directives and fixed-point constants in the DMS source code.
+  This is not a bug in the emulator,
+  but in the 1130's own assembler.
+  IBM cross-assembled DMS on a 360 or 370.
+  For this package,
+  DMS must be assembled using the asm1130 cross-assembler.
+* Until October 24th 2012,
+  due to a bug in the cross-assembler asm1130,
+  the FORTRAN extended-precision ``SQRT()`` function was defective.
+  DMS images obtained from us prior to this date should be replaced with a newer version. 
+* There is a bug in the Fortran compiler:
+  if you call a function with no arguments,
+  it will flag the wrong statement with the C36 syntax error.
+* Be very careful when calling subroutines and functions.
+  The 1130's subroutine linkage is pretty fragile.
+  If you pass the wrong number of arguments,
+  the 1130 will end up executing data.
+* On our DMS image,
+  ``DUP STORECI`` crashes DMS.
+  This is likely due to a bug in the simulator or the cross-assembler.

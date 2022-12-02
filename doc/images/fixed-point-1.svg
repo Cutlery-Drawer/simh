@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="740" height="80" viewBox="0 0 740 80"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xml:space="preserve"
+	xml:lang="en">
+<title>IBM 1130 fixed-point format</title>
+<defs>
+	<style type="text/css">
+		line, rect{
+			fill: none;
+			stroke: currentColor;
+		}
+		circle, text, polygon{
+			fill: currentColor;
+		}
+		text{
+			font-family: Arial, Helvetica, sans-serif;
+			text-anchor: middle;
+		}
+		.arrow{
+			marker-start: url(#arrowhead);
+			marker-end:   url(#arrowhead);
+			stroke: currentColor;
+			stroke-width: 2;
+		}
+		@media (prefers-color-scheme: dark){
+			:root { color: #ccc; }
+		}
+	</style>
+
+	<!-- Arrowhead -->
+	<marker id="arrowhead"
+		viewBox="0 0 11 8"
+		refX="5.5"
+		refY="4"
+		markerWidth="11"
+		markerHeight="8"
+		markerUnits="userSpaceOnUse"
+		orient="auto-start-reverse"
+	><polygon points="
+		11 4
+		0  8
+		0  0
+		11 4
+	"/></marker>
+</defs>
+
+<g opacity="0.25">
+	<line x1="740"   y1="29.5"  y2="29.5"/>
+	<line x1="94.5"  x2="94.5"  y2="60"/>
+	<line x1="139.5" x2="139.5" y2="29.5"/>
+	<line x1="185.5" x2="185.5" y2="29.5"/>
+	<line x1="231.5" x2="231.5" y2="29.5"/>
+	<line x1="277.5" x2="277.5" y2="59.5"/>
+	<line x1="324.5" x2="324.5" y2="29.5"/>
+	<line x1="370.5" x2="370.5" y2="29.5"/>
+	<line x1="416.5" x2="416.5" y2="29.5"/>
+	<line x1="462.5" x2="462.5" y2="29.5"/>
+	<line x1="508.5" x2="508.5" y2="29.5"/>
+	<line x1="555.5" x2="555.5" y2="29.5"/>
+	<line x1="601.5" x2="601.5" y2="29.5"/>
+	<line x1="647.5" x2="647.5" y2="29.5"/>
+	<line x1="693.5" x2="693.5" y2="29.5"/>
+</g>
+<line x1="46.5" x2="46.5" y2="60"/>
+<rect x="0.5" y="0.5" width="739" height="59"/>
+<g font-size="15">
+	<text x="24"  y="21">0</text>
+	<text x="71"  y="21">1</text>
+	<text x="117" y="21">2</text>
+	<text x="163" y="21">3</text>
+	<text x="209" y="21">4</text>
+	<text x="255" y="21">5</text>
+	<text x="302" y="21">6</text>
+	<text x="348" y="21">7</text>
+	<text x="393" y="21">8</text>
+	<text x="440" y="21">9</text>
+	<text x="486" y="21">10</text>
+	<text x="532" y="21">11</text>
+	<text x="578" y="21">12</text>
+	<text x="624" y="21">13</text>
+	<text x="671" y="21">14</text>
+	<text x="717" y="21">15</text>
+</g>
+<text x="24"  y="51">Sign</text>
+<text x="70"  y="51">MSB</text>
+<text x="185" y="51">Integer part</text>
+<text x="505" y="51">Fractional part</text>
+
+<g id="implied-binary-point">
+	<line class="arrow" x1="260" y1="70" x2="296" y2="70"/>
+	<circle cx="277.5" cy="58.5" r="4"/>
+	<text x="370" y="75" font-size="15">Implied binary point</text>
+</g>
+</svg>
