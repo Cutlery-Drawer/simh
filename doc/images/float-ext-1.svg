@@ -38,9 +38,9 @@
 </g>
 <line x1="370.5" x2="370.5" y2="60"/>
 <rect x="0.5" y="0.5" width="739" height="59"/>
-<text x="24"  y="21" font-size="15">0</text>
-<text x="348" y="21" font-size="15">7</text>
-<text x="394" y="21" font-size="15">8</text>
+<text x="23"  y="21" font-size="15">0</text>
+<text x="347" y="21" font-size="15">7</text>
+<text x="393" y="21" font-size="15">8</text>
 <text x="716" y="21" font-size="15">15</text>
 <text x="185" y="51">Unused</text>
 <text x="555" y="51">Characteristic (offset 128)</text>
