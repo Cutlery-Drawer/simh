@@ -1,0 +1,894 @@
+.. -*- coding: utf-8; mode: rst; tab-width: 4; truncate-lines: t; indent-tabs-mode: nil; truncate-lines: t; -*- vim:set et ts=4 ft=rst nowrap:
+
+*****************************
+IBM 7090/7094 simulator usage
+*****************************
+:Date: 2008-12-01
+:Revision: $Format:%H$
+:Copyright: See `LICENSE.txt <../LICENSE.txt>`_ for terms of use.
+
+.. topic:: **Copyright notice**
+
+   The following copyright notice applies to the SIMH source, binary, and documentation:
+
+   .. include:: ../LICENSE.txt
+
+.. sectnum:: :suffix: .
+.. contents::
+   :backlinks: none
+   :depth: 3
+   :local:
+
+This memorandum documents the IBM 7094 simulator.
+
+Simulator files
+===============
+To compile the IBM 7094,
+you must define ``USE_INT64`` as part of the compilation command-line.
+
+``sim/``
+    | ``scp.h``
+    | ``sim_console.h``
+    | ``sim_defs.h``
+    | ``sim_fio.h``
+    | ``sim_rev.h``
+    | ``sim_sock.h``
+    | ``sim_tape.h``
+    | ``sim_timer.h``
+    | ``sim_tmxr.h``
+    | ``scp.c``
+    | ``sim_console.c``
+    | ``sim_fio.c``
+    | ``sim_sock.c``
+    | ``sim_tape.c``
+    | ``sim_timer.c``
+    | ``sim_tmxr.c``
+
+``sim/i7094/``
+    | ``i7094_defs.h``
+    | ``i7094_dat.h``
+    | ``i7094_cd.c``
+    | ``i7094_clk.c``
+    | ``i7094_com.c``
+    | ``i7094_cpu.c``
+    | ``i7094_cpu1.c``
+    | ``i7094_drm.c``
+    | ``i7094_dsk.c``
+    | ``i7094_io.c``
+    | ``i7094_lp.c``
+    | ``i7094_mt.c``
+    | ``i7094_sys.c``
+
+IBM 7090/7094 features
+======================
+The IBM 7090/7094 simulator is configured as follows:
+
+========================  ========================================================================================
+Device name(s)            Simulates
+========================  ========================================================================================
+``CPU``                   7090, 7094, or 7094 with CTSS RPQ's CPU with 32KW, 32KW, or 64KW of memory, respectively
+``CLK``                   Interval timer (RPQ F89349) and Chronolog clock
+``CHANA``                 7607 channel (required)
+``CHANB``\ ..\ ``CHANH``  Additional 7607, 7289, or 7909 channels
+``MTA``                   Magnetic tape controller, channel A (required)
+``MTB``\ ..\ ``MTH``      Additional magnetic tape controllers, channels B to H
+``CDR``                   711 card reader
+``CDP``                   721 card punch
+``LPT``                   716 line printer
+``DSK``                   7631 file control with up to 10 modules (disks or drums)
+``DRM``                   7289 fast drum control
+``COM``                   7750 communications control
+``COML``                  7750 communications lines
+========================  ========================================================================================
+
+Channels B through H,
+the corresponding magnetic tape controllers,
+and the file control, drum control, and communications control are initially set DISABLED.
+The file control, drum control, and communications control can be assigned to any channel in the range B through H.
+
+The 7090/7094 simulator implements several unique stop condition:
+
+* Undefined CPU instruction
+* Undefined channel instruction
+* XEC nesting exceeds limit
+* Divide check on a divide and halt instruction
+* Select of a non-existent channel
+* 7607 select of a 7909 channel
+* Write select of a write protected device
+* Invalid file control format
+* Invalid message to 7750
+* No buffer storage available for input character on 7750
+* No buffer storage available for output character on 7750
+
+The ``LOAD`` command is not implemented.
+
+CPU
+---
+The CPU options allow the user to specify a 7090, a 7094, or a 7094 with CTSS RPQs. ::
+
+    SET CPU 7090            7090
+    SET CPU 7094            Standard 7094
+    SET CPU CTSS            7094 with CTSS RPQs
+
+Memory size is 32KW on a 7090 or 7094 CPU,
+64KW on a CTSS CPU.
+CTSS mode enables access to the Chronolog clock as magtape unit A7.
+
+CPU registers include the visible state of the processor as well as the control registers for the interrupt system.
+
+====================  ====  ============================================
+Name                  Size  Comments
+====================  ====  ============================================
+``PC``                15    Program counter
+``AC``                38    Accumulator
+``MQ``                36    Multiplier-quotient
+``SI``                36    Storage indicators
+``KEYS``              36    Front panel keys
+``XR1``\ ..\ ``XR7``  15    Index registers 1 to 7
+                            [7090 uses only ``XR1``, ``XR2``, ``XR4``]
+``SS1``\ ..\ ``SS6``  1     Sense switches 1 to 6
+``SL1``\ ..\ ``4``    1     Sense lights 1 to 4
+``OVF``               1     AC overflow indicator
+``MQO``               1     MQ overflow indicator
+``DVC``               1     Divide check indicator
+``IOC``               1     I/O check indicator
+``TTRAP``             1     Transfer trap enable
+``CTRAP``             1     Copy trap enable
+``STRAP``             1     Select trap enable
+``FTRAP``             1     Floating point trap enable
+``STORN``             1     Storage nullification mode enable
+``MULTI``             1     Multiple-tag mode enable
+                            [always 1 on 7090]
+``CHREQ``             8     Channel request flags
+``CHTR_PEND``         1     Channel trap pending
+``CHTR_INHT``         1     Channel trap inhibit
+``CHTR_INHI``         1     Channel trap instruction inhibit
+``CHTR_ENAB``         30    Channel trap enable flags
+``USERM``             1     User mode flag [CTSS only]
+``IMEM``              1     Instruction B-core flag [CTSS only]
+``DMEM``              1     Data B-core flag [CTSS only]
+``RELOC``             8     Relocation base block [CTSS only]
+``START``             8     Address start block [CTSS only]
+``LIMIT``             8     Address limit block [CTSS only]
+``OLDPC``             15    PC at start of instruction
+``PCQ[0:63]``         15    PC prior to last jump or interrupt;
+                            Most recent PC change first
+``HTPEND``            1     Halt and transfer pending
+``HTADDR``            15    Halt and transfer address
+``XECMAX``            8     XEC chain limit
+``WRU``               8     Interrupt character
+``STOP_ILL``          1     Stop on undefined instruction
+====================  ====  ============================================
+
+The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands::
+
+    SET CPU HISTORY           Clear history buffer
+    SET CPU HISTORY=0         Disable history
+    SET CPU HISTORY=n         Enable history, length = n
+    SHOW CPU HISTORY          Print CPU history
+    SHOW CPU HISTORY=n        Print first n entries of CPU history
+
+If switch ``-C`` is set,
+channel commands are also included in the CPU history.
+The maximum length for the history is 262144 entries.
+
+Interval timer (``CLK``)
+------------------------
+The timer (``CLK``) implements a 60Hz interval timer.
+It is disabled by default.
+
+The timer has the following registers:
+
+========  ====  ============================
+Name      Size  Comments
+========  ====  ============================
+``TRAP``  1     Interval timer trap flag
+``TIME``  24    Tick delay
+========  ====  ============================
+
+I/O channels (``CHANA``\ ..\ ``CHANH``)
+---------------------------------------
+The 709X supports up to 8 channels.
+Channel models include::
+
+    7607   Standard multiplexer channel
+    7289   High speed drum channel
+    7909   Advanced capabilities channel
+
+Channel A is required and is always a 7607.
+Channels B through H are disabled by default.
+Channels B through H can be enabled.
+When a channel is enabled,
+the attached device must also be specified::
+
+    SET CHANx ENABLED{=[729|TAPE|7289|DRUM|7631|FILE|7750|COMM]}
+
+If no device type is specified,
+``TAPE`` is assumed.
+
+Setting a channel to 729 (synonym ``TAPE``) defines the channel as a 7607 and enables the corresponding magnetic tape controller.
+Setting a channel to 7289 (synonym ``DRUM``) defines the channel as a 7289 and enables the high-speed drum control.
+Setting a channel to 7631 defines the channel as a 7909 and enables the file control.
+Setting a channel to 7750 (synonym ``COMM``) defines the channel as a 7909 and enables the communications control.
+Only one high-speed drum control,
+one file control,
+and one communications control are supported per system.
+
+As an example,
+the following commands set up the 1971 CTSS configuration::
+
+    SET CPU CTSS
+    SET CLK ENABLED
+    SET CHANB ENABLED=TAPE
+    SET CHANC ENABLED=DISK
+    SET CHANE ENABLED=COMM
+    SET CHANG ENABLED=DRUM
+
+Channels have the following registers:
+
+=========  =========  ====  ============================
+Name       Type       Size  Comments
+=========  =========  ====  ============================
+``STATE``  All        8     Channel state
+``DSC``    7607,7289  4     Data select
+``DSU``    7607,7289  9     Data select unit
+``NDSC``   7607,7289  4     Non-data select
+``NDSU``   7607,7289  9     Non-data select unit
+``FLAGS``  All        30    Channel flags
+``IDF``    All        2     Input data flags
+``OP``     All        5     Channel opcode
+``CLC``    All        16    Channel location counter
+``WC``     All        15    Channel word counter
+``CA``     All        16    Channel current address
+``AR``     All        36    Channel assembly register
+``CND``    7909       6     Channel interrupt conditions
+``LCC``    7909       6     Channel control counter
+``SMS``    7909       7     Channel options mask
+=========  =========  ====  ============================
+
+Channel A devices
+-----------------
+
+.. _711 card reader:
+.. _CDR:
+
+711 card reader (``CDR``)
+"""""""""""""""""""""""""
+The card reader (``CDR``) reads data from a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+The ``POS`` register specifies the number of the next data item to be read.
+Thus, by changing ``POS``,
+the user can backspace or advance the reader.
+
+Card reader files can either be text
+(one character per column)
+or column binary
+(two characters per column).
+The file type can be specified with a ``SET`` command::
+
+    SET CDR TEXT           Set text mode
+    SET CDR BINARY         Set column binary mode
+
+or in the ``ATTACH`` command::
+
+    ATT -T CDR <file>      Set text mode
+    ATT CDR <file>.TXT     Set text mode
+    ATT -C CDR <file>      Set column binary mode
+    ATT CDR <file>.CBN     Set column binary mode
+
+The card reader supports the ``BOOT`` command.
+``BOOT CDR`` starts the standard card reader bootstrap at location 0.
+
+The card reader implements these registers:
+
+=============  ====  ==========================
+Name           Size  Comments
+=============  ====  ==========================
+``STATE``      2     Reader state
+``BPTR``       5     Binary buffer pointer
+``BUF[0:23]``  36    Binary buffer
+``POS``        32    Position in the input file
+``TSTART``     24    Card start delay
+``TSTOP``      24    Card stop delay
+``TLEFT``      24    Delay between row halves
+``TRIGHT``     24    Delay between rows
+=============  ====  ==========================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+End-of-file   Out of cards
+OS I/O error  Report error and stop
+============  =====================
+
+.. _721 card punch:
+.. _CDP:
+
+721 card punch (``CDP``)
+""""""""""""""""""""""""
+The card reader (``CDP``) writes data to a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+The ``POS`` register specifies the number of the next data item to be written.
+Thus, by changing ``POS``,
+the user can backspace or advance the punch.
+
+Card punch files can either be text
+(one character per column)
+or column binary
+(two characters per column).
+The file type can be specified with a ``SET`` command::
+
+    SET CDP TEXT           Set text mode
+    SET CDP BINARY         Set column binary mode
+
+or in the ``ATTACH`` command::
+
+    ATT -T CDP <file>      Set text mode
+    ATT CDP <file>.TXT     Set text mode
+    ATT -C CDR <file>      Set column binary mode
+    ATT CDP <file>.CBN     Set column binary mode
+
+The card punch supports both the business
+(1403 print chain A)
+and Fortran
+(1403 print chain H)
+character sets::
+
+    SET CDP BUSINESS       Business character set
+    SET CDP FORTRAN        Fortran character set
+
+The Fortran character set is the default.
+
+The card punch implements these registers:
+
+=============  ====  ===========================
+Name           Size  Comments
+=============  ====  ===========================
+``STATE``      2     Reader state
+``CHOB``       36    Channel output buffer
+``CHOBV``      1     Output buffer valid flag
+``BPTR``       5     Binary buffer pointer
+``BUF[0:23]``  36    Binary buffer
+``POS``        32    Position in the output file
+``TSTART``     24    Card start delay
+``TSTOP``      24    Card stop delay
+``TLEFT``      24    Delay between row halves
+``TRIGHT``     24    Delay between rows
+=============  ====  ===========================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. _716 line printer:
+.. _LPT:
+
+716 line printer (``LPT``)
+""""""""""""""""""""""""""
+The line printer (``LPT``) writes data to a disk file as ASCII text with terminating newlines.
+The ``POS`` register specifies the number of the next data item to be written.
+Thus, by changing ``POS``,
+the user can backspace or advance the printer.
+
+The line printer implements both 48- and 64-character print chains::
+
+    SET LPT 64             64-character print chain
+    SET LPT 48             48-character print chain
+
+The line printer also implements both the business
+(1403 print chain A)
+and Fortran
+(1403 H chain)
+character sets::
+
+    SET LPT BUSINESS       Business print character set
+    SET LPT FORTRAN        Fortran character set
+
+The default is 64 characters,
+Fortran set.
+
+Finally,
+because the line printer was used for status output messages,
+its output can be redirected to the controlling terminal window if no file is attached::
+
+    SET LPT DEFAULT        Default output to console window
+    SET LPT NODEFAULT      No default output, error if not attached
+
+The line printer implements these registers:
+
+==============  ====  ===========================
+Name            Size  Comments
+==============  ====  ===========================
+``STATE``       2     Printer state
+``CMD``         2     Printer command
+``CHOB``        36    Channel output buffer
+``CHOBV``       1     Output buffer valid flag
+``BPTR``        5     Binary buffer pointer
+``BUF[0:23]``   36    Binary buffer
+``EBUF[0:22]``  36    Echo buffer
+``POS``         32    Position in the output file
+``TSTART``      24    Line start delay
+``TSTOP``       24    Line print delay
+``TLEFT``       24    Delay between row halves
+``TRIGHT``      24    Delay between rows
+==============  ====  ===========================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. _729 magnetic tape:
+
+729 magnetic tape (``MTA``\ …\ ``MTH``)
+---------------------------------------
+Every 7607 channel can support up to ten seven-track magnetic tape units (``MTx1``\ …\ ``MTx10``).
+Magnetic tape options include the ability to make units write enabled or write locked. ::
+
+    SET MTn LOCKED              Set unit n write locked
+    SET MTn WRITEENABLED        Set unit n write enabled
+
+Magnetic tape units can be set to a specific reel capacity in MB,
+or to unlimited capacity::
+
+    SET MTn CAPAC=m             Set unit n capacity to m MB (0 = unlimited)
+    SHOW MTn CAPAC              Show unit n capacity in MB
+
+Units can also be set ``ENABLED`` or ``DISABLED``.
+The magnetic tape simulator supports the ``BOOT`` command.
+``BOOT MTxn`` starts the standard magnetic tape load program at location 0.
+
+The magnetic tape controllers implement the following registers:
+
+=============  ====  ==================================
+Name           Size  Comments
+=============  ====  ==================================
+``UNIT``       5     Unit select code
+``CHOB``       36    Channel output buffer
+``CHOBV``      1     Output buffer valid flag
+``BPTR``       16    Buffer pointer
+``BLNT``       16    Buffer length
+``BUF``        7     Character buffer (with parity)
+``TWEF``       24    Wait time for end of file
+``TSHORT``     24    Wait time for "immediate" commands
+``TSTART``     24    Wait time for unit start
+``TSTOP``      24    Wait time for unit stop
+``TWORD``      24    Wait time between word transfers
+``UST[1:10]``  5     Unit state, drives 1 to 10
+``POS[1:10]``  32    Position, drives 1 to 10
+=============  ====  ==================================
+
+Error handling is as follows:
+
+==============  =====================
+Error           Processed as
+==============  =====================
+Not attached    Report error and stop
+End-of-file     Set error indicator
+OS I/O error    | Print error message
+                | Set error indicator
+                | Report error and stop
+==============  =====================
+
+.. _7631 file control:
+.. _DSK:
+
+7631 file control (``DSK``)
+---------------------------
+The 7631 file control supports up to ten devices,
+which can be 7320 drums,
+1301 disks,
+1302 disks,
+or 2302 disks.
+Unit types are specified with the ``SET`` command.
+The type can be set only if the unit
+(and the next unit in sequence)
+is unattached,
+and the unit number is even::
+
+    SET DSKn 7320          Unit n is a drum (unit n+1 is disabled)
+    SET DSKn 1301          Unit n is a 1301 disk (unit n+1 is the same)
+    SET DSKn 1302          Unit n is a 1302 disk (unit n+1 is the same)
+    SET DSKn 2302          Unit n is a 2302 disk (unit n+1 is the same)
+
+Units can be ``SET ENABLED`` or ``DISABLED``.
+In addition,
+units can be set to enable or disable formatting::
+
+    SET DSKn FORMAT        Enable formatting
+    SET DSKn NOFORMAT      Disable formatting
+
+Formatting is disabled by default.
+The current format can be shown with the command::
+
+    SHOW DSKn FORMAT       Display format information
+
+The 7631 implements the following registers:
+
+===============  ====  =======================================
+Name             Size  Comments
+===============  ====  =======================================
+``STATE``        6     File control state
+``ACCESS``       1     Currently selected access
+``MODULE``       4     Currently selected module (0-9)
+``RECORD``       36    Record address (6 BCD characters)
+``MODE``         4     Disk I/O mode
+``SENSE``        60    Sense data (10 BCD characters)
+``BCDCMD``       60    Most recent command (10 BCD characters)
+``CHOB``         36    Channel output buffer
+``CHOBV``        1     Output buffer valid flag
+``STOP``         1     Channel stop flag
+``FCNTR``        13    Format track character counter
+``BUF[0:999]``   36    Track buffer
+``RBASE``        10    Offset to record base
+``RPTR``         10    Offset to current word
+``RLIM``         10    Offset to record end
+``STIME``        24    Seek delay
+``RTIME``        24    Rotational delay
+``WTIME``        24    Inter-word delay
+``GTIME``        24    End-of-sector (gap) delay
+``CTIME``        24    Command processing delay
+``TRACK[0:19]``  10    | Current track number
+                       | [0:9] module n, access 0
+                       | [10:19] module n, access 1
+===============  ====  =======================================
+
+Error handling is as follows:
+
+==============  =====================
+Error           Processed as
+==============  =====================
+Not attached    Report error and stop
+OS I/O error    Report error and stop
+==============  =====================
+
+.. _7289 high-speed drum:
+.. _DRM:
+
+7289 high-speed drum (``DRM``)
+------------------------------
+The 7289 (also known as the 7320A) high-speed drum was a late addition to CTSS.
+Very little is known about the device,
+other than what is used in the CTSS sources.
+
+The drum implements these registers:
+
+=========  ====  ========================
+Name       Size  Comments
+=========  ====  ========================
+``STATE``  2     Drum state
+``DA``     18    Drum address register
+``OP``     1     Read/write flag
+``CHOB``   36    Channel output buffer
+``CHOBV``  1     Output buffer valid flag
+``TIME``   24    Inter-word delay
+=========  ====  ========================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+============  =====================
+
+Drum data files are buffered in memory;
+therefore,
+end of file and OS I/O errors cannot occur.
+
+.. _7750 communications controller:
+.. _COM:
+.. _COML:
+
+7750 communications controller (``COM`` and ``COML``)
+-----------------------------------------------------
+The 7750 is modeled as a terminal multiplexer with 33 lines.
+It consists of two devices:
+``COM`` is the multiplexer controller,
+and ``COML`` is the individual lines.
+For the first 32 lines,
+the 7750 performs input and output through Telnet sessions connected via a user-specified listening port;
+the 33rd line is permanently attached to the simulator console window.
+The ``ATTACH`` command specifies the port to be used for Telnet sessions::
+
+    ATTACH COM <port>      Set up listening port
+
+where ``port`` is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
+
+Each line (each unit of ``COML``) can be set to one of two modes:
+KSR-35 and KSR-37.
+In KSR-35 mode,
+lowercase input and output characters are converted automatically to uppercase,
+and parity is ignored.
+In KSR-37 mode,
+lowercase characters are left alone,
+and even parity is generated on input.
+KSR-37 is the default.
+
+Once ``COM`` is attached and the simulator is running,
+the 7750 listens for connections on the specified port.
+It assumes that any incoming connection is a Telnet connection.
+A connection remains open until disconnected either by the Telnet client,
+a ``SET COM DISCONNECT`` command,
+or a ``DETACH COM`` command.
+
+The 7750 implements the following special ``SHOW`` commands::
+
+    SHOW COM CONNECTIONS         Displays current connections to the 7750
+    SHOW COM STATISTICS          Displays statistics for active connections
+    SHOW COM FREEQ               Displays the character buffer free list
+    SHOW COM INPQ                Displays the character input queue
+    SHOW COM OUTQ                Displays the output queues for all lines
+    SHOW COMn OUTQ               Displays the output queue for line n
+
+The 7750 implements the following special ``SET`` commands::
+
+    SET COM DISCONNECT=n         Disconnect line n
+    SET COMLn DISCONNECT         Disconnect line n
+    SET COMLn LOG=filename       Log output of line n to filename
+    SET COMLn NOLOG              Disable logging and close log file
+    SET COMLn KSR35              Set line n to KSR-35
+    SET COMLn KSR37              Set line n to KSR-37
+
+The controller (``COM``) implements these registers:
+
+=================  ====  ===================================
+Name               Size  Comments
+=================  ====  ===================================
+``ENABLE``         1     Enable flag
+``STATE``          6     Controller state
+``MSGNUM``         12    Input message sequence number
+``CHOB``           36    Channel output buffer
+``CHOBV``          1     Output buffer valid flag
+``STOP``           1     Channel stop flag
+``BUF[0:119]``     36    Channel buffer
+``BPTR``           7     Channel buffer pointer
+``BLIM``           7     Channel buffer limit
+``FREEQ[0:1]``     16    Free queue header
+``INPQ[0:1]``      16    Input queue header
+``OUTQ[0:65]``     16    Output queue headers, lines 0 to 32
+``PKTB[0:32767]``  16    Character buffer entries
+=================  ====  ===================================
+
+Queue headers consist of two 16-bit words;
+both are subscripts into the character buffer array.
+The first word is the buffer subscript for the queue head;
+the second is the buffer subscript for the queue tail.
+In an empty queue,
+both words are 0.
+
+Character buffer entries also consist of two 16-bit words.
+The first is the buffer subscript for the next entry in the queue;
+0 indicates end of queue.
+The second is the data element,
+typically a 12-bit character.
+
+The lines (``COML``) implements these registers:
+
+==============  ====  ============================
+Name            Size  Comments
+==============  ====  ============================
+``TIME[0:32]``  24    Transmit time, lines 0 to 32
+==============  ====  ============================
+
+The 7750 does not support save and restore.
+All open connections,
+except the permanent connection to the console window,
+are lost when the simulator shuts down or ``COM`` is detached.
+
+Symbolic display and input
+==========================
+The IBM 7094 simulator implements symbolic display and input.
+Display is controlled by command-line switches:
+
+======  ==============================
+``-c``  Display as character
+``-s``  Display as character string
+``-m``  Display instruction mnemonics
+``-i``  Display as 7607 IO instruction
+``-n``  Display as 7909 IO instruction
+======  ==============================
+
+Character and string display is further qualified by switches that specify the character coding and conversion conventions:
+
+======  ===========================================
+``-b``  BCD data (default is nine-code)
+``-a``  Business character set (default is Fortran)
+======  ===========================================
+
+The default data coding is nine-code,
+and the default character set is Fortran.
+Note that 7094 BCD and IBM 1401 BCD differ in one important regard:
+the 7094 interprets 0 as code 20,
+the 1401 as code 12.
+
+Input parsing is controlled by the first character typed in or by command-line switches:
+
+===============  ====================
+``'`` or ``-c``  Character
+``"`` or ``-s``  String
+Alphabetic       Instruction mnemonic
+Numeric          Octal number
+===============  ====================
+
+Instruction input uses standard 7094 assembler syntax.
+There are two basic instruction classes:
+memory reference and index reference.
+
+Memory reference instructions have the format ::
+
+    memref{*} address{,tag}
+
+Index reference instructions have the format ::
+
+    idxref{*} address,{tag},decrement
+
+Specific instructions may disallow indirect addressing or limit the size of the tag, address, or decrement fields.
+
+Channel (I/O) instructions have the same basic two formats.
+
+Character sets
+==============
+The IBM 7094 uses a 6-bit character code called 9-code,
+a variation (with permuted zones) of the ubiquitous BCD (binary coded decimal).
+The 7094 also uses BCD for communicating with the card reader/punch and the line printer.
+In both 9-code and BCD,
+some of the characters have no equivalent in ASCII and require different representations:
+
+.. _9-code:
+
+======  ==============  ===========  ==========================
+9-code  ASCII           IBM 7094     Print
+        representation  character    chains
+======  ==============  ===========  ==========================
+00      ``0``
+01      ``1``
+02      ``2``
+03      ``3``
+04      ``4``
+05      ``5``
+06      ``6``
+07      ``7``
+10      ``8``
+11      ``9``
+12      ``^``
+13      ``#`` or ``=``               ``#`` in *A*, ``=`` in *H*
+14      ``@`` or ``'``               ``@`` in *A*, ``'`` in *H*
+15      ``:``                        Blank in *A*, *H* 48 char
+16      ``>``                        Blank in *A*, *H* 48 char
+17      ``{``           Tape mark    Blank in *A*, *H* 48 char
+20      ``&`` or ``+``               ``&`` in *A*, ``+`` in *H*
+21      ``A``
+22      ``B``
+23      ``C``
+24      ``D``
+25      ``E``
+26      ``F``
+27      ``G``
+30      ``H``
+31      ``I``
+32      ``?``
+33      ``.``
+34      ``)``
+35      ``[``                        Blank in *A*, *H* 48 char
+36      ``<``                        Blank in *A*, *H* 48 char
+37      ``}``           Group mark   Blank in *A*, *H* 48 char
+40      ``-``
+41      ``J``
+42      ``K``
+43      ``L``
+44      ``M``
+45      ``N``
+46      ``O``
+47      ``P``
+50      ``Q``
+51      ``R``
+52      ``!``
+53      ``$``
+54      ``*``
+55      ``]``                        Blank in *A*, *H* 48 char
+56      ``;``                        Blank in *A*, *H* 48 char
+57      ``_``           Delta        Blank in *A*, *H* 48 char
+60      Space
+61      ``/``
+62      ``S``
+63      ``T``
+64      ``U``
+65      ``V``
+66      ``W``
+67      ``X``
+70      ``Y``
+71      ``Z``
+72      ``|``           Record mark
+73      ``,``
+74      ``%`` or ``(``               ``%`` in *A*, ``(`` in *H*
+75      ``~``                        Blank in *A*, *H* 48 char
+76      ``\``                        Blank in *A*, *H* 48 char
+77      ``"``                        Blank in *A*, *H* 48 char
+======  ==============  ===========  ==========================
+
+.. _bcd-code:
+.. _BCD:
+
+===========  ==============  ===========  ==========================
+BCD code     ASCII           IBM 7094     Print
+             representation  character    chains
+===========  ==============  ===========  ==========================
+00           Space
+01           ``1``
+02           ``2``
+03           ``3``
+04           ``4``
+05           ``5``
+06           ``6``
+07           ``7``
+10           ``8``
+11           ``9``
+12           ``0``
+13           ``#`` or ``=``               ``#`` in *A*, ``=`` in *H*
+14           ``@`` or ``'``               ``@`` in *A*, ``'`` in *H*
+15           ``:``                        Blank in *A*, *H* 48 char
+16           ``>``                        Blank in *A*, *H* 48 char
+17           ``{``           Tape mark    Blank in *A*, *H* 48 char
+20           ``^``                        Blank in *A*, *H* 48 char
+21           ``/``
+22           ``S``
+23           ``T``
+24           ``U``
+25           ``V``
+26           ``W``
+27           ``X``
+30           ``Y``
+31           ``Z``
+32           ``|``           Record mark
+33           ``,``
+34           ``%`` or ``(``               ``%`` in *A*, ``(`` in *H*
+35           ``~``                        Blank in *A*, *H* 48 char
+36           ``\``                        Blank in *A*, *H* 48 char
+37           ``"``                        Blank in *A*, *H* 48 char
+40           ``-``
+41           ``J``
+42           ``K``
+43           ``L``
+44           ``M``
+45           ``N``
+46           ``O``
+47           ``P``
+50           ``Q``
+51           ``R``
+52           ``!``
+53           ``$``
+54           ``*``
+55           ``]``                        Blank in *A*, *H* 48 char
+56           ``;``           Delta        Blank in *A*, *H* 48 char
+57           ``_``                        Blank in *A*, *H* 48 char
+60           ``&``
+61           ``A``
+62           ``B``
+63           ``C``
+64           ``D``
+65           ``E``
+66           ``F``
+67           ``G``
+70           ``H``
+71           ``I``
+72           ``?``
+73           ``.``
+74           ``)``
+75           ``[``                        Blank in *A*, *H* 48 char
+76           ``<``                        Blank in *A*, *H* 48 char
+77           ``}``           Group mark   Blank in *A*, *H* 48 char
+===========  ==============  ===========  ==========================
