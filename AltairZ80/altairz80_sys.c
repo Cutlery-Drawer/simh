@@ -68,12 +68,15 @@ extern DEVICE hdc1001_dev;
 
 extern DEVICE jade_dev;
 extern DEVICE tarbell_dev;
+extern DEVICE tdd_dev;
 extern DEVICE icom_dev;
 extern DEVICE dj2d_dev;
 extern DEVICE m2sio0_dev;
 extern DEVICE m2sio1_dev;
 extern DEVICE pmmi_dev;
 extern DEVICE hayes_dev;
+extern DEVICE mmd_dev;
+extern DEVICE mmdm_dev;
 
 extern DEVICE cromfdc_dev;
 extern DEVICE wd179x_dev;
@@ -81,6 +84,7 @@ extern DEVICE n8vem_dev;
 extern DEVICE wdi2_dev;
 
 extern DEVICE scp300f_dev;
+extern DEVICE djhdc_dev;
 
 extern long disasm (unsigned char *data, char *output, int segsize, long offset);
 extern t_stat parse_sym_m68k(char* c, t_addr a, UNIT* u, t_value* val, int32 sw);
@@ -129,10 +133,14 @@ DEVICE      *sim_devices[]  = {
     &jade_dev,
     /* Tarbell Devices */
     &tarbell_dev,
+    &tdd_dev,
     /* iCOM Devices */
     &icom_dev,
-    /* Disk Jockey 2D Devices */
+    /* Morrow Devices */
     &dj2d_dev,
+    &djhdc_dev,
+    &mmd_dev,
+    &mmdm_dev,
     /* MITS 88-2SIO */
     &m2sio0_dev,
     &m2sio1_dev,
@@ -152,11 +160,12 @@ DEVICE      *sim_devices[]  = {
 static char memoryAccessMessage[256];
 static char instructionMessage[256];
 const char *sim_stop_messages[SCPE_BASE] = {
-    "HALT instruction",
+    "Unknown error",            /* 0 is reserved/unknown */
     "Breakpoint",
     memoryAccessMessage,
     instructionMessage,
-    "Invalid Opcode"
+    "Invalid Opcode",
+    "HALT instruction"
 };
 
 static const char *const Mnemonics8080[] = {

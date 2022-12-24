@@ -290,6 +290,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\AltairZ80\mmd.c"
+				>
+			</File>
+			<File
 				RelativePath="..\AltairZ80\n8vem.c"
 				>
 			</File>
@@ -319,6 +323,10 @@
 			</File>
 			<File
 				RelativePath="..\AltairZ80\s100_dj2d.c"
+				>
+			</File>
+			<File
+				RelativePath="..\AltairZ80\s100_djhdc.c"
 				>
 			</File>
 			<File
@@ -375,6 +383,10 @@
 			</File>
 			<File
 				RelativePath="..\AltairZ80\s100_tarbell.c"
+				>
+			</File>
+			<File
+				RelativePath="..\AltairZ80\s100_tdd.c"
 				>
 			</File>
 			<File

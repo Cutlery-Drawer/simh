@@ -40,6 +40,7 @@
 #define ADDRMASKEXTENDED        (MAXMEMORY - 1)             /* extended address mask                        */
 #define BANKMASK                (MAXBANKS - 1)              /* bank mask                                    */
 #define MEMORYSIZE              (cpu_unit.capac)            /* actual memory size                           */
+#define MEMORYMASK              (cpu_unit.capac - 1)        /* actual memory size mask                      */
 #define KB                      1024                        /* kilo byte                                    */
 #define KBLOG2                  10                          /* log2 of KB                                   */
 #define ALTAIR_ROM_LOW          0xff00                      /* start address of regular Altair ROM          */
@@ -63,11 +64,11 @@ typedef enum {
 } ChipType;
 
 /* simulator stop codes */
-#define STOP_HALT       0   /* HALT                                             */
 #define STOP_IBKPT      1   /* breakpoint   (program counter)                   */
 #define STOP_MEM        2   /* breakpoint   (memory access)                     */
 #define STOP_INSTR      3   /* breakpoint   (instruction access)                */
 #define STOP_OPCODE     4   /* invalid operation encountered (8080, Z80, 8086)  */
+#define STOP_HALT       5   /* HALT                                             */
 
 #define UNIT_CPU_V_OPSTOP       (UNIT_V_UF+0)               /* stop on invalid operation                    */
 #define UNIT_CPU_OPSTOP         (1 << UNIT_CPU_V_OPSTOP)
