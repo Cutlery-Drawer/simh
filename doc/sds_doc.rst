@@ -150,9 +150,9 @@ the minimum length is 64 entries.
 This history records the CPU mode when the instruction was executed (normal, monitor or user).
 The ``SET CPU HISTORY`` command accepts one switch value to optionally suppress recording of instructions in a particular CPU mode::
 
-    SET –n CPU HISTORY=n         Don't record if in normal mode
-    SET –m CPU HISTORY=n         Don't record if in monitor mode
-    SET –u CPU HISTORY=n         Don't record if in user mode
+    SET -n CPU HISTORY=n         Don't record if in normal mode
+    SET -m CPU HISTORY=n         Don't record if in monitor mode
+    SET -u CPU HISTORY=n         Don't record if in user mode
 
 The SDS 940 simulator implements four types of execution breakpoints,
 controlled by command-line switches:
