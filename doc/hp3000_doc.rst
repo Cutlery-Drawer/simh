@@ -1167,7 +1167,7 @@ A section of an example trace is::
     >>CPU   reg: 00.006500  000002    A 000014, B 001340, X 000000, M i t r o c CCG
     >>CPU fetch: 00.010347  020320    instruction fetch
 
-.. |INSTR| replace:: :html:`<samp>INSTR</samp>`
+.. |INSTR| replace:: :html:`<samp><b>INSTR</b></samp>`
 .. _INSTR:
 
 The |INSTR| option traces instruction executions.
@@ -1177,7 +1177,7 @@ If the right-hand opcode is not ``NOP``,
 it is reprinted before execution,
 with dashes replacing the just-executed left-hand opcode.
 
-.. |DATA| replace:: :html:`<samp>DATA</samp>`
+.. |DATA| replace:: :html:`<samp><b>DATA</b></samp>`
 .. _DATA:
 
 The |DATA| option traces reads from and writes to memory.
@@ -1188,7 +1188,7 @@ Absolute accesses always use bank 0.
 Program, data, and stack accesses use the bank addresses in the |PBANK|, |DBANK|, and |SBANK| registers,
 respectively.
 
-.. |FETCH| replace:: :html:`<samp>FETCH</samp>`
+.. |FETCH| replace:: :html:`<samp><b>FETCH</b></samp>`
 .. _FETCH:
 
 The |FETCH| option traces instruction fetches from memory.
@@ -1196,7 +1196,7 @@ These accesses are separated from those traced by the |DATA| option because fetc
 Because the HP 3000 has a two-stage pipeline,
 fetches load the NIR (Next Instruction Register) with the instruction after the instruction about to be executed from the CIR (Current Instruction Register).
 
-.. |REG| replace:: :html:`<samp>REG</samp>`
+.. |REG| replace:: :html:`<samp><b>REG</b></samp>`
 .. _REG:
 
 The |REG| option traces register values.
@@ -1210,7 +1210,7 @@ the program,
 data,
 and stack segment base registers are printed.
 
-.. |OPND| replace:: :html:`<samp>OPND</samp>`
+.. |OPND| replace:: :html:`<samp><b>OPND</b></samp>`
 .. _OPND:
 
 The |OPND| option traces memory byte operand values.
@@ -1223,7 +1223,7 @@ digit counts,
 and fraction counts,
 and the |EDIT| instruction displays its subprogram operations.
 
-.. |EXEC| replace:: :html:`<samp>EXEC</samp>`
+.. |EXEC| replace:: :html:`<samp><b>EXEC</b></samp>`
 .. _EXEC:
 
 The |EXEC| option traces the execution of instructions that match user-specified criteria.
