@@ -1,0 +1,983 @@
+.. -*- coding: utf-8; mode: rst; tab-width: 4; truncate-lines: t; indent-tabs-mode: nil; truncate-lines: t; -*- vim:set et ts=4 ft=rst nowrap:
+
+.. role:: html(raw)
+   :format: html
+
+.. |ATTACH|   replace:: :html:`<samp><b>ATTACH</b></samp>`
+.. |BOOT|     replace:: :html:`<samp><b>BOOT</b></samp>`
+.. |DISABLED| replace:: :html:`<samp>DISABLED</samp>`
+.. |LOAD|     replace:: :html:`<samp><b>LOAD</b></samp>`
+.. |SET|      replace:: :html:`<samp><b>SET</b></samp>`
+.. |SHOW|     replace:: :html:`<samp><b>SHOW</b></samp>`
+.. |n|        replace:: :html:`<samp><var>n</var></samp>`
+.. |`|        replace:: :literal:`\``
+
+************************
+IBM 7090 simulator usage
+************************
+:Date: 2018-07-25
+:Revision: $Format:%H$
+:Copyright: See `LICENSE.txt <../LICENSE.txt>`_ for terms of use.
+
+.. topic:: **Copyright notice**
+
+   The following copyright notice applies to the SIMH source, binary, and documentation:
+
+   .. include:: ../LICENSE.txt
+
+.. sectnum:: :suffix: .
+.. contents::
+   :backlinks: none
+   :depth: 3
+   :local:
+
+Introduction
+============
+The follow-up to the IBM704.
+Utilizing ideas learned from the Stretch,
+IBM enhanced the 704 by adding multiple communications channels to speed up processing I/O devices.
+This allowed the machine to continue processing while the tapes or card readers transfered data.
+Also, this was one of the first machines to feature indirect addressing.
+Also added as an indicator register to hold flags and other information.
+The IBM 709 was announced January 2, 1957 and withdrawn April 7, 1960.
+Originally the IBM 709T later to be named the IBM 7090 by customers,
+the machine was a faster version of the IBM 709 implemented in transistors instead of tubes.
+The IBM 7090 was announced December 30, 1958 and withdrawn July 14, 1969.
+The IBM 7090 also was built out of the same modules as the Stretch and used the same memory modules.
+The final enhancement was the IBM 7094:
+this added double-precision arithmetic,
+faster processing,
+and 4 more index registers.
+The machine looked like a 7090 until extra indexing mode was entered,
+then instead of 3 registers begin OR-ed together,
+the 3 bits selected one of 7 index registers.
+It was later upgraded to the 7094/II which was still faster.
+IBM 7094 & IBM 7094/II were announced January 15, 1962 and withdrawn July 14, 1969.
+
+IBM also developed two transistorized versions of the IBM 704,
+these were slower then the IBM 7090,
+and did not feature an indicator register or indirect addressing.
+But they came optionally with double-precision floating-point,
+and special character operating instructions.
+It was also possible to purchase a 7040 without index registers or floating-point.
+The machines were meant to be front-ends to the IBM 7094,
+and a direct couple devices was sold,
+along with the ability to share 1301 drives between systems.
+Unfortunately,
+no software has been found for the IBM 7040/44.
+
+The IBM 7094 was also one of the first machines to be modified to run time sharing.
+The Compatible Time Sharing System (CTSS) was developed by MIT to allow for the IBM 7094 to be shared by multiple people while still being compatible with FMS.
+
+Simulator files
+===============
+To compile the IBM 7090,
+you must define ``USE_INT64`` as part of the compilation command-line.
+
++--------------+-------------------+----------------------------------------------+
+| Subdirectory | File              | Contains                                     |
++==============+===================+==============================================+
+| ``I7000/``   | ``i7000_defs.h``  | IBM 7000 simulators general definitions      |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_defs.h``  | IBM 7090 simulator specific definitions      |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_chan.c``  | Generic channel interface                    |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_cpu.c``   | 7090 CPU, channel, interface                 |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_chan.c``  | 7090 channel                                 |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_sys.c``   | 7090 system interface                        |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_cdr.c``   | 711 card reader                              |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_cdp.c``   | 721 card punch                               |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_lpr.c``   | 716 line printer                             |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_drum.c``  | 733 drum memory interface                    |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_com.c``   | 7750 communications controller\ |*|          |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_dsk.c``   | 1301/2302 disk and 7238 drum controller\ |*| |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_ht.c``    | 7340 hypertape controller\ |*|               |
+|              +-------------------+----------------------------------------------+
+|              | ``i7090_hdrum.c`` | CTSS high speed drum\ |*|                    |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_mt.c``    | 729 tape controller                          |
+|              +-------------------+----------------------------------------------+
+|              | ``i7000_chron.c`` | Chrono clock\ |*|                            |
++--------------+-------------------+----------------------------------------------+
+
+.. |*| replace:: :sup:`*`
+
+If so desired,
+instead of defining I7090,
+I704 can be defined and the files marked with |*| above can be removed.
+This produces a smaller executable that will only emulate a IBM 704 computer.
+
+IBM 7090 features
+=================
+The IBM 7090 simulator is configured as follows:
+
+==================  ========================================
+Device name(s)      Simulates
+==================  ========================================
+|CPU|_              7090 CPU with 32Kw/64Kw of memory
+|CH0|_              704 unit record devices
+|CH1|_\ ..\ |CH8|_  7607/7909/7289 channels
+|MT|_               729 magnetic tape controller (on |CH0|_)
+|MTA|_              729 magnetic tape controller
+|MTB|_              729 magnetic tape controller
+|MTC|_              729 magnetic tape controller
+|MTD|_              729 magnetic tape controller
+|MTE|_              729 magnetic tape controller
+|CHRON|_            ChronoClock
+|HTA|_              7340 hypertape, default not included
+|HTB|_              7340 hypertape, default not included
+|CDR|_              711 card reader
+|CDP|_              721 card punch
+|LP|_               716 line printer
+|DR|_               Drum memory
+|HD|_               CTSS high speed drum
+|DK|_               1301/2302/7304 disk
+|COM|_              7750 communications controller
+|COML|_             7750 communications lines
+==================  ========================================
+
+Channels A through H,
+the corresponding magnetic tape controllers,
+and the file control,
+drum control,
+and communications control are initially set |DISABLED|.
+The file control,
+drum control,
+and communications control can be assigned to any channel in the range B through H.
+
+The 7090 simulator implements several unique stop conditions:
+
+* Undefined CPU instruction
+* Undefined channel instruction
+* XEC nesting exceeds limit
+* Divide check on a divide and halt instruction
+* Select of a non-existent channel
+* 7607 select of a 7909 channel
+* Write select of a write protected device
+* Invalid file control format
+* Invalid message to 7750
+* No buffer storage available for input character on 7750
+* No buffer storage available for output character on 7750
+
+The |LOAD| command will load a card binary image file into memory.
+
+.. |CPU|   replace:: :html:`<samp>CPU</samp>`
+.. |*CPU*| replace:: :html:`<samp><b>CPU</b></samp>`
+.. _*CPU*:
+
+|CPU|
+-----
+The |CPU| options include setting memory size and CPU type.
+Also the special features required for use by the CTSS project:
+
+=====================================  =========================================
+:html:`<samp>SET CPU STANDARD</samp>`  Standard CPU
+:html:`<samp>SET CPU CTSS</samp>`      Add extra core memory for CTSS
+:html:`<samp>SET CPU 704</samp>`       Set CPU to emulate a 704
+:html:`<samp>SET CPU 709</samp>`       Set CPU to emulate 709 instructions
+:html:`<samp>SET CPU 7090</samp>`      Set CPU to emulate 7090
+:html:`<samp>SET CPU 7094</samp>`      Set CPU to emulate 7094
+:html:`<samp>SET CPU 4K</samp>`        Set memory to 4K
+:html:`<samp>SET CPU 8K</samp>`        Set memory to 8K
+:html:`<samp>SET CPU 16K</samp>`       Set memory to 16K
+:html:`<samp>SET CPU 32K</samp>`       Set memory to 32K
+:html:`<samp>SET CPU TRUEIO</samp>`    CPU executes I/O in CPU time
+:html:`<samp>SET CPU FASTIO</samp>`    CPU detects I/O waits and shortens them
+:html:`<samp>SET CPU NOEFP</samp>`     Disable extended-precision floating-point
+:html:`<samp>SET CPU EFP</samp>`       Enable extended-precision floating-point
+:html:`<samp>SET CPU NOFPSM</samp>`    Disable floating-point significance mode
+:html:`<samp>SET CPU FPSM</samp>`      Enable  floating-point significance mode
+:html:`<samp>SET CPU TIMER</samp>`     Enable interval timer and interrupt
+:html:`<samp>SET CPU NOTIMER</samp>`   Disable interval timer
+=====================================  =========================================
+
+Memory size is 32KW on a standard CPU,
+64KW on a CTSS CPU.
+See notes below on setting up for CTSS.
+
+The 7090 supported many options which were called RPQs;
+these include extended-precision floating-point instructions.
+These were similar to the later 7094 double-precision floating-point instructions.
+Significance mode allowed for better detection of bits during floating-point operations.
+
+:html:`<samp>FASTIO</samp>` mode detects when the CPU is in a loop waiting for a channel to become available,
+and then sets the simulation interval to run any pending I/O.
+This results in faster simulations without the CPU being aware of this.
+If the timer is used,
+this might result in incorrect timing intervals.
+
+|CPU| registers include the visible state of the processor as well as the control registers for the interrupt system.
+
+.. |IC|        replace:: :html:`<samp class="register">IC</samp>`
+.. |AC|        replace:: :html:`<samp class="register">AC</samp>`
+.. |MQ|        replace:: :html:`<samp class="register">MQ</samp>`
+.. |ID|        replace:: :html:`<samp class="register">ID</samp>`
+.. |KEYS|      replace:: :html:`<samp class="register">KEYS</samp>`
+.. |XR1|       replace:: :html:`<samp class="register">XR1</samp>`
+.. |XR7|       replace:: :html:`<samp class="register">XR7</samp>`
+.. |SW1|       replace:: :html:`<samp class="register">SW1</samp>`
+.. |SW6|       replace:: :html:`<samp class="register">SW6</samp>`
+.. |SW|        replace:: :html:`<samp class="register">SW</samp>`
+.. |SL1|       replace:: :html:`<samp class="register">SL1</samp>`
+.. |SL4|       replace:: :html:`<samp class="register">SL4</samp>`
+.. |ACOVF|     replace:: :html:`<samp class="register">ACOVF</samp>`
+.. |MQOVF|     replace:: :html:`<samp class="register">MQOVF</samp>`
+.. |DVC|       replace:: :html:`<samp class="register">DVC</samp>`
+.. |IOC|       replace:: :html:`<samp class="register">IOC</samp>`
+.. |TM|        replace:: :html:`<samp class="register">TM</samp>`
+.. |CTM|       replace:: :html:`<samp class="register">CTM</samp>`
+.. |STM|       replace:: :html:`<samp class="register">STM</samp>`
+.. |FTM|       replace:: :html:`<samp class="register">FTM</samp>`
+.. |NMODE|     replace:: :html:`<samp class="register">NMODE</samp>`
+.. |MTM|       replace:: :html:`<samp class="register">MTM</samp>`
+.. |ENB|       replace:: :html:`<samp class="register">ENB</samp>`
+.. |INST_BASE| replace:: :html:`<samp class="register">INST_BASE</samp>`
+.. |DATA_BASE| replace:: :html:`<samp class="register">DATA_BASE</samp>`
+.. |BASE|      replace:: :html:`<samp class="register">BASE</samp>`
+.. |LIMIT|     replace:: :html:`<samp class="register">LIMIT</samp>`
+
+================  ====  ===================================
+Name              Size  Comments
+================  ====  ===================================
+|IC|              15    Program counter
+|AC|              38    Accumulator
+|MQ|              36    Multiplier quotient
+|ID|              36    Indicators register
+|KEYS|            36    Front panel keys
+|XR1|\ ..\ |XR7|  15    Index registers
+|SW1|\ ..\ |SW6|  1     Sense switches 1..6
+|SW|              6     Sense switches
+|SL1|\ ..\ |SL4|  4     Sense lights 1..4
+|ACOVF|           1     Accumulator overflow indicator
+|MQOVF|           1     MQ overflow indicator
+|DVC|             1     Divide check indicator
+|IOC|             1     I/O check indicator
+|TM|              1     Transfer trap mode
+|CTM|             1     Copy trap mode
+|STM|             1     Select trap mode
+|FTM|             1     Floating trap mode
+|NMODE|           1     Storage nullification mode
+|MTM|             1     Multiple tag mode
+|ENB|             36    Interrupt enable register
+|INST_BASE|       1     (CTSS) B core instruction execution
+|DATA_BASE|       1     (CTSS) B core data access
+|BASE|            14    (CTSS) relocation base block
+|LIMIT|           14    (CTSS) address limit block
+================  ====  ===================================
+
+The CPU can maintain a history of the most recently executed instructions.
+
+This is controlled by the :html:`<samp><b>SET CPU HISTORY</b></samp>` and :html:`<samp><b>SHOW CPU HISTORY</b></samp>` commands:
+
+=========================================================  ======================================
+:html:`<samp><b>SET CPU HISTORY</b></samp>`                Clear history buffer
+:html:`<samp><b>SET CPU HISTORY=0</b></samp>`              Disable history
+:html:`<samp><b>SET CPU HISTORY=</b><var>n</var></samp>`   Enable history, length = |n|
+:html:`<samp><b>SHOW CPU HISTORY</b></samp>`               Print CPU history
+:html:`<samp><b>SHOW CPU HISTORY=</b><var>n</var></samp>`  Print first |n| entries of CPU history
+=========================================================  ======================================
+
+Instruction history trace shows the Instruction counter for the instruction,
+the AC and MQ before the execution,
+the computed effective address,
+the word read from storage,
+and the three index registers |XR1|, 2 and 4.
+
+.. |CH0| replace:: :html:`<samp>CH0</samp>`
+.. |CH1| replace:: :html:`<samp>CH1</samp>`
+.. |CH8| replace:: :html:`<samp>CH8</samp>`
+.. _CH0:
+.. _CH1:
+.. _CH8:
+.. _I/O channels:
+
+I/O channels (|CH0|\ ..\ |CH8|)
+-------------------------------
+The 7090 supports up to 8 channels.
+Channel models include
+
+====  =============================
+7607  Standard multiplexer channel
+7289  High speed drum channel
+7909  Advanced capabilities channel
+====  =============================
+
+Channel A is required and is always a 7607.
+Channels are represented by a number:
+:html:`<samp>A=1</samp>`,
+:html:`<samp>B=2</samp>`,
+:html:`<samp>C=3</samp>`,
+:html:`<samp>D=4</samp>`,
+:html:`<samp>E=5</samp>`,
+:html:`<samp>F=6</samp>`,
+:html:`<samp>G=7</samp>`,
+:html:`<samp>H=8</samp>`.
+Channel 0 is for 704 devices.
+
+===========================================================  ==================================================
+:html:`<samp><b>SET CH</b><var>n</var> <b>7607</b></samp>`   Set channel to be a 7607 type
+:html:`<samp><b>SET CH</b><var>n</var> <b>7909</b></samp>`   Set channel to be a 7909 type
+:html:`<samp><b>SET CH</b><var>n</var> <b>7289</b></samp>`   Set channel to be a 7289 type (for CTSS Drum)
+:html:`<samp><b>SET CH</b><var>n</var> <b>FIXED</b></samp>`  Fix channel to specific type
+:html:`<samp><b>SET CH</b><var>n</var> <b>AUTO</b></samp>`   Default, channel configures based on devices on it
+===========================================================  ==================================================
+
+Generally there is no need to worry about channel configurations;
+in auto mode,
+they will configure to the correct type to support devices attached to them.
+Or you will get an error when you attempt to run the simulation if there is a conflict.
+The default layout of devices will work for IBSYS and CTSS.
+
+A :html:`<samp><b>SHOW CHANNEL</b></samp>` command will list out the devices currently assigned to this channel,
+or all channels if no specific channel is selected.
+
+.. |CR3| replace:: :html:`<samp>CR3</samp>`
+.. |CP3| replace:: :html:`<samp>CP3</samp>`
+.. |LP3| replace:: :html:`<samp>LP3</samp>`
+
+Channel 0 is a pseudo-channel for 704 devices.
+Currently unit |CR3|, |CP3|, |LP3|, |DR0|, and |MT| are set to this device.
+
+Channels have the following registers:
+
+.. |ADDR|     replace:: :html:`<samp class="register">ADDR</samp>`
+.. |CMD|      replace:: :html:`<samp class="register">CMD</samp>`
+.. |WC|       replace:: :html:`<samp class="register">WC</samp>`
+.. |ASM|      replace:: :html:`<samp class="register">ASM</samp>`
+.. |LOCATION| replace:: :html:`<samp class="register">LOCATION</samp>`
+.. |STATUS|   replace:: :html:`<samp class="register">STATUS</samp>`
+.. |SENSE|    replace:: :html:`<samp class="register">SENSE</samp>`
+.. |COUNTER|  replace:: :html:`<samp class="register">COUNTER</samp>`
+.. |SMS|      replace:: :html:`<samp class="register">SMS</samp>`
+
+==========  ====  ====  ========================
+Name        Type  Size  Comments
+==========  ====  ====  ========================
+|ADDR|      All   16    Channel data address
+|CMD|       All   6     Channel command
+|WC|        All   15    Channel word count
+|ASM|       All   36    Assembly register
+|LOCATION|  All   16    Channel location counter
+|STATUS|    All   16    Channel device status
+|SENSE|     7909  16    Channel sense data
+|COUNTER|   7909  6     Channel counter
+|SMS|       7909  7     Channel SMS register
+==========  ====  ====  ========================
+
+For the meaning of bits in |STATUS| and |SENSE|,
+see ``i7000_defs.h``.
+
+Channel 7607 devices and 704 devices
+------------------------------------
+These devices can only be attached to 7607 channels or to the programed I/O channel 0.
+
+.. |CDR| replace:: :html:`<samp>CDR</samp>`
+.. _CDR:
+.. _711 card reader:
+
+711 card reader (|CDR|)
+"""""""""""""""""""""""
+The card reader (|CDR|) reads data from a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card reader files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a |SET| command:
+
+====================================================================  =================================
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=TEXT</b></samp>`    Set ASCII text mode
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=BINARY</b></samp>`  Set for binary card images
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=BCD</b></samp>`     Set for BCD records
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=CBN</b></samp>`     Set for column binary BCD records
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=AUTO</b></samp>`    Automatically determine format
+====================================================================  =================================
+
+or in the |ATTACH| command:
+
+==============================================================================================  ==================================================================
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <var>file</var></samp>`                              Attach a file
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-s</b> <var>file</var></samp>`                    Add file onto current cards to read
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-e</b> <var>file</var></samp>`                    After file is read in, the reader will receive an end-of-file flag
+==============================================================================================  ==================================================================
+
+The card reader can be attached to either a 704 PIO channel or a 7607 channel.
+The channel can be changed by the following command:
+
+========================================================================  ============================================================
+:html:`<samp><b>SET CDR</b><var>n</var> <b>CHAN=</b><var>c</var></samp>`  Set this device to channel :html:`<samp><var>c</var></samp>`
+========================================================================  ============================================================
+
+The default assignments are:
+
+=========================  ============
+:html:`<samp>CDR0</samp>`  Channel A(1)
+:html:`<samp>CDR1</samp>`  Channel C(3)
+:html:`<samp>CDR2</samp>`  Disabled
+:html:`<samp>CDR3</samp>`  704 PIO
+=========================  ============
+
+If the simulator is compiled for only 704,
+then there is only one card reader called |CDR|.
+
+The card reader can be booted with the following command:
+
+================================================  ==========================
+:html:`<samp><b>BOOT CDR</b><var>n</var></samp>`  Load first 3 words of card
+================================================  ==========================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+End of file   Out of cards
+OS I/O error  Report error and stop
+============  =====================
+
+.. |CDP| replace:: :html:`<samp>CDP</samp>`
+.. _CDP:
+.. _721 card punch:
+
+721 card punch (|CDP|)
+""""""""""""""""""""""
+The card reader (|CDP|) writes data to a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card punch files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a |SET| command:
+
+====================================================================  =================================
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=TEXT</b></samp>`    Set ASCII text mode
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=BINARY</b></samp>`  Set for binary card images
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=BCD</b></samp>`     Set for BCD records
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=CBN</b></samp>`     Set for column binary BCD records
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=AUTO</b></samp>`    Automatically determine format
+====================================================================  =================================
+
+or in the |ATTACH| command:
+
+==============================================================================================  ===================================
+:html:`<samp><b>ATTACH CDP</b><var>n</var> <var>file</var></samp>`                              Attach a file
+:html:`<samp><b>ATTACH CDP</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+==============================================================================================  ===================================
+
+The card punch can be attached to either a 704 PIO channel or a 7607 channel.
+The channel can be changed by the following command:
+
+========================================================================  ============================================================
+:html:`<samp><b>SET CDP</b><var>n</var> <b>CHAN=</b><var>c</var></samp>`  Set this device to channel :html:`<samp><var>c</var></samp>`
+========================================================================  ============================================================
+
+The default assignments are:
+
+=========================  ============
+:html:`<samp>CDP0</samp>`  Channel A(1)
+:html:`<samp>CDP1</samp>`  Channel C(3)
+:html:`<samp>CDP2</samp>`  Disabled
+:html:`<samp>CDP3</samp>`  704 PIO
+=========================  ============
+
+If the simulator is compiled for only 704,
+then there is only one card reader called |CDR|.
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. |LP| replace:: :html:`<samp>LP</samp>`
+.. _LP:
+.. _716 line printer:
+
+716 line printer (|LP|)
+"""""""""""""""""""""""
+The line printer (|LP|) writes data to a disk file as ASCII text with terminating newlines.
+Currently set to handle standard signals to control paper advance.
+
+=================================================================================  =============================================
+:html:`<samp><b>SET LP</b><var>n</var> <b>NO</b>/<b>ECHO</b></samp>`               Set echoing to console of line-printer output
+:html:`<samp><b>SET LP</b><var>n</var> <b>CHAN=</b><var>n</var></samp>`            Set channel for this device
+:html:`<samp><b>SET LP</b><var>n</var> <b>LINESPERPAGE=</b><var>lpp</var></samp>`  Set number of lines per page on printer
+=================================================================================  =============================================
+
+The default assignments are:
+
+========================  ============
+:html:`<samp>LP0</samp>`  Channel A(1)
+:html:`<samp>LP1</samp>`  Channel C(3)
+:html:`<samp>LP2</samp>`  Disabled
+:html:`<samp>LP3</samp>`  704 PIO
+========================  ============
+
+.. |SPRA| replace:: :html:`<samp>SPRA</samp>`
+.. |SPT|  replace:: :html:`<samp>SPT</samp>`
+
+The printer supports the following |SPRA| |n| selection pulses for controlling spacing
+(spacing occurs before the line is printed):
+
+======  ==  =======================================================
+|SPRA|  1   To top of form
+|SPRA|  2   Single space
+|SPRA|  3   Double space, before printing line
+|SPRA|  4   Triple space, before printing line
+|SPRA|  9   Suppress line feed after print, print characters 73–120
+|SPT|       Will skip if any printer line has been pulsed
+======  ==  =======================================================
+
+Default with no |SPRA| is to single-space before printing.
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. |MT|    replace:: :html:`<samp>MT</samp>`
+.. |MTA|   replace:: :html:`<samp>MTA</samp>`
+.. |MTB|   replace:: :html:`<samp>MTB</samp>`
+.. |MTC|   replace:: :html:`<samp>MTC</samp>`
+.. |MTD|   replace:: :html:`<samp>MTD</samp>`
+.. |MTE|   replace:: :html:`<samp>MTE</samp>`
+.. |MTA-D| replace:: :html:`<samp>MTA-D</samp>`
+.. _MT:
+.. _MTA:
+.. _MTB:
+.. _MTC:
+.. _MTD:
+.. _MTE:
+.. _MTA-D:
+.. _729 magnetic tape:
+
+729 magnetic tape (|MTA-D|)
+"""""""""""""""""""""""""""
+These come in groups of 10 units each.
+The controller defines which channel the devices will be on.
+:html:`<samp>MT<var>x</var>0</samp>` is unit 10.
+
+=======================================================================  ===========================
+:html:`<samp><b>SET MT</b><var>x</var> <b>CHAN=</b><var>n</var></samp>`  Set mag tape to channel |n|
+=======================================================================  ===========================
+
+Each individual tape drive support several options:
+|MTA| used as an example.
+
+==================================================================  ============================================
+:html:`<samp><b>SET MTA</b><var>n</var> <b>ONLINE</b></samp>`       Set the mag tape drive online
+:html:`<samp><b>SET MTA</b><var>n</var> <b>OFFLINE</b></samp>`      Set the mag tape drive offline and not ready
+:html:`<samp><b>SET MTA</b><var>n</var> <b>REWIND</b></samp>`       Set the mag tape to the load point
+:html:`<samp><b>SET MTA</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
+:html:`<samp><b>SET MTA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
+:html:`<samp><b>SET MTA</b><var>n</var> <b>LOW</b></samp>`          Set mag tape to low density
+:html:`<samp><b>SET MTA</b><var>n</var> <b>HIGH</b></samp>`         Set mag tape to high density
+==================================================================  ============================================
+
+Options: Density :html:`<samp>LOW</samp>`\ /\ :html:`<samp>HIGH</samp>` is only for informational purposes only:
+it does not change the format of how tapes are written.
+
+Online/offline is part of a optional RPQ for the 7090 which adds the DRS/TRS instructions.
+
+================================================  =================================================================
+:html:`<samp><b>DRS</b> <var>drive</var></samp>`  Will set drive to offline after current command is finished.
+                                                  Drive is not unloaded and can be re-enabled by setting it online.
+:html:`<samp><b>TRS</b> <var>drive</var></samp>`  Test to see if the drive is online.
+                                                  If the drive is there and online,
+                                                  it will skip the next instruction;
+                                                  otherwise, it takes the next instruction.
+================================================  =================================================================
+
+These instructions were put in since accessing a unloaded tape drive would hang the CPU.
+
+Tape drives can be booted with:
+
+================================================  ===================================
+:html:`<samp><b>BOOT MT</b><var>xn</var></samp>`  Read in first three words of record
+================================================  ===================================
+
+.. |CHRON| replace:: :html:`<samp>CHRON</samp>`
+.. _CHRON:
+
+ChronoClock
+"""""""""""
+Disabled by default.
+This is a special 729 tape drive which returns the current time.
+It supports the option of setting the channel and drive that it will occupy.
+Note: You must disable the real 729 drive that it is replacing.
+The clock responds to Read and Backspace commands.
+A read results in a 10-character buffer being generated that has the month, day, hour, minutes, seconds and milliseconds.
+This time is taken from the local computer time.
+
+=======================================================  =================================
+:html:`<samp><b>SET CHRON CHAN=</b><var>n</var></samp>`  Set channel for chrono clock
+:html:`<samp><b>SET CHRON UNIT=</b><var>n</var></samp>`  Set the unit for the chrono clock
+=======================================================  =================================
+
+Example: To set ChronoClock to unit A9,
+do the following::
+
+    SET MTA9 DISABLE
+    SET CHRON UNIT=9 CHAN=A
+
+.. |DR|  replace:: :html:`<samp>DR</samp>`
+.. |DR0| replace:: :html:`<samp>DR0</samp>`
+.. _DR:
+.. _DR0:
+.. _733 drum:
+
+733 drum (|DR|)
+"""""""""""""""
+This is the drum for 704/709 and possible 7090.
+Up to 16 units can be attached to the CPU,
+all are on pseudo-channel 0.
+Each drum is 2048K words in size.
+They are all stored in one file.
+
+======================================================  ===========================================
+:html:`<samp><b>SET DR0 UNITS=</b><var>n</var></samp>`  Set number of units to of storage to attach
+======================================================  ===========================================
+
+Drum unit 0 can be booted with:
+
+====================================  ===================================
+:html:`<samp><b>BOOT DR0</b></samp>`  Read in first three words of record
+====================================  ===================================
+
+Drum unit can be assigned to a 7607 channel,
+but this is unsupported by the operating systems.
+Drum channel is changed with:
+
+=====================================================  =======================
+:html:`<samp><b>SET DR0 CHAN=</b><var>n</var></samp>`  Set drum to channel |n|
+=====================================================  =======================
+
+7909 devices
+------------
+These devices must be attached to a 7909 channel to work.
+
+.. |DK| replace:: :html:`<samp>DK</samp>`
+.. _DK:
+
+1301/1302/2302/7320 disk devices
+"""""""""""""""""""""""""""""""""
+The 7631 file control supports up to ten devices,
+which can be 7320 drums,
+1301 disks,
+1302 disks,
+or 2302 disks.
+Unit types are specified with the |SET| command.
+
+=================================================================  =======================================
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=7320</b></samp>`    Unit |n| is a drum
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=7320-2</b></samp>`  Unit |n| is a drum (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1301</b></samp>`    Unit |n| is a 1301 disk
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=130l-2</b></samp>`  Unit |n| is a 1301-2 disk (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1302</b></samp>`    Unit |n| is a 1302 disk
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1302-2</b></samp>`  Unit |n| is a 1302-2 disk (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=2302</b></samp>`    Unit |n| is a 2302 disk
+=================================================================  =======================================
+
+Units can be :html:`<samp><b>SET ENABLED</b></samp>` or |DISABLED|.
+In addition,
+units can be set to enable or disable formatting:
+
+=========================================================================  ==========================================================
+:html:`<samp><b>SET DK</b><var>n</var> <b>FORMAT</b></samp>`               Enable formatting
+:html:`<samp><b>SET DK</b><var>n</var> <b>NOFORMAT</b></samp>`             Disable formatting
+:html:`<samp><b>SET DK</b><var>n</var> <b>HA2</b></samp>`                  Enable writing of home address 2
+:html:`<samp><b>SET DK</b><var>n</var> <b>NOHA2</b></samp>`                Disable writing of home address 2
+:html:`<samp><b>SET DK</b><var>n</var> <b>MODULE=</b><var>n</var></samp>`  Set modules for unit; modules can only be even (|n| = 0–8)
+:html:`<samp><b>SET DK</b><var>n</var> <b>CHAN=</b><var>n</var></samp>`    Set channel for unit (|n| = A–H)
+:html:`<samp><b>SET DK</b><var>n</var> <b>SELECT=</b><var>n</var></samp>`  Set select on channel (0 or 1)
+:html:`<samp><b>SET DK</b><var>n</var> <b>CTSS</b></samp>`                 Set disk to use CTSS bootstrap
+:html:`<samp><b>SET DK</b><var>n</var> <b>IBSYS</b></samp>`                Set disk to use IBSYS bootstrap
+=========================================================================  ==========================================================
+
+Formatting is disabled by default.
+
+All disk units support bootstrapping with the |BOOT| command.
+Bootstrap code is build based on whether CPU is in CTSS mode or not.
+
+===============================================  ================================================
+:html:`<samp><b>BOOT DK</b><var>n</var></samp>`  Insert custom loader into lower memory and start
+===============================================  ================================================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. |HTA| replace:: :html:`<samp>HTA</samp>`
+.. |HTB| replace:: :html:`<samp>HTB</samp>`
+.. _HTA:
+.. _HTB:
+.. _Hypertape 7340 tape drive:
+
+Hypertape 7340 tape drive (|HTA|\ /\ |HTB|)
+"""""""""""""""""""""""""""""""""""""""""""
+These come in groups of 10 units each.
+The controller defines which channel the devices will be on.
+
+=======================================================  ==============================
+:html:`<samp><b>SET HTA CHAN=</b><var>n</var></samp>`    Set channel for unit (A–H)
+:html:`<samp><b>SET HTA SELECT=</b><var>n</var></samp>`  Set select on channel (0 or 1)
+=======================================================  ==============================
+
+Each individual tape drive support several options:
+|HTA| used as an example.
+
+==================================================================  ================================
+:html:`<samp><b>SET HTA</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
+:html:`<samp><b>SET HTA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
+==================================================================  ================================
+
+.. note::
+   Hypertape drives may not be working correctly since there is very little documentation available on them.
+
+Hypertape drives support bootstrapping with |BOOT| command.
+
+================================================  ================================================
+:html:`<samp><b>BOOT HTA</b><var>n</var></samp>`  Insert custom loader into lower memory and start
+================================================  ================================================
+
+.. |COM|  replace:: :html:`<samp>COM</samp>`
+.. |COML| replace:: :html:`<samp>COML</samp>`
+.. _COM:
+.. _COML:
+.. _7750 communications controller:
+
+7750 communications controller (|COM| and |COML|)
+"""""""""""""""""""""""""""""""""""""""""""""""""
+The 7750 is modeled as a terminal multiplexer with 33 lines.
+It consists of two devices:
+|COM| is the multiplexer controller,
+and |COML| is the individual lines.
+For the first 32 lines,
+the 7750 performs input and output through Telnet sessions connected via a user-specified listening port;
+the 33rd line is permanently attached to the simulator console window.
+The |ATTACH| command specifies the port to be used for Telnet sessions:
+
+======================================================  =====================
+:html:`<samp><b>ATTACH COM</b> <var>port</var></samp>`  Set up listening port
+======================================================  =====================
+
+... where :html:`<samp><var>port</var></samp>` is a decimal number between 1 and 65535 that is not being used other TCP/IP activities.
+
+Each line
+(each unit of |COML|) can be set to one of twp modes:
+KSR-35 and KSR-37.
+In KSR-35 mode,
+lowercase input and output characters are converted automatically to uppercase,
+and parity is ignored.
+In KSR-37 mode,
+lowercase characters are left alone,
+and even parity is generated on input.
+KSR-37 is the default.
+
+Once |COM| is attached and the simulator is running,
+the 7750 listens for connections on the specified port.
+It assumes that any incoming connection is a Telnet connections.
+The connections remain open until disconnected either by the Telnet client,
+a :html:`<samp><b>SET COM DISCONNECT</b></samp>` command,
+or a :html:`<samp><b>DETACH COM</b></samp>` command.
+
+===========================================================  ================================
+:html:`<samp><b>SET COM DISCONNECT=</b><var>n</var></samp>`  Disconnect line |n|
+:html:`<samp><b>SET COM CHAN=</b><var>n</var></samp>`        Set channel for |COM| controller
+===========================================================  ================================
+
+The 7750 implements the following special |SHOW| commands:
+
+================================================  =========================================
+:html:`<samp><b>SHOW COM CONNECTIONS</b></samp>`  Display current connections to the 7750
+:html:`<samp><b>SHOW COM STATISTICS</b></samp>`   Display statistics for active connections
+================================================  =========================================
+
+The 7750 implements the following special |SET| commands:
+
+===============================================================================  ==================================================================
+:html:`<samp><b>SET COML</b><var>n</var> <b>LOG=</b><var>filename</var></samp>`  Log output of line |n| to :html:`<samp><var>filename</var></samp>`
+:html:`<samp><b>SET COML</b><var>n</var> <b>NOLOG</b></samp>`                    Disable logging and close log file
+:html:`<samp><b>SET COML</b><var>n</var> <b>KSR35</b></samp>`                    Set line |n| to ksr-35
+:html:`<samp><b>SET COML</b><var>n</var> <b>KSR37</b></samp>`                    Set line |n| to ksr-37
+:html:`<samp><b>SET COML</b><var>n</var> <b>2741</b></samp>`                     Set line |n| to 2741
+===============================================================================  ==================================================================
+
+The controller (|COM|) implements these registers:
+
+.. |ENABLE| replace:: :html:`<samp class="register">ENABLE</samp>`
+.. |STATE|  replace:: :html:`<samp class="register">STATE</samp>`
+.. |MSGNUM| replace:: :html:`<samp class="register">MSGNUM</samp>`
+
+========  ====  =============================
+Name      Size  Comments
+========  ====  =============================
+|ENABLE|  1     Enable flag
+|STATE|   6     Controller state
+|MSGNUM|  12    Input message sequence number
+========  ====  =============================
+
+.. |HD| replace:: :html:`<samp>HD</samp>`
+.. _HD:
+.. _7289 high-speed drum:
+
+7289 high-speed drum (|HD|)
+---------------------------
+The 7289 (also known as the 7320A) high-speed drum was a late addition to CTSS.
+Very little is known about the device,
+other than what is used in the CTSS sources.
+
+The drum can be changed to different channels with the commands:
+
+======================================================  ======================================================
+:html:`<samp><b>SET HD0 CHAN=</b><var>n</var></samp>`   Set Drum to channel |n|.
+                                                        The channel must be configured as a 7289-type channel.
+                                                        Otherwise, the drum will not work.
+:html:`<samp><b>SET HD0 UNITS=</b><var>n</var></samp>`  Set the number of 256K drums on the unit.
+======================================================  ======================================================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+============  =====================
+
+Drum data files are buffered in memory;
+therefore, end-of-file and OS I/O errors cannot occur.
+
+Symbolic display and input
+==========================
+The IBM 7090 simulator implements symbolic display and input.
+Display is controlled by command-line switches:
+
+======  ===================================
+``-c``  Display/enter as BCD character
+``-m``  Display/enter instruction mnemonics
+``-l``  Display as Lisp pointer
+\       Display/enter as octal number
+======  ===================================
+
+Instruction input uses standard 7090 assembler syntax.
+There are two basic instruction classes:
+memory reference and index reference.
+
+Memory reference instructions have the format ::
+
+    memref{*} address{,tag}
+
+Index reference instructions have the format ::
+
+    idxref{*} address,{tag},decrement
+
+Specific instructions may disallow indirect addressing or limit the size of the tag, address, or decrement fields.
+
+Channel (I/O) instructions have the same basic two formats.
+
+Sim load
+========
+The |LOAD| command looks at the extension of the file to determine how to load the file.
+
+========  ============================================
+``.crd``  | Load a card image file into memory.
+          | Standard 709 format + 1 card loader.
+
+``.oct``  | Load an octal deck:
+          | Address *<blank>* octal *<blank>* octal...
+
+``.sym``  | Load a 709 symbolic deck.
+          | Address instruction
+          | Address BCD string
+          | Address OCT octal
+          | Octal
+========  ============================================
+
+Character codes
+===============
+==========  ==========  ===============  =====  ========  ==============
+Commercial  Scientific  ASCII            BCD    Card      Remark
+==========  ==========  ===============  =====  ========  ==============
+\           \           \                00               Blank
+``1``                   ``0``            01     1
+``2``                   ``0``            02     2
+``3``                   ``0``            03     3
+``4``                   ``0``            04     4
+``5``                   ``0``            05     5
+``6``                   ``0``            06     6
+``7``                   ``0``            07     7
+``8``                   ``0``            10     8
+``9``                   ``0``            11     9
+``0``                   ``0``            12     10
+``#``       ``=``       ``=``            13     3–8
+``@``       ``'``       ``'``\ /\ ``@``  14     4–8
+``:``                   ``:``            15     5–8
+``>``                   ``>``            16     6–8
+``√``                   ``"``            17     7–8       Tape mark
+``ƀ``                   ``_``            20     2–8
+``/``                   ``/``            21     10–1
+``S``                   ``S``            22     10–1
+``T``                   ``T``            23     10–2
+``U``                   ``U``            24     10–3
+``V``                   ``V``            25     10–4
+``W``                   ``W``            26     10–5
+``X``                   ``X``            27     10–6
+``Y``                   ``Y``            30     10–7
+``Z``                   ``Z``            31     10–8
+``#``                   ``#``            32     10–2–8    Word mark
+``,``                   ``,``            33     10–3–8
+``%``       ``(``       ``%``\ /\ ``(``  34     10–4–8
+|`|                     |`|              35     10–5–8
+``\``                   ``\``            36     10–6–8
+``⧻``                   ``{``            37     10–7–8    Segment mark
+``-``                   ``-``            40     11        Also −0
+``J``                   ``J``            41     11–1
+``K``                   ``K``            42     11–2
+``L``                   ``L``            43     11–3
+``M``                   ``M``            44     11–4
+``N``                   ``N``            45     11–5
+``O``                   ``O``            46     11–6
+``P``                   ``P``            47     11–7
+``Q``                   ``Q``            50     11–8
+``R``                   ``R``            51     11–9
+``!``                   ``!``            52     11–2–8
+``$``                   ``$``            53     11–3–8
+``*``                   ``*``            54     11–4–8
+``]``                   ``]``            55     11–5–8
+``;``                   ``;``            56     11–6–8
+``△``                   ``^``            57     11–7–8
+``&``       ``+``       ``&``\ /\ ``+``  60     12        Also +0
+``A``                   ``A``            61     12–1
+``B``                   ``B``            62     12–2
+``C``                   ``C``            63     12–3
+``D``                   ``D``            64     12–4
+``E``                   ``E``            65     12–5
+``F``                   ``F``            66     12–6
+``G``                   ``G``            67     12–7
+``H``                   ``H``            70     12–8
+``I``                   ``I``            71     12–9
+``?``                   ``?``            72     12–2–8
+``.``                   ``.``            73     12–3–8
+``⌑``       ``)``       ``)``            74     12–4–8    Lozenge
+``[``                   ``[``            75     12–5–8
+``<``                   ``<``            76     12–3–8
+``⧻*``                  ``|``            77     12–7–8    Group mark
+==========  ==========  ===============  =====  ========  ==============
