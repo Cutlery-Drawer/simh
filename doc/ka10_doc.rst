@@ -3,7 +3,7 @@
 .. role:: html(raw)
    :format: html
 
-.. |SET| replace:: :html:`<samp><b>SET</b></samp>`
+.. |SET| replace:: :html:`<samp>SET</samp>`
 .. |MPX| replace:: :html:`<samp>MPX</samp>`
 .. |STK| replace:: :html:`<samp>STK</samp>`
 .. |n|   replace:: :html:`<samp><var>n</var></samp>`
@@ -190,123 +190,130 @@ KA10 features
 =============
 The KA10 simulator is configured as follows:
 
-.. |TEN11|  replace:: :html:`<samp>TEN11</samp>`
-.. |AUXCPU| replace:: :html:`<samp>AUXCPU</samp>`
+.. |AUXCPU|   replace:: :html:`<samp>AUXCPU</samp>`
+.. |*AUXCPU*| replace:: :html:`<samp><b>AUXCPU</b></samp>`
+.. _*AUXCPU*: AUXCPU
+
+.. |TEN11|    replace:: :html:`<samp>TEN11</samp>`
+.. |*TEN11*|  replace:: :html:`<samp><b>TEN11</b></samp>`
+.. _*TEN11*:  TEN11
 
 +----------------+------------------------------------------------+
 | Device name(s) | Simulates                                      |
 +================+================================================+
-| |CPU|_         | KA10 CPU with 256KW of memory                  |
+| |*CPU*|_       | KA10 CPU with 256KW of memory                  |
 +----------------+------------------------------------------------+
-| |CTY|_         | Console TTY                                    |
+| |*CTY*|_       | Console TTY                                    |
 +----------------+------------------------------------------------+
-| |PTP|_         | Paper tape punch                               |
+| |*PTP*|_       | Paper tape punch                               |
 +----------------+------------------------------------------------+
-| |PTR|_         | Paper tape reader                              |
+| |*PTR*|_       | Paper tape reader                              |
 +----------------+------------------------------------------------+
-| |LPT|_         | LP10 line printer                              |
+| |*LPT*|_       | LP10 line printer                              |
 +----------------+------------------------------------------------+
-| |CR|_          | CR10 card reader                               |
+| |*CR*|_        | CR10 card reader                               |
 +----------------+------------------------------------------------+
-| |CP|_          | CP10 card punch                                |
+| |*CP*|_        | CP10 card punch                                |
 +----------------+------------------------------------------------+
-| |MTA|_         | TM10A/B tape controller                        |
+| |*MTA*|_       | TM10A/B tape controller                        |
 +----------------+------------------------------------------------+
-| |DPA|_         | RP10 disk controller                           |
+| |*DPA*|_       | RP10 disk controller                           |
 +----------------+                                                |
-| |DPB|_         |                                                |
+| |*DPB*|_       |                                                |
 +----------------+------------------------------------------------+
-| |FSA|_         | RS04 disk controller via RH10                  |
+| |*FSA*|_       | RS04 disk controller via RH10                  |
 +----------------+------------------------------------------------+
-| |RPA|_         | RH10 disk controllers via RH10                 |
+| |*RPA*|_       | RH10 disk controllers via RH10                 |
 +----------------+                                                |
-| |RPB|_         |                                                |
+| |*RPB*|_       |                                                |
 +----------------+                                                |
-| |RPC|_         |                                                |
+| |*RPC*|_       |                                                |
 +----------------+                                                |
-| |RPD|_         |                                                |
+| |*RPD*|_       |                                                |
 +----------------+------------------------------------------------+
-| |PMP|_         | |PMP| IBM 3330 disk controller                 |
+| |*PMP*|_       | |PMP| IBM 3330 disk controller                 |
 +----------------+------------------------------------------------+
-| |AI|_          | System concepts DC-10 IBM 2314 disk controller |
+| |*AI*|_        | System concepts DC-10 IBM 2314 disk controller |
 +----------------+------------------------------------------------+
-| |TUA|_         | TM02 tape controller via RH10                  |
+| |*TUA*|_       | TM02 tape controller via RH10                  |
 +----------------+------------------------------------------------+
-| |FHA|_         | RC10 disk controller                           |
+| |*FHA*|_       | RC10 disk controller                           |
 +----------------+------------------------------------------------+
-| |DDC|_         | DDC10 disk controller                          |
+| |*DDC*|_       | DDC10 disk controller                          |
 +----------------+------------------------------------------------+
-| |DT|_          | TD10 DECtape controller                        |
+| |*DT*|_        | TD10 DECtape controller                        |
 +----------------+------------------------------------------------+
-| |DC|_          | DC10 communications controller                 |
+| |*DC*|_        | DC10 communications controller                 |
 +----------------+------------------------------------------------+
-| |DK|_          | Clock timer module                             |
+| |*DK*|_        | Clock timer module                             |
 +----------------+------------------------------------------------+
-| |PCLK|_        | Petit calendar clock                           |
+| |*PCLK*|_      | Petit calendar clock                           |
 +----------------+------------------------------------------------+
-| |PD|_          | Coriolis clock                                 |
+| |*PD*|_        | Coriolis clock                                 |
 +----------------+------------------------------------------------+
-| |IMP|_         | IMP network interface                          |
+| |*IMP*|_       | IMP network interface                          |
 +----------------+------------------------------------------------+
-| |CH|_          | CH10 Chaosnet interface                        |
+| |*CH*|_        | CH10 Chaosnet interface                        |
 +----------------+------------------------------------------------+
-| |IMX|_         | A/D input multiplexer                          |
+| |*IMX*|_       | A/D input multiplexer                          |
 +----------------+------------------------------------------------+
-| |TK|_          | Knight kludge, TTY scanner                     |
+| |*TK*|_        | Knight kludge, TTY scanner                     |
 +----------------+------------------------------------------------+
-| |MTY|_         | MTY, Morton terminal multiplexer               |
+| |*MTY*|_       | MTY, Morton terminal multiplexer               |
 +----------------+------------------------------------------------+
-| |DPK|_         | DK-10 datapoint kludge                         |
+| |*DPK*|_       | DK-10 datapoint kludge                         |
 +----------------+------------------------------------------------+
-| |DKB|_         | Stanford microswitch scanner                   |
+| |*DKB*|_       | Stanford microswitch scanner                   |
 +----------------+------------------------------------------------+
-| |III|_         | Stanford triple III display                    |
+| |*III*|_       | Stanford triple III display                    |
 +----------------+------------------------------------------------+
-| |TEN11|        | PDP-11 interface                               |
+| |*TEN11*|      | PDP-11 interface                               |
 +----------------+------------------------------------------------+
-| |AUXCPU|       | PDP-6 interface                                |
+| |*AUXCPU*|     | PDP-6 interface                                |
 +----------------+------------------------------------------------+
-| |DCT|_         | PDP-6 data control type 136                    |
+| |*DCT*|_       | PDP-6 data control type 136                    |
 +----------------+------------------------------------------------+
-| |DTC|_         | PDP-6 type 551 DECtape controller              |
+| |*DTC*|_       | PDP-6 type 551 DECtape controller              |
 +----------------+------------------------------------------------+
-| |MTC|_         | PDP-6 type 516 magtape controller              |
+| |*MTC*|_       | PDP-6 type 516 magtape controller              |
 +----------------+------------------------------------------------+
-| |DSK|_         | PDP-6 type 270 disk controller                 |
+| |*DSK*|_       | PDP-6 type 270 disk controller                 |
 +----------------+------------------------------------------------+
-| |DCS|_         | PDP-6 type 630 terminal multiplexer            |
+| |*DCS*|_       | PDP-6 type 630 terminal multiplexer            |
 +----------------+------------------------------------------------+
 
-.. |CPU| replace:: :html:`<samp>CPU</samp>`
+.. |CPU|   replace:: :html:`<samp>CPU</samp>`
+.. |*CPU*| replace:: :html:`<samp><b>CPU</b></samp>`
+.. _*CPU*:
 
 |CPU|
 -----
 The CPU options include setting memory size and O/S customization.
 
-=============================================  ===========================================  =========
-:html:`<samp><b>SET CPU 16K</b></samp>`        Set memory to 16K
-:html:`<samp><b>SET CPU 32K</b></samp>`        Set memory to 32K
-:html:`<samp><b>SET CPU 48K</b></samp>`        Set memory to 48K
-:html:`<samp><b>SET CPU 64K</b></samp>`        Set memory to 64K
-:html:`<samp><b>SET CPU 96K</b></samp>`        Set memory to 96K
-:html:`<samp><b>SET CPU 128K</b></samp>`       Set memory to 128K
-:html:`<samp><b>SET CPU 256K</b></samp>`       Set memory to 256K
-:html:`<samp><b>SET CPU 512K </b></samp>`      Set memory to 512K                           ITS & BBN
-:html:`<samp><b>SET CPU 768K</b></samp>`       Set memory to 768K                           ITS & BBN
-:html:`<samp><b>SET CPU 1024K</b></samp>`      Set memory to 1024K                          ITS & BBN
-:html:`<samp><b>SET CPU NOMAOFF</b></samp>`    Set traps to default of 040
-:html:`<samp><b>SET CPU MAOFF</b></samp>`      Move trap vectors from 040 to 0140           WAITS
-:html:`<samp><b>SET CPU ONESEG</b></samp>`     Set to one segment register
-:html:`<samp><b>SET CPU TWOSEG</b></samp>`     Set to two segment registers
-:html:`<samp><b>SET CPU ITS</b></samp>`        Add ITS pager and instruction support to KA  ITS
-:html:`<samp><b>SET CPU NOMPX </b></samp>`     Disable |MPX| interrupt support for ITS
-:html:`<samp><b>SET CPU MPX</b></samp>`        Enable |MPX| interrupt support for ITS       ITS
-:html:`<samp><b>SET CPU WAITS</b></samp>`      Add support for special WAITS instructions   WAITS
-:html:`<samp><b>SET CPU NOWAITS</b></samp>`    Disable special WAITS instructions
-:html:`<samp><b>SET CPU BBN</b></samp>`        Enable BBN pager and Tenex support           TENEX
-:html:`<samp><b>SET CPU NOIDLE</b></samp>`     Disable idle detection
-:html:`<samp><b>SET CPU IDLE</b></samp>`       Enable idle detection
-=============================================  ===========================================  =========
+====================================  ===========================================  =========
+:html:`<samp>SET CPU 16K</samp>`      Set memory to 16K
+:html:`<samp>SET CPU 32K</samp>`      Set memory to 32K
+:html:`<samp>SET CPU 48K</samp>`      Set memory to 48K
+:html:`<samp>SET CPU 64K</samp>`      Set memory to 64K
+:html:`<samp>SET CPU 96K</samp>`      Set memory to 96K
+:html:`<samp>SET CPU 128K</samp>`     Set memory to 128K
+:html:`<samp>SET CPU 256K</samp>`     Set memory to 256K
+:html:`<samp>SET CPU 512K</samp>`     Set memory to 512K                           ITS & BBN
+:html:`<samp>SET CPU 768K</samp>`     Set memory to 768K                           ITS & BBN
+:html:`<samp>SET CPU 1024K</samp>`    Set memory to 1024K                          ITS & BBN
+:html:`<samp>SET CPU NOMAOFF</samp>`  Set traps to default of 040
+:html:`<samp>SET CPU MAOFF</samp>`    Move trap vectors from 040 to 0140           WAITS
+:html:`<samp>SET CPU ONESEG</samp>`   Set to one segment register
+:html:`<samp>SET CPU TWOSEG</samp>`   Set to two segment registers
+:html:`<samp>SET CPU ITS</samp>`      Add ITS pager and instruction support to KA  ITS
+:html:`<samp>SET CPU NOMPX</samp>`    Disable |MPX| interrupt support for ITS
+:html:`<samp>SET CPU MPX</samp>`      Enable |MPX| interrupt support for ITS       ITS
+:html:`<samp>SET CPU WAITS</samp>`    Add support for special WAITS instructions   WAITS
+:html:`<samp>SET CPU NOWAITS</samp>`  Disable special WAITS instructions
+:html:`<samp>SET CPU BBN</samp>`      Enable BBN pager and Tenex support           TENEX
+:html:`<samp>SET CPU NOIDLE</samp>`   Disable idle detection
+:html:`<samp>SET CPU IDLE</samp>`     Enable idle detection
+====================================  ===========================================  =========
 
 CPU registers include the visible state of the processor as well as the control registers for the interrupt system.
 
@@ -413,15 +420,15 @@ Name              Size  Comments                       OS type
 
 The CPU can maintain a history of the most recently executed instructions.
 
-This is controlled by the :html:`<samp><b>SET CPU HISTORY</b></samp>` and :html:`<samp><b>SHOW CPU HISTORY</b></samp>` commands:
+This is controlled by the :html:`<samp>SET CPU HISTORY</samp>` and :html:`<samp>SHOW CPU HISTORY</samp>` commands:
 
-=========================================================  ======================================
-:html:`<samp><b>SET CPU HISTORY</b></samp>`                Clear history buffer
-:html:`<samp><b>SET CPU HISTORY=</b>0 </samp>`             Disable history
-:html:`<samp><b>SET CPU HISTORY=</b><var>n</var></samp>`   Enable history, length = |n|
-:html:`<samp><b>SHOW CPU HISTORY</b></samp>`               Print CPU history
-:html:`<samp><b>SHOW CPU HISTORY=</b><var>n</var></samp>`  Print first |n| entries of CPU history
-=========================================================  ======================================
+==================================================  ======================================
+:html:`<samp>SET CPU HISTORY</samp>`                Clear history buffer
+:html:`<samp>SET CPU HISTORY=0</samp>`              Disable history
+:html:`<samp>SET CPU HISTORY=<var>n</var></samp>`   Enable history, length = |n|
+:html:`<samp>SHOW CPU HISTORY</samp>`               Print CPU history
+:html:`<samp>SHOW CPU HISTORY=<var>n</var></samp>`  Print first |n| entries of CPU history
+==================================================  ======================================
 
 Instruction tracing shows the program counter,
 the contents of |AC| selected,
@@ -437,30 +444,34 @@ Unit record I/O devices
 .. _Console teletype:
 .. _device 120:
 .. _CTY:
-.. |CTY| replace:: :html:`<samp>CTY</samp>`
+.. _*CTY*:
+.. |CTY|   replace:: :html:`<samp>CTY</samp>`
+.. |*CTY*| replace:: :html:`<samp><b>CTY</b></samp>`
 
 Console teletype (|CTY|) (device 120)
 """""""""""""""""""""""""""""""""""""
 The console station allows for communications with the operating system.
 
-======================================  ================================
-:html:`<samp><b>SET CTY 7B</b></samp>`  7-bit characters, space parity
-:html:`<samp><b>SET CTY 8B</b></samp>`  8-bit characters, space parity
-:html:`<samp><b>SET CTY 7P</b></samp>`  7-bit characters, space parity
-:html:`<samp><b>SET CTY UC</b></samp>`  Translate lowercase to uppercase
-======================================  ================================
+===============================  ================================
+:html:`<samp>SET CTY 7B</samp>`  7-bit characters, space parity
+:html:`<samp>SET CTY 8B</samp>`  8-bit characters, space parity
+:html:`<samp>SET CTY 7P</samp>`  7-bit characters, space parity
+:html:`<samp>SET CTY UC</samp>`  Translate lowercase to uppercase
+===============================  ================================
 
 The CTY also supports a method for stopping the TOPS10 operating system.
 
-========================================  ========================
-:html:`<samp><b>SET CTY STOP</b></samp>`  Deposit 1 in location 30
-========================================  ========================
+=================================  ========================
+:html:`<samp>SET CTY STOP</samp>`  Deposit 1 in location 30
+=================================  ========================
 
 .. _Paper tape reader (PTR):
 .. _Paper tape reader:
 .. _device 104:
 .. _PTR:
-.. |PTR| replace:: :html:`<samp>PTR</samp>`
+.. _*PTR*:
+.. |PTR|   replace:: :html:`<samp>PTR</samp>`
+.. |*PTR*| replace:: :html:`<samp><b>PTR</b></samp>`
 
 Paper tape reader (|PTR|) (device 104)
 """"""""""""""""""""""""""""""""""""""
@@ -470,7 +481,9 @@ Reads a paper tape from a disk file.
 .. _Paper tape punch:
 .. _device 100:
 .. _PTP:
-.. |PTP| replace:: :html:`<samp>PTP</samp>`
+.. _*PTP*:
+.. |PTP|   replace:: :html:`<samp>PTP</samp>`
+.. |*PTP*| replace:: :html:`<samp><b>PTP</b></samp>`
 
 Paper tape punch (|PTP|) (device 100)
 """""""""""""""""""""""""""""""""""""
@@ -480,7 +493,9 @@ Punches a paper tape to a disk file.
 .. _Card reader:
 .. _device 150:
 .. _CR:
-.. |CR| replace:: :html:`<samp>CR</samp>`
+.. _*CR*:
+.. |CR|   replace:: :html:`<samp>CR</samp>`
+.. |*CR*| replace:: :html:`<samp><b>CR</b></samp>`
 
 Card reader (|CR|) (device 150)
 """""""""""""""""""""""""""""""
@@ -488,28 +503,30 @@ The card reader (|CR|) reads data from a disk file.
 Card reader files can either be text (one character per column) or column binary (two characters per column).
 The file type can be specified with a |SET| command:
 
-===================================================================  =================================
-:html:`<samp><b>SET CR</b><var>n</var> <b>FORMAT=TEXT</b></samp>`    Set ASCII text mode
-:html:`<samp><b>SET CR</b><var>n</var> <b>FORMAT=BINARY</b></samp>`  Set for binary card images
-:html:`<samp><b>SET CR</b><var>n</var> <b>FORMAT=BCD</b></samp>`     Set for BCD records
-:html:`<samp><b>SET CR</b><var>n</var> <b>FORMAT=CBN</b></samp>`     Set for column binary BCD records
-:html:`<samp><b>SET CR</b><var>n</var> <b>FORMAT=AUTO</b></samp>`    Automatically determine format
-===================================================================  =================================
+=====================================================  =================================
+:html:`<samp>SET CR<var>n</var> FORMAT=TEXT</samp>`    Set ASCII text mode
+:html:`<samp>SET CR<var>n</var> FORMAT=BINARY</samp>`  Set for binary card images
+:html:`<samp>SET CR<var>n</var> FORMAT=BCD</samp>`     Set for BCD records
+:html:`<samp>SET CR<var>n</var> FORMAT=CBN</samp>`     Set for column binary BCD records
+:html:`<samp>SET CR<var>n</var> FORMAT=AUTO</samp>`    Automatically determine format
+=====================================================  =================================
 
 or in the |ATTACH| command:
 
-=============================================================================================  ==================================================================
-:html:`<samp><b>ATTACH CR</b><var>n</var> <var>file</var></samp>`                              Attach a file
-:html:`<samp><b>ATTACH CR</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
-:html:`<samp><b>ATTACH CR</b><var>n</var> <b>-s</b> <var>file</var></samp>`                    Add file onto current cards to read
-:html:`<samp><b>ATTACH CR</b><var>n</var> <b>-e</b> <var>file</var></samp>`                    After file is read in, the reader will receive an end-of-file flag
-=============================================================================================  ==================================================================
+===============================================================================  ==================================================================
+:html:`<samp>ATTACH CR<var>n</var> <var>file</var></samp>`                       Attach a file
+:html:`<samp>ATTACH CR<var>n</var> -f <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+:html:`<samp>ATTACH CR<var>n</var> -s <var>file</var></samp>`                    Add file onto current cards to read
+:html:`<samp>ATTACH CR<var>n</var> -e <var>file</var></samp>`                    After file is read in, the reader will receive an end-of-file flag
+===============================================================================  ==================================================================
 
 .. _Card punch (CP):
 .. _Card punch:
 .. _device 110:
 .. _CP:
-.. |CP| replace:: :html:`<samp>CP</samp>`
+.. _*CP*:
+.. |CP|   replace:: :html:`<samp>CP</samp>`
+.. |*CP*| replace:: :html:`<samp><b>CP</b></samp>`
 
 Card punch (|CP|) (device 110)
 """"""""""""""""""""""""""""""
@@ -518,41 +535,43 @@ Cards are simulated as ASCII lines with terminating newlines.
 Card punch files can either be text (one character per column) or column binary (two characters per column).
 The file type can be specified with a |SET| command:
 
-================================================  =================================
-:html:`<samp><b>SET CP FORMAT=TEXT</b></samp>`    Set ASCII text mode
-:html:`<samp><b>SET CP FORMAT=BINARY</b></samp>`  Set for binary card images
-:html:`<samp><b>SET CP FORMAT=BCD</b></samp>`     Set for BCD records
-:html:`<samp><b>SET CP FORMAT=CBN</b></samp>`     Set for column binary BCD records
-:html:`<samp><b>SET CP FORMAT=AUTO</b></samp>`    Automatically determine format
-================================================  =================================
+=========================================  =================================
+:html:`<samp>SET CP FORMAT=TEXT</samp>`    Set ASCII text mode
+:html:`<samp>SET CP FORMAT=BINARY</samp>`  Set for binary card images
+:html:`<samp>SET CP FORMAT=BCD</samp>`     Set for BCD records
+:html:`<samp>SET CP FORMAT=CBN</samp>`     Set for column binary BCD records
+:html:`<samp>SET CP FORMAT=AUTO</samp>`    Automatically determine format
+=========================================  =================================
 
 or in the |ATTACH| command:
 
-==========================================================================  ===================================
-:html:`<samp><b>ATTACH CP</b> <var>file</var></samp>`                       Attach a file
-:html:`<samp><b>ATTACH CP -f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
-==========================================================================  ===================================
+===================================================================  ===================================
+:html:`<samp>ATTACH CP <var>file</var></samp>`                       Attach a file
+:html:`<samp>ATTACH CP -f <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+===================================================================  ===================================
 
 .. _Line printer (LPT):
 .. _Line printer:
 .. _device 124:
 .. _LPT:
-.. |LPT| replace:: :html:`<samp>LPT</samp>`
+.. _*LPT*:
+.. |LPT|   replace:: :html:`<samp>LPT</samp>`
+.. |*LPT*| replace:: :html:`<samp><b>LPT</b></samp>`
 
 Line printer (|LPT|) (device 124)
 """""""""""""""""""""""""""""""""
 The line printer (|LPT|) writes data to a disk file as ASCII text with terminating newlines.
 Currently set to handle standard signals to control paper advance.
 
-================================================================================  ==============================================================
-:html:`<samp><b>SET LPT</b><var>n</var> <b>LC</b></samp>`                         Allow printer to print lowercase
-:html:`<samp><b>SET LPT</b><var>n</var> <b>UC</b></samp>`                         Print only uppercase
-:html:`<samp><b>SET LPT</b><var>n</var> <b>UTF8</b></samp>`                       Print control characters as UTF8 characters
-:html:`<samp><b>SET LPT</b><var>n</var> <b>LINESPERPAGE=</b><var>n</var></samp>`  Set the number of lines before an auto form feed is generated.
-                                                                                  There is an automatic margin of 6 lines.
-                                                                                  There is a maximum of 100 lines per page.
-:html:`<samp><b>SET LPT</b><var>n</var> <b>DEV=</b><var>n</var></samp>`           Set device number to |n|\ (octal)
-================================================================================  ==============================================================
+==================================================================  ==============================================================
+:html:`<samp>SET LPT<var>n</var> LC</samp>`                         Allow printer to print lowercase
+:html:`<samp>SET LPT<var>n</var> UC</samp>`                         Print only uppercase
+:html:`<samp>SET LPT<var>n</var> UTF8</samp>`                       Print control characters as UTF8 characters
+:html:`<samp>SET LPT<var>n</var> LINESPERPAGE=<var>n</var></samp>`  Set the number of lines before an auto form feed is generated.
+                                                                    There is an automatic margin of 6 lines.
+                                                                    There is a maximum of 100 lines per page.
+:html:`<samp>SET LPT<var>n</var> DEV=<var>n</var></samp>`           Set device number to |n|\ (octal)
+==================================================================  ==============================================================
 
 These characters control the skipping of various number of lines.
 
@@ -581,8 +600,10 @@ this device is not enabled.
 When enabled and commands are sent to it,
 a graphics windows will display.
 
-.. |III| replace:: :html:`<samp>III</samp>`
+.. |III|   replace:: :html:`<samp>III</samp>`
+.. |*III*| replace:: :html:`<samp><b>III</b></samp>`
 .. _III:
+.. _*III*:
 .. _Stanford triple III display:
 .. _Stanford triple III display (III):
 .. _device 430:
@@ -594,20 +615,24 @@ By default,
 this device is not enabled.
 Used |DKB|_ device for keyboard input.
 
-.. |DKB| replace:: :html:`<samp>DKB</samp>`
+.. |DKB|   replace:: :html:`<samp>DKB</samp>`
+.. |*DKB*| replace:: :html:`<samp><b>DKB</b></samp>`
 .. _DKB:
+.. _*DKB*:
 .. _DKB Stanford microswitch keyboard scanner:
 .. _DKB Stanford microswitch keyboard scanner (DKB):
 .. _device 310:
 
-DKB Stanford microswitch keyboard scanner (|DKB|) (device 310)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+|DKB| Stanford microswitch keyboard scanner (|DKB|) (device 310)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Used by |III|_ to handle input.
 Currently only one keyboard is supported.
 
 .. |DK|   replace:: :html:`<samp>DK</samp>`
 .. |DK10| replace:: :html:`<samp>DK10</samp>`
+.. |*DK*| replace:: :html:`<samp><b>DK</b></samp>`
 .. _DK:
+.. _*DK*:
 .. _DK10:
 .. _DK10 timer module:
 .. _DK10 timer module (DK):
@@ -618,10 +643,12 @@ Currently only one keyboard is supported.
 The |DK10| timer module does not have any settable options.
 
 .. |MTA|   replace:: :html:`<samp>MTA</samp>`
+.. |*MTA*| replace:: :html:`<samp><b>MTA</b></samp>`
 .. |TM10|  replace:: :html:`<samp>TM10</samp>`
 .. |TM10A| replace:: :html:`<samp>TM10A</samp>`
 .. |TM10B| replace:: :html:`<samp>TM10B</samp>`
 .. _MTA:
+.. _*MTA*:
 .. _TM10 magnetic tape:
 .. _TM10 magnetic tape (MTA):
 .. _device 340:
@@ -635,24 +662,26 @@ the |TM10A| and the |TM10B|.
 The B model added a DF10 which allowed the tape data to be transferred without intervention of the CPU.
 The device has 2 options:
 
-=====================================================  ================================================
-:html:`<samp><b>SET MTA TYPE=</b><var>t</var></samp>`  Set the type of the controller to ``A`` or ``B``
-:html:`<samp><b>SET MTA MPX=</b><var>#</var></samp>`   For ITS, set the MPX interrupt to channel |#|
-=====================================================  ================================================
+==============================================  ================================================
+:html:`<samp>SET MTA TYPE=<var>t</var></samp>`  Set the type of the controller to ``A`` or ``B``
+:html:`<samp>SET MTA MPX=<var>#</var></samp>`   For ITS, set the MPX interrupt to channel |#|
+==============================================  ================================================
 
 Each individual tape drive support several options:
 |MTA| used as an example.
 
-==================================================================  =======================================
-:html:`<samp><b>SET MTA</b><var>n</var> <b>7T</b></samp>`           Set the mag tape unit to 7-track format
-:html:`<samp><b>SET MTA</b><var>n</var> <b>9T</b></samp>`           Set the mag tape unit to 9-track format
-:html:`<samp><b>SET MTA</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
-:html:`<samp><b>SET MTA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
-==================================================================  =======================================
+====================================================  =======================================
+:html:`<samp>SET MTA<var>n</var> 7T</samp>`           Set the mag tape unit to 7-track format
+:html:`<samp>SET MTA<var>n</var> 9T</samp>`           Set the mag tape unit to 9-track format
+:html:`<samp>SET MTA<var>n</var> LOCKED</samp>`       Set the mag tape to be read-only
+:html:`<samp>SET MTA<var>n</var> WRITEENABLE</samp>`  Set the mag tape to be writable
+====================================================  =======================================
 
 .. |DT|   replace:: :html:`<samp>DT</samp>`
 .. |TD10| replace:: :html:`<samp>TD10</samp>`
+.. |*DT*| replace:: :html:`<samp><b>DT</b></samp>`
 .. _DT:
+.. _*DT*:
 .. _TD10 DECTape:
 .. _device 320:
 .. _device 324:
@@ -664,23 +693,25 @@ This controller loads the tape into memory and uses the buffered version.
 For ITS,
 you needed to connect it to an |MPX| channel to handle I/O.
 
-===================================================  ===============================================
-:html:`<samp><b>SET DT MPX=</b><var>#</var></samp>`  For ITS, set the |MPX| interrupt to channel |#|
-===================================================  ===============================================
+============================================  ===============================================
+:html:`<samp>SET DT MPX=<var>#</var></samp>`  For ITS, set the |MPX| interrupt to channel |#|
+============================================  ===============================================
 
 Each individual tape drive support several options:
 |DT| used as an example.
 
-=================================================================  ================================================
-:html:`<samp><b>SET DT</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
-:html:`<samp><b>SET DT</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
-:html:`<samp><b>SET DT</b><var>n</var> <b>18b</b></samp>`          Default, tapes are considered to be 18-bit tapes
-:html:`<samp><b>SET DT</b><var>n</var> <b>16b</b></samp>`          Tapes are converted from 16-bit to 18-bit
-:html:`<samp><b>SET DT</b><var>n</var> <b>12b</b></samp>`          Tapes are converted from 12-bit to 18-bit
-=================================================================  ================================================
+===================================================  ================================================
+:html:`<samp>SET DT<var>n</var> LOCKED</samp>`       Set the mag tape to be read-only
+:html:`<samp>SET DT<var>n</var> WRITEENABLE</samp>`  Set the mag tape to be writable
+:html:`<samp>SET DT<var>n</var> 18b</samp>`          Default, tapes are considered to be 18-bit tapes
+:html:`<samp>SET DT<var>n</var> 16b</samp>`          Tapes are converted from 16-bit to 18-bit
+:html:`<samp>SET DT<var>n</var> 12b</samp>`          Tapes are converted from 12-bit to 18-bit
+===================================================  ================================================
 
-.. |PCLK| replace:: :html:`<samp>PCLK</samp>`
+.. |PCLK|   replace:: :html:`<samp>PCLK</samp>`
+.. |*PCLK*| replace:: :html:`<samp><b>PCLK</b></samp>`
 .. _PCLK:
+.. _*PCLK*:
 .. _PCLK Petit calendar clock:
 .. _device 730:
 
@@ -692,8 +723,10 @@ The device supports two settings: ``ON`` and ``OFF``.
 By default,
 this device is disabled.
 
-.. |PD| replace:: :html:`<samp>PD</samp>`
+.. |PD|   replace:: :html:`<samp>PD</samp>`
+.. |*PD*| replace:: :html:`<samp><b>PD</b></samp>`
 .. _PD:
+.. _*PD*:
 .. _PD DeCoriolis clock:
 .. _device 500:
 
@@ -705,8 +738,10 @@ There are 60 ticks per second.
 The device was made by Paul DeCoriolis at MIT.
 By default, this device is disabled.
 
-.. |IMX| replace:: :html:`<samp>IMX</samp>`
+.. |IMX|   replace:: :html:`<samp>IMX</samp>`
+.. |*IMX*| replace:: :html:`<samp><b>IMX</b></samp>`
 .. _IMX:
+.. _*IMX*:
 .. _A/D input multiplexer:
 .. _A/D input multiplexer (IMX):
 .. _device 574:
@@ -728,8 +763,10 @@ Disk I/O devices
 ----------------
 The PDP-10 supported many disk controllers.
 
-.. |FHA| replace:: :html:`<samp>FHA</samp>`
+.. |FHA|   replace:: :html:`<samp>FHA</samp>`
+.. |*FHA*| replace:: :html:`<samp><b>FHA</b></samp>`
 .. _FHA:
+.. _*FHA*:
 .. _FHA disk controller:
 .. _device 170:
 
@@ -744,17 +781,21 @@ The RM10 could hold up to 345K words of data.
 Each individual disk drive support several options:
 |FHA| used as an example.
 
-==================================================================  =============================
-:html:`<samp><b>SET FHA</b><var>n</var> <b>RD10</b></samp>`         Set this unit to be an RD10
-:html:`<samp><b>SET FHA</b><var>n</var> <b>RM10</b></samp>`         Set this unit to be an RM10
-:html:`<samp><b>SET FHA</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET FHA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-==================================================================  =============================
+====================================================  =============================
+:html:`<samp>SET FHA<var>n</var> RD10</samp>`         Set this unit to be an RD10
+:html:`<samp>SET FHA<var>n</var> RM10</samp>`         Set this unit to be an RM10
+:html:`<samp>SET FHA<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET FHA<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+====================================================  =============================
 
-.. |DPA| replace:: :html:`<samp>DPA</samp>`
-.. |DPB| replace:: :html:`<samp>DPB</samp>`
+.. |DPA|   replace:: :html:`<samp>DPA</samp>`
+.. |DPB|   replace:: :html:`<samp>DPB</samp>`
+.. |*DPA*| replace:: :html:`<samp><b>DPA</b></samp>`
+.. |*DPB*| replace:: :html:`<samp><b>DPB</b></samp>`
 .. _DPA:
 .. _DPB:
+.. _*DPA*:
+.. _*DPB*:
 .. _DPA/DPB disk controller:
 .. _device 250:
 .. _device 254:
@@ -775,24 +816,24 @@ The latter two are for compatibility with other simulators.
 Each individual disk drive support several options:
 |DPA| used as an example.
 
-==================================================================  ==================================================
-:html:`<samp><b>SET DPA</b><var>n</var> <b>RP01</b></samp>`         Set this unit to be an RP01
-:html:`<samp><b>SET DPA</b><var>n</var> <b>RP02</b></samp>`         Set this unit to be an RP02
-:html:`<samp><b>SET DPA</b><var>n</var> <b>RP03</b></samp>`         Set this unit to be an RP03
-:html:`<samp><b>SET DPA</b><var>n</var> <b>HEADERS</b></samp>`      Enable the RP10 to execute write headers function
-:html:`<samp><b>SET DPA</b><var>n</var> <b>NOHEADERS</b></samp>`    Prevent the RP10 to execute write headers function
-:html:`<samp><b>SET DPA</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET DPA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-==================================================================  ==================================================
+====================================================  ==================================================
+:html:`<samp>SET DPA<var>n</var> RP01</samp>`         Set this unit to be an RP01
+:html:`<samp>SET DPA<var>n</var> RP02</samp>`         Set this unit to be an RP02
+:html:`<samp>SET DPA<var>n</var> RP03</samp>`         Set this unit to be an RP03
+:html:`<samp>SET DPA<var>n</var> HEADERS</samp>`      Enable the RP10 to execute write headers function
+:html:`<samp>SET DPA<var>n</var> NOHEADERS</samp>`    Prevent the RP10 to execute write headers function
+:html:`<samp>SET DPA<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET DPA<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+====================================================  ==================================================
 
 To attach a disk,
 use the |ATTACH| command:
 
-==============================================================================================  ===================================
-:html:`<samp><b>ATTACH DPA</b><var>n</var> <var>file</var></samp>`                              Attach a file
-:html:`<samp><b>ATTACH DPA</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
-:html:`<samp><b>ATTACH DPA</b><var>n</var> <b>-n</b> <var>file</var></samp>`                    Create a blank disk
-==============================================================================================  ===================================
+================================================================================  ===================================
+:html:`<samp>ATTACH DPA<var>n</var> <var>file</var></samp>`                       Attach a file
+:html:`<samp>ATTACH DPA<var>n</var> -f <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+:html:`<samp>ATTACH DPA<var>n</var> -n <var>file</var></samp>`                    Create a blank disk
+================================================================================  ===================================
 
 .. |SIMH|   replace:: :html:`<samp>SIMH</samp>`
 .. |DBD9|   replace:: :html:`<samp>DBD9</samp>`
@@ -801,8 +842,10 @@ use the |ATTACH| command:
 
 |format| can be |SIMH|, |DBD9|, or |DLD9|.
 
-.. |PMP| replace:: :html:`<samp>PMP</samp>`
+.. |PMP|   replace:: :html:`<samp>PMP</samp>`
+.. |*PMP*| replace:: :html:`<samp><b>PMP</b></samp>`
 .. _PMP:
+.. _*PMP*:
 .. _PMP disk controller:
 .. _device 504:
 
@@ -810,19 +853,21 @@ use the |ATTACH| command:
 """"""""""""""""""""""""""""""""""""""
 The |PMP| disk controller allowed for IBM type drives to be connected to the PDP-10.
 This is the controller used by WAITS.
-This device is disabled by default. 
+This device is disabled by default.
 
 Each individual disk drive support several options:
 |DPA| used as an example.
 
-===========================================================================  ===================================================================================
-:html:`<samp><b>SET PMP</b><var>n</var> <b>TYPE=</b><var>type</var></samp>`  Set this unit to be of type :html:`<samp><var>type</var></samp>` (generally 3330-2)
-:html:`<samp><b>SET PMP</b><var>0</var> <b>DEV=</b><var>##</var></samp>`     Set the addresses of all disks to start at |##| hex
-:html:`<samp><b>SET PMP</b><var>n</var> <b>DEV=</b><var>##</var></samp>`     Set this unit to be at address |##|
-===========================================================================  ===================================================================================
+=============================================================  ===================================================================================
+:html:`<samp>SET PMP<var>n</var> TYPE=<var>type</var></samp>`  Set this unit to be of type :html:`<samp><var>type</var></samp>` (generally 3330-2)
+:html:`<samp>SET PMP<var>0</var> DEV=<var>##</var></samp>`     Set the addresses of all disks to start at |##| hex
+:html:`<samp>SET PMP<var>n</var> DEV=<var>##</var></samp>`     Set this unit to be at address |##|
+=============================================================  ===================================================================================
 
-.. |AI| replace:: :html:`<samp>AI</samp>`
+.. |AI|   replace:: :html:`<samp>AI</samp>`
+.. |*AI*| replace:: :html:`<samp><b>AI</b></samp>`
 .. _AI:
+.. _*AI*:
 .. _System Concepts DC-10 disk controller:
 .. _device 610:
 .. _device 614:
@@ -832,8 +877,10 @@ System Concepts DC-10 disk controller (device 610/614)
 System Concepts DC-10 disk controller allowed IBM 2314 compatible disk drives to be attached to the MIT AI Lab PDP-10 running ITS.
 This device is disabled by default.
 
-.. |DDC| replace:: :html:`<samp>DDC</samp>`
+.. |DDC|   replace:: :html:`<samp>DDC</samp>`
+.. |*DDC*| replace:: :html:`<samp><b>DDC</b></samp>`
 .. _DDC:
+.. _*DDC*:
 
 DDC10 drum controller for Tenex
 """""""""""""""""""""""""""""""
@@ -852,16 +899,24 @@ The first unit which is not enabled will get device 270,
 units will be assigned the next available address automatically.
 The device configuration must match that which is defined in the OS.
 
-.. |RP|  replace:: :html:`<samp>RP</samp>`
-.. |RPA| replace:: :html:`<samp>RPA</samp>`
-.. |RPB| replace:: :html:`<samp>RPB</samp>`
-.. |RPC| replace:: :html:`<samp>RPC</samp>`
-.. |RPD| replace:: :html:`<samp>RPD</samp>`
+.. |RP|    replace:: :html:`<samp>RP</samp>`
+.. |RPA|   replace:: :html:`<samp>RPA</samp>`
+.. |RPB|   replace:: :html:`<samp>RPB</samp>`
+.. |RPC|   replace:: :html:`<samp>RPC</samp>`
+.. |RPD|   replace:: :html:`<samp>RPD</samp>`
+.. |*RPA*| replace:: :html:`<samp><b>RPA</b></samp>`
+.. |*RPB*| replace:: :html:`<samp><b>RPB</b></samp>`
+.. |*RPC*| replace:: :html:`<samp><b>RPC</b></samp>`
+.. |*RPD*| replace:: :html:`<samp><b>RPD</b></samp>`
 .. _RP:
 .. _RPA:
 .. _RPB:
 .. _RPC:
 .. _RPD:
+.. _*RPA*:
+.. _*RPB*:
+.. _*RPC*:
+.. _*RPD*:
 
 |RP| disk drives
 """"""""""""""""
@@ -873,29 +928,31 @@ Disks can be stored in one of several file formats:
 |SIMH|, |DBD9|, and |DLD9|.
 The latter two are for compatibility with other simulators.
 
-==================================================================  ========================================
-:html:`<samp><b>SET RPA</b><var>n</var> <b>RP04</b></samp>`         Set this unit to be an RP04 (19 MWords)
-:html:`<samp><b>SET RPA</b><var>n</var> <b>RP06</b></samp>`         Set this unit to be an RP06 (39 MWords)
-:html:`<samp><b>SET RPA</b><var>n</var> <b>RP07</b></samp>`         Set this unit to be an RP07 (110 MWords)
-:html:`<samp><b>SET RPA</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET RPA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-==================================================================  ========================================
+====================================================  ========================================
+:html:`<samp>SET RPA<var>n</var> RP04</samp>`         Set this unit to be an RP04 (19 MWords)
+:html:`<samp>SET RPA<var>n</var> RP06</samp>`         Set this unit to be an RP06 (39 MWords)
+:html:`<samp>SET RPA<var>n</var> RP07</samp>`         Set this unit to be an RP07 (110 MWords)
+:html:`<samp>SET RPA<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET RPA<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+====================================================  ========================================
 
 To attach a disk,
 use the |ATTACH| command:
 
-==============================================================================================  ===================================
-:html:`<samp><b>ATTACH RPA</b><var>n</var> <var>file</var></samp>`                              Attach a file
-:html:`<samp><b>ATTACH RPA</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
-:html:`<samp><b>ATTACH RPA</b><var>n</var> <b>-n</b> <var>file</var></samp>`                    Create a blank disk
-==============================================================================================  ===================================
+================================================================================  ===================================
+:html:`<samp>ATTACH RPA<var>n</var> <var>file</var></samp>`                       Attach a file
+:html:`<samp>ATTACH RPA<var>n</var> -f <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+:html:`<samp>ATTACH RPA<var>n</var> -n <var>file</var></samp>`                    Create a blank disk
+================================================================================  ===================================
 
 |format| can be |SIMH|, |DBD9|, or |DLD9|.
 
-.. |RS|  replace:: :html:`<samp>RS</samp>`
-.. |FSA| replace:: :html:`<samp>FSA</samp>`
+.. |RS|    replace:: :html:`<samp>RS</samp>`
+.. |FSA|   replace:: :html:`<samp>FSA</samp>`
+.. |*FSA*| replace:: :html:`<samp><b>FSA</b></samp>`
 .. _RS:
 .. _FSA:
+.. _*FSA*:
 
 |RS| disk drives
 """"""""""""""""
@@ -904,39 +961,41 @@ These drives are fixed head swapping disks.
 By default,
 they are disabled.
 
-==================================================================  ========================================
-:html:`<samp><b>SET FSA</b><var>n</var> <b>RS03</b></samp>`         Set this unit to be an RS03 (262 KWords)
-:html:`<samp><b>SET FSA</b><var>n</var> <b>RS04</b></samp>`         Set this unit to be an RS04 (262 KWords)
-:html:`<samp><b>SET FSA</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET FSA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-==================================================================  ========================================
+====================================================  ========================================
+:html:`<samp>SET FSA<var>n</var> RS03</samp>`         Set this unit to be an RS03 (262 KWords)
+:html:`<samp>SET FSA<var>n</var> RS04</samp>`         Set this unit to be an RS04 (262 KWords)
+:html:`<samp>SET FSA<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET FSA<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+====================================================  ========================================
 
-.. |TUA| replace:: :html:`<samp>TUA</samp>`
-.. |TU|  replace:: :html:`<samp>TU</samp>`
 .. _TU:
 .. _TUA:
+.. _*TUA*: TUA
+.. |TU|    replace:: :html:`<samp>TU</samp>`
+.. |TUA|   replace:: :html:`<samp>TUA</samp>`
+.. |*TUA*| replace:: :html:`<samp><b>TUA</b></samp>`
 
 |TU| tape drives
 """"""""""""""""
 The |TUA| is a Mass bus tape controller using a TM03 formatter.
 There can be one per RH10 and it can support up to 8 drives.
 
-==================================================================  ================================
-:html:`<samp><b>SET TUA</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
-:html:`<samp><b>SET TUA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
-==================================================================  ================================
+====================================================  ================================
+:html:`<samp>SET TUA<var>n</var> LOCKED</samp>`       Set the mag tape to be read-only
+:html:`<samp>SET TUA<var>n</var> WRITEENABLE</samp>`  Set the mag tape to be writable
+====================================================  ================================
 
 Terminal multiplexer I/O devices
 --------------------------------
-.. |ATTACH| replace:: :html:`<samp><b>ATTACH</b></samp>`
+.. |ATTACH| replace:: :html:`<samp>ATTACH</samp>`
 .. _ATTACH:
 
 All terminal multiplexers must be attached in order to work.
 The |ATTACH| command specifies the port to be used for Telnet sessions:
 
-====================================================================  =====================
-:html:`<samp><b>ATTACH</b> <var>device</var> <var>port</var></samp>`  Set up listening port
-====================================================================  =====================
+=============================================================  =====================
+:html:`<samp>ATTACH <var>device</var> <var>port</var></samp>`  Set up listening port
+=============================================================  =====================
 
 ... where :html:`<samp><var>port</var></samp>` is a decimal number between 1 and 65535 that is not being used other TCP/IP activities.
 
@@ -944,36 +1003,38 @@ Once attached and the simulator is running,
 the multiplexer listens for connections on the specified port.
 It assumes that any incoming connection is a Telnet connections.
 The connections remain open until disconnected either by the Telnet client,
-a :html:`<samp><b>SET</b> <var>device</var> <b>DISCONNECT</b></samp>` command,
-or a :html:`<samp><b>DETACH</b> <var>device</var></samp>` command.
+a :html:`<samp>SET <var>device</var> DISCONNECT</samp>` command,
+or a :html:`<samp>DETACH <var>device</var></samp>` command.
 
-================================================================================  ===================
-:html:`<samp><b>SET</b> <var>device</var> <b>DISCONNECT=</b><var>n</var></samp>`  Disconnect line |n|
-================================================================================  ===================
+==================================================================  ===================
+:html:`<samp>SET <var>device</var> DISCONNECT=<var>n</var></samp>`  Disconnect line |n|
+==================================================================  ===================
 
 .. |device| replace:: :html:`<samp><var>device</var></samp>`
-.. |SHOW|   replace:: :html:`<samp><b>SHOW</b></samp>`
+.. |SHOW|   replace:: :html:`<samp>SHOW</samp>`
 
 The |device| implements the following special |SHOW| commands:
 
-=====================================================================  ===========================================
-:html:`<samp><b>SHOW</b> <var>device</var> <b>CONNECTIONS</b></samp>`  Display current connections to the |device|
-:html:`<samp><b>SHOW</b> <var>device</var> <b>STATISTICS</b></samp>`   Display statistics for active connections
-:html:`<samp><b>SHOW</b> <var>device</var> <b>LOG</b></samp>`          Display logging for all lines
-=====================================================================  ===========================================
+=======================================================  ===========================================
+:html:`<samp>SHOW <var>device</var> CONNECTIONS</samp>`  Display current connections to the |device|
+:html:`<samp>SHOW <var>device</var> STATISTICS</samp>`   Display statistics for active connections
+:html:`<samp>SHOW <var>device</var> LOG</samp>`          Display logging for all lines
+=======================================================  ===========================================
 
 Logging can be controlled as follows:
 
-====================================================================================================  ==================================================================
-:html:`<samp><b>SET</b> <var>device</var> <b>LOG=</b><var>n</var><b>=</b><var>filename</var></samp>`  Log output of line |n| to :html:`<samp><var>filename</var></samp>`
-:html:`<samp><b>SET</b> <var>device</var> <b>NOLOG</b></samp>`                                        Disable logging and close log file
-====================================================================================================  ==================================================================
+===============================================================================  ==================================================================
+:html:`<samp>SET <var>device</var> LOG=<var>n</var>=<var>filename</var></samp>`  Log output of line |n| to :html:`<samp><var>filename</var></samp>`
+:html:`<samp>SET <var>device</var> NOLOG</samp>`                                 Disable logging and close log file
+===============================================================================  ==================================================================
 
 .. |DC|     replace:: :html:`<samp>DC</samp>`
 .. |DC10|   replace:: :html:`<samp>DC10</samp>`
 .. |DC10E|  replace:: :html:`<samp>DC10E</samp>`
 .. |DEC10E| replace:: :html:`<samp>DEC10E</samp>`
+.. |*DC*|   replace:: :html:`<samp><b>DC</b></samp>`
 .. _DC:
+.. _*DC*:
 .. _DC10:
 .. _DC10E:
 .. _DC10E terminal controller:
@@ -987,13 +1048,15 @@ For modem control,
 there was a second port for each line.
 These could be offset by any number of groups.
 
-=====================================================  ==============================================================
-:html:`<samp><b>SET DC LINES=</b><var>n</var></samp>`  Set the number of lines on the |DC10|, multiple of 8
-:html:`<samp><b>SET DC MODEM=</b><var>n</var></samp>`  Set the start of where the modem control |DEC10E| lines begins
-=====================================================  ==============================================================
+==============================================  ==============================================================
+:html:`<samp>SET DC LINES=<var>n</var></samp>`  Set the number of lines on the |DC10|, multiple of 8
+:html:`<samp>SET DC MODEM=<var>n</var></samp>`  Set the start of where the modem control |DEC10E| lines begins
+==============================================  ==============================================================
 
-.. |TK| replace:: :html:`<samp>TK</samp>`
+.. |TK|   replace:: :html:`<samp>TK</samp>`
+.. |*TK*| replace:: :html:`<samp><b>TK</b></samp>`
 .. _TK:
+.. _*TK*:
 .. _TK Knight kludge, TTY scanner:
 .. _device 0600:
 
@@ -1004,8 +1067,10 @@ It's specific to the MIT AI lab and Dynamic Modeling PDP-10s.
 By default,
 this device is disabled.
 
-.. |MTY| replace:: :html:`<samp>MTY</samp>`
+.. |MTY|   replace:: :html:`<samp>MTY</samp>`
+.. |*MTY*| replace:: :html:`<samp><b>MTY</b></samp>`
 .. _MTY:
+.. _*MTY*:
 .. _MTY Morton terminal multiplexer:
 .. _device 400:
 
@@ -1016,8 +1081,10 @@ It's specific to the MIT Mathlab and Dynamic Modeling PDP-10s.
 By default,
 this device is disabled.
 
-.. |DPK| replace:: :html:`<samp>DPK</samp>`
+.. |DPK|   replace:: :html:`<samp>DPK</samp>`
+.. |*DPK*| replace:: :html:`<samp><b>DPK</b></samp>`
 .. _DPK:
+.. _*DPK*:
 .. _device 604:
 
 |DPK| DK-10 Datapoint kludge (device 604)
@@ -1031,8 +1098,10 @@ and is disabled by default.
 Network devices
 ---------------
 
-.. |IMP| replace:: :html:`<samp>IMP</samp>`
+.. |IMP|   replace:: :html:`<samp>IMP</samp>`
+.. |*IMP*| replace:: :html:`<samp><b>IMP</b></samp>`
 .. _IMP:
+.. _*IMP*:
 .. _IMP interface message processor:
 .. _device 460:
 
@@ -1054,28 +1123,28 @@ If DHCP is enabled,
 the |IMP| will issue a DHCP request at startup and set IP to the address that is provided.
 DHCP is enabled by default.
 
-======================================================================================================  ===========================================================================
-:html:`<samp><b>SET IMP MAC=</b><var>xx:xx:xx:xx:xx:xx</var></samp>`                                    Set the MAC address of the |IMP| to the value given
-:html:`<samp><b>SET IMP IP=</b><var>ddd.ddd.ddd.ddd/dd</var></samp>`                                    Set the external IP address of the |IMP| along with the net mask in bits
-:html:`<samp><b>SET IMP GW=</b><var>ddd.ddd.ddd.ddd</var></samp>`                                       Set the gateway address for the |IMP|
-:html:`<samp><b>SET IMP HOST=</b><var>ddd.ddd.ddd.ddd</var></samp>`                                     Set the IP address of the PDP-10 system
-:html:`<samp><b>SET IMP DHCP</b></samp>`                                                                Allow the |IMP| to acquire an IP address from the local network via DHCP
-                                                                                                        Only HOST must be set if this feature is used
-:html:`<samp><b>SET IMP NODHCP</b></samp>`                                                              Disable the |IMP| from making DHCP queries
-:html:`<samp><b>SET IMP ARP=</b><var>ddd.ddd.ddd.ddd</var><b>=</b><var>xx:xx:xx:xx:xx:xx</var></samp>`  Create a static ARP entry for the IP address with the indicated MAC address
-:html:`<samp><b>SET IMP MIT</b></samp>`                                                                 Set the |IMP| to look like the |IMP| used by MIT for ITS
-:html:`<samp><b>SET IMP MPX=</b><var>#</var></samp>`                                                    For ITS, set the |MPX| interrupt to channel |#|
-:html:`<samp><b>SET IMP BBN</b></samp>`                                                                 Set the |IMP| to behave like generic BBN |IMP| (Not implemented yet)
-:html:`<samp><b>SET IMP WAITS</b></samp>`                                                               Set the |IMP| for Stanford style |IMP| for WAITS
-:html:`<samp><b>SHOW IMP ARP</b></samp>`                                                                Display the IP address to MAC address table
-======================================================================================================  ===========================================================================
+========================================================================================  ===========================================================================
+:html:`<samp>SET IMP MAC=<var>xx:xx:xx:xx:xx:xx</var></samp>`                             Set the MAC address of the |IMP| to the value given
+:html:`<samp>SET IMP IP=<var>ddd.ddd.ddd.ddd/dd</var></samp>`                             Set the external IP address of the |IMP| along with the net mask in bits
+:html:`<samp>SET IMP GW=<var>ddd.ddd.ddd.ddd</var></samp>`                                Set the gateway address for the |IMP|
+:html:`<samp>SET IMP HOST=<var>ddd.ddd.ddd.ddd</var></samp>`                              Set the IP address of the PDP-10 system
+:html:`<samp>SET IMP DHCP</samp>`                                                         Allow the |IMP| to acquire an IP address from the local network via DHCP
+                                                                                          Only HOST must be set if this feature is used
+:html:`<samp>SET IMP NODHCP</samp>`                                                       Disable the |IMP| from making DHCP queries
+:html:`<samp>SET IMP ARP=<var>ddd.ddd.ddd.ddd</var>=<var>xx:xx:xx:xx:xx:xx</var></samp>`  Create a static ARP entry for the IP address with the indicated MAC address
+:html:`<samp>SET IMP MIT</samp>`                                                          Set the |IMP| to look like the |IMP| used by MIT for ITS
+:html:`<samp>SET IMP MPX=<var>#</var></samp>`                                             For ITS, set the |MPX| interrupt to channel |#|
+:html:`<samp>SET IMP BBN</samp>`                                                          Set the |IMP| to behave like generic BBN |IMP| (Not implemented yet)
+:html:`<samp>SET IMP WAITS</samp>`                                                        Set the |IMP| for Stanford style |IMP| for WAITS
+:html:`<samp>SHOW IMP ARP</samp>`                                                         Display the IP address to MAC address table
+========================================================================================  ===========================================================================
 
 .. |0readme_ethernet.txt| replace:: ``0readme_ethernet.txt``
 .. _0readme_ethernet.txt: ../0readme_ethernet.txt
 
 The |IMP| device must be attached to an available Ethernet interface.
 To determine which devices are available,
-use the :html:`<samp><b>SHOW ETHERNET</b></samp>` command to list the potential interfaces.
+use the :html:`<samp>SHOW ETHERNET</samp>` command to list the potential interfaces.
 Check out the |0readme_ethernet.txt|_ file from the top of the source directory.
 
 The |IMP| device can be configured in several ways.
@@ -1095,12 +1164,12 @@ see the |0readme_ethernet.txt|_ file as to options.
 With the |IMP| interface,
 the IP address of the simulated system is static,
 and under ITS is configured into the system at compile time.
-This address should be given to the |IMP| with the :html:`<samp><b>SET IMP HOST=</b><var>ip</var></samp>` command,
+This address should be given to the |IMP| with the :html:`<samp>SET IMP HOST=<var>ip</var></samp>` command,
 the |IMP| will direct all traffic it sees to this address.
 If this address is not the same as the address of the system as seen by the network,
-then this address can be set with :html:`<samp><b>SET IMP IP=</b><var>ip</var></samp>`,
-and :html:`<samp><b>SET IMP GW=</b><var>ip</var></samp>`,
-or :html:`<samp><b>SET IMP DHCP</b></samp>`,
+then this address can be set with :html:`<samp>SET IMP IP=<var>ip</var></samp>`,
+and :html:`<samp>SET IMP GW=<var>ip</var></samp>`,
+or :html:`<samp>SET IMP DHCP</samp>`,
 which will allow the |IMP| to request an address from a local DHCP server.
 The |IMP| will translate the packets it receives/sends to look like the appeared from the desired address.
 The |IMP| will also correctly translate FTP requests in this configuration.
@@ -1112,8 +1181,10 @@ with the default |IMP| at ``10.0.2.15``.
 For this mode,
 DHCP can be used.
 
-.. |CH| replace:: :html:`<samp>CH</samp>`
 .. _CH:
+.. _*CH*:
+.. |CH|   replace:: :html:`<samp>CH</samp>`
+.. |*CH*| replace:: :html:`<samp><b>CH</b></samp>`
 .. _CH Chaosnet interface:
 .. _device 470:
 
@@ -1127,10 +1198,10 @@ peer to talk to,
 and your local UDP listening port.
 All UDP packets are sent to the peer for further processing.
 
-=======================================================================  ====================================
-:html:`<samp><b>SET CH NODE=</b><var>n</var></samp>`                     Set the Node number for this system
-:html:`<samp><b>SET CH PEER=</b><var>ddd.ddd.ddd.ddd:dddd</var></samp>`  Set the Peer address and port number
-=======================================================================  ====================================
+================================================================  ====================================
+:html:`<samp>SET CH NODE=<var>n</var></samp>`                     Set the Node number for this system
+:html:`<samp>SET CH PEER=<var>ddd.ddd.ddd.ddd:dddd</var></samp>`  Set the Peer address and port number
+================================================================  ====================================
 
 The |CH| device must be attached to a UDP port number.
 This is where it will receive UDP packets from its peer.
@@ -1143,8 +1214,10 @@ Early versions of TOPS10 could also run with these devices.
 By default,
 these devices are disabled.
 
-.. |DCT| replace:: :html:`<samp>DCT</samp>`
+.. |DCT|   replace:: :html:`<samp>DCT</samp>`
+.. |*DCT*| replace:: :html:`<samp><b>DCT</b></samp>`
 .. _DCT:
+.. _*DCT*:
 .. _DCT type 136 data control:
 
 |DCT| type 136 data control (Device 200/204)
@@ -1155,8 +1228,10 @@ Devices which use the |DCT| include a |DCT| option with takes two octal digits,
 the first is the |DCT| device 0 or 1,
 the second is the channel 1 to 7.
 
-.. |DTC| replace:: :html:`<samp>DTC</samp>`
+.. |DTC|   replace:: :html:`<samp>DTC</samp>`
+.. |*DTC*| replace:: :html:`<samp><b>DTC</b></samp>`
 .. _DTC:
+.. _*DTC*:
 .. _DTC type 551 DECtape controller:
 .. _device 210:
 
@@ -1166,22 +1241,24 @@ This was the standard DECtape controller for the PDP-6.
 This controller loads the tape into memory and uses the buffered version.
 You need to specify which DCT unit and channel the tape is connected to.
 
-=====================================================  ==============================================
-:html:`<samp><b>SET DTC DCT=</b><var>uc</var></samp>`  Set the DTC to connect to DCT unit and channel
-=====================================================  ==============================================
+==============================================  ==============================================
+:html:`<samp>SET DTC DCT=<var>uc</var></samp>`  Set the DTC to connect to DCT unit and channel
+==============================================  ==============================================
 
-Each individual tape drive support several options: 
+Each individual tape drive support several options:
 
-==================================================================  ================================================
-:html:`<samp><b>SET DTC</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
-:html:`<samp><b>SET DTC</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
-:html:`<samp><b>SET DTC</b><var>n</var> <b>18b</b></samp>`          Default, tapes are considered to be 18-bit tapes
-:html:`<samp><b>SET DTC</b><var>n</var> <b>16b</b></samp>`          Tapes are converted from 16-bit to 18-bit
-:html:`<samp><b>SET DTC</b><var>n</var> <b>12b</b></samp>`          Tapes are converted from 12-bit to 18-bit
-==================================================================  ================================================
+====================================================  ================================================
+:html:`<samp>SET DTC<var>n</var> LOCKED</samp>`       Set the mag tape to be read-only
+:html:`<samp>SET DTC<var>n</var> WRITEENABLE</samp>`  Set the mag tape to be writable
+:html:`<samp>SET DTC<var>n</var> 18b</samp>`          Default, tapes are considered to be 18-bit tapes
+:html:`<samp>SET DTC<var>n</var> 16b</samp>`          Tapes are converted from 16-bit to 18-bit
+:html:`<samp>SET DTC<var>n</var> 12b</samp>`          Tapes are converted from 12-bit to 18-bit
+====================================================  ================================================
 
-.. |MTC| replace:: :html:`<samp>MTC</samp>`
+.. |MTC|   replace:: :html:`<samp>MTC</samp>`
+.. |*MTC*| replace:: :html:`<samp><b>MTC</b></samp>`
 .. _MTC:
+.. _*MTC*:
 .. _MTC type 516 magtape controller:
 .. _device 220:
 
@@ -1192,21 +1269,23 @@ This device handled only 7-track tapes.
 The simulator has the option to automatically translate 8-track tapes into 7-track tapes.
 You need to specify which DCT unit and channel the tape is connected to.
 
-=====================================================  ===============================================
-:html:`<samp><b>SET MTC DCT=</b><var>uc</var></samp>`  Sets the MTC to connect to DCT unit and channel
-=====================================================  ===============================================
+==============================================  ===============================================
+:html:`<samp>SET MTC DCT=<var>uc</var></samp>`  Sets the MTC to connect to DCT unit and channel
+==============================================  ===============================================
 
 Each individual tape drive supports several options:
 
-==================================================================  =======================================================
-:html:`<samp><b>SET MTC</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET MTC</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-:html:`<samp><b>SET MTC</b><var>n</var> <b>9T</b></samp>`           Set this unit to simulated 9-track format
-:html:`<samp><b>SET MTC</b><var>n</var> <b>7T</b></samp>`           Set this unit to read/write 7-track tapes (with parity)
-==================================================================  =======================================================
+====================================================  =======================================================
+:html:`<samp>SET MTC<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET MTC<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+:html:`<samp>SET MTC<var>n</var> 9T</samp>`           Set this unit to simulated 9-track format
+:html:`<samp>SET MTC<var>n</var> 7T</samp>`           Set this unit to read/write 7-track tapes (with parity)
+====================================================  =======================================================
 
-.. |DSK| replace:: :html:`<samp>DSK</samp>`
+.. |DSK|   replace:: :html:`<samp>DSK</samp>`
+.. |*DSK*| replace:: :html:`<samp><b>DSK</b></samp>`
 .. _DSK:
+.. _*DSK*:
 .. _DSK type 270 disk controller:
 .. _device 270:
 
@@ -1216,19 +1295,21 @@ The 270 disk could support up to 4 units.
 The controller had to be connected to a type 136 data controller.
 You need to specify which DCT unit and channel the disk is connected to.
 
-=====================================================  ==============================================
-:html:`<samp><b>SET DSK DCT=</b><var>uc</var></samp>`  Set the DSK to connect to DCT unit and channel
-=====================================================  ==============================================
+==============================================  ==============================================
+:html:`<samp>SET DSK DCT=<var>uc</var></samp>`  Set the DSK to connect to DCT unit and channel
+==============================================  ==============================================
 
 Each individual disk drive support several options:
 
-==================================================================  =============================
-:html:`<samp><b>SET DSK</b><var>n</var> <b>LOCKED</b></samp>`       Set this unit to be read-only
-:html:`<samp><b>SET DSK</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set this unit to be writable
-==================================================================  =============================
+====================================================  =============================
+:html:`<samp>SET DSK<var>n</var> LOCKED</samp>`       Set this unit to be read-only
+:html:`<samp>SET DSK<var>n</var> WRITEENABLE</samp>`  Set this unit to be writable
+====================================================  =============================
 
-.. |DCS| replace:: :html:`<samp>DCS</samp>`
+.. |DCS|   replace:: :html:`<samp>DCS</samp>`
+.. |*DCS*| replace:: :html:`<samp><b>DCS</b></samp>`
 .. _DCS:
+.. _*DCS*:
 .. _DCS type 630 terminal multiplexer:
 .. _device 300:
 
@@ -1238,8 +1319,8 @@ See section on terminal multiplexers on generic setup.
 
 Symbolic display and input
 ==========================
-.. |EXAMINE| replace:: :html:`<samp><b>EXAMINE</b></samp>`
-.. |DEPOSIT| replace:: :html:`<samp><b>DEPOSIT</b></samp>`
+.. |EXAMINE| replace:: :html:`<samp>EXAMINE</samp>`
+.. |DEPOSIT| replace:: :html:`<samp>DEPOSIT</samp>`
 
 The KA10 simulator implements symbolic display and input.
 These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
@@ -1311,12 +1392,12 @@ OS specific configurations
 TOPS10
 ------
 The default configuration supports Tops10,
-so there is no extra configuration required. 
+so there is no extra configuration required.
 
 ITS
 ---
 To run ITS,
-the CPU must be :html:`<samp><b>SET CPU ITS MPX 1024K</b></samp>`;
+the CPU must be :html:`<samp>SET CPU ITS MPX 1024K</samp>`;
 this will enable the ITS pager,
 special instructions,
 and the interrupt multiplexer.
@@ -1334,7 +1415,7 @@ WAITS
 -----
 WAITS has two configurations,
 one uses the default two relocation registers.
-This can be done with :html:`<samp><b>SET CPU WAITS MAOFF</b></samp>`;
+This can be done with :html:`<samp>SET CPU WAITS MAOFF</samp>`;
 the |PMP|_ disk is the only supported disk.
 WAITS used some PDP-6 devices
 (|DTC|_, |MTC|_, |DCS|_, |DTC|_).
@@ -1344,8 +1425,8 @@ and the |MTC| should be configured to ``dct=01``.
 After 1975,
 Stanford added a BBN pager unit to their KA,
 to run later versions of WAITS,
-:html:`<samp><b>set cpu waits maoff bbn 512k</b></samp>`.
-The :html:`<samp><b>waits</b></samp>` flag enables the FIX and XCTR instructions for waits.
-:html:`<samp><b>maoff</b></samp>` moves the trap vectors to the 0140.
+:html:`<samp>set cpu waits maoff bbn 512k</samp>`.
+The :html:`<samp>waits</samp>` flag enables the FIX and XCTR instructions for waits.
+:html:`<samp>maoff</samp>` moves the trap vectors to the 0140.
 For systems numbers over 49,
 BBN pager needs to also be enabled on the CPU.
