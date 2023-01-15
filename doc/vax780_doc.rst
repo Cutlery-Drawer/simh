@@ -1300,7 +1300,7 @@ Options allow control of the MAC address, the controller mode, and the sanity ti
     SHOW XU MAC
 
 These commands are used to change or display the MAC address.
-``<mac-address>`` is a valid ethernet MAC, delimited by dashes or periods.
+``<mac-address>`` is a valid Ethernet MAC, delimited by dashes or periods.
 The controller defaults to ``08-00-2B-CC-DD-EE``,
 which should be sufficient if there is only one SIMH controller on your LAN.
 Two cards with the same MAC address will see each other's packets,

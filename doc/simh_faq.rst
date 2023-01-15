@@ -645,7 +645,7 @@ Other host OS's will look similar but will have different filename syntax. ::
     sim> attach -r rq1 vax\hobbyist.dsk  ; attach cdrom dump file as read-only
     sim> set rq2 offline                 ; turn off disk rq2
     sim> set rq3 offline                 ; turn off disk rq3
-    sim> attach xq eth0                  ; attach to host ethernet controller
+    sim> attach xq eth0                  ; attach to host Ethernet controller
     sim> b cpu                           ; start (boot) VAX console
 
     KA655-B V5.3, VMB 2.7

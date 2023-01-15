@@ -167,7 +167,7 @@ you must define ``USE_INT64`` as part of the compilation command-line.
 |              +-------------------+------------------------------------------------+
 |              | ``kx10_lights.c`` | Front panel interface                          |
 |              +-------------------+------------------------------------------------+
-|              | ``kx10_imp.c``    | IMP10 interface to ethernet                    |
+|              | ``kx10_imp.c``    | IMP10 interface to Ethernet                    |
 |              +-------------------+------------------------------------------------+
 |              | ``ka10_ch10.c``   | Chaosnet 10 interface                          |
 |              +-------------------+------------------------------------------------+
@@ -1147,7 +1147,7 @@ use the :html:`<samp><b>SHOW ETHERNET</b></samp>` command to list the potential
 Check out the |0readme_ethernet.txt|_ file from the top of the source directory.
 
 The |IMP| device can be configured in several ways.
-Ether it can connect directly to an ethernet port (via TAP),
+Ether it can connect directly to an Ethernet port (via TAP),
 or it can be connected via a TUN interface.
 If configured via TAP interface,
 the |IMP| will behave like any other Ethernet interface,
