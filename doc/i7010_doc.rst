@@ -1,0 +1,721 @@
+.. -*- coding: utf-8; mode: rst; tab-width: 4; truncate-lines: t; indent-tabs-mode: nil; truncate-lines: t; -*- vim:set et ts=4 ft=rst nowrap:
+
+.. role:: html(raw)
+   :format: html
+
+.. |ATTACH| replace:: :html:`<samp><b>ATTACH</b></samp>`
+.. |BOOT|   replace:: :html:`<samp><b>BOOT</b></samp>`
+.. |SET|    replace:: :html:`<samp><b>SET</b></samp>`
+.. |SHOW|   replace:: :html:`<samp><b>SHOW</b></samp>`
+.. |esc|    replace:: :html:`<kbd>esc</kbd>`
+.. |c|      replace:: :html:`<samp><var>c</var></samp>`
+.. |n|      replace:: :html:`<samp><var>n</var></samp>`
+.. |`|      replace:: :literal:`\``
+
+************************
+IBM 7010 simulator usage
+************************
+:Date: 2018-07-25
+:Revision: $Format:%H$
+:Copyright: See `LICENSE.txt <../LICENSE.txt>`_ for terms of use.
+
+.. topic:: **Copyright notice**
+
+   The following copyright notice applies to the SIMH source, binary, and documentation:
+
+   .. include:: ../LICENSE.txt
+
+.. sectnum:: :suffix: .
+.. contents::
+   :backlinks: none
+   :depth: 3
+   :local:
+
+Introduction
+============
+The IBM 1410 and 7010 were designed as enhancements to the IBM 1401;
+these were somewhat source-compatible,
+but not binary-compatible.
+The 1410 was introduced on September 12, 1960,
+and the 7010 in 1962.
+The 1410 was withdrawn on March 30th, 1970.
+The 7010 featured 4 I/O channels where the 1410 had 2.
+Also, the 7010 could access 100,000 characters of memory,
+as opposed to the 80,000 for the 1410.
+The 7010 also featured optional decimal floating-point instructions.
+Memory was divided into fields separated by a special flag called a *word mark*.
+Instructions end at the first character with the word mark set.
+They consist of a operation code,
+followed by 1 or 2 5-digit addresses,
+and an optional instruction modifier.
+If the 10's and 100's digit have zone bits set,
+the address is modified by the contents of the five characters at locations 25–100.
+Each register is 5 characters long and word marks are ignored.
+The 1410 and 7010 could also be optionally equipped with priority mode to allow for device complete interrupts.
+
+The 7010 or 1410 CPU has no registers.
+All operations on done from memory.
+
+Simulator files
+===============
+To compile the IBM 7010:
+
++--------------+-------------------+-----------------------------------------+
+| Subdirectory | File              | Contains                                |
++==============+===================+=========================================+
+| ``I7000/``   | ``i7000_defs.h``  | IBM 7000 simulators general definitions |
+|              +-------------------+-----------------------------------------+
+|              | ``i7010_defs.h``  | IBM 7010 simulator specific definitions |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_chan.c``  | Generic channel interface               |
+|              +-------------------+-----------------------------------------+
+|              | ``i7010_cpu.c``   | 7010 CPU, channel, interface            |
+|              +-------------------+-----------------------------------------+
+|              | ``I7010_chan.c``  | 7010 channel                            |
+|              +-------------------+-----------------------------------------+
+|              | ``i7010_sys.c``   | 7010 system interface                   |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_cdr.c``   | 1402 card reader                        |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_cdp.c``   | 1402 card punch                         |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_com.c``   | 7750 communications controller          |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_con.c``   | Inquiry console                         |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_dsk.c``   | 1301/2302 disk and 7238 drum controller |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_ht.c``    | 7340 hypertape controller               |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_lpr.c``   | 1403 line printer                       |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_mt.c``    | 729 tape controller                     |
+|              +-------------------+-----------------------------------------+
+|              | ``i7000_chron.c`` | ChronoClock                             |
++--------------+-------------------+-----------------------------------------+
+
+IBM 7010 features
+=================
+The IBM 7010 simulator is configured as follows:
+
+==================  =========================================
+Device name(s)      Simulates
+==================  =========================================
+|CPU|_              7010 CPU with 10-60K of memory
+|CH1|_\ ..\ |CH4|_  7010 channels
+|MTA|_              729 magnetic tape controller (channel 20)
+|MTB|_              729 magnetic tape controller (channel 21)
+|MTC|_              729 magnetic tape controller (channel 22)
+|CHRON|_            ChronoClock
+|CDR|_              1402 card reader
+|CDP|_              1402 card punch
+|STKR|_             1402 card punch stacker
+|LP|_               1403 line printer
+|DK|_               1301/2302/7304 disk
+|COM|_              7750 communications controller
+|COML|_             7750 communications lines
+==================  =========================================
+
+The 7010 simulator implements several unique stop conditions:
+
+* I/O device not ready
+* Unknown CPU instruction
+* I/O check
+* Divide error
+* No word mark
+* Invalid addresses
+* Invalid instruction length
+* Program check
+* Protection check
+* Invalid message to 7750
+* No buffer storage available for input character on 7750
+* No buffer storage available for output character on 7750
+
+.. |CPU| replace:: :html:`<samp>CPU</samp>`
+
+|CPU|
+-----
+The |CPU| options include setting memory size and CPU type.
+
+==============================================  ====================
+:html:`<samp><b>SET CPU 1401</b></samp>`        Emulate a 1401
+:html:`<samp><b>SET CPU 7010</b></samp>`        Emulate a 7010
+:html:`<samp><b>SET CPU 10K</b></samp>`         Set memory to 10K
+:html:`<samp><b>SET CPU 20K</b></samp>`         Set memory to 20K
+:html:`<samp><b>SET CPU 30K</b></samp>`         Set memory to 30K
+:html:`<samp><b>SET CPU 40K</b></samp>`         Set memory to 40K
+:html:`<samp><b>SET CPU 50K</b></samp>`         Set memory to 50K
+:html:`<samp><b>SET CPU 60K</b></samp>`         Set memory to 60K
+:html:`<samp><b>SET CPU 70K</b></samp>`         Set memory to 70K
+:html:`<samp><b>SET CPU 80K</b></samp>`         Set memory to 80K
+:html:`<samp><b>SET CPU 90K</b></samp>`         Set memory to 90K
+:html:`<samp><b>SET CPU 100K</b></samp>`        Set memory to 100K
+:html:`<samp><b>SET CPU NOPRIORITY</b></samp>`  No priority mode
+:html:`<samp><b>SET CPU PRIORITY</b></samp>`    Priority mode
+:html:`<samp><b>SET CPU NOFLOAT</b></samp>`     No floating-point
+:html:`<samp><b>SET CPU FLOAT</b></samp>`       Floating-point
+:html:`<samp><b>SET CPU NOPROT</b></samp>`      No memory protection
+:html:`<samp><b>SET CPU PROT</b></samp>`        Memory protection
+==============================================  ====================
+
+Memory size is 10KW on a standard CPU,
+extended option must be enabled to use memory sizes over 10KW.
+
+CPU registers include the visible state of the processor as well as the control registers for the interrupt system.
+
+.. |IAR|     replace:: :html:`<samp class="register">IAR</samp>`
+.. |AAR|     replace:: :html:`<samp class="register">AAR</samp>`
+.. |BAR|     replace:: :html:`<samp class="register">BAR</samp>`
+.. |CAR|     replace:: :html:`<samp class="register">CAR</samp>`
+.. |DAR|     replace:: :html:`<samp class="register">DAR</samp>`
+.. |E|       replace:: :html:`<samp class="register">E</samp>`
+.. |F|       replace:: :html:`<samp class="register">F</samp>`
+.. |G|       replace:: :html:`<samp class="register">G</samp>`
+.. |H|       replace:: :html:`<samp class="register">H</samp>`
+.. |ASTRISK| replace:: :html:`<samp class="register">ASTRISK</samp>`
+.. |SW0|     replace:: :html:`<samp class="register">SW0</samp>`
+.. |SW6|     replace:: :html:`<samp class="register">SW6</samp>`
+.. |SW|      replace:: :html:`<samp class="register">SW</samp>`
+
+================  =============  ============================
+Name              Size (digits)  Comments
+================  =============  ============================
+|IAR|             5              Instruction address register
+|AAR|             5              A address register
+|BAR|             5              B address register
+|CAR|             5              C address register
+|DAR|             5              D address register
+|E|               5              Channel 0 address register
+|F|               5              Channel 1 address register
+|G|               5              Channel 2 address register
+|H|               5              Channel 3 address register
+|ASTRISK|         1              Asterix mode
+|SW0|\ ..\ |SW6|  1              Sense switch
+|SW|              6              Sense switches
+================  =============  ============================
+
+The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the :html:`<samp><b>SET CPU HISTORY</b></samp>` and :html:`<samp><b>SHOW CPU HISTORY</b></samp>` commands:
+
+=========================================================  ======================================
+:html:`<samp><b>SET CPU HISTORY</b></samp>`                Clear history buffer
+:html:`<samp><b>SET CPU HISTORY=0</b></samp>`              Disable history
+:html:`<samp><b>SET CPU HISTORY=</b><var>n</var></samp>`   Enable history, length = |n|
+:html:`<samp><b>SHOW CPU HISTORY</b></samp>`               Print CPU history
+:html:`<samp><b>SHOW CPU HISTORY=</b><var>n</var></samp>`  Print first |n| entries of CPU history
+=========================================================  ======================================
+
+The history trace shows the instruction counter,
+the |AAR| and |BAR| before and after the instruction executed.
+The result of the instruction is displayed followed by the symbolic instruction.
+
+.. |CH1| replace:: :html:`<samp>CH1</samp>`
+.. |CH4| replace:: :html:`<samp>CH4</samp>`
+.. _CH1:
+.. _CH4:
+.. _I/O channels:
+
+I/O channels (|CH1|\ ..\ |CH4|)
+-------------------------------
+The 7010 supported 4 channels.
+
+========================================================  ===========================================
+:html:`<samp><b>SET CHAN UREC=</b><var>dev</var></samp>`  Set device to cause interrupts on a channel
+========================================================  ===========================================
+
+Channels have the following registers:
+
+.. |ADDR|  replace:: :html:`<samp class="register">ADDR</samp>`
+.. |CMD|   replace:: :html:`<samp class="register">CMD</samp>`
+.. |FLAGS| replace:: :html:`<samp class="register">FLAGS</samp>`
+
+=======  =============  ====================
+Name     Size (digits)  Comments
+=======  =============  ====================
+|ADDR|   5              Channel data address
+|CMD|    1              Channel command
+|FLAGS|  32 (binary)    Channel flags
+=======  =============  ====================
+
+For the meaning of bits in |FLAGS|,
+see ``i7000_defs.h``.
+
+Unit record devices
+-------------------
+.. |INQ| replace:: :html:`<samp>INQ</samp>`
+.. _INQ:
+.. _Inquiry station:
+
+Inquiry station (|INQ|)
+"""""""""""""""""""""""
+The inquiry station allows for communications with the operating system.
+The station is half-duplex and will either print or accept input.
+Whenever the computer sends a message,
+it is prefixed with an ``R`` character.
+When the station is ready to receive input,
+it prompts with an ``I``.
+Input is buffered until the return character is entered.
+:html:`<kbd>Backspace</kbd>` will remove the last character typed.
+An |esc| will send an interrupt to the processor to request it read a record from the console.
+An |esc| while in input mode will cancel input mode and clear any typed message.
+
+.. |CDR| replace:: :html:`<samp>CDR</samp>`
+.. _CDR:
+.. _1402 card reader:
+
+1402 card reader (|CDR|)
+""""""""""""""""""""""""
+The card reader (|CDR|) reads data from a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card reader files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a |SET| command:
+
+====================================================================  =================================
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=TEXT</b></samp>`    Set ASCII text mode
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=BINARY</b></samp>`  Set for binary card images
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=BCD</b></samp>`     Set for BCD records
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=CBN</b></samp>`     Set for column binary BCD records
+:html:`<samp><b>SET CDR</b><var>n</var> <b>FORMAT=AUTO</b></samp>`    Automatically determine format
+====================================================================  =================================
+
+or in the |ATTACH| command:
+
+==============================================================================================  ===================================================================
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <var>file</var></samp>`                              Attach a file
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-s</b> <var>file</var></samp>`                    Add file onto current cards to read
+:html:`<samp><b>ATTACH CDR</b><var>n</var> <b>-e</b> <var>file</var></samp>`                    After file is read in, the reader will receive and end-of-file flag
+==============================================================================================  ===================================================================
+
+The channel can be changed by the following command:
+
+========================================================================  ==============================
+:html:`<samp><b>SET CDR</b><var>n</var> <b>CHAN=</b><var>c</var></samp>`  Set this device to channel |c|
+========================================================================  ==============================
+
+The default assignments are:
+
+=========================  =========
+:html:`<samp>CDR0</samp>`  Channel 1
+:html:`<samp>CDR1</samp>`  Disabled
+=========================  =========
+
+The card reader can be booted with the following command:
+
+================================================  =================================
+:html:`<samp><b>BOOT CDR</b><var>n</var></samp>`  | Read first card into address 1.
+                                                  | Start execution at location 1.
+================================================  =================================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+End of file   Out of cards
+OS I/O error  Report error and stop
+============  =====================
+
+.. |CDP| replace:: :html:`<samp>CDP</samp>`
+.. _CDP:
+.. _1402 card punch:
+
+1402 card punch (|CDP|)
+"""""""""""""""""""""""
+The card reader (|CDP|) writes data to a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card punch files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a |SET| command:
+
+====================================================================  =================================
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=TEXT</b></samp>`    Set ASCII text mode
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=BINARY</b></samp>`  Set for binary card images
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=BCD</b></samp>`     Set for BCD records
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=CBN</b></samp>`     Set for column binary BCD records
+:html:`<samp><b>SET CDP</b><var>n</var> <b>FORMAT=AUTO</b></samp>`    Automatically determine format
+====================================================================  =================================
+
+or in the |ATTACH| command:
+
+==============================================================================================  ===================================
+:html:`<samp><b>ATTACH CDP</b><var>n</var> <var>file</var></samp>`                              Attach a file
+:html:`<samp><b>ATTACH CDP</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp>`  Attach a file with the given format
+==============================================================================================  ===================================
+
+The channel can be changed by the following command:
+
+========================================================================  ==============================
+:html:`<samp><b>SET CDP</b><var>n</var> <b>CHAN=</b><var>c</var></samp>`  Set this device to channel |c|
+========================================================================  ==============================
+
+The default assignments are:
+
+=========================  =========
+:html:`<samp>CDP0</samp>`  Channel 1
+:html:`<samp>CDP1</samp>`  Disabled
+=========================  =========
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. |STKR| replace:: :html:`<samp>STKR</samp>`
+.. _STKR:
+.. _Stack device:
+
+Stack device (|STKR|)
+"""""""""""""""""""""
+The stacker device can be enabled,
+and files can be attached to individual bins of the stacker.
+The file format follows that of the |CDP|_ device.
+The individual unit reflects the stacker code sent by the computer.
+If no file is attached,
+the output will go to the file attached to the |CDP|_ device. 
+
+.. |LP| replace:: :html:`<samp>LP</samp>`
+.. _LP:
+.. _1403 line printer:
+
+1403 line printer (|LP|)
+""""""""""""""""""""""""
+The line printer (|LP|) writes data to a disk file as ASCII text with terminating newlines.
+Currently set to handle standard signals to control paper advance.
+
+=================================================================================  =============================================
+:html:`<samp><b>SET LP</b><var>n</var> <b>NO</b>/<b>ECHO</b></samp>`               Set echoing to console of line-printer output
+:html:`<samp><b>SET LP</b><var>n</var> <b>CHAN=</b><var>n</var></samp>`            Set channel for this device
+:html:`<samp><b>SET LP</b><var>n</var> <b>LINESPERPAGE=</b><var>lpp</var></samp>`  Set number of lines per page on printer
+=================================================================================  =============================================
+
+The default assignments are:
+
+========================  =========
+:html:`<samp>LP0</samp>`  Channel 1
+:html:`<samp>LP1</samp>`  Disabled
+========================  =========
+
+If the printer supports the following control codes to control spacing.
+
+=================  =======================================
+Character (octal)  Action
+=================  =======================================
+060                Suppress spacing
+020                Single space after
+040                Single space before
+063                Skip to channel 3 (every 5th line)
+062                Skip to channel 2 (every 8th line)
+061 & 069          Skip to channel 1 (or 9), (top of form)
+=================  =======================================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+Magnetic tape devices
+---------------------
+.. |MTA|   replace:: :html:`<samp>MTA</samp>`
+.. |MTB|   replace:: :html:`<samp>MTB</samp>`
+.. |MTC|   replace:: :html:`<samp>MTC</samp>`
+.. |MTA-C| replace:: :html:`<samp>MTA-C</samp>`
+.. _MTA:
+.. _MTB:
+.. _MTC:
+.. _MTA-C:
+.. _729 magnetic tape:
+
+729 magnetic tape (|MTA-C|)
+"""""""""""""""""""""""""""
+These come in groups of 10 units each.
+
+Each individual tape drive support several options:
+|MTA| used as an example.
+
+==================================================================  ==================================
+:html:`<samp><b>SET MTA</b><var>n</var> <b>REWIND</b></samp>`       Set the mag tape to the load point
+:html:`<samp><b>SET MTA</b><var>n</var> <b>LOCKED</b></samp>`       Set the mag tape to be read-only
+:html:`<samp><b>SET MTA</b><var>n</var> <b>WRITEENABLE</b></samp>`  Set the mag tape to be writable
+:html:`<samp><b>SET MTA</b><var>n</var> <b>LOW</b></samp>`          Set mag tape to low density
+:html:`<samp><b>SET MTA</b><var>n</var> <b>HIGH</b></samp>`         Set mag tape to high density
+==================================================================  ==================================
+
+Options: Density :html:`<samp>LOW</samp>`\ /\ :html:`<samp>HIGH</samp>` is only for informational purposes,
+and it does not change the format of how tapes are written.
+
+Tape drives can be booted with:
+
+================================================  ==============================
+:html:`<samp><b>BOOT MT</b><var>xn</var></samp>`  Read in record into location 0
+================================================  ==============================
+
+.. |CHRON| replace:: :html:`<samp>CHRON</samp>`
+.. _CHRON:
+
+ChronoClock
+"""""""""""
+Disabled by default.
+This is a special 729 tape drive which returns the current time.
+It supports the option of setting the channel and drive that it will occupy.
+Note: You must disable the real 729 drive that is is replacing.
+The clock responds to Read and Backspace commands.
+A read results in a 10-character buffer being generated that has the month, day, hour, minutes, seconds and milliseconds.
+This time is taken from the local computer time.
+
+=======================================================  =================================
+:html:`<samp><b>SET CHRON CHAN=</b><var>n</var></samp>`  Set channel for chrono clock
+:html:`<samp><b>SET CHRON UNIT=</b><var>n</var></samp>`  Set the unit for the chrono clock
+=======================================================  =================================
+
+Example: To set Chronoclock to unit A9,
+do the following::
+
+    SET MTA9 DISABLE
+    SET CHRON UNIT=9 CHAN=1
+
+7909 devices
+------------
+These devices must be attached to a 7909 channel to work.
+
+.. |DK| replace:: :html:`<samp>DK</samp>`
+.. _DK:
+
+1301/1302/2302/7320 disk devices
+""""""""""""""""""""""""""""""""
+The 7631 file control supports up to ten devices,
+which can be 7320 drums,
+1301 disks,
+1302 disks,
+or 2302 disks.
+Unit types are specified with the |SET| command.
+
+=================================================================  =======================================
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=7320</b></samp>`    Unit |n| is a drum
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=7320-2</b></samp>`  Unit |n| is a drum (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1301</b></samp>`    Unit |n| is a 1301 disk
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=130l-2</b></samp>`  Unit |n| is a 1301-2 disk (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1302</b></samp>`    Unit |n| is a 1302 disk
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=1302-2</b></samp>`  Unit |n| is a 1302-2 disk (two modules)
+:html:`<samp><b>SET DK</b><var>n</var> <b>TYPE=2302</b></samp>`    Unit |n| is a 2302 disk
+=================================================================  =======================================
+
+Units can be :html:`<samp><b>SET ENABLED</b></samp>` or :html:`<samp><b>DISABLED</b></samp>`.
+In addition,
+units can be set to enable or disable formatting:
+
+=========================================================================  ====================================================
+:html:`<samp><b>SET DK</b><var>n</var> <b>FORMAT</b></samp>`               Enable formatting
+:html:`<samp><b>SET DK</b><var>n</var> <b>NOFORMAT</b></samp>`             Disable formatting
+:html:`<samp><b>SET DK</b><var>n</var> <b>HA2</b></samp>`                  Enable writing of home address 2
+:html:`<samp><b>SET DK</b><var>n</var> <b>NOHA2</b></samp>`                Disable writing of home address 2
+:html:`<samp><b>SET DK</b><var>n</var> <b>MODULE=</b><var>n</var></samp>`  Set modules for unit; modules can only be even (0–8)
+:html:`<samp><b>SET DK</b><var>n</var> <b>CHAN=</b><var>n</var></samp>`    Set channel for unit (A-H)
+:html:`<samp><b>SET DK</b><var>n</var> <b>SELECT=</b><var>n</var></samp>`  Set select on channel (0 or 1)
+:html:`<samp><b>SET DK</b><var>n</var> <b>CTSS</b></samp>`                 Set disk to use CTSS bootstrap
+:html:`<samp><b>SET DK</b><var>n</var> <b>IBSYS</b></samp>`                Set disk to use IBSYS bootstrap
+=========================================================================  ====================================================
+
+Formatting is disabled by default.
+
+All disk units support bootstrapping with |BOOT| command.
+Bootstrap code is build based on whether CPU is in CTSS mode or not.
+
+===============================================  ================================================
+:html:`<samp><b>BOOT DK</b><var>n</var></samp>`  Insert custom loader into lower memory and start
+===============================================  ================================================
+
+Error handling is as follows:
+
+============  =====================
+Error         Processed as
+============  =====================
+Not attached  Report error and stop
+OS I/O error  Report error and stop
+============  =====================
+
+.. |COM|  replace:: :html:`<samp>COM</samp>`
+.. |COML| replace:: :html:`<samp>COML</samp>`
+.. _COM:
+.. _COML:
+.. _7750 communications controller:
+
+7750 communications controller (|COM| and |COML|)
+"""""""""""""""""""""""""""""""""""""""""""""""""
+The 7750 is modeled as a terminal multiplexer with 33 lines.
+It consists of two devices:
+|COM| is the multiplexer controller,
+and |COML| is the individual lines.
+For the first 32 lines,
+the 7750 performs input and output through Telnet sessions connected via a user-specified listening port;
+the 33rd line is permanently attached to the simulator console window.
+The |ATTACH| command specifies the port to be used for Telnet sessions:
+
+======================================================  =====================
+:html:`<samp><b>ATTACH COM</b> <var>port</var></samp>`  Set up listening port
+======================================================  =====================
+
+... where :html:`<samp><var>port</var></samp>` is a decimal number between 1 and 65535 that is not being used by other TCP/IP activities.
+
+Each line
+(each unit of |COML|)
+can be set to one of two modes:
+KSR-35 and KSR-37.
+In KSR-35 mode,
+lowercase input and output characters are converted automatically to uppercase,
+and parity is ignored.
+In KSR-37 mode,
+lowercase characters are left alone,
+and even parity is generated on input.
+KSR-37 is the default.
+
+Once |COM| is attached and the simulator is running,
+the 7750 listens for connections on the specified port.
+It assumes that any incoming connection is a Telnet connection.
+The connections remain open until disconnected either by the Telnet client,
+a :html:`<samp><b>SET COM DISCONNECT</b></samp>` command,
+or a :html:`<samp><b>DETACH COM</b></samp>` command.
+
+===========================================================  ================================
+:html:`<samp><b>SET COM DISCONNECT=</b><var>n</var></samp>`  Disconnect line |n|
+:html:`<samp><b>SET COM CHAN=</b><var>n</var></samp>`        Set channel for |COM| controller
+===========================================================  ================================
+
+The 7750 implements the following special |SHOW| commands:
+
+================================================  =========================================
+:html:`<samp><b>SHOW COM CONNECTIONS</b></samp>`  Display current connections to the 7750
+:html:`<samp><b>SHOW COM STATISTICS</b></samp>`   Display statistics for active connections
+================================================  =========================================
+
+The 7750 implements the following special |SET| commands:
+
+.. |filename| replace:: :html:`<samp><var>filename</var></samp>`
+
+===============================================================================  ====================================
+:html:`<samp><b>SET COML</b><var>n</var> <b>LOG=</b><var>filename</var></samp>`  Log output of line |n| to |filename|
+:html:`<samp><b>SET COML</b><var>n</var> <b>NOLOG</b></samp>`                    Disable logging and close log file
+:html:`<samp><b>SET COML</b><var>n</var> <b>KSR35</b></samp>`                    Set line |n| to ksr-35
+:html:`<samp><b>SET COML</b><var>n</var> <b>KSR37</b></samp>`                    Set line |n| to ksr-37
+:html:`<samp><b>SET COML</b><var>n</var> <b>2741</b></samp>`                     Set line |n| to 2741
+===============================================================================  ====================================
+
+The controller (|COM|) implements these registers:
+
+.. |ENABLE| replace:: :html:`<samp class="register">ENABLE</samp>`
+.. |STATE|  replace:: :html:`<samp class="register">STATE</samp>`
+.. |MSGNUM| replace:: :html:`<samp class="register">MSGNUM</samp>`
+
+========  ====  =============================
+Name      Size  Comments
+========  ====  =============================
+|ENABLE|  1     Enable flag
+|STATE|   6     Controller state
+|MSGNUM|  12    Input message sequence number
+========  ====  =============================
+
+Symbolic display and input
+==========================
+The IBM 7010 simulator implements symbolic display and input.
+These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
+
+.. |EXAMINE| replace:: :html:`<samp><b>EXAMINE</b></samp>`
+.. |DEPOSIT| replace:: :html:`<samp><b>DEPOSIT</b></samp>`
+
+======  ===================================
+``-m``  Display/enter symbolic machine code
+``-c``  Display/enter BCD characters
+``-n``  Display 1401 symbolic machine code
+\       Display/enter octal characters
+======  ===================================
+
+The symbolic input/display supports several formats for instruction display:
+
+* :html:`<samp><var>opcode</var></samp>`
+* :html:`<samp><var>opcode</var> <var>character</var></samp>`
+* :html:`<samp><var>opcode</var> <var>character</var><var>character</var><var>character</var></samp>`
+* :html:`<samp><var>opcode</var> <var>address</var></samp>`
+* :html:`<samp><var>opcode</var> <var>address</var>,<var>address</var></samp>`
+* :html:`<samp><var>opcode</var> <var>address</var>,<var>character</var></samp>`
+* :html:`<samp><var>opcode</var> <var>address</var>,<var>address</var>,<var>character</var></samp>`
+
+An address is a decimal number optionally followed by a :html:`<samp>+X<var>nn</var></samp>` specifying an index register.
+
+Character codes
+===============
+==========  ==========  ===============  ===  ======  ============
+Commercial  Scientific  ASCII            BCD  Card    Remark
+==========  ==========  ===============  ===  ======  ============
+\                                        00           Blank
+``1``                   ``0``            01   1
+``2``                   ``0``            02   2
+``3``                   ``0``            03   3
+``4``                   ``0``            04   4
+``5``                   ``0``            05   5
+``6``                   ``0``            06   6
+``7``                   ``0``            07   7
+``8``                   ``0``            10   8
+``9``                   ``0``            11   9
+``0``                   ``0``            12   10
+``#``       ``=``       ``=``            13   3–8
+``@``       ``'``       ``'``\ /\ ``@``  14   4–8
+``:``                   ``:``            15   5–8
+``>``                   ``>``            16   6–8
+``√``                   ``"``            17   7–8     Tape mark
+``ƀ``                   ``_``            20   2–8
+``/``                   ``/``            21   10–1
+``S``                   ``S``            22   10–1
+``T``                   ``T``            23   10–2
+``U``                   ``U``            24   10–3
+``V``                   ``V``            25   10–4
+``W``                   ``W``            26   10–5
+``X``                   ``X``            27   10–6
+``Y``                   ``Y``            30   10–7
+``Z``                   ``Z``            31   10–8
+``#``                   ``#``            32   10–2–8  Word mark
+``,``                   ``,``            33   10–3–8
+``%``       ``(``       ``%``\ /\ ``(``  34   10–4–8
+|`|                     |`|              35   10–5–8
+``\``                   ``\``            36   10–6–8
+``⧻``                   ``{``            37   10–7–8  Segment mark
+``-``                   ``-``            40   11      Also −0
+``J``                   ``J``            41   11–1
+``K``                   ``K``            42   11–2
+``L``                   ``L``            43   11–3
+``M``                   ``M``            44   11–4
+``N``                   ``N``            45   11–5
+``O``                   ``O``            46   11–6
+``P``                   ``P``            47   11–7
+``Q``                   ``Q``            50   11–8
+``R``                   ``R``            51   11–9
+``!``                   ``!``            52   11–2–8
+``$``                   ``$``            53   11–3–8
+``*``                   ``*``            54   11–4–8
+``]``                   ``]``            55   11–5–8
+``;``                   ``;``            56   11–6–8
+``△``                   ``^``            57   11–7–8
+``&``       ``+``       ``&``\ /\ ``+``  60   12      Also +0
+``A``                   ``A``            61   12–1
+``B``                   ``B``            62   12–2
+``C``                   ``C``            63   12–3
+``D``                   ``D``            64   12–4
+``E``                   ``E``            65   12–5
+``F``                   ``F``            66   12–6
+``G``                   ``G``            67   12–7
+``H``                   ``H``            70   12–8
+``I``                   ``I``            71   12–9
+``?``                   ``?``            72   12–2–8
+``.``                   ``.``            73   12–3–8
+``⌑``       ``)``       ``)``            74   12–4–8  Lozenge
+``[``                   ``[``            75   12–5–8
+``<``                   ``<``            76   12–3–8
+``⧻*``                  ``|``            77   12–7–8  Group mark
+==========  ==========  ===============  ===  ======  ============
