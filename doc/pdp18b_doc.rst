@@ -241,11 +241,14 @@ The ``LOAD`` command supports three different file formats:
 
 The load file format can be specified by switches:
 
-======  ===========================
-``-R``  Hardware read-in RIM format
-``-S``  Second stage RIM format
-``-B``  Binary loader format
-======  ===========================
+.. table::
+   :class: switches
+
+   ======  ===========================
+   ``-R``  Hardware read-in RIM format
+   ``-S``  Second stage RIM format
+   ``-B``  Binary loader format
+   ======  ===========================
 
 If no switch is specified,
 the load file format is determined from the file extension.
@@ -1082,11 +1085,14 @@ The Type 550, |TC02|, and |TC15| support PDP-8 format, PDP-11 format, and 18b fo
 ``ATTACH`` assumes the image is in 18b format;
 the user can force other choices with switches:
 
-======  =============================
-``-t``  PDP-8 format
-``-s``  PDP-11 format
-``-a``  Autoselect based on file size
-======  =============================
+.. table::
+   :class: switches
+
+   ======  =============================
+   ``-t``  PDP-8 format
+   ``-s``  PDP-11 format
+   ``-a``  Autoselect based on file size
+   ======  =============================
 
 The DECtape controller is a data-only simulator;
 the timing and mark track,
@@ -1219,52 +1225,70 @@ Symbolic display and input
 The 18b PDP simulators implement symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ================================================
-``-a``  Display as ASCII character
-``-b``  Display as three DECsys Baudot packed characters
-``-c``  Display as three SIXBIT packed characters
-``-f``  Display as three FIODEC packed character
-``-m``  Display instruction mnemonics
-======  ================================================
+.. table::
+   :class: switches
+
+   ======  ================================================
+   ``-a``  Display as ASCII character
+   ``-b``  Display as three DECsys Baudot packed characters
+   ``-c``  Display as three SIXBIT packed characters
+   ``-f``  Display as three FIODEC packed character
+   ``-m``  Display instruction mnemonics
+   ======  ================================================
 
 The PDP-7 and PDP-9 recognize one additional switch:
 
-======  =================================================
-``-u``  Display as Unix v0 ASCII
-        (two 7b ASCII characters in 9b bytes, big-endian)
-======  =================================================
+.. table::
+   :class: switches
+
+   ======  =================================================
+   ``-u``  Display as Unix v0 ASCII
+           (two 7b ASCII characters in 9b bytes, big-endian)
+   ======  =================================================
 
 The PDP-15 recognizes two additional switches:
 
-======  =====================================================
-``-u``  Display as PDP11 ASCII
-        (two 7b ASCII characters in 8b bytes, little-endian);
-        16b devices only
-``-p``  Display as packed ASCII
-        (five 7b ASCII characters in two 18b words)
-======  =====================================================
+.. table::
+   :class: switches
+
+   ======  =====================================================
+   ``-u``  Display as PDP11 ASCII
+           (two 7b ASCII characters in 8b bytes, little-endian);
+           16b devices only
+   ``-p``  Display as packed ASCII
+           (five 7b ASCII characters in two 18b words)
+   ======  =====================================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ==============================
-``'`` or ``-a``  ASCII character
-``"`` or ``-c``  Three packed SIXBIT characters
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ==============================
+.. table::
+   :class: switches
+
+   ===============  ==============================
+   ``'`` or ``-a``  ASCII character
+   ``"`` or ``-c``  Three packed SIXBIT characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ==============================
 
 The PDP-7 and PDP-9 recognize one additional input mode:
 
-======  ===================================================
-``-u``  Unix v0 ASCII (two 7b ASCII characters in 9b bytes)
-======  ===================================================
+.. table::
+   :class: switches
+
+   ======  ===================================================
+   ``-u``  Unix v0 ASCII (two 7b ASCII characters in 9b bytes)
+   ======  ===================================================
 
 The PDP-15 also recognizes an additional input mode:
 
-======  =====================================================
-``-p``  Five character packed ASCII string in two 18b words
-``-u``  PDP11 ASCII (two 7b ASCII in 8b bytes, little-endian)
-======  =====================================================
+.. table::
+   :class: switches
+
+   ======  =====================================================
+   ``-p``  Five character packed ASCII string in two 18b words
+   ``-u``  PDP11 ASCII (two 7b ASCII in 8b bytes, little-endian)
+   ======  =====================================================
 
 Instruction input uses standard 18b PDP assembler syntax.
 There are eight instruction classes:

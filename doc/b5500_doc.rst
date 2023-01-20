@@ -583,12 +583,15 @@ Symbolic display and input
 The B5500 simulator implements symbolic display and input.
 These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
 
-======  ======================================
-``-c``  Display/enter character mode syllables
-``-w``  Display/enter word mode syllables
-``-b``  Display/enter character data
-\       Display/enter octal data
-======  ======================================
+.. table::
+   :class: switches
+
+   ======  ======================================
+   ``-c``  Display/enter character mode syllables
+   ``-w``  Display/enter word mode syllables
+   ``-b``  Display/enter character data
+   \       Display/enter octal data
+   ======  ======================================
 
 The symbolic input/display supports 4 formats for instruction display:
 

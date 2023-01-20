@@ -1435,25 +1435,31 @@ Symbolic display and input
 The PDP-10 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  =========================================
-``-a``  Display as ASCII character
-``-c``  Display as 6 sixbit packed characters
-``-p``  Display as 5 packed ASCII (7b) characters
-``-m``  Display instruction mnemonics
-``-v``  Interpret address as virtual
-``-e``  Force executive mode
-``-u``  Force user mode
-======  =========================================
+.. table::
+   :class: switches
+
+   ======  =========================================
+   ``-a``  Display as ASCII character
+   ``-c``  Display as 6 sixbit packed characters
+   ``-p``  Display as 5 packed ASCII (7b) characters
+   ``-m``  Display instruction mnemonics
+   ``-v``  Interpret address as virtual
+   ``-e``  Force executive mode
+   ``-u``  Force user mode
+   ======  =========================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ==============================
-``'`` or ``-a``  ASCII character
-``"`` or ``-c``  6 sixbit packed characters
-``#`` or ``-p``  5 packed ASCII (7b) characters
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ==============================
+.. table::
+   :class: switches
+
+   ===============  ==============================
+   ``'`` or ``-a``  ASCII character
+   ``"`` or ``-c``  6 sixbit packed characters
+   ``#`` or ``-p``  5 packed ASCII (7b) characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ==============================
 
 Instruction input uses standard PDP-10 assembler syntax.
 There are three instruction classes:

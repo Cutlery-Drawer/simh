@@ -2663,13 +2663,16 @@ The number of words in the ``val`` array is given by the global variable |sim_em
 The interpretation of switch values is arbitrary (except in the cases noted below),
 but the following are provided by existing VMs in their |fprint_sym| implementations:
 
-======  ====================
-Switch  Interpretation
-======  ====================
-``-a``  Single character
-``-c``  Character string
-``-m``  Instruction mnemonic
-======  ====================
+.. table::
+   :class: switches
+
+   ======  ====================
+   Switch  Interpretation
+   ======  ====================
+   ``-a``  Single character
+   ``-c``  Character string
+   ``-m``  Instruction mnemonic
+   ======  ====================
 
 In addition,
 on input,

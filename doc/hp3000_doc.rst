@@ -292,14 +292,17 @@ The data default may be changed with the :html:`<samp><b>SET CPU</b> { <b>BIN
 or the radix may be overridden temporarily with a command-line switch,
 as follows:
 
-=================  ===================
-Switch             Interpretation
-=================  ===================
-``-2``             A binary value
-``-8`` or ``-O``   An octal value
-``-10`` or ``-D``  A decimal value
-``-16`` or ``-H``  A hexadecimal value
-=================  ===================
+.. table::
+   :class: switches
+
+   =================  ===================
+   Switch             Interpretation
+   =================  ===================
+   ``-2``             A binary value
+   ``-8`` or ``-O``   An octal value
+   ``-10`` or ``-D``  A decimal value
+   ``-16`` or ``-H``  A hexadecimal value
+   =================  ===================
 
 When examining or depositing into device registers,
 the default radix for the specified register is used unless overridden with one of the above command-line switches.
@@ -311,17 +314,20 @@ When examining or depositing into memory or certain registers,
 command-line switches specifying the symbolic mode and format may be used to override the default numeric mode,
 as follows:
 
-=======  =========================================================================
-Switch   Mode interpretation
-=======  =========================================================================
-``-A``   A single character in the right-hand byte
-``-C``   A two-character packed string
-``-E``   An |EDIT| subprogram operation mnemonic
-``-ER``  An |EDIT| subprogram operation mnemonic starting with the right-hand byte
-``-I``   An I/O program instruction mnemonic
-``-M``   A CPU instruction mnemonic
-``-T``   A CPU status mnemonic
-=======  =========================================================================
+.. table::
+   :class: switches
+
+   =======  =========================================================================
+   Switch   Mode interpretation
+   =======  =========================================================================
+   ``-A``   A single character in the right-hand byte
+   ``-C``   A two-character packed string
+   ``-E``   An |EDIT| subprogram operation mnemonic
+   ``-ER``  An |EDIT| subprogram operation mnemonic starting with the right-hand byte
+   ``-I``   An I/O program instruction mnemonic
+   ``-M``   A CPU instruction mnemonic
+   ``-T``   A CPU status mnemonic
+   =======  =========================================================================
 
 In the absence of a mode switch or a specified symbolic default,
 entering values with a leading ``'`` (apostrophe) implies ``-A``,
@@ -346,15 +352,18 @@ If it is not,
 it is displayed as a numeric value in the CPU's data radix.
 Any numeric operands present are displayed in a default radix unless overridden by the addition of one of these mutually exclusive format switches:
 
-======  =========================================
-Switch  Format interpretation
-======  =========================================
-``-A``  A single character in the right-hand byte
-``-B``  A binary value
-``-O``  An octal value
-``-D``  A decimal value
-``-H``  A hexadecimal value
-======  =========================================
+.. table::
+   :class: switches
+
+   ======  =========================================
+   Switch  Format interpretation
+   ======  =========================================
+   ``-A``  A single character in the right-hand byte
+   ``-B``  A binary value
+   ``-O``  An octal value
+   ``-D``  A decimal value
+   ``-H``  A hexadecimal value
+   ======  =========================================
 
 Numeric operands are displayed in a radix suitable to the type of the value.
 For CPU instruction operands:
@@ -441,12 +450,15 @@ The CPU simulator supports two forms of memory addresses:
 
 Command-line switches modify the interpretation of relative addresses as follows:
 
-======  ================================================
-Switch  Interpretation
-======  ================================================
-``-P``  The implied bank number is obtained from |PBANK|
-``-S``  The implied bank number is obtained from |SBANK|
-======  ================================================
+.. table::
+   :class: switches
+
+   ======  ================================================
+   Switch  Interpretation
+   ======  ================================================
+   ``-P``  The implied bank number is obtained from |PBANK|
+   ``-S``  The implied bank number is obtained from |SBANK|
+   ======  ================================================
 
 If no switch is specified,
 the implied bank number is obtained from |DBANK|.

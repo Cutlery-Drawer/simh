@@ -325,11 +325,14 @@ Symbolic display and input
 The IBM 701 simulator implements symbolic display and input.
 These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
 
-======  ===================================
-``-m``  Display/enter symbolic machine code
-``-c``  Display/enter BCD characters
-\       Display/enter octal data
-======  ===================================
+.. table::
+   :class: switches
+
+   ======  ===================================
+   ``-m``  Display/enter symbolic machine code
+   ``-c``  Display/enter BCD characters
+   \       Display/enter octal data
+   ======  ===================================
 
 The symbolic input/display supports one format for instruction display::
 

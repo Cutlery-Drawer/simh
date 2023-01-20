@@ -168,13 +168,16 @@ the input address can be run through memory relocation::
 ``BA``, ``HA``, ``WA``, ``DA`` specify that the input address is a byte, halfword, word, or doubleword address, respectively.
 The flags are:
 
-======  ================================
-``-v``  Input address is virtual
-``-b``  Output is byte address
-``-h``  Output is halfword address
-``-w``  Output is word address (default)
-``-d``  Output is doubleword address
-======  ================================
+.. table::
+   :class: switches
+
+   ======  ================================
+   ``-v``  Input address is virtual
+   ``-b``  Output is byte address
+   ``-h``  Output is halfword address
+   ``-w``  Output is word address (default)
+   ``-d``  Output is doubleword address
+   ======  ================================
 
 For example::
 
@@ -827,28 +830,34 @@ Symbolic display and input
 The Sigma 32b simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-=======  ====================================================
-``-a``   Display as ASCII character (byte addressing)
-``-b``   Display as byte (byte addressing)
-``-e``   Display at EBCDIC character (byte addressing)
-``-h``   Display as halfword (halfword addressing)
-``-ca``  Display as four ASCII characters (word addressing)
-``-ce``  Display as four EBCDIC characters (word addressing)
-``-m``   Display instruction mnemonics (word addressing)
-=======  ====================================================
+.. table::
+   :class: switches
+
+   =======  ====================================================
+   ``-a``   Display as ASCII character (byte addressing)
+   ``-b``   Display as byte (byte addressing)
+   ``-e``   Display at EBCDIC character (byte addressing)
+   ``-h``   Display as halfword (halfword addressing)
+   ``-ca``  Display as four ASCII characters (word addressing)
+   ``-ce``  Display as four EBCDIC characters (word addressing)
+   ``-m``   Display instruction mnemonics (word addressing)
+   =======  ====================================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-================  ===============================================
-``#`` or ``-a``   ASCII character (byte addressing)
-``'`` or ``-e``   EBCDIC character (byte addressing)
--b                hexadecimal byte (byte addressing)
--h                hexadecimal halfword (halfword addressing)
-``"`` or ``-ac``  Four packed ASCII characters (word addressing)
-``-ae``           Four packed EBCDIC characters (word addressing)
-Alphabetic        Instruction mnemonic (word addressing)
-Numeric           Hexadecimal word (word addressing)
-================  ===============================================
+.. table::
+   :class: switches
+
+   ================  ===============================================
+   ``#`` or ``-a``   ASCII character (byte addressing)
+   ``'`` or ``-e``   EBCDIC character (byte addressing)
+   ``-b``            Hexadecimal byte (byte addressing)
+   ``-h``            Hexadecimal halfword (halfword addressing)
+   ``"`` or ``-ac``  Four packed ASCII characters (word addressing)
+   ``-ae``           Four packed EBCDIC characters (word addressing)
+   Alphabetic        Instruction mnemonic (word addressing)
+   Numeric           Hexadecimal word (word addressing)
+   ================  ===============================================
 
 Instruction input uses (more or less) standard XDS Sigma assembler syntax.
 All instructions are variants on the same basic form::

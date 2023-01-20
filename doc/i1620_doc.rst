@@ -676,21 +676,27 @@ Symbolic display and input
 The IBM 1620 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ===============================================================================
-``-c``  Display as single character (alphanumeric for |CPU|_ and |DP|_, ASCII for others)
-``-s``  Display as alphanumeric string (|CPU|_ and |DP|_ only)
-``-m``  Display instruction mnemonics (|CPU|_ and |DP|_ only)
-``-d``  Display 50 characters per line, with flags denoted by ``_`` on the line above
-======  ===============================================================================
+.. table::
+   :class: switches
+
+   ======  ===============================================================================
+   ``-c``  Display as single character (alphanumeric for |CPU|_ and |DP|_, ASCII for others)
+   ``-s``  Display as alphanumeric string (|CPU|_ and |DP|_ only)
+   ``-m``  Display instruction mnemonics (|CPU|_ and |DP|_ only)
+   ``-d``  Display 50 characters per line, with flags denoted by ``_`` on the line above
+   ======  ===============================================================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ===============================================================
-``'`` or ``-c``  Character (alphanumeric for |CPU|_ and |DP|_, ASCII for others)
-``"`` or ``-s``  Alphanumeric string (|CPU|_ and |DP|_ only)
-Alphabetic       Instruction mnemonic (|CPU|_ and |DP|_ only)
-Numeric          Octal number
-===============  ===============================================================
+.. table::
+   :class: switches
+
+   ===============  ===============================================================
+   ``'`` or ``-c``  Character (alphanumeric for |CPU|_ and |DP|_, ASCII for others)
+   ``"`` or ``-s``  Alphanumeric string (|CPU|_ and |DP|_ only)
+   Alphabetic       Instruction mnemonic (|CPU|_ and |DP|_ only)
+   Numeric          Octal number
+   ===============  ===============================================================
 
 Instruction input is free format and consists of an opcode and up to three operands::
 

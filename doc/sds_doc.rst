@@ -157,12 +157,15 @@ The ``SET CPU HISTORY`` command accepts one switch value to optionally suppress 
 The SDS 940 simulator implements four types of execution breakpoints,
 controlled by command-line switches:
 
-======  ===============================================================
-``-e``  Break if ``P`` equals address, unqualified by machine mode
-``-m``  Break if ``P`` equals address, machine in monitor mode
-``-n``  Break if ``P`` equals address, machine in normal (SDS 930) mode
-``-u``  Break if ``P`` equals address, machine in user mode
-======  ===============================================================
+.. table::
+   :class: switches
+
+   ======  ===============================================================
+   ``-e``  Break if ``P`` equals address, unqualified by machine mode
+   ``-m``  Break if ``P`` equals address, machine in monitor mode
+   ``-n``  Break if ``P`` equals address, machine in normal (SDS 930) mode
+   ``-u``  Break if ``P`` equals address, machine in user mode
+   ======  ===============================================================
 
 Breakpoint commands default to ``-e`` behavior if no switch is specified.
 
@@ -812,20 +815,26 @@ Symbolic display and input
 The SDS 940 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ==============================================
-``-a``  Display as three SDS internal ASCII characters
-``-c``  Display as four packed SDS 6b characters
-``-m``  Display instruction mnemonics
-======  ==============================================
+.. table::
+   :class: switches
+
+   ======  ==============================================
+   ``-a``  Display as three SDS internal ASCII characters
+   ``-c``  Display as four packed SDS 6b characters
+   ``-m``  Display instruction mnemonics
+   ======  ==============================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ==========================================
-``'`` or ``-a``  Three packed SDS internal ASCII characters
-``"`` or ``-c``  Four packed SDS 6b characters
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ==========================================
+.. table::
+   :class: switches
+
+   ===============  ==========================================
+   ``'`` or ``-a``  Three packed SDS internal ASCII characters
+   ``"`` or ``-c``  Four packed SDS 6b characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ==========================================
 
 Instruction input uses (more or less) standard SDS 940 assembler syntax.
 There are ten instruction classes:
@@ -856,12 +865,15 @@ with 2 indicating indexing.
 In addition,
 all display and input commands may specify how the address is mapped to main memory via a command-line switch:
 
-======  ====================================================
-``-n``  Normal, address is an absolute physical address
-``-x``  Monitor, map address through the monitor memory map
-``-u``  User, map address through the user memory map
-``-v``  Current, map address through the monitor or user map
-        depending upon current machine mode
-======  ====================================================
+.. table::
+   :class: switches
+
+   ======  ====================================================
+   ``-n``  Normal, address is an absolute physical address
+   ``-x``  Monitor, map address through the monitor memory map
+   ``-u``  User, map address through the user memory map
+   ``-v``  Current, map address through the monitor or user map
+           depending upon current machine mode
+   ======  ====================================================
 
 Memory mapping defaults to ``-n`` behavior if no switch is specified.

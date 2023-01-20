@@ -559,23 +559,29 @@ Symbolic display and input
 The IBM 1401 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ========================================================================
-``-c``  Display as single character (BCD for |CPU|_ and |MT|_, ASCII for others)
-``-s``  Display as wordmark terminated BCD string (|CPU|_ only)
-``-m``  Display instruction mnemonics (|CPU|_ only)
-``-d``  Display 50 characters per line,
-        with word marks denoted by "1" on the line below
-======  ========================================================================
+.. table::
+   :class: switches
+
+   ======  ========================================================================
+   ``-c``  Display as single character (BCD for |CPU|_ and |MT|_, ASCII for others)
+   ``-s``  Display as wordmark terminated BCD string (|CPU|_ only)
+   ``-m``  Display instruction mnemonics (|CPU|_ only)
+   ``-d``  Display 50 characters per line,
+           with word marks denoted by "1" on the line below
+   ======  ========================================================================
 
 In a |CPU|_ character display,
 word marks are denoted by |backtick|.
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-================================  =======================================================
-``'`` or ``"``, ``-c`` or ``-s``  Characters (BCD for |CPU|_ and |MT|_, ASCII for others)
-Alphabetic                        Instruction mnemonic
-Numeric                           Octal number
-================================  =======================================================
+.. table::
+   :class: switches
+
+   ================================  =======================================================
+   ``'`` or ``"``, ``-c`` or ``-s``  Characters (BCD for |CPU|_ and |MT|_, ASCII for others)
+   Alphabetic                        Instruction mnemonic
+   Numeric                           Octal number
+   ================================  =======================================================
 
 Instruction input is free format,
 with spaces separating fields.

@@ -630,12 +630,15 @@ These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| co
 .. |EXAMINE| replace:: :html:`<samp><b>EXAMINE</b></samp>`
 .. |DEPOSIT| replace:: :html:`<samp><b>DEPOSIT</b></samp>`
 
-======  ===================================
-``-m``  Display/enter symbolic machine code
-``-c``  Display/enter BCD characters
-``-n``  Display 1401 symbolic machine code
-\       Display/enter octal characters
-======  ===================================
+.. table::
+   :class: switches
+
+   ======  ===================================
+   ``-m``  Display/enter symbolic machine code
+   ``-c``  Display/enter BCD characters
+   ``-n``  Display 1401 symbolic machine code
+   \       Display/enter octal characters
+   ======  ===================================
 
 The symbolic input/display supports several formats for instruction display:
 

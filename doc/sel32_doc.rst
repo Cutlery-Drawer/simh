@@ -763,15 +763,18 @@ Symbolic display
 The SEL-32 simulator implements symbolic display and input when using the ``EXAMINE`` command.
 Display is controlled by command-line switches:
 
-======  ===============================================
-``-a``  Display as ASCII character (byte addressing)
-``-b``  Display as byte (byte addressing)
-``-o``  Display as octal value
-``-d``  Display as decimal
-``-h``  Display as hexadecimal
-``-m``  Display base register instruction mnemonics
-``-n``  Display non-base register instruction mnemonics
-======  ===============================================
+.. table::
+   :class: switches
+
+   ======  ===============================================
+   ``-a``  Display as ASCII character (byte addressing)
+   ``-b``  Display as byte (byte addressing)
+   ``-o``  Display as octal value
+   ``-d``  Display as decimal
+   ``-h``  Display as hexadecimal
+   ``-m``  Display base register instruction mnemonics
+   ``-n``  Display non-base register instruction mnemonics
+   ======  ===============================================
 
 Diagnostics for SEL-32 simulator
 ================================

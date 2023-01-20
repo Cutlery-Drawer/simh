@@ -870,12 +870,15 @@ Symbolic display and input
 The IBM 7090 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ===================================
-``-c``  Display/enter as BCD character
-``-m``  Display/enter instruction mnemonics
-``-l``  Display as Lisp pointer
-\       Display/enter as octal number
-======  ===================================
+.. table::
+   :class: switches
+
+   ======  ===================================
+   ``-c``  Display/enter as BCD character
+   ``-m``  Display/enter instruction mnemonics
+   ``-l``  Display as Lisp pointer
+   \       Display/enter as octal number
+   ======  ===================================
 
 Instruction input uses standard 7090 assembler syntax.
 There are two basic instruction classes:

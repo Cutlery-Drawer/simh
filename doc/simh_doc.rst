@@ -122,7 +122,7 @@ The simulators recognize or require a few compile-time ``#defines``:
   but it should work in any host environment that supports the Pcap library
   (see the Ethernet readme file).
 
-- The PDP-11 and VAX simulators support disks and sequential tape files greater than 2GB when the host OS is capable of manipulating files greater than 2GB.  
+- The PDP-11 and VAX simulators support disks and sequential tape files greater than 2GB when the host OS is capable of manipulating files greater than 2GB.
 
 - The HP2100 Fast FORTRAN Processor (FFP) and 1000-F CPU options require 64b integer support.
   Define ``HAVE_INT64`` (not ``USE_INT64``) as part of the compilation command-line if your host compiler supports 64b integers.
@@ -194,7 +194,7 @@ These components are available by downloading the file
 https://github.com/simh/windows-build/archive/windows-build.zip
 
 This zip file contains a file called ``README.md`` which explains how to locate the unpacked zip file contents to build simulators with Ethernet support.
-If your build environment has Git_, the build activity will automatically download the windows-build components the first time you build a simulator. 
+If your build environment has Git_, the build activity will automatically download the windows-build components the first time you build a simulator.
 
 In order for a simulator (built with Ethernet support) to provide working Ethernet functionality at run time,
 npcap WinPCAP must be installed on the system.
@@ -365,11 +365,14 @@ The |RESTORE| command (abbreviation |REST|, alternately |GET|) restores a previo
 
     restore {-d} {-f} {-q} <filename>
 
-======  =====================================================================
-``-d``  Avoid detaching and reattaching devices during a restore
-``-f``  Override the date timestamp check for attached files during a restore
-``-q``  Suppress warning messages about save file version information
-======  =====================================================================
+.. table::
+   :class: switches
+
+   ======  =====================================================================
+   ``-d``  Avoid detaching and reattaching devices during a restore
+   ``-f``  Override the date timestamp check for attached files during a restore
+   ``-q``  Suppress warning messages about save file version information
+   ======  =====================================================================
 
 Notes:
 
@@ -582,20 +585,26 @@ The "object list" consists of one or more of the following, separated by commas:
 
 Switches can be used to control the format of display information:
 
-=================  ======================
-``-o`` or ``-8``   Display as octal
-``-d`` or ``-10``  Display as decimal
-``-h`` or ``-16``  Display as hexadecimal
-``-2``             Display as binary
-=================  ======================
+.. table::
+   :class: switches
+
+   =================  ======================
+   ``-o`` or ``-8``   Display as octal
+   ``-d`` or ``-10``  Display as decimal
+   ``-h`` or ``-16``  Display as hexadecimal
+   ``-2``             Display as binary
+   =================  ======================
 
 Simulators typically provide these additional switches for address locations:
 
-======  ===============================
-``-a``  Display as ASCII
-``-c``  Display as character string
-``-m``  Display as instruction mnemonic
-======  ===============================
+.. table::
+   :class: switches
+
+   ======  ===============================
+   ``-a``  Display as ASCII
+   ``-c``  Display as character string
+   ``-m``  Display as instruction mnemonic
+   ======  ===============================
 
 |..| and accept symbolic input (see documentation with each simulator).
 
@@ -776,7 +785,7 @@ These simulator-detected conditions stop simulation:
 
 4.8.2 User-specified stop conditions
 """"""""""""""""""""""""""""""""""""
-Typing the interrupt character stops simulation. 
+Typing the interrupt character stops simulation.
 The interrupt character is defined by the ``WRU`` (where are you) console option and is initially set to ``005`` (``^E``).
 
 4.8.3 Breakpoints
@@ -880,7 +889,7 @@ The |EXPECT| command provides a way to define a rule which will stop execution a
 If it is not specified, the simulated system's console device is the default device.
 
 If a ``[count]`` is specified,
-the rule will match after the match string has matched *count* times. 
+the rule will match after the match string has matched *count* times.
 
 The string argument must be delimited by quote characters.
 Quotes may be either single or double but the opening and closing quote characters must match.
@@ -914,32 +923,35 @@ that action command should be enclosed in quotes so that the entire action comma
 """"""""""""""
 Switches can be used to influence the behavior of |EXPECT|_ rules.
 
-=======  ====================================================================================
-``-p``   Expect rules default to be one shot activities.
-         That is, a rule is automatically removed when a match occurs unless the rule is
-         designated as a persistent rule by using a ``-p`` switch when the rule is defined.
+.. table::
+   :class: switches
 
-``-c``   If an expect rule is defined with the ``-c`` switch,
-         it will cause all pending expect rules on the current device to be cleared when the
-         rule matches data in the device output stream.
+   =======  ====================================================================================
+   ``-p``   Expect rules default to be one shot activities.
+            That is, a rule is automatically removed when a match occurs unless the rule is
+            designated as a persistent rule by using a ``-p`` switch when the rule is defined.
 
-``-r``   If an expect rule is defined with the ``-r`` switch, the string is interpreted as a
-         regular expression applied to the output data stream.
-         This regular expression may contain parentheses delimited sub-groups.
+   ``-c``   If an expect rule is defined with the ``-c`` switch,
+            it will cause all pending expect rules on the current device to be cleared when the
+            rule matches data in the device output stream.
 
-         The syntax of the regular expressions available are those supported by the
-         Perl Compatible Regular Expression package (a.k.a, PCRE).
-         As the name implies, the syntax is generally the same as
-         `Perl regular expressions <https://perldoc.perl.org/perlre>`_.
+   ``-r``   If an expect rule is defined with the ``-r`` switch, the string is interpreted as a
+            regular expression applied to the output data stream.
+            This regular expression may contain parentheses delimited sub-groups.
 
-         If the PCRE package isn't available in the environment when a simulator is built,
-         the local system's regular expression package (if available) is used and the regular
-         expression syntax is limited to what may be provided there.
+            The syntax of the regular expressions available are those supported by the
+            Perl Compatible Regular Expression package (a.k.a, PCRE).
+            As the name implies, the syntax is generally the same as
+            `Perl regular expressions <https://perldoc.perl.org/perlre>`_.
 
-``-i``   If a regular expression expect rule is defined with the ``-i`` switch,
-         character matching for that expression will be case independent.
-         The ``-i`` switch is only valid for regular expression expect rules (``-r``).
-=======  ====================================================================================
+            If the PCRE package isn't available in the environment when a simulator is built,
+            the local system's regular expression package (if available) is used and the regular
+            expression syntax is limited to what may be provided there.
+
+   ``-i``   If a regular expression expect rule is defined with the ``-i`` switch,
+            character matching for that expression will be case independent.
+            The ``-i`` switch is only valid for regular expression expect rules (``-r``).
+   =======  ====================================================================================
 
 4.9.1.1 Escaping string data
 ''''''''''''''''''''''''''''
@@ -1122,7 +1134,7 @@ Other device and unit parameters are implementation-specific.
     SHOW CONFIGURATION      Shows the simulator configuration and
                             the status of all devices and units
     SHOW DEVICES            Shows the simulator configuration
-    SHOW FEATURES           Shows the simulator configuration with 
+    SHOW FEATURES           Shows the simulator configuration with
                             descriptions
     SHOW MODIFIERS          Shows all available modifiers
     SHOW NAMES              Show all logical names
@@ -1131,9 +1143,9 @@ Other device and unit parameters are implementation-specific.
     SHOW VERSION            Show the simulator version and options
     SHOW <device>           Shows the status of the named device
     SHOW <unit>             Shows the status of the named unit
-    SHOW THROTTLE           Shows the current throttling mode 
-    SHOW SHOW               Shows the show options for all devices 
-    SHOW ETHERNET           Shows the status/availability of host 
+    SHOW THROTTLE           Shows the current throttling mode
+    SHOW SHOW               Shows the show options for all devices
+    SHOW ETHERNET           Shows the status/availability of host
                             Ethernet devices
     SHOW SERIAL             Shows the status of host serial ports
     SHOW MULTIPLEXER        Shows the status of all multiplexer devices
@@ -1993,27 +2005,30 @@ Debug message output contains a timestamp which indicates the number of simulate
 
 Debug message output can be enhanced to contain additional, potentially useful information.
 
-======  ================================================================================================
-``-f``  Suppress the internal logic which coalesces successive identical debug output lines
-        into one followed by an indicator of how many times the same line was output.
-        This mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.
+.. table::
+   :class: switches
 
-``-t``  Cause debug output to contain a time-of-day displayed as ``hh:mm:ss.msec``.
+   ======  ================================================================================================
+   ``-f``  Suppress the internal logic which coalesces successive identical debug output lines
+           into one followed by an indicator of how many times the same line was output.
+           This mode is most appropriate when output is being displayed in real time to STDOUT or STDERR.
 
-``-a``  Cause debug output to contain a time of day displayed as ``seconds.msec``.
+   ``-t``  Cause debug output to contain a time-of-day displayed as ``hh:mm:ss.msec``.
 
-``-r``  Cause the time-of-day displayed due to the ``-t`` or ``-a`` switches to be relative
-        to the start time of debugging. If neither ``-t`` or ``-a`` is explicitly specified,
-        ``-t`` is implied.
+   ``-a``  Cause debug output to contain a time of day displayed as ``seconds.msec``.
 
-``-p``  Add the output of the PC (Program Counter) to each debug message.
+   ``-r``  Cause the time-of-day displayed due to the ``-t`` or ``-a`` switches to be relative
+           to the start time of debugging. If neither ``-t`` or ``-a`` is explicitly specified,
+           ``-t`` is implied.
 
-``-n``  Cause a new/empty file to be written to. The default is to append to an existing debug log file.
+   ``-p``  Add the output of the PC (Program Counter) to each debug message.
 
-``-d``  Cause data blob output to also display the data as RADIX-50 characters.
+   ``-n``  Cause a new/empty file to be written to. The default is to append to an existing debug log file.
 
-``-e``  Cause data blob output to also display the data as EBCDIC characters.
-======  ================================================================================================
+   ``-d``  Cause data blob output to also display the data as RADIX-50 characters.
+
+   ``-e``  Cause data blob output to also display the data as EBCDIC characters.
+   ======  ================================================================================================
 
 4.20.2 Device debug options
 """""""""""""""""""""""""""
@@ -2451,9 +2466,9 @@ Rev 2.4, Jan, 99
     - Placed all sources under X11-like open source license
     - Added DUMP command, revised sim_load interface
     - Added SHOW MODIFIERS command
-    - Revised magnetic tape format to include record error flag   
+    - Revised magnetic tape format to include record error flag
     - Fixed 64b problems in SCP
-    - Fixed big endian problem in PDP-11 bad block routine 
+    - Fixed big endian problem in PDP-11 bad block routine
     - Fixed interrupt on error bug in PDP-11 RP/RM disks
     - Fixed ROL/ROR inversion in PDP-11 symbolic routines
 
@@ -2497,7 +2512,7 @@ Rev 2.3, Mar, 97
     - Changed magnetic tape format to double ended
     - Changed PDP-8 current page mnemonic from T to C
     - Added endian independent I/O routines
-    - Added precise integer data types 
+    - Added precise integer data types
     - Fixed bug in ``sim_poll_kbd``
     - Fixed bug in PDP-8 binary loader
     - Fixed bugs in TM11 magnetic tape
@@ -2565,7 +2580,7 @@ Winfried Bergmann        Linux port testing
 Phil Budne               Solaris port testing
 Max Burnet               PDP information, documentation, and software
 J\. David Bryan          HP Simulators
-Robert Alan Byer         VMS socket support and testing 
+Robert Alan Byer         VMS socket support and testing
 James Carpenter          Linux port testing
 Chip Charlot             PDP-11 RT-11, RSTS/E, RSX-11M legal permissions
 Louis Chrétien           Macintosh porting

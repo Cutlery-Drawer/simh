@@ -961,17 +961,20 @@ Symbolic display and input
 The KL10 simulator implements symbolic display and input.
 These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
 
-======  ===========================================
-``-v``  Look up the address via translation,
-        will return nothing if address is not valid
-``-u``  With the ``-v`` option,
-        use user space instead of executive space
-``-a``  Display/enter ASCII data
-``-p``  Display/enter packed ASCII data
-``-c``  Display/enter Sixbit character data
-``-m``  Display/enter symbolic instructions
-\       Display/enter octal data
-======  ===========================================
+.. table::
+   :class: switches
+
+   ======  ===========================================
+   ``-v``  Look up the address via translation,
+           will return nothing if address is not valid
+   ``-u``  With the ``-v`` option,
+           use user space instead of executive space
+   ``-a``  Display/enter ASCII data
+   ``-p``  Display/enter packed ASCII data
+   ``-c``  Display/enter Sixbit character data
+   ``-m``  Display/enter symbolic instructions
+   \       Display/enter octal data
+   ======  ===========================================
 
 Symbolic instructions can be of the formats:
 

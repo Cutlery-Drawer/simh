@@ -647,11 +647,14 @@ Symbolic display and input
 The IBM 7070 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ===================================
-``-c``  Display/enter as BCD character
-``-m``  Display/enter instruction mnemonics
-        Display/enter as decimal number
-======  ===================================
+.. table::
+   :class: switches
+
+   ======  ===================================
+   ``-c``  Display/enter as BCD character
+   ``-m``  Display/enter instruction mnemonics
+           Display/enter as decimal number
+   ======  ===================================
 
 Instruction input uses standard 7070 assembler syntax.
 

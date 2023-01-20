@@ -210,12 +210,15 @@ When examining or depositing into memory,
 command-line switches specifying the symbolic mode and format may be used to override the default numeric mode,
 as follows:
 
-======  ===============================
-Switch  Mode interpretation
-======  ===============================
-``-C``  String of up to five characters
-``-M``  A CPU instruction opcode
-======  ===============================
+.. table::
+   :class: switches
+
+   ======  ===============================
+   Switch  Mode interpretation
+   ======  ===============================
+   ``-C``  String of up to five characters
+   ``-M``  A CPU instruction opcode
+   ======  ===============================
 
 If the ``-C`` switch is specified,
 the value is displayed as five characters delimited by single quotes.

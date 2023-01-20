@@ -173,17 +173,20 @@ Initial memory size is 64KB.
 
 These switches are recognized when examining or depositing in CPU memory:
 
-======  =======================================
-``-a``  Examine/deposit ASCII characters
-``-b``  Examine/deposit bytes
-``-c``  Examine/deposit packed ASCII characters
-``-f``  Examine/deposit fullwords
-``-d``  Data radix is decimal
-``-o``  Data radix is octal
-``-h``  Data radix is hexadecimal
-``-m``  Examine as instruction mnemonics
-``-v``  Interpret address as virtual
-======  =======================================
+.. table::
+   :class: switches
+
+   ======  =======================================
+   ``-a``  Examine/deposit ASCII characters
+   ``-b``  Examine/deposit bytes
+   ``-c``  Examine/deposit packed ASCII characters
+   ``-f``  Examine/deposit fullwords
+   ``-d``  Data radix is decimal
+   ``-o``  Data radix is octal
+   ``-h``  Data radix is hexadecimal
+   ``-m``  Examine as instruction mnemonics
+   ``-v``  Interpret address as virtual
+   ======  =======================================
 
 Packed characters, halfwords, fullwords, and instructions must be aligned on a halfword (16b) boundary.
 If an odd address is specified,
@@ -266,17 +269,20 @@ Initial memory size is 1024KB.
 
 These switches are recognized when examining or depositing in CPU memory:
 
-======  =======================================
-``-a``  Examine/deposit ASCII characters
-``-b``  Examine/deposit bytes
-``-c``  Examine/deposit packed ASCII characters
-``-w``  Examine/deposit halfwords
-``-d``  Data radix is decimal
-``-o``  Data radix is octal
-``-h``  Data radix is hexadecimal
-``-m``  Examine as instruction mnemonics
-``-v``  Interpret address as virtual
-======  =======================================
+.. table::
+   :class: switches
+
+   ======  =======================================
+   ``-a``  Examine/deposit ASCII characters
+   ``-b``  Examine/deposit bytes
+   ``-c``  Examine/deposit packed ASCII characters
+   ``-w``  Examine/deposit halfwords
+   ``-d``  Data radix is decimal
+   ``-o``  Data radix is octal
+   ``-h``  Data radix is hexadecimal
+   ``-m``  Examine as instruction mnemonics
+   ``-v``  Interpret address as virtual
+   ======  =======================================
 
 Packed characters, halfwords, fullwords, and instructions must be aligned on a halfword (16b) boundary.
 If an odd address is specified,
@@ -1067,20 +1073,26 @@ Symbolic display and input
 The Interdata simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ===============================================
-``-a``  Display byte as ASCII character
-``-c``  Display halfword as two packed ASCII characters
-``-m``  Display instruction mnemonics
-======  ===============================================
+.. table::
+   :class: switches
+
+   ======  ===============================================
+   ``-a``  Display byte as ASCII character
+   ``-c``  Display halfword as two packed ASCII characters
+   ``-m``  Display instruction mnemonics
+   ======  ===============================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ===========================
-``'`` or ``-a``  ASCII character
-``"`` or ``-c``  Two packed ASCII characters
-Alphabetic       Instruction mnemonic
-Numeric          Hexadecimal number
-===============  ===========================
+.. table::
+   :class: switches
+
+   ===============  ===========================
+   ``'`` or ``-a``  ASCII character
+   ``"`` or ``-c``  Two packed ASCII characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Hexadecimal number
+   ===============  ===========================
 
 16b Instruction Input
 ---------------------

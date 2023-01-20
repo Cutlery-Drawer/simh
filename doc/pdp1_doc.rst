@@ -373,11 +373,14 @@ and 18b format DECtape images.
 ``ATTACH`` assumes the image is in 18b format;
 the user can other choices with switches:
 
-======  =============================
-``-t``  PDP-8 format
-``-s``  PDP-11 format
-``-a``  Autoselect based on file size
-======  =============================
+.. table::
+   :class: switches
+
+   ======  =============================
+   ``-t``  PDP-8 format
+   ``-s``  PDP-11 format
+   ``-a``  Autoselect based on file size
+   ======  =============================
 
 The DECtape controller is a data-only simulator;
 the timing and mark track,
@@ -583,20 +586,26 @@ Symbolic display and input
 The PDP-1 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-=======  ================================================
-``-a``   Display as ASCII character
-``-c``   Display as three packed FIODEC characters
-``-m``   Display instruction mnemonics
-=======  ================================================
+.. table::
+   :class: switches
+
+   =======  ================================================
+   ``-a``   Display as ASCII character
+   ``-c``   Display as three packed FIODEC characters
+   ``-m``   Display instruction mnemonics
+   =======  ================================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ==============================
-``'`` or ``-a``  ASCII character
-``"`` or ``-c``  Three packed FIODEC characters
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ==============================
+.. table::
+   :class: switches
+
+   ===============  ==============================
+   ``'`` or ``-a``  ASCII character
+   ``"`` or ``-c``  Three packed FIODEC characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ==============================
 
 Instruction input uses modified PDP-1 assembler syntax.
 There are six instruction classes:

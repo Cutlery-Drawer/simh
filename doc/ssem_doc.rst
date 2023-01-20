@@ -78,12 +78,15 @@ Symbolic display and input
 The SSEM simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  =========================================================
-``-h``  Display as hexadecimal
-``-d``  Display as decimal
-``-b``  Display as backwards binary. Least significant bit first.
-``-m``  Display instruction mnemonics
-======  =========================================================
+.. table::
+   :class: switches
+
+   ======  =========================================================
+   ``-h``  Display as hexadecimal
+   ``-d``  Display as decimal
+   ``-b``  Display as backwards binary. Least significant bit first.
+   ``-m``  Display instruction mnemonics
+   ======  =========================================================
 
 Input parsing is controlled by the first character typed in or by command-line switches::
 

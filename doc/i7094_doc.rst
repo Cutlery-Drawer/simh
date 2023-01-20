@@ -694,20 +694,26 @@ Symbolic display and input
 The IBM 7094 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ==============================
-``-c``  Display as character
-``-s``  Display as character string
-``-m``  Display instruction mnemonics
-``-i``  Display as 7607 IO instruction
-``-n``  Display as 7909 IO instruction
-======  ==============================
+.. table::
+   :class: switches
+
+   ======  ==============================
+   ``-c``  Display as character
+   ``-s``  Display as character string
+   ``-m``  Display instruction mnemonics
+   ``-i``  Display as 7607 IO instruction
+   ``-n``  Display as 7909 IO instruction
+   ======  ==============================
 
 Character and string display is further qualified by switches that specify the character coding and conversion conventions:
 
-======  ===========================================
-``-b``  BCD data (default is nine-code)
-``-a``  Business character set (default is Fortran)
-======  ===========================================
+.. table::
+   :class: switches
+
+   ======  ===========================================
+   ``-b``  BCD data (default is nine-code)
+   ``-a``  Business character set (default is Fortran)
+   ======  ===========================================
 
 The default data coding is nine-code,
 and the default character set is Fortran.
@@ -717,12 +723,15 @@ the 1401 as code 12.
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ====================
-``'`` or ``-c``  Character
-``"`` or ``-s``  String
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ====================
+.. table::
+   :class: switches
+
+   ===============  ====================
+   ``'`` or ``-c``  Character
+   ``"`` or ``-s``  String
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ====================
 
 Instruction input uses standard 7094 assembler syntax.
 There are two basic instruction classes:

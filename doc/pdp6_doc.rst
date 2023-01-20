@@ -511,13 +511,16 @@ Symbolic display and input
 The KA10 simulator implements symbolic display and input.
 These are controlled by the following switches to the |EXAMINE| and |DEPOSIT| commands:
 
-======  ===================================
-``-a``  Display/enter ASCII data
-``-p``  Display/enter packed ASCII data
-``-c``  Display/enter Sixbit character data
-``-m``  Display/enter symbolic instructions
-\       Display/enter octal data
-======  ===================================
+.. table::
+   :class: switches
+
+   ======  ===================================
+   ``-a``  Display/enter ASCII data
+   ``-p``  Display/enter packed ASCII data
+   ``-c``  Display/enter Sixbit character data
+   ``-m``  Display/enter symbolic instructions
+   \       Display/enter octal data
+   ======  ===================================
 
 Symbolic instructions can be of the formats:
 

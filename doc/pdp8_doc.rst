@@ -640,11 +640,14 @@ and 18b format DECtape images.
 ``ATTACH`` assumes the image is in PDP-8 format;
 the user can force other choices with switches:
 
-======  =====================================
-``-s``  PDP-11 format
-``-f``  18b format
-``-a``  Autoselect based on file on file size
-======  =====================================
+.. table::
+   :class: switches
+
+   ======  =====================================
+   ``-s``  PDP-11 format
+   ``-f``  18b format
+   ``-a``  Autoselect based on file on file size
+   ======  =====================================
 
 The TD8E controller is a data-only simulator;
 the timing and mark track,
@@ -1047,11 +1050,14 @@ and 18b format DECtape images.
 ``ATTACH`` assumes the image is in PDP-8 format;
 the user can force other choices with switches:
 
-======  =====================================
-``-s``  PDP-11 format
-``-f``  18b format
-``-a``  Autoselect based on file on file size
-======  =====================================
+.. table::
+   :class: switches
+
+   ======  =====================================
+   ``-s``  PDP-11 format
+   ``-f``  18b format
+   ``-a``  Autoselect based on file on file size
+   ======  =====================================
 
 The TC08 controller is a data-only simulator;
 the timing and mark track,
@@ -1144,22 +1150,28 @@ Symbolic display and input
 The PDP-8 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  =============================================
-``-a``  Display as ASCII character
-``-c``  Display as two packed sixbit characters
-``-t``  Display as two packed TSS/8 sixbit characters
-``-m``  Display instruction mnemonics
-======  =============================================
+.. table::
+   :class: switches
+
+   ======  =============================================
+   ``-a``  Display as ASCII character
+   ``-c``  Display as two packed sixbit characters
+   ``-t``  Display as two packed TSS/8 sixbit characters
+   ``-m``  Display instruction mnemonics
+   ======  =============================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-=================  ==================================
-``'`` or ``-a``    ASCII character
-``"`` or ``-c``    Two packed sixbit characters
-``#`` or ``-t``    Two packed TSS/8 sixbit characters
-Alphabetic         Instruction mnemonic
-Numeric            Octal number
-=================  ==================================
+.. table::
+   :class: switches
+
+   =================  ==================================
+   ``'`` or ``-a``    ASCII character
+   ``"`` or ``-c``    Two packed sixbit characters
+   ``#`` or ``-t``    Two packed TSS/8 sixbit characters
+   Alphabetic         Instruction mnemonic
+   Numeric            Octal number
+   =================  ==================================
 
 Instruction input uses standard PDP-8 assembler syntax.
 There are four instruction classes:

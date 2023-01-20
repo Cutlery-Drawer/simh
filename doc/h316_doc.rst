@@ -791,20 +791,26 @@ Symbolic display and input
 The H316/H516 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ======================================
-``-a``  Display as ASCII character
-``-c``  Display as two packed ASCII characters
-``-m``  Display instruction mnemonics
-======  ======================================
+.. table::
+   :class: switches
+
+   ======  ======================================
+   ``-a``  Display as ASCII character
+   ``-c``  Display as two packed ASCII characters
+   ``-m``  Display instruction mnemonics
+   ======  ======================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ===========================
-``'`` or ``-a``  ASCII character
-``"`` or ``-c``  Two packed ASCII characters
-Alphabetic       Instruction mnemonic
-Numeric          Octal number
-===============  ===========================
+.. table::
+   :class: switches
+
+   ===============  ===========================
+   ``'`` or ``-a``  ASCII character
+   ``"`` or ``-c``  Two packed ASCII characters
+   Alphabetic       Instruction mnemonic
+   Numeric          Octal number
+   ===============  ===========================
 
 Instruction input uses standard H316/H516 assembler syntax.
 There are six instruction classes:

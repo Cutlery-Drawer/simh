@@ -655,11 +655,14 @@ Symbolic display and input
 The IBM 7080 simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-=================  ===================================
-``-c``             Display/enter as BCD character
-``-d``\ /\ ``-s``  Display as character dump
-``-m``             Display/enter instruction mnemonics
-=================  ===================================
+.. table::
+   :class: switches
+
+   =================  ===================================
+   ``-c``             Display/enter as BCD character
+   ``-d``\ /\ ``-s``  Display as character dump
+   ``-m``             Display/enter instruction mnemonics
+   =================  ===================================
 
 Instruction input uses standard 7080 assembler syntax.
 

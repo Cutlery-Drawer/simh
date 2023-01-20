@@ -355,24 +355,30 @@ Symbolic display and input
 The LGP simulator implements symbolic display and input.
 Display is controlled by command-line switches:
 
-======  ======================================
-``-a``  Display as character (tape files only)
-``-h``  Display as standard hexadecimal
-``-l``  Display as LGP hexadecimal
-``-m``  Display instruction mnemonics
-``-n``  Display addresses in normal format
-        (overrides ``SET CPU TRACK``)
-``-t``  Display addresses as track/sector
-        (overrides ``SET CPU NORMAL``)
-======  ======================================
+.. table::
+   :class: switches
+
+   ======  ======================================
+   ``-a``  Display as character (tape files only)
+   ``-h``  Display as standard hexadecimal
+   ``-l``  Display as LGP hexadecimal
+   ``-m``  Display instruction mnemonics
+   ``-n``  Display addresses in normal format
+           (overrides ``SET CPU TRACK``)
+   ``-t``  Display addresses as track/sector
+           (overrides ``SET CPU NORMAL``)
+   ======  ======================================
 
 Input parsing is controlled by the first character typed in or by command-line switches:
 
-===============  ====================
-``'`` or ``-a``  Flex character
-``-`` or opcode  Instruction mnemonic
-Numeric          Hexadecimal number
-===============  ====================
+.. table::
+   :class: switches
+
+   ===============  ====================
+   ``'`` or ``-a``  Flex character
+   ``-`` or opcode  Instruction mnemonic
+   Numeric          Hexadecimal number
+   ===============  ====================
 
 LGP hexadecimal differs from standard hexadecimal in the characters used for digits 10-15
 
