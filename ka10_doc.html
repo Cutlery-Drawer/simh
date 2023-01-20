@@ -1,0 +1,1906 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. Dec PDP-10/KA10 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="dec-pdp-10-ka10-simulator-usage">
+<h1><span class="sectnum">1. </span>Dec PDP-10/KA10 simulator usage<a class="headerlink" href="#dec-pdp-10-ka10-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2022-10-22</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#introduction" id="id39"><span class="sectnum">1.1. </span>Introduction</a></p></li>
+<li><p><a class="reference internal" href="#simulator-files" id="id40"><span class="sectnum">1.2. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#ka10-features" id="id41"><span class="sectnum">1.3. </span>KA10 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id42"><span class="sectnum">1.3.1. </span><span class="html"><samp>CPU</samp></span></a></p></li>
+<li><p><a class="reference internal" href="#unit-record-i-o-devices" id="id43"><span class="sectnum">1.3.2. </span>Unit record I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#console-teletype-cty-device-120" id="id44"><span class="sectnum">1.3.2.1. </span>Console teletype (<span class="html"><samp>CTY</samp></span>) (device 120)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-reader-ptr-device-104" id="id45"><span class="sectnum">1.3.2.2. </span>Paper tape reader (<span class="html"><samp>PTR</samp></span>) (device 104)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-punch-ptp-device-100" id="id46"><span class="sectnum">1.3.2.3. </span>Paper tape punch (<span class="html"><samp>PTP</samp></span>) (device 100)</a></p></li>
+<li><p><a class="reference internal" href="#card-reader-cr-device-150" id="id47"><span class="sectnum">1.3.2.4. </span>Card reader (<span class="html"><samp>CR</samp></span>) (device 150)</a></p></li>
+<li><p><a class="reference internal" href="#card-punch-cp-device-110" id="id48"><span class="sectnum">1.3.2.5. </span>Card punch (<span class="html"><samp>CP</samp></span>) (device 110)</a></p></li>
+<li><p><a class="reference internal" href="#line-printer-lpt-device-124" id="id49"><span class="sectnum">1.3.2.6. </span>Line printer (<span class="html"><samp>LPT</samp></span>) (device 124)</a></p></li>
+<li><p><a class="reference internal" href="#type-340-graphics-display-dpy-device-130" id="id50"><span class="sectnum">1.3.2.7. </span>Type 340 graphics display (<span class="html"><samp>DPY</samp></span>) (device 130)</a></p></li>
+<li><p><a class="reference internal" href="#stanford-triple-iii-display-iii-device-430" id="id51"><span class="sectnum">1.3.2.8. </span>Stanford triple III display (<span class="html"><samp>III</samp></span>) (device 430)</a></p></li>
+<li><p><a class="reference internal" href="#dkb-stanford-microswitch-keyboard-scanner-dkb-device-310" id="id52"><span class="sectnum">1.3.2.9. </span><span class="html"><samp>DKB</samp></span> Stanford microswitch keyboard scanner (<span class="html"><samp>DKB</samp></span>) (device 310)</a></p></li>
+<li><p><a class="reference internal" href="#dk10-timer-module-dk-device-070" id="id53"><span class="sectnum">1.3.2.10. </span><span class="html"><samp>DK10</samp></span> timer module (<span class="html"><samp>DK</samp></span>) (device 070)</a></p></li>
+<li><p><a class="reference internal" href="#tm10-magnetic-tape-mta-device-340-344" id="id54"><span class="sectnum">1.3.2.11. </span>TM10 magnetic tape (<span class="html"><samp>MTA</samp></span>) (device 340/344)</a></p></li>
+<li><p><a class="reference internal" href="#td10-dectape-dt-device-320-324" id="id55"><span class="sectnum">1.3.2.12. </span>TD10 DECTape (<span class="html"><samp>DT</samp></span>) (device 320/324)</a></p></li>
+<li><p><a class="reference internal" href="#pclk-petit-calendar-clock-device-730" id="id56"><span class="sectnum">1.3.2.13. </span><span class="html"><samp>PCLK</samp></span> Petit calendar clock (device 730)</a></p></li>
+<li><p><a class="reference internal" href="#pd-decoriolis-clock-device-500" id="id57"><span class="sectnum">1.3.2.14. </span><span class="html"><samp>PD</samp></span> DeCoriolis clock (device 500)</a></p></li>
+<li><p><a class="reference internal" href="#a-d-input-multiplexer-imx-device-574" id="id58"><span class="sectnum">1.3.2.15. </span>A/D input multiplexer (<span class="html"><samp>IMX</samp></span>) (device 574)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#disk-i-o-devices" id="id59"><span class="sectnum">1.3.3. </span>Disk I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#fha-disk-controller-device-170" id="id60"><span class="sectnum">1.3.3.1. </span><span class="html"><samp>FHA</samp></span> disk controller (device 170)</a></p></li>
+<li><p><a class="reference internal" href="#dpa-dpb-disk-controller-device-250-254" id="id61"><span class="sectnum">1.3.3.2. </span><span class="html"><samp>DPA</samp></span>/<span class="html"><samp>DPB</samp></span> disk controller (device 250/254)</a></p></li>
+<li><p><a class="reference internal" href="#pmp-disk-controller-device-500-504" id="id62"><span class="sectnum">1.3.3.3. </span><span class="html"><samp>PMP</samp></span> disk controller (device 500/504)</a></p></li>
+<li><p><a class="reference internal" href="#system-concepts-dc-10-disk-controller-device-610-614" id="id63"><span class="sectnum">1.3.3.4. </span>System Concepts DC-10 disk controller (device 610/614)</a></p></li>
+<li><p><a class="reference internal" href="#ddc10-drum-controller-for-tenex" id="id64"><span class="sectnum">1.3.3.5. </span>DDC10 drum controller for Tenex</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#massbus-devices" id="id65"><span class="sectnum">1.3.4. </span>Massbus devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rp-disk-drives" id="id66"><span class="sectnum">1.3.4.1. </span><span class="html"><samp>RP</samp></span> disk drives</a></p></li>
+<li><p><a class="reference internal" href="#rs-disk-drives" id="id67"><span class="sectnum">1.3.4.2. </span><span class="html"><samp>RS</samp></span> disk drives</a></p></li>
+<li><p><a class="reference internal" href="#tu-tape-drives" id="id68"><span class="sectnum">1.3.4.3. </span><span class="html"><samp>TU</samp></span> tape drives</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#terminal-multiplexer-i-o-devices" id="id69"><span class="sectnum">1.3.5. </span>Terminal multiplexer I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#dc10e-terminal-controller-device-240" id="id70"><span class="sectnum">1.3.5.1. </span><span class="html"><samp>DC10E</samp></span> terminal controller (device 240)</a></p></li>
+<li><p><a class="reference internal" href="#tk-knight-kludge-tty-scanner-device-0600" id="id71"><span class="sectnum">1.3.5.2. </span><span class="html"><samp>TK</samp></span> Knight kludge, TTY scanner (device 0600)</a></p></li>
+<li><p><a class="reference internal" href="#mty-morton-terminal-multiplexer-device-400" id="id72"><span class="sectnum">1.3.5.3. </span><span class="html"><samp>MTY</samp></span> Morton terminal multiplexer (device 400)</a></p></li>
+<li><p><a class="reference internal" href="#dpk-dk-10-datapoint-kludge-device-604" id="id73"><span class="sectnum">1.3.5.4. </span><span class="html"><samp>DPK</samp></span> DK-10 Datapoint kludge (device 604)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-devices" id="id74"><span class="sectnum">1.3.6. </span>Network devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#imp-interface-message-processor-device-460" id="id75"><span class="sectnum">1.3.6.1. </span><span class="html"><samp>IMP</samp></span> interface message processor (device 460)</a></p></li>
+<li><p><a class="reference internal" href="#ch-chaosnet-interface-device-470" id="id76"><span class="sectnum">1.3.6.2. </span><span class="html"><samp>CH</samp></span> Chaosnet interface (device 470)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#pdp-6-devices" id="id77"><span class="sectnum">1.3.7. </span>PDP-6 devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#dct-type-136-data-control-device-200-204" id="id78"><span class="sectnum">1.3.7.1. </span><span class="html"><samp>DCT</samp></span> type 136 data control (Device 200/204)</a></p></li>
+<li><p><a class="reference internal" href="#dtc-type-551-dectape-controller-device-210" id="id79"><span class="sectnum">1.3.7.2. </span><span class="html"><samp>DTC</samp></span> type 551 DECtape controller (device 210)</a></p></li>
+<li><p><a class="reference internal" href="#mtc-type-516-magtape-controller-device-220" id="id80"><span class="sectnum">1.3.7.3. </span><span class="html"><samp>MTC</samp></span> type 516 magtape controller (device 220)</a></p></li>
+<li><p><a class="reference internal" href="#dsk-type-270-disk-controller-device-270" id="id81"><span class="sectnum">1.3.7.4. </span><span class="html"><samp>DSK</samp></span> type 270 disk controller (device 270)</a></p></li>
+<li><p><a class="reference internal" href="#dcs-type-630-terminal-multiplexer-device-300" id="id82"><span class="sectnum">1.3.7.5. </span><span class="html"><samp>DCS</samp></span> type 630 terminal multiplexer (device 300)</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id83"><span class="sectnum">1.4. </span>Symbolic display and input</a></p></li>
+<li><p><a class="reference internal" href="#os-specific-configurations" id="id84"><span class="sectnum">1.5. </span>OS specific configurations</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#tops10" id="id85"><span class="sectnum">1.5.1. </span>TOPS10</a></p></li>
+<li><p><a class="reference internal" href="#its" id="id86"><span class="sectnum">1.5.2. </span>ITS</a></p></li>
+<li><p><a class="reference internal" href="#waits" id="id87"><span class="sectnum">1.5.3. </span>WAITS</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><span class="sectnum">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>Originally the DEC PDP-10 computer started as the PDP-6.
+This was a 36-bit computer that was designed for timesharing,
+which was introduced in 1964.
+The original goal of the machine was to allow for processing of many 6-bit characters at a time.
+36 bits were also common in machines like the IBM 7090, GE 645, and Univac 11xx lines.
+Several systems influenced the design of the PDP-6,
+like CTSS, Lisp, support for larger memory.
+The PDP-6 was canceled by DEC due to production problems.
+The engineers designed a smaller replacement,
+which happened to be a 36-bit computer that looked very much like the PDP-6.
+This was called the PDP-10, later renamed to “DECSystem-10”.
+The system supported up to 256K words of memory.</p>
+<p>The first PDP-10 was labeled KA10,
+and added a few instructions to the PDP-6.
+Both the PDP-6 and PDP-10 used a base and limit relocation scheme.
+The KA10 generally offered two registers,
+one of user data and the second for user shared code.
+These were referred to the Low-Segment and High-Segment,
+the High-Segment could be shared with several jobs.
+The next version was called KI10 for Integrated.
+This added support for paging and double precision floating-point instructions.
+It also added 4 sets of registers to improve context switching time.
+It could also support up to 4 megawords of memory.
+Following the KI10 was the KL10 (for Low-Cost).
+The KL10 added double precision integer instructions and instructions to improve COBOL performance.
+This was the first version which was microcoded.
+The KL10 was extended to support user programs larger then 256k.
+The final version to make it to market was the KS10 (for Small),
+this was a bit-slice version of the PDP-10 which used UNIBUS devices which were cheaper then the KL10 devices.</p>
+<p>The original operating system for the PDP-6/PDP-10 was just called “Monitor”.
+It was designed to fit into 6K words.
+Around the third release, swapping was added.
+The sixth release saw the addition of virtual memory.
+Around the fourth release, it was given the name “TOPS-10”
+Around this time, BBN was working on a paging system and implemented it on the PDP-10.
+This was called “Tenex”.
+This was later adopted by DEC and became “Tops-20”.</p>
+<p>During the mid-60s,
+a group at MIT,
+who where not happy with how Multics was being developed,
+decided to create their own operating system which they called Incompatible Timesharing System (“ITS”),
+which was a play on the original project called Compatible Timesharing System (“CTSS”).
+CTSS was implemented by MIT on their IBM 7090 as an experimental system that allowed multiple time sharing users to co-exist on the same machine running batch processing.
+(hence the term “compatable”).</p>
+<p>Also during the mid-60s,
+a group at Stanford Artificial Intelligence Laboratory (SAIL),
+started with a version of TOPS-10 and heavily modified it to become WAITS.</p>
+<p>During the 70s,
+Tymshare starting with DEC TOPS-10 system,
+modified it to support random access files,
+paging with working sets and spawn-able processes.
+This ran on the KI10, KL10 and KS10.</p>
+<p>The PDP-10 was ultimately replaced by the VAX.</p>
+</section>
+<section id="simulator-files">
+<h2><span class="sectnum">1.2. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<p>To compile the DEC 10/KA10 simulator,
+you must define <code class="docutils literal notranslate"><span class="pre">USE_INT64</span></code> as part of the compilation command-line.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subdirectory</p></th>
+<th class="head"><p>File</p></th>
+<th class="head"><p>Contains</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="43"><p><code class="docutils literal notranslate"><span class="pre">PDP10/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kx10_defs.h</span></code></p></td>
+<td><p>KA10 simulator definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_cpu.c</span></code></p></td>
+<td><p>KA10 CPU</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_df.c</span></code></p></td>
+<td><p>DF10/C controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_rh.c</span></code></p></td>
+<td><p>RH10 controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_diskh</span></code></p></td>
+<td><p>Disk formatter definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_disk.c</span></code></p></td>
+<td><p>Disk formatter routine</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_sys.c</span></code></p></td>
+<td><p>KA10 system interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_cty.c</span></code></p></td>
+<td><p>Console terminal interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_pt.c</span></code></p></td>
+<td><p>Paper tape reader and punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_rc.c</span></code></p></td>
+<td><p>RC10 disk controller, RD10 and RM10 disks</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_dp.c</span></code></p></td>
+<td><p>RP10 disk controller, RP01/2/3 disks</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_rp.c</span></code></p></td>
+<td><p>RH10 disk controller, RP04/5/6 disks</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_rs.c</span></code></p></td>
+<td><p>RH10 disk controller, RS04 fixed-head disks</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_dt.c</span></code></p></td>
+<td><p>TD10 DECtape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_mt.c</span></code></p></td>
+<td><p>TM10A/B magnetic tape controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_tu.c</span></code></p></td>
+<td><p>RH10/TM03 magnetic tape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_lp.c</span></code></p></td>
+<td><p>Line printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_cr.c</span></code></p></td>
+<td><p>Punch card reader</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_cp.c</span></code></p></td>
+<td><p>Punch card punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_dk.c</span></code></p></td>
+<td><p>DK10 interval timer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_dc.c</span></code></p></td>
+<td><p>DC10 communications controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_ddc.c</span></code></p></td>
+<td><p>DDC-10 drum controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_tk10.c</span></code></p></td>
+<td><p>Knight kludge, TTY scanner</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_mty.c</span></code></p></td>
+<td><p>MTY, Morton terminal multiplexer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_dpk.c</span></code></p></td>
+<td><p>DK-10 datapoint kludge</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_dpy.c</span></code></p></td>
+<td><p>DEC 340 graphics interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_dkb.c</span></code></p></td>
+<td><p>Stanford microswitch scanner for III display</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_iii.c</span></code></p></td>
+<td><p>Stanford triple III display</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_stk.c</span></code></p></td>
+<td><p>Stanford keyboard for 340</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_pclk.c</span></code></p></td>
+<td><p>Petit calendar clock</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_pd.c</span></code></p></td>
+<td><p>DeCoriolis clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_imx.c</span></code></p></td>
+<td><p>Analog input device</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_ten11.c</span></code></p></td>
+<td><p>PDP-11 interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_lights.c</span></code></p></td>
+<td><p>Front panel interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kx10_imp.c</span></code></p></td>
+<td><p>IMP10 interface to Ethernet</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_ch10.c</span></code></p></td>
+<td><p>Chaosnet 10 interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_pmp.c</span></code></p></td>
+<td><p>PMP interface to IBM 3330 drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ka10_ai.c</span></code></p></td>
+<td><p>System Concepts DC-10 IBM 2314 disk controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pdp6_dct.c</span></code></p></td>
+<td><p>PDP-6 data controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pdp6_dtc.c</span></code></p></td>
+<td><p>PDP-6 551 DECtape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pdp6_mtc.c</span></code></p></td>
+<td><p>PDP-6 556 magtape controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pdp6_dsk.c</span></code></p></td>
+<td><p>PDP-6 270 disk controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pdp6_dcs.c</span></code></p></td>
+<td><p>PDP-7 630 terminal multiplexer</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ka10-features">
+<h2><span class="sectnum">1.3. </span>KA10 features<a class="headerlink" href="#ka10-features" title="Permalink to this heading">¶</a></h2>
+<p>The KA10 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpu"><span class="html"><samp><b>CPU</b></samp></span></a></p></td>
+<td><p>KA10 CPU with 256KW of memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id2"><span class="html"><samp><b>CTY</b></samp></span></a></p></td>
+<td><p>Console TTY</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id4"><span class="html"><samp><b>PTP</b></samp></span></a></p></td>
+<td><p>Paper tape punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id3"><span class="html"><samp><b>PTR</b></samp></span></a></p></td>
+<td><p>Paper tape reader</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id7"><span class="html"><samp><b>LPT</b></samp></span></a></p></td>
+<td><p>LP10 line printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id5"><span class="html"><samp><b>CR</b></samp></span></a></p></td>
+<td><p>CR10 card reader</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id6"><span class="html"><samp><b>CP</b></samp></span></a></p></td>
+<td><p>CP10 card punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id11"><span class="html"><samp><b>MTA</b></samp></span></a></p></td>
+<td><p>TM10A/B tape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id17"><span class="html"><samp><b>DPA</b></samp></span></a></p></td>
+<td rowspan="2"><p>RP10 disk controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id18"><span class="html"><samp><b>DPB</b></samp></span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id26"><span class="html"><samp><b>FSA</b></samp></span></a></p></td>
+<td><p>RS04 disk controller via RH10</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id22"><span class="html"><samp><b>RPA</b></samp></span></a></p></td>
+<td rowspan="4"><p>RH10 disk controllers via RH10</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id23"><span class="html"><samp><b>RPB</b></samp></span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id24"><span class="html"><samp><b>RPC</b></samp></span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id25"><span class="html"><samp><b>RPD</b></samp></span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id19"><span class="html"><samp><b>PMP</b></samp></span></a></p></td>
+<td><p><span class="html"><samp>PMP</samp></span> IBM 3330 disk controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id20"><span class="html"><samp><b>AI</b></samp></span></a></p></td>
+<td><p>System concepts DC-10 IBM 2314 disk controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="TUA"><span class="html"><samp><b>TUA</b></samp></span></a></p></td>
+<td><p>TM02 tape controller via RH10</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id16"><span class="html"><samp><b>FHA</b></samp></span></a></p></td>
+<td><p>RC10 disk controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id21"><span class="html"><samp><b>DDC</b></samp></span></a></p></td>
+<td><p>DDC10 disk controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id12"><span class="html"><samp><b>DT</b></samp></span></a></p></td>
+<td><p>TD10 DECtape controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id28"><span class="html"><samp><b>DC</b></samp></span></a></p></td>
+<td><p>DC10 communications controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id10"><span class="html"><samp><b>DK</b></samp></span></a></p></td>
+<td><p>Clock timer module</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id13"><span class="html"><samp><b>PCLK</b></samp></span></a></p></td>
+<td><p>Petit calendar clock</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id14"><span class="html"><samp><b>PD</b></samp></span></a></p></td>
+<td><p>Coriolis clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id32"><span class="html"><samp><b>IMP</b></samp></span></a></p></td>
+<td><p>IMP network interface</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id33"><span class="html"><samp><b>CH</b></samp></span></a></p></td>
+<td><p>CH10 Chaosnet interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id15"><span class="html"><samp><b>IMX</b></samp></span></a></p></td>
+<td><p>A/D input multiplexer</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id29"><span class="html"><samp><b>TK</b></samp></span></a></p></td>
+<td><p>Knight kludge, TTY scanner</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id30"><span class="html"><samp><b>MTY</b></samp></span></a></p></td>
+<td><p>MTY, Morton terminal multiplexer</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id31"><span class="html"><samp><b>DPK</b></samp></span></a></p></td>
+<td><p>DK-10 datapoint kludge</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id9"><span class="html"><samp><b>DKB</b></samp></span></a></p></td>
+<td><p>Stanford microswitch scanner</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id8"><span class="html"><samp><b>III</b></samp></span></a></p></td>
+<td><p>Stanford triple III display</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>TEN11</b></samp></span></p></td>
+<td><p>PDP-11 interface</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>AUXCPU</b></samp></span></p></td>
+<td><p>PDP-6 interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id34"><span class="html"><samp><b>DCT</b></samp></span></a></p></td>
+<td><p>PDP-6 data control type 136</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id35"><span class="html"><samp><b>DTC</b></samp></span></a></p></td>
+<td><p>PDP-6 type 551 DECtape controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id36"><span class="html"><samp><b>MTC</b></samp></span></a></p></td>
+<td><p>PDP-6 type 516 magtape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id37"><span class="html"><samp><b>DSK</b></samp></span></a></p></td>
+<td><p>PDP-6 type 270 disk controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id38"><span class="html"><samp><b>DCS</b></samp></span></a></p></td>
+<td><p>PDP-6 type 630 terminal multiplexer</p></td>
+</tr>
+</tbody>
+</table>
+<section id="cpu">
+<span id="id1"></span><h3><span class="sectnum">1.3.1. </span><span class="html"><samp>CPU</samp></span><a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The CPU options include setting memory size and O/S customization.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 16K</b></samp></span></p></td>
+<td><p>Set memory to 16K</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 32K</b></samp></span></p></td>
+<td><p>Set memory to 32K</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 48K</b></samp></span></p></td>
+<td><p>Set memory to 48K</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 64K</b></samp></span></p></td>
+<td><p>Set memory to 64K</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 96K</b></samp></span></p></td>
+<td><p>Set memory to 96K</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 128K</b></samp></span></p></td>
+<td><p>Set memory to 128K</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 256K</b></samp></span></p></td>
+<td><p>Set memory to 256K</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 512K </b></samp></span></p></td>
+<td><p>Set memory to 512K</p></td>
+<td><p>ITS &amp; BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 768K</b></samp></span></p></td>
+<td><p>Set memory to 768K</p></td>
+<td><p>ITS &amp; BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 1024K</b></samp></span></p></td>
+<td><p>Set memory to 1024K</p></td>
+<td><p>ITS &amp; BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOMAOFF</b></samp></span></p></td>
+<td><p>Set traps to default of 040</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU MAOFF</b></samp></span></p></td>
+<td><p>Move trap vectors from 040 to 0140</p></td>
+<td><p>WAITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU ONESEG</b></samp></span></p></td>
+<td><p>Set to one segment register</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU TWOSEG</b></samp></span></p></td>
+<td><p>Set to two segment registers</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU ITS</b></samp></span></p></td>
+<td><p>Add ITS pager and instruction support to KA</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU NOMPX </b></samp></span></p></td>
+<td><p>Disable <span class="html"><samp>MPX</samp></span> interrupt support for ITS</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU MPX</b></samp></span></p></td>
+<td><p>Enable <span class="html"><samp>MPX</samp></span> interrupt support for ITS</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU WAITS</b></samp></span></p></td>
+<td><p>Add support for special WAITS instructions</p></td>
+<td><p>WAITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOWAITS</b></samp></span></p></td>
+<td><p>Disable special WAITS instructions</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU BBN</b></samp></span></p></td>
+<td><p>Enable BBN pager and Tenex support</p></td>
+<td><p>TENEX</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOIDLE</b></samp></span></p></td>
+<td><p>Disable idle detection</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU IDLE</b></samp></span></p></td>
+<td><p>Enable idle detection</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+<th class="head"><p>OS type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PC</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Program counter</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">FLAGS</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Flags</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FM0</samp></span>–<span class="html"><samp class="register">FM17</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Fast memory</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">SW</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Console SW register</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">MI</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Memory indicators</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">AS</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Console AS register</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">ABRK</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Address break</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">ACOND</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Address condition switches</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PIR</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>Priority interrupt request</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PIH</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>Priority interrupt hold</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PIE</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>Priority interrupt enable</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PIENB</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Enable priority system</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">BYF5</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Byte flag</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">UUO</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>UUO cycle</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PL</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Program limit low</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PH</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Program limit high</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">RL</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Program relation low</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RH</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Program relation high</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PFLAG</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Relocation enable</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PUSHOVER</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Push overflow flag</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">MEMPROT</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Memory protection flag</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">NXM</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Non-existing memory access</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">CLK</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Clock interrupt</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">OV</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Overflow enable</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FOV</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Floating overflow enable</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">APRIRQ</samp></span></p></td>
+<td><p>3</p></td>
+<td><p>APR interrupt number</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PAGE_ENABLE</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Paging enabled</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PAGE_FAULT</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Page fault</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">AC_STACK</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>AC stack</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PAGE_RELOAD</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Page reload</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FAULT_DATA</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Page fault data</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">TRP_FLG</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Trap flag</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">LAST_PAGE</samp></span></p></td>
+<td><p>9</p></td>
+<td><p>Last page</p></td>
+<td><p>ITS/BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">EXEC_MAP</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>Executive mapping</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">NXT_WR</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Map next write</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">MON_BASE</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>Monitor base</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">USER_BASE</samp></span></p></td>
+<td><p>8</p></td>
+<td><p>User base</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">USER_LIMIT</samp></span></p></td>
+<td><p>3</p></td>
+<td><p>User limit</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">PER_USER</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Per user data</p></td>
+<td><p>BBN</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">DBR1</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Paging control register 1</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">DBR2</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Paging control register 2</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">DBR3</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Paging control register 3</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">JPC</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Last jump instruction address</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">AGE</samp></span></p></td>
+<td><p>4</p></td>
+<td><p>Age</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FAULT_ADDR</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Fault address</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">OPC</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Saved PC and flags</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">MAR</samp></span></p></td>
+<td><p>18</p></td>
+<td><p>Memory access register</p></td>
+<td><p>ITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">QUA_TIME</samp></span></p></td>
+<td><p>36</p></td>
+<td><p>Quantum time</p></td>
+<td><p>ITS</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU can maintain a history of the most recently executed instructions.</p>
+<p>This is controlled by the <span class="html"><samp><b>SET CPU HISTORY</b></samp></span> and <span class="html"><samp><b>SHOW CPU HISTORY</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU HISTORY</b></samp></span></p></td>
+<td><p>Clear history buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU HISTORY=</b>0 </samp></span></p></td>
+<td><p>Disable history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU HISTORY=</b><var>n</var></samp></span></p></td>
+<td><p>Enable history, length = <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SHOW CPU HISTORY</b></samp></span></p></td>
+<td><p>Print CPU history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SHOW CPU HISTORY=</b><var>n</var></samp></span></p></td>
+<td><p>Print first <span class="html"><samp><var>n</var></samp></span> entries of CPU history</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instruction tracing shows the program counter,
+the contents of <span class="html"><samp class="register">AC</samp></span> selected,
+and the computed effective address.
+<span class="html"><samp class="register">AR</samp></span> is generally the contents the memory location referenced by <span class="html"><samp class="register">EA</samp></span>.
+<span class="html"><samp class="register">RES</samp></span> is the result of the instruction.
+<span class="html"><samp class="register">FLAGS</samp></span> shows the flags after the instruction is executed.
+<span class="html"><samp class="register">IR</samp></span> shows the instruction being executed.</p>
+</section>
+<section id="unit-record-i-o-devices">
+<h3><span class="sectnum">1.3.2. </span>Unit record I/O devices<a class="headerlink" href="#unit-record-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<span class="target" id="id2"><span id="cty"></span><span id="device-120"></span><span id="console-teletype"></span><span id="console-teletype-cty"></span></span><section id="console-teletype-cty-device-120">
+<h4><span class="sectnum">1.3.2.1. </span>Console teletype (<span class="html"><samp>CTY</samp></span>) (device 120)<a class="headerlink" href="#console-teletype-cty-device-120" title="Permalink to this heading">¶</a></h4>
+<p>The console station allows for communications with the operating system.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CTY 7B</b></samp></span></p></td>
+<td><p>7-bit characters, space parity</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CTY 8B</b></samp></span></p></td>
+<td><p>8-bit characters, space parity</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CTY 7P</b></samp></span></p></td>
+<td><p>7-bit characters, space parity</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CTY UC</b></samp></span></p></td>
+<td><p>Translate lowercase to uppercase</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CTY also supports a method for stopping the TOPS10 operating system.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CTY STOP</b></samp></span></p></td>
+<td><p>Deposit 1 in location 30</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="id3"><span id="ptr"></span><span id="device-104"></span><span id="paper-tape-reader"></span><span id="paper-tape-reader-ptr"></span></span></section>
+<section id="paper-tape-reader-ptr-device-104">
+<h4><span class="sectnum">1.3.2.2. </span>Paper tape reader (<span class="html"><samp>PTR</samp></span>) (device 104)<a class="headerlink" href="#paper-tape-reader-ptr-device-104" title="Permalink to this heading">¶</a></h4>
+<p>Reads a paper tape from a disk file.</p>
+<span class="target" id="id4"><span id="ptp"></span><span id="device-100"></span><span id="paper-tape-punch"></span><span id="paper-tape-punch-ptp"></span></span></section>
+<section id="paper-tape-punch-ptp-device-100">
+<h4><span class="sectnum">1.3.2.3. </span>Paper tape punch (<span class="html"><samp>PTP</samp></span>) (device 100)<a class="headerlink" href="#paper-tape-punch-ptp-device-100" title="Permalink to this heading">¶</a></h4>
+<p>Punches a paper tape to a disk file.</p>
+<span class="target" id="id5"><span id="cr"></span><span id="device-150"></span><span id="card-reader"></span><span id="card-reader-cr"></span></span></section>
+<section id="card-reader-cr-device-150">
+<h4><span class="sectnum">1.3.2.4. </span>Card reader (<span class="html"><samp>CR</samp></span>) (device 150)<a class="headerlink" href="#card-reader-cr-device-150" title="Permalink to this heading">¶</a></h4>
+<p>The card reader (<span class="html"><samp>CR</samp></span>) reads data from a disk file.
+Card reader files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a <span class="html"><samp><b>SET</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CR</b><var>n</var> <b>FORMAT=TEXT</b></samp></span></p></td>
+<td><p>Set ASCII text mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CR</b><var>n</var> <b>FORMAT=BINARY</b></samp></span></p></td>
+<td><p>Set for binary card images</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CR</b><var>n</var> <b>FORMAT=BCD</b></samp></span></p></td>
+<td><p>Set for BCD records</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CR</b><var>n</var> <b>FORMAT=CBN</b></samp></span></p></td>
+<td><p>Set for column binary BCD records</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CR</b><var>n</var> <b>FORMAT=AUTO</b></samp></span></p></td>
+<td><p>Automatically determine format</p></td>
+</tr>
+</tbody>
+</table>
+<p>or in the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CR</b><var>n</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CR</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CR</b><var>n</var> <b>-s</b> <var>file</var></samp></span></p></td>
+<td><p>Add file onto current cards to read</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CR</b><var>n</var> <b>-e</b> <var>file</var></samp></span></p></td>
+<td><p>After file is read in, the reader will receive an end-of-file flag</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="id6"><span id="cp"></span><span id="device-110"></span><span id="card-punch"></span><span id="card-punch-cp"></span></span></section>
+<section id="card-punch-cp-device-110">
+<h4><span class="sectnum">1.3.2.5. </span>Card punch (<span class="html"><samp>CP</samp></span>) (device 110)<a class="headerlink" href="#card-punch-cp-device-110" title="Permalink to this heading">¶</a></h4>
+<p>The card reader (<span class="html"><samp>CP</samp></span>) writes data to a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card punch files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a <span class="html"><samp><b>SET</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CP FORMAT=TEXT</b></samp></span></p></td>
+<td><p>Set ASCII text mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CP FORMAT=BINARY</b></samp></span></p></td>
+<td><p>Set for binary card images</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CP FORMAT=BCD</b></samp></span></p></td>
+<td><p>Set for BCD records</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CP FORMAT=CBN</b></samp></span></p></td>
+<td><p>Set for column binary BCD records</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CP FORMAT=AUTO</b></samp></span></p></td>
+<td><p>Automatically determine format</p></td>
+</tr>
+</tbody>
+</table>
+<p>or in the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CP</b> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CP -f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="id7"><span id="lpt"></span><span id="device-124"></span><span id="line-printer"></span><span id="line-printer-lpt"></span></span></section>
+<section id="line-printer-lpt-device-124">
+<h4><span class="sectnum">1.3.2.6. </span>Line printer (<span class="html"><samp>LPT</samp></span>) (device 124)<a class="headerlink" href="#line-printer-lpt-device-124" title="Permalink to this heading">¶</a></h4>
+<p>The line printer (<span class="html"><samp>LPT</samp></span>) writes data to a disk file as ASCII text with terminating newlines.
+Currently set to handle standard signals to control paper advance.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET LPT</b><var>n</var> <b>LC</b></samp></span></p></td>
+<td><p>Allow printer to print lowercase</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET LPT</b><var>n</var> <b>UC</b></samp></span></p></td>
+<td><p>Print only uppercase</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET LPT</b><var>n</var> <b>UTF8</b></samp></span></p></td>
+<td><p>Print control characters as UTF8 characters</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET LPT</b><var>n</var> <b>LINESPERPAGE=</b><var>n</var></samp></span></p></td>
+<td><p>Set the number of lines before an auto form feed is generated.
+There is an automatic margin of 6 lines.
+There is a maximum of 100 lines per page.</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET LPT</b><var>n</var> <b>DEV=</b><var>n</var></samp></span></p></td>
+<td><p>Set device number to <span class="html"><samp><var>n</var></samp></span>(octal)</p></td>
+</tr>
+</tbody>
+</table>
+<p>These characters control the skipping of various number of lines.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Character</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>014</p></td>
+<td><p>Skip to top of form</p></td>
+</tr>
+<tr class="row-odd"><td><p>013</p></td>
+<td><p>Skip mod 20 lines</p></td>
+</tr>
+<tr class="row-even"><td><p>020</p></td>
+<td><p>Skip mod 30 lines</p></td>
+</tr>
+<tr class="row-odd"><td><p>021</p></td>
+<td><p>Skip to even line</p></td>
+</tr>
+<tr class="row-even"><td><p>022</p></td>
+<td><p>Skip to every 3 line</p></td>
+</tr>
+<tr class="row-odd"><td><p>023</p></td>
+<td><p>Same as line feed (12), but ignore margin</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type-340-graphics-display-dpy-device-130">
+<span id="device-130"></span><span id="type-340-graphics-display"></span><span id="dpy"></span><h4><span class="sectnum">1.3.2.7. </span>Type 340 graphics display (<span class="html"><samp>DPY</samp></span>) (device 130)<a class="headerlink" href="#type-340-graphics-display-dpy-device-130" title="Permalink to this heading">¶</a></h4>
+<p>Primarily useful under ITS,
+TOPS-10 does have some limited support for this device.
+By default,
+this device is not enabled.
+When enabled and commands are sent to it,
+a graphics windows will display.</p>
+</section>
+<section id="stanford-triple-iii-display-iii-device-430">
+<span id="device-430"></span><span id="stanford-triple-iii-display-iii"></span><span id="stanford-triple-iii-display"></span><span id="id8"></span><span id="iii"></span><h4><span class="sectnum">1.3.2.8. </span>Stanford triple III display (<span class="html"><samp>III</samp></span>) (device 430)<a class="headerlink" href="#stanford-triple-iii-display-iii-device-430" title="Permalink to this heading">¶</a></h4>
+<p>Primarily useful under WAITS.
+By default,
+this device is not enabled.
+Used <a class="reference internal" href="#dkb"><span class="html"><samp>DKB</samp></span></a> device for keyboard input.</p>
+</section>
+<section id="dkb-stanford-microswitch-keyboard-scanner-dkb-device-310">
+<span id="device-310"></span><span id="dkb-stanford-microswitch-keyboard-scanner-dkb"></span><span id="dkb-stanford-microswitch-keyboard-scanner"></span><span id="id9"></span><span id="dkb"></span><h4><span class="sectnum">1.3.2.9. </span><span class="html"><samp>DKB</samp></span> Stanford microswitch keyboard scanner (<span class="html"><samp>DKB</samp></span>) (device 310)<a class="headerlink" href="#dkb-stanford-microswitch-keyboard-scanner-dkb-device-310" title="Permalink to this heading">¶</a></h4>
+<p>Used by <a class="reference internal" href="#iii"><span class="html"><samp>III</samp></span></a> to handle input.
+Currently only one keyboard is supported.</p>
+</section>
+<section id="dk10-timer-module-dk-device-070">
+<span id="device-070"></span><span id="dk10-timer-module-dk"></span><span id="dk10-timer-module"></span><span id="dk10"></span><span id="id10"></span><span id="dk"></span><h4><span class="sectnum">1.3.2.10. </span><span class="html"><samp>DK10</samp></span> timer module (<span class="html"><samp>DK</samp></span>) (device 070)<a class="headerlink" href="#dk10-timer-module-dk-device-070" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>DK10</samp></span> timer module does not have any settable options.</p>
+</section>
+<section id="tm10-magnetic-tape-mta-device-340-344">
+<span id="device-344"></span><span id="device-340"></span><span id="tm10-magnetic-tape-mta"></span><span id="tm10-magnetic-tape"></span><span id="id11"></span><span id="mta"></span><h4><span class="sectnum">1.3.2.11. </span>TM10 magnetic tape (<span class="html"><samp>MTA</samp></span>) (device 340/344)<a class="headerlink" href="#tm10-magnetic-tape-mta-device-340-344" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>TM10</samp></span> was the most common tape controller on KA10 and KI10.
+The <span class="html"><samp>TM10</samp></span> came in two models,
+the <span class="html"><samp>TM10A</samp></span> and the <span class="html"><samp>TM10B</samp></span>.
+The B model added a DF10 which allowed the tape data to be transferred without intervention of the CPU.
+The device has 2 options:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA TYPE=</b><var>t</var></samp></span></p></td>
+<td><p>Set the type of the controller to <code class="docutils literal notranslate"><span class="pre">A</span></code> or <code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTA MPX=</b><var>#</var></samp></span></p></td>
+<td><p>For ITS, set the MPX interrupt to channel <span class="html"><samp><var>#</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Each individual tape drive support several options:
+<span class="html"><samp>MTA</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>7T</b></samp></span></p></td>
+<td><p>Set the mag tape unit to 7-track format</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>9T</b></samp></span></p></td>
+<td><p>Set the mag tape unit to 9-track format</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set the mag tape to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set the mag tape to be writable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="td10-dectape-dt-device-320-324">
+<span id="device-324"></span><span id="device-320"></span><span id="td10-dectape"></span><span id="id12"></span><span id="dt"></span><h4><span class="sectnum">1.3.2.12. </span>TD10 DECTape (<span class="html"><samp>DT</samp></span>) (device 320/324)<a class="headerlink" href="#td10-dectape-dt-device-320-324" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>TD10</samp></span> was the standard DECTape controller for KA and KIs.
+This controller loads the tape into memory and uses the buffered version.
+For ITS,
+you needed to connect it to an <span class="html"><samp>MPX</samp></span> channel to handle I/O.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DT MPX=</b><var>#</var></samp></span></p></td>
+<td><p>For ITS, set the <span class="html"><samp>MPX</samp></span> interrupt to channel <span class="html"><samp><var>#</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Each individual tape drive support several options:
+<span class="html"><samp>DT</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DT</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set the mag tape to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DT</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set the mag tape to be writable</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DT</b><var>n</var> <b>18b</b></samp></span></p></td>
+<td><p>Default, tapes are considered to be 18-bit tapes</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DT</b><var>n</var> <b>16b</b></samp></span></p></td>
+<td><p>Tapes are converted from 16-bit to 18-bit</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DT</b><var>n</var> <b>12b</b></samp></span></p></td>
+<td><p>Tapes are converted from 12-bit to 18-bit</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pclk-petit-calendar-clock-device-730">
+<span id="device-730"></span><span id="pclk-petit-calendar-clock"></span><span id="id13"></span><span id="pclk"></span><h4><span class="sectnum">1.3.2.13. </span><span class="html"><samp>PCLK</samp></span> Petit calendar clock (device 730)<a class="headerlink" href="#pclk-petit-calendar-clock-device-730" title="Permalink to this heading">¶</a></h4>
+<p>This device keeps track of time and date for WAITS.
+It was custom designed by Peter Petit.
+The device supports two settings: <code class="docutils literal notranslate"><span class="pre">ON</span></code> and <code class="docutils literal notranslate"><span class="pre">OFF</span></code>.
+By default,
+this device is disabled.</p>
+</section>
+<section id="pd-decoriolis-clock-device-500">
+<span id="device-500"></span><span id="pd-decoriolis-clock"></span><span id="id14"></span><span id="pd"></span><h4><span class="sectnum">1.3.2.14. </span><span class="html"><samp>PD</samp></span> DeCoriolis clock (device 500)<a class="headerlink" href="#pd-decoriolis-clock-device-500" title="Permalink to this heading">¶</a></h4>
+<p>This is a device which keeps track of the time and date.
+An access will return the number of ticks since the beginning of the year.
+There are 60 ticks per second.
+The device was made by Paul DeCoriolis at MIT.
+By default, this device is disabled.</p>
+</section>
+<section id="a-d-input-multiplexer-imx-device-574">
+<span id="device-574"></span><span id="a-d-input-multiplexer-imx"></span><span id="a-d-input-multiplexer"></span><span id="id15"></span><span id="imx"></span><h4><span class="sectnum">1.3.2.15. </span>A/D input multiplexer (<span class="html"><samp>IMX</samp></span>) (device 574)<a class="headerlink" href="#a-d-input-multiplexer-imx-device-574" title="Permalink to this heading">¶</a></h4>
+<p>Provides 128 channels of 12-bit analog to digital converters.
+Currently, only input from USB game controllers are supported.
+To map game inputs to channels, use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">IMX</span> <span class="n">CHANNEL</span><span class="o">=</span><span class="mi">123</span><span class="p">;</span><span class="n">UNIT0</span><span class="p">;</span><span class="n">AXIS1</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">123</span></code> is the A/D channel in octal notation,
+<code class="docutils literal notranslate"><span class="pre">UNIT0</span></code> is first USB game controller,
+and <code class="docutils literal notranslate"><span class="pre">AXIS1</span></code> is the second axis on that controller.
+Add <code class="docutils literal notranslate"><span class="pre">;NEGATE</span></code> to invert the signal.</p>
+</section>
+</section>
+<section id="disk-i-o-devices">
+<h3><span class="sectnum">1.3.3. </span>Disk I/O devices<a class="headerlink" href="#disk-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<p>The PDP-10 supported many disk controllers.</p>
+<section id="fha-disk-controller-device-170">
+<span id="device-170"></span><span id="fha-disk-controller"></span><span id="id16"></span><span id="fha"></span><h4><span class="sectnum">1.3.3.1. </span><span class="html"><samp>FHA</samp></span> disk controller (device 170)<a class="headerlink" href="#fha-disk-controller-device-170" title="Permalink to this heading">¶</a></h4>
+<p>The RC10 disk controller used a DF10 to transfer data to memory.
+There were two types of disks that could be connected to the RC10:
+the RD10 and RM10.
+The RD10 could hold up to 512K words of data.
+The RM10 could hold up to 345K words of data.</p>
+<p>Each individual disk drive support several options:
+<span class="html"><samp>FHA</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET FHA</b><var>n</var> <b>RD10</b></samp></span></p></td>
+<td><p>Set this unit to be an RD10</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET FHA</b><var>n</var> <b>RM10</b></samp></span></p></td>
+<td><p>Set this unit to be an RM10</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET FHA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET FHA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dpa-dpb-disk-controller-device-250-254">
+<span id="device-254"></span><span id="device-250"></span><span id="dpa-dpb-disk-controller"></span><span id="id18"></span><span id="id17"></span><span id="dpb"></span><span id="dpa"></span><h4><span class="sectnum">1.3.3.2. </span><span class="html"><samp>DPA</samp></span>/<span class="html"><samp>DPB</samp></span> disk controller (device 250/254)<a class="headerlink" href="#dpa-dpb-disk-controller-device-250-254" title="Permalink to this heading">¶</a></h4>
+<p>The RP10 disk controller used a DF10 to transfer data to memory.
+There were three types of disks that could be connected to the RP10:
+the RP01, RP02, and RP03.
+The RP01 held up to 1.2M words,
+the RP02 5.2M words,
+and the RP03 10M words.
+The second controller is <span class="html"><samp>DPB</samp></span>.
+Disks can be stored in one of several file formats:
+<span class="html"><samp>SIMH</samp></span>, <span class="html"><samp>DBD9</samp></span>, and <span class="html"><samp>DLD9</samp></span>.
+The latter two are for compatibility with other simulators.</p>
+<p>Each individual disk drive support several options:
+<span class="html"><samp>DPA</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>RP01</b></samp></span></p></td>
+<td><p>Set this unit to be an RP01</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>RP02</b></samp></span></p></td>
+<td><p>Set this unit to be an RP02</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>RP03</b></samp></span></p></td>
+<td><p>Set this unit to be an RP03</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>HEADERS</b></samp></span></p></td>
+<td><p>Enable the RP10 to execute write headers function</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>NOHEADERS</b></samp></span></p></td>
+<td><p>Prevent the RP10 to execute write headers function</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DPA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+</tbody>
+</table>
+<p>To attach a disk,
+use the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH DPA</b><var>n</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH DPA</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH DPA</b><var>n</var> <b>-n</b> <var>file</var></samp></span></p></td>
+<td><p>Create a blank disk</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="html"><samp><var>format</var></samp></span> can be <span class="html"><samp>SIMH</samp></span>, <span class="html"><samp>DBD9</samp></span>, or <span class="html"><samp>DLD9</samp></span>.</p>
+</section>
+<section id="pmp-disk-controller-device-500-504">
+<span id="device-504"></span><span id="pmp-disk-controller"></span><span id="id19"></span><span id="pmp"></span><h4><span class="sectnum">1.3.3.3. </span><span class="html"><samp>PMP</samp></span> disk controller (device 500/504)<a class="headerlink" href="#pmp-disk-controller-device-500-504" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>PMP</samp></span> disk controller allowed for IBM type drives to be connected to the PDP-10.
+This is the controller used by WAITS.
+This device is disabled by default.</p>
+<p>Each individual disk drive support several options:
+<span class="html"><samp>DPA</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET PMP</b><var>n</var> <b>TYPE=</b><var>type</var></samp></span></p></td>
+<td><p>Set this unit to be of type <span class="html"><samp><var>type</var></samp></span> (generally 3330-2)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET PMP</b><var>0</var> <b>DEV=</b><var>##</var></samp></span></p></td>
+<td><p>Set the addresses of all disks to start at <span class="html"><samp><var>##</var></samp></span> hex</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET PMP</b><var>n</var> <b>DEV=</b><var>##</var></samp></span></p></td>
+<td><p>Set this unit to be at address <span class="html"><samp><var>##</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="system-concepts-dc-10-disk-controller-device-610-614">
+<span id="device-614"></span><span id="device-610"></span><span id="system-concepts-dc-10-disk-controller"></span><span id="id20"></span><span id="ai"></span><h4><span class="sectnum">1.3.3.4. </span>System Concepts DC-10 disk controller (device 610/614)<a class="headerlink" href="#system-concepts-dc-10-disk-controller-device-610-614" title="Permalink to this heading">¶</a></h4>
+<p>System Concepts DC-10 disk controller allowed IBM 2314 compatible disk drives to be attached to the MIT AI Lab PDP-10 running ITS.
+This device is disabled by default.</p>
+</section>
+<section id="ddc10-drum-controller-for-tenex">
+<span id="id21"></span><span id="ddc"></span><h4><span class="sectnum">1.3.3.5. </span>DDC10 drum controller for Tenex<a class="headerlink" href="#ddc10-drum-controller-for-tenex" title="Permalink to this heading">¶</a></h4>
+<p>DEC RES-10 drum controller is used by Tenex for swapping.
+This device is disabled by default.</p>
+</section>
+</section>
+<section id="massbus-devices">
+<h3><span class="sectnum">1.3.4. </span>Massbus devices<a class="headerlink" href="#massbus-devices" title="Permalink to this heading">¶</a></h3>
+<p>Massbus devices are attached via RH10s.
+Devices start at device 270 and go up (274,360,364,370,374).
+For Tops10,
+devices need to be in the order <a class="reference internal" href="#rs"><span class="html"><samp>RS</samp></span></a>, <a class="reference internal" href="#rp"><span class="html"><samp>RP</samp></span></a>, <a class="reference external" href="TUA"><span class="html"><samp>TU</samp></span></a>.
+By default,
+<a class="reference internal" href="#rs"><span class="html"><samp>RS</samp></span></a> disks are disabled.
+The first unit which is not enabled will get device 270,
+units will be assigned the next available address automatically.
+The device configuration must match that which is defined in the OS.</p>
+<section id="rp-disk-drives">
+<span id="id25"></span><span id="id24"></span><span id="id23"></span><span id="id22"></span><span id="rpd"></span><span id="rpc"></span><span id="rpb"></span><span id="rpa"></span><span id="rp"></span><h4><span class="sectnum">1.3.4.1. </span><span class="html"><samp>RP</samp></span> disk drives<a class="headerlink" href="#rp-disk-drives" title="Permalink to this heading">¶</a></h4>
+<p>Up to 4 strings of up to 8 RP drives can be configured.
+By default,
+the third and fourth controllers are disabled.
+These are addresses as <span class="html"><samp>RPA</samp></span>, <span class="html"><samp>RPB</samp></span>, <span class="html"><samp>RPC</samp></span>, and <span class="html"><samp>RPD</samp></span>.
+Disks can be stored in one of several file formats:
+<span class="html"><samp>SIMH</samp></span>, <span class="html"><samp>DBD9</samp></span>, and <span class="html"><samp>DLD9</samp></span>.
+The latter two are for compatibility with other simulators.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RPA</b><var>n</var> <b>RP04</b></samp></span></p></td>
+<td><p>Set this unit to be an RP04 (19 MWords)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET RPA</b><var>n</var> <b>RP06</b></samp></span></p></td>
+<td><p>Set this unit to be an RP06 (39 MWords)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RPA</b><var>n</var> <b>RP07</b></samp></span></p></td>
+<td><p>Set this unit to be an RP07 (110 MWords)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET RPA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RPA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+</tbody>
+</table>
+<p>To attach a disk,
+use the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH RPA</b><var>n</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH RPA</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH RPA</b><var>n</var> <b>-n</b> <var>file</var></samp></span></p></td>
+<td><p>Create a blank disk</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="html"><samp><var>format</var></samp></span> can be <span class="html"><samp>SIMH</samp></span>, <span class="html"><samp>DBD9</samp></span>, or <span class="html"><samp>DLD9</samp></span>.</p>
+</section>
+<section id="rs-disk-drives">
+<span id="id26"></span><span id="fsa"></span><span id="rs"></span><h4><span class="sectnum">1.3.4.2. </span><span class="html"><samp>RS</samp></span> disk drives<a class="headerlink" href="#rs-disk-drives" title="Permalink to this heading">¶</a></h4>
+<p>One string of up to 8 RS drives can be configured.
+These drives are fixed head swapping disks.
+By default,
+they are disabled.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET FSA</b><var>n</var> <b>RS03</b></samp></span></p></td>
+<td><p>Set this unit to be an RS03 (262 KWords)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET FSA</b><var>n</var> <b>RS04</b></samp></span></p></td>
+<td><p>Set this unit to be an RS04 (262 KWords)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET FSA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET FSA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tu-tape-drives">
+<h4><span class="sectnum">1.3.4.3. </span><span class="html"><samp>TU</samp></span> tape drives<a class="headerlink" href="#tu-tape-drives" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>TUA</samp></span> is a Mass bus tape controller using a TM03 formatter.
+There can be one per RH10 and it can support up to 8 drives.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET TUA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set the mag tape to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET TUA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set the mag tape to be writable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="terminal-multiplexer-i-o-devices">
+<h3><span class="sectnum">1.3.5. </span>Terminal multiplexer I/O devices<a class="headerlink" href="#terminal-multiplexer-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<p id="attach">All terminal multiplexers must be attached in order to work.
+The <span class="html"><samp><b>ATTACH</b></samp></span> command specifies the port to be used for Telnet sessions:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH</b> <var>device</var> <var>port</var></samp></span></p></td>
+<td><p>Set up listening port</p></td>
+</tr>
+</tbody>
+</table>
+<p>… where <span class="html"><samp><var>port</var></samp></span> is a decimal number between 1 and 65535 that is not being used other TCP/IP activities.</p>
+<p>Once attached and the simulator is running,
+the multiplexer listens for connections on the specified port.
+It assumes that any incoming connection is a Telnet connections.
+The connections remain open until disconnected either by the Telnet client,
+a <span class="html"><samp><b>SET</b> <var>device</var> <b>DISCONNECT</b></samp></span> command,
+or a <span class="html"><samp><b>DETACH</b> <var>device</var></samp></span> command.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET</b> <var>device</var> <b>DISCONNECT=</b><var>n</var></samp></span></p></td>
+<td><p>Disconnect line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="html"><samp><var>device</var></samp></span> implements the following special <span class="html"><samp><b>SHOW</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SHOW</b> <var>device</var> <b>CONNECTIONS</b></samp></span></p></td>
+<td><p>Display current connections to the <span class="html"><samp><var>device</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SHOW</b> <var>device</var> <b>STATISTICS</b></samp></span></p></td>
+<td><p>Display statistics for active connections</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SHOW</b> <var>device</var> <b>LOG</b></samp></span></p></td>
+<td><p>Display logging for all lines</p></td>
+</tr>
+</tbody>
+</table>
+<p>Logging can be controlled as follows:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET</b> <var>device</var> <b>LOG=</b><var>n</var><b>=</b><var>filename</var></samp></span></p></td>
+<td><p>Log output of line <span class="html"><samp><var>n</var></samp></span> to <span class="html"><samp><var>filename</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET</b> <var>device</var> <b>NOLOG</b></samp></span></p></td>
+<td><p>Disable logging and close log file</p></td>
+</tr>
+</tbody>
+</table>
+<section id="dc10e-terminal-controller-device-240">
+<span id="device-240"></span><span id="dc10e-terminal-controller"></span><span id="dc10e"></span><span id="dc10"></span><span id="id28"></span><span id="dc"></span><h4><span class="sectnum">1.3.5.1. </span><span class="html"><samp>DC10E</samp></span> terminal controller (device 240)<a class="headerlink" href="#dc10e-terminal-controller-device-240" title="Permalink to this heading">¶</a></h4>
+<p>The <span class="html"><samp>DC</samp></span> device was the standard terminal multiplexer for the KA10 and KI10s.
+Lines came in groups of 8.
+For modem control,
+there was a second port for each line.
+These could be offset by any number of groups.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DC LINES=</b><var>n</var></samp></span></p></td>
+<td><p>Set the number of lines on the <span class="html"><samp>DC10</samp></span>, multiple of 8</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DC MODEM=</b><var>n</var></samp></span></p></td>
+<td><p>Set the start of where the modem control <span class="html"><samp>DEC10E</samp></span> lines begins</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tk-knight-kludge-tty-scanner-device-0600">
+<span id="device-0600"></span><span id="tk-knight-kludge-tty-scanner"></span><span id="id29"></span><span id="tk"></span><h4><span class="sectnum">1.3.5.2. </span><span class="html"><samp>TK</samp></span> Knight kludge, TTY scanner (device 0600)<a class="headerlink" href="#tk-knight-kludge-tty-scanner-device-0600" title="Permalink to this heading">¶</a></h4>
+<p>This is a device with 16 terminal ports.
+It’s specific to the MIT AI lab and Dynamic Modeling PDP-10s.
+By default,
+this device is disabled.</p>
+</section>
+<section id="mty-morton-terminal-multiplexer-device-400">
+<span id="device-400"></span><span id="mty-morton-terminal-multiplexer"></span><span id="id30"></span><span id="mty"></span><h4><span class="sectnum">1.3.5.3. </span><span class="html"><samp>MTY</samp></span> Morton terminal multiplexer (device 400)<a class="headerlink" href="#mty-morton-terminal-multiplexer-device-400" title="Permalink to this heading">¶</a></h4>
+<p>This is a device with 32 high-speed terminal lines.
+It’s specific to the MIT Mathlab and Dynamic Modeling PDP-10s.
+By default,
+this device is disabled.</p>
+</section>
+<section id="dpk-dk-10-datapoint-kludge-device-604">
+<span id="device-604"></span><span id="id31"></span><span id="dpk"></span><h4><span class="sectnum">1.3.5.4. </span><span class="html"><samp>DPK</samp></span> DK-10 Datapoint kludge (device 604)<a class="headerlink" href="#dpk-dk-10-datapoint-kludge-device-604" title="Permalink to this heading">¶</a></h4>
+<p>The System Concepts DK-10,
+also known as the Datapoint Kludge,
+is a device with 16 terminal ports.
+This device is specific to ITS,
+and is disabled by default.</p>
+</section>
+</section>
+<section id="network-devices">
+<h3><span class="sectnum">1.3.6. </span>Network devices<a class="headerlink" href="#network-devices" title="Permalink to this heading">¶</a></h3>
+<section id="imp-interface-message-processor-device-460">
+<span id="device-460"></span><span id="imp-interface-message-processor"></span><span id="id32"></span><span id="imp"></span><h4><span class="sectnum">1.3.6.1. </span><span class="html"><samp>IMP</samp></span> interface message processor (device 460)<a class="headerlink" href="#imp-interface-message-processor-device-460" title="Permalink to this heading">¶</a></h4>
+<p>This allows the KA/KI to connect to the Internet.
+Currently, only supported under ITS.
+ITS and other OSes that used the <span class="html"><samp>IMP</samp></span> did not support modern protocols,
+and typically required a complete rebuild to change the IP address.
+Because of this,
+the <span class="html"><samp>IMP</samp></span> processor includes built-in NAT and DHCP support.
+For ITS,
+the system generated IP packets which are translated to the local network.
+If the HOST is set to <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code>,
+there will be no translation.
+If HOST is set to an IP address,
+then it will be mapped into the address set in IP.
+If DHCP is enabled,
+the <span class="html"><samp>IMP</samp></span> will issue a DHCP request at startup and set IP to the address that is provided.
+DHCP is enabled by default.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP MAC=</b><var>xx:xx:xx:xx:xx:xx</var></samp></span></p></td>
+<td><p>Set the MAC address of the <span class="html"><samp>IMP</samp></span> to the value given</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP IP=</b><var>ddd.ddd.ddd.ddd/dd</var></samp></span></p></td>
+<td><p>Set the external IP address of the <span class="html"><samp>IMP</samp></span> along with the net mask in bits</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP GW=</b><var>ddd.ddd.ddd.ddd</var></samp></span></p></td>
+<td><p>Set the gateway address for the <span class="html"><samp>IMP</samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP HOST=</b><var>ddd.ddd.ddd.ddd</var></samp></span></p></td>
+<td><p>Set the IP address of the PDP-10 system</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP DHCP</b></samp></span></p></td>
+<td><p>Allow the <span class="html"><samp>IMP</samp></span> to acquire an IP address from the local network via DHCP
+Only HOST must be set if this feature is used</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP NODHCP</b></samp></span></p></td>
+<td><p>Disable the <span class="html"><samp>IMP</samp></span> from making DHCP queries</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP ARP=</b><var>ddd.ddd.ddd.ddd</var><b>=</b><var>xx:xx:xx:xx:xx:xx</var></samp></span></p></td>
+<td><p>Create a static ARP entry for the IP address with the indicated MAC address</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP MIT</b></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>IMP</samp></span> to look like the <span class="html"><samp>IMP</samp></span> used by MIT for ITS</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP MPX=</b><var>#</var></samp></span></p></td>
+<td><p>For ITS, set the <span class="html"><samp>MPX</samp></span> interrupt to channel <span class="html"><samp><var>#</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP BBN</b></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>IMP</samp></span> to behave like generic BBN <span class="html"><samp>IMP</samp></span> (Not implemented yet)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP WAITS</b></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>IMP</samp></span> for Stanford style <span class="html"><samp>IMP</samp></span> for WAITS</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SHOW IMP ARP</b></samp></span></p></td>
+<td><p>Display the IP address to MAC address table</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="html"><samp>IMP</samp></span> device must be attached to an available Ethernet interface.
+To determine which devices are available,
+use the <span class="html"><samp><b>SHOW ETHERNET</b></samp></span> command to list the potential interfaces.
+Check out the <a class="reference external" href="../0readme_ethernet.txt"><code class="docutils literal notranslate"><span class="pre">0readme_ethernet.txt</span></code></a> file from the top of the source directory.</p>
+<p>The <span class="html"><samp>IMP</samp></span> device can be configured in several ways.
+Ether it can connect directly to an Ethernet port (via TAP),
+or it can be connected via a TUN interface.
+If configured via TAP interface,
+the <span class="html"><samp>IMP</samp></span> will behave like any other Ethernet interface,
+and if asked,
+grab its own address.
+In environments where this is not desired,
+the TUN interface can be used.
+When configured under a TUN interface,
+the simulated network is a collection of ports on the local host.
+These can be mapped based on configuration options;
+see the <a class="reference external" href="../0readme_ethernet.txt"><code class="docutils literal notranslate"><span class="pre">0readme_ethernet.txt</span></code></a> file as to options.</p>
+<p>With the <span class="html"><samp>IMP</samp></span> interface,
+the IP address of the simulated system is static,
+and under ITS is configured into the system at compile time.
+This address should be given to the <span class="html"><samp>IMP</samp></span> with the <span class="html"><samp><b>SET IMP HOST=</b><var>ip</var></samp></span> command,
+the <span class="html"><samp>IMP</samp></span> will direct all traffic it sees to this address.
+If this address is not the same as the address of the system as seen by the network,
+then this address can be set with <span class="html"><samp><b>SET IMP IP=</b><var>ip</var></samp></span>,
+and <span class="html"><samp><b>SET IMP GW=</b><var>ip</var></samp></span>,
+or <span class="html"><samp><b>SET IMP DHCP</b></samp></span>,
+which will allow the <span class="html"><samp>IMP</samp></span> to request an address from a local DHCP server.
+The <span class="html"><samp>IMP</samp></span> will translate the packets it receives/sends to look like the appeared from the desired address.
+The <span class="html"><samp>IMP</samp></span> will also correctly translate FTP requests in this configuration.</p>
+<p>When running under a TUN interface,
+<span class="html"><samp>IMP</samp></span> is on a virtual <code class="docutils literal notranslate"><span class="pre">10.0.2.0</span></code> network.
+The default gateway is <code class="docutils literal notranslate"><span class="pre">10.0.2.1</span></code>,
+with the default <span class="html"><samp>IMP</samp></span> at <code class="docutils literal notranslate"><span class="pre">10.0.2.15</span></code>.
+For this mode,
+DHCP can be used.</p>
+<span class="target" id="id33"><span id="ch"></span></span></section>
+<section id="ch-chaosnet-interface-device-470">
+<span id="device-470"></span><span id="ch-chaosnet-interface"></span><h4><span class="sectnum">1.3.6.2. </span><span class="html"><samp>CH</samp></span> Chaosnet interface (device 470)<a class="headerlink" href="#ch-chaosnet-interface-device-470" title="Permalink to this heading">¶</a></h4>
+<p>Chaosnet was another method of network access for ITS.
+Chaosnet can be connected to another ITS system or a VAX/PDP-11 running BSD Unix or VMS.
+Chaosnet runs over UDP protocol under Unix.
+You must specify a node number,
+peer to talk to,
+and your local UDP listening port.
+All UDP packets are sent to the peer for further processing.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CH NODE=</b><var>n</var></samp></span></p></td>
+<td><p>Set the Node number for this system</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CH PEER=</b><var>ddd.ddd.ddd.ddd:dddd</var></samp></span></p></td>
+<td><p>Set the Peer address and port number</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="html"><samp>CH</samp></span> device must be attached to a UDP port number.
+This is where it will receive UDP packets from its peer.</p>
+</section>
+</section>
+<section id="pdp-6-devices">
+<h3><span class="sectnum">1.3.7. </span>PDP-6 devices<a class="headerlink" href="#pdp-6-devices" title="Permalink to this heading">¶</a></h3>
+<p>These devices could be attached to the KA10.
+Stanford WAITS used them.
+Early versions of TOPS10 could also run with these devices.
+By default,
+these devices are disabled.</p>
+<section id="dct-type-136-data-control-device-200-204">
+<span id="dct-type-136-data-control"></span><span id="id34"></span><span id="dct"></span><h4><span class="sectnum">1.3.7.1. </span><span class="html"><samp>DCT</samp></span> type 136 data control (Device 200/204)<a class="headerlink" href="#dct-type-136-data-control-device-200-204" title="Permalink to this heading">¶</a></h4>
+<p>This device acted as a data multiplexer for the DECtape/Magtape and disk.
+Individual devices could be assigned channels on this device.
+Devices which use the <span class="html"><samp>DCT</samp></span> include a <span class="html"><samp>DCT</samp></span> option with takes two octal digits,
+the first is the <span class="html"><samp>DCT</samp></span> device 0 or 1,
+the second is the channel 1 to 7.</p>
+</section>
+<section id="dtc-type-551-dectape-controller-device-210">
+<span id="device-210"></span><span id="dtc-type-551-dectape-controller"></span><span id="id35"></span><span id="dtc"></span><h4><span class="sectnum">1.3.7.2. </span><span class="html"><samp>DTC</samp></span> type 551 DECtape controller (device 210)<a class="headerlink" href="#dtc-type-551-dectape-controller-device-210" title="Permalink to this heading">¶</a></h4>
+<p>This was the standard DECtape controller for the PDP-6.
+This controller loads the tape into memory and uses the buffered version.
+You need to specify which DCT unit and channel the tape is connected to.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DTC DCT=</b><var>uc</var></samp></span></p></td>
+<td><p>Set the DTC to connect to DCT unit and channel</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each individual tape drive support several options:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DTC</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set the mag tape to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DTC</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set the mag tape to be writable</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DTC</b><var>n</var> <b>18b</b></samp></span></p></td>
+<td><p>Default, tapes are considered to be 18-bit tapes</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DTC</b><var>n</var> <b>16b</b></samp></span></p></td>
+<td><p>Tapes are converted from 16-bit to 18-bit</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DTC</b><var>n</var> <b>12b</b></samp></span></p></td>
+<td><p>Tapes are converted from 12-bit to 18-bit</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mtc-type-516-magtape-controller-device-220">
+<span id="device-220"></span><span id="mtc-type-516-magtape-controller"></span><span id="id36"></span><span id="mtc"></span><h4><span class="sectnum">1.3.7.3. </span><span class="html"><samp>MTC</samp></span> type 516 magtape controller (device 220)<a class="headerlink" href="#mtc-type-516-magtape-controller-device-220" title="Permalink to this heading">¶</a></h4>
+<p>This was the standard Magtape controller for the PDP-6.
+This device handled only 7-track tapes.
+The simulator has the option to automatically translate 8-track tapes into 7-track tapes.
+You need to specify which DCT unit and channel the tape is connected to.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTC DCT=</b><var>uc</var></samp></span></p></td>
+<td><p>Sets the MTC to connect to DCT unit and channel</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each individual tape drive supports several options:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTC</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTC</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTC</b><var>n</var> <b>9T</b></samp></span></p></td>
+<td><p>Set this unit to simulated 9-track format</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTC</b><var>n</var> <b>7T</b></samp></span></p></td>
+<td><p>Set this unit to read/write 7-track tapes (with parity)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dsk-type-270-disk-controller-device-270">
+<span id="device-270"></span><span id="dsk-type-270-disk-controller"></span><span id="id37"></span><span id="dsk"></span><h4><span class="sectnum">1.3.7.4. </span><span class="html"><samp>DSK</samp></span> type 270 disk controller (device 270)<a class="headerlink" href="#dsk-type-270-disk-controller-device-270" title="Permalink to this heading">¶</a></h4>
+<p>The 270 disk could support up to 4 units.
+The controller had to be connected to a type 136 data controller.
+You need to specify which DCT unit and channel the disk is connected to.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DSK DCT=</b><var>uc</var></samp></span></p></td>
+<td><p>Set the DSK to connect to DCT unit and channel</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each individual disk drive support several options:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DSK</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set this unit to be read-only</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DSK</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set this unit to be writable</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dcs-type-630-terminal-multiplexer-device-300">
+<span id="device-300"></span><span id="dcs-type-630-terminal-multiplexer"></span><span id="id38"></span><span id="dcs"></span><h4><span class="sectnum">1.3.7.5. </span><span class="html"><samp>DCS</samp></span> type 630 terminal multiplexer (device 300)<a class="headerlink" href="#dcs-type-630-terminal-multiplexer-device-300" title="Permalink to this heading">¶</a></h4>
+<p>See section on terminal multiplexers on generic setup.</p>
+</section>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.4. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The KA10 simulator implements symbolic display and input.
+These are controlled by the following switches to the <span class="html"><samp><b>EXAMINE</b></samp></span> and <span class="html"><samp><b>DEPOSIT</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-v</span></code></p></td>
+<td><p>Look up the address via translation; will return nothing if address is not valid</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-u</span></code></p></td>
+<td><p>With the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option, use user space instead of executive space</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display/enter ASCII data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-p</span></code></p></td>
+<td><p>Display/enter packed ASCII data</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display/enter Sixbit character data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display/enter symbolic instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Display/enter octal data</p></td>
+</tr>
+</tbody>
+</table>
+<p>Symbolic instructions can be of the formats:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Opcode</span> <span class="pre">ac,operand</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Opcode</span> <span class="pre">operands</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">I/O</span> <span class="pre">Opcode</span> <span class="pre">device,address</span></code></p></li>
+</ul>
+<p>Operands can be one or more of the following in order:</p>
+<ul class="simple">
+<li><p>Optional <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> for indirection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> to set sign</p></li>
+<li><p>Octal number</p></li>
+<li><p>Optional (<code class="docutils literal notranslate"><span class="pre">ac</span></code>) for indexing</p></li>
+</ul>
+<p>Breakpoints can be set at real memory address.
+The PDP-10 supports 3 types of breakpoints:
+Execution, Memory Access, and Memory Modify.
+The default is execution.
+Adding <code class="docutils literal notranslate"><span class="pre">-R</span></code> to the breakpoint command will stop the simulator on access to that memory location,
+either via fetch,
+indirection,
+or operand access.
+Adding <code class="docutils literal notranslate"><span class="pre">-w</span></code> will stop the simulator when the location is modified.</p>
+<p>The simulator can load RIM files,
+SAV files,
+EXE files,
+WAITS octal DMP files,
+and MIT SBLK files.</p>
+<p>When instruction history is enabled,
+the history trace shows internal status of various registers at the start of the instruction execution.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">PC</samp></span></p></td>
+<td><p>Show the PC of the instruction executed</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">AC</samp></span></p></td>
+<td><p>The contents of the referenced AC</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">EA</samp></span></p></td>
+<td><p>The final computed effective address</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">AR</samp></span></p></td>
+<td><p>Generally the operand that was computed</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RES</samp></span></p></td>
+<td><p>The AR register after the instruction was complete</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FLAGS</samp></span></p></td>
+<td><p>The values of the <span class="html"><samp class="register">FLAGS</samp></span> register before execution of the instruction</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">IR</samp></span></p></td>
+<td><p>The fetched instruction followed by the disassembled instruction</p></td>
+</tr>
+</tbody>
+</table>
+<p>The PDP-10 simulator allows for memory reference and memory modify breakpoints with the <code class="docutils literal notranslate"><span class="pre">-r</span></code> and <code class="docutils literal notranslate"><span class="pre">-w</span></code> options given to the break command.</p>
+</section>
+<section id="os-specific-configurations">
+<h2><span class="sectnum">1.5. </span>OS specific configurations<a class="headerlink" href="#os-specific-configurations" title="Permalink to this heading">¶</a></h2>
+<section id="tops10">
+<h3><span class="sectnum">1.5.1. </span>TOPS10<a class="headerlink" href="#tops10" title="Permalink to this heading">¶</a></h3>
+<p>The default configuration supports Tops10,
+so there is no extra configuration required.</p>
+</section>
+<section id="its">
+<h3><span class="sectnum">1.5.2. </span>ITS<a class="headerlink" href="#its" title="Permalink to this heading">¶</a></h3>
+<p>To run ITS,
+the CPU must be <span class="html"><samp><b>SET CPU ITS MPX 1024K</b></samp></span>;
+this will enable the ITS pager,
+special instructions,
+and the interrupt multiplexer.
+<span class="html"><samp>DK</samp></span> should be disabled,
+along with all Mass bus devices.
+The following devices should be enabled:
+<span class="html"><samp>PD</samp></span>, (also optionally) <span class="html"><samp>DPY</samp></span>, <span class="html"><samp>STK</samp></span>, <span class="html"><samp>TK</samp></span>, <span class="html"><samp>MTY</samp></span>, <span class="html"><samp>TEN11</samp></span>, <span class="html"><samp>AUXCPU</samp></span>, <span class="html"><samp>IMP</samp></span>, <span class="html"><samp>CH</samp></span>.
+ITS used a second interrupt multiplexer,
+so some devices need to be configured to specific channels.
+<span class="html"><samp>TM10</samp></span> (<span class="html"><samp>MTA</samp></span>) was at <code class="docutils literal notranslate"><span class="pre">MPX=7</span></code>,
+DECtapes (<span class="html"><samp>DT</samp></span>) was at <code class="docutils literal notranslate"><span class="pre">MPX=6</span></code>,
+and the <span class="html"><samp>IMP</samp></span> was at <code class="docutils literal notranslate"><span class="pre">MPX=4</span></code>.</p>
+</section>
+<section id="waits">
+<h3><span class="sectnum">1.5.3. </span>WAITS<a class="headerlink" href="#waits" title="Permalink to this heading">¶</a></h3>
+<p>WAITS has two configurations,
+one uses the default two relocation registers.
+This can be done with <span class="html"><samp><b>SET CPU WAITS MAOFF</b></samp></span>;
+the <a class="reference internal" href="#pmp"><span class="html"><samp>PMP</samp></span></a> disk is the only supported disk.
+WAITS used some PDP-6 devices
+(<a class="reference internal" href="#dtc"><span class="html"><samp>DTC</samp></span></a>, <a class="reference internal" href="#mtc"><span class="html"><samp>MTC</samp></span></a>, <a class="reference internal" href="#dcs"><span class="html"><samp>DCS</samp></span></a>, <a class="reference internal" href="#dtc"><span class="html"><samp>DTC</samp></span></a>).
+Also, the following special devices for WAITS should be enabled (<a class="reference internal" href="#dkb"><span class="html"><samp>DKB</samp></span></a>, <a class="reference internal" href="#iii"><span class="html"><samp>III</samp></span></a>).
+The <a class="reference internal" href="#dtc"><span class="html"><samp>DTC</samp></span></a> should be configured to <code class="docutils literal notranslate"><span class="pre">dct=02</span></code>,
+and the <span class="html"><samp>MTC</samp></span> should be configured to <code class="docutils literal notranslate"><span class="pre">dct=01</span></code>.
+After 1975,
+Stanford added a BBN pager unit to their KA,
+to run later versions of WAITS,
+<span class="html"><samp><b>set cpu waits maoff bbn 512k</b></samp></span>.
+The <span class="html"><samp><b>waits</b></samp></span> flag enables the <span class="html"><samp>FIX</samp></span> and <span class="html"><samp>XCTR</samp></span> instructions for waits.
+<span class="html"><samp><b>maoff</b></samp></span> moves the trap vectors to the 0140.
+For systems numbers over 49,
+BBN pager needs to also be enabled on the CPU.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/ka10_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

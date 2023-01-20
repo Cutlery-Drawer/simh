@@ -1,0 +1,2200 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. PDP-8 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. PDP-10 simulator usage" href="pdp10_doc.html" />
+    <link rel="prev" title="1. PDP-4/7/9/15 simulator usage" href="pdp18b_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pdp-8-simulator-usage">
+<h1><span class="sectnum">1. </span>PDP-8 simulator usage<a class="headerlink" href="#pdp-8-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2020-05-01</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id1"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#pdp-8-features" id="id2"><span class="sectnum">1.2. </span>PDP-8 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id3"><span class="sectnum">1.2.1. </span>CPU</a></p></li>
+<li><p><a class="reference internal" href="#tsc8-75-etos-timeshare-control-tsc" id="id4"><span class="sectnum">1.2.2. </span>TSC8-75 ETOS timeshare control (<code class="docutils literal notranslate"><span class="pre">TSC</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#fpp8a-floating-point-unit-fpp" id="id5"><span class="sectnum">1.2.3. </span>FPP8A floating point unit (<code class="docutils literal notranslate"><span class="pre">FPP</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#programmed-i-o-devices" id="id6"><span class="sectnum">1.2.4. </span>Programmed I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#pc8e-paper-tape-reader-ptr" id="id7"><span class="sectnum">1.2.4.1. </span>PC8E Paper Tape Reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#pc8e-paper-tape-punch-ptp" id="id8"><span class="sectnum">1.2.4.2. </span>PC8E Paper Tape Punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#kl8e-terminal-input-tti" id="id9"><span class="sectnum">1.2.4.3. </span>KL8E terminal input (<code class="docutils literal notranslate"><span class="pre">TTI</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#kl8e-terminal-output-tto" id="id10"><span class="sectnum">1.2.4.4. </span>KL8E Terminal Output (<code class="docutils literal notranslate"><span class="pre">TTO</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#le8e-line-printer-lpt" id="id11"><span class="sectnum">1.2.4.5. </span>LE8E Line Printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#dk8e-line-frequency-clock-clk" id="id12"><span class="sectnum">1.2.4.6. </span>DK8E Line-Frequency Clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#kl8ja-additional-terminals-ttix-ttox" id="id13"><span class="sectnum">1.2.4.7. </span>KL8JA Additional Terminals (<code class="docutils literal notranslate"><span class="pre">TTIX</span></code>, <code class="docutils literal notranslate"><span class="pre">TTOX</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#td8e-tu56-dectape-td" id="id14"><span class="sectnum">1.2.4.8. </span>TD8E/TU56 DECtape (<code class="docutils literal notranslate"><span class="pre">TD</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#ta8e-ta60-cassette-tape-ct" id="id15"><span class="sectnum">1.2.4.9. </span>TA8E/TA60 Cassette Tape (<code class="docutils literal notranslate"><span class="pre">CT</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#moving-head-disks" id="id16"><span class="sectnum">1.2.5. </span>Moving head disks</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rk8e-cartridge-disk-rk" id="id17"><span class="sectnum">1.2.5.1. </span>RK8E Cartridge Disk (<code class="docutils literal notranslate"><span class="pre">RK</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#rl8a-cartridge-disk-rl" id="id18"><span class="sectnum">1.2.5.2. </span>RL8A Cartridge Disk (<code class="docutils literal notranslate"><span class="pre">RL</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#rx8e-rx01-rx28-rx02-floppy-disk-rx" id="id19"><span class="sectnum">1.2.6. </span>RX8E/RX01, RX28/RX02 Floppy Disk (<code class="docutils literal notranslate"><span class="pre">RX</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#fixed-head-disks" id="id20"><span class="sectnum">1.2.7. </span>Fixed head disks</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rf08-rs08-fixed-head-disk-rf" id="id21"><span class="sectnum">1.2.7.1. </span>RF08/RS08 Fixed Head Disk (<code class="docutils literal notranslate"><span class="pre">RF</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#df32-ds32-fixed-head-disk-df" id="id22"><span class="sectnum">1.2.7.2. </span>DF32/DS32 Fixed Head Disk (<code class="docutils literal notranslate"><span class="pre">DF</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#tc08-tu56-dectape-dt" id="id23"><span class="sectnum">1.2.8. </span>TC08/TU56 DECtape (<code class="docutils literal notranslate"><span class="pre">DT</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#tm8e-magnetic-tape-mt" id="id24"><span class="sectnum">1.2.9. </span>TM8E Magnetic Tape (<code class="docutils literal notranslate"><span class="pre">MT</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id25"><span class="sectnum">1.3. </span>Symbolic display and input</a></p></li>
+</ul>
+</nav>
+<p>This memorandum documents the PDP-8 simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/pdp8/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_ct.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_df.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_dt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_fpp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_lp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_mt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_pt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_rf.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_rk.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_rl.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_rx.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_sys.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_td.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_tsc.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_tt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pdp8_ttx.c</span></code></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="pdp-8-features">
+<h2><span class="sectnum">1.2. </span>PDP-8 features<a class="headerlink" href="#pdp-8-features" title="Permalink to this heading">¶</a></h2>
+<p>The PDP-8 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device names(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>PDP-8/E CPU with 4KW-32KW of memory</p></td>
+</tr>
+<tr class="row-odd"><td><p>—</p></td>
+<td><p>KE8E extended arithmetic element (EAE)</p></td>
+</tr>
+<tr class="row-even"><td><p>—</p></td>
+<td><p>KM8E memory management and timeshare control</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TSC</span></code></p></td>
+<td><p>TSC8-75 ETOS operating system timeshare control</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FPP</span></code></p></td>
+<td><p>FPP8A floating point unit</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PTR,PTP</span></code></p></td>
+<td><p>PC8E paper tape reader/punch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTI,TTO</span></code></p></td>
+<td><p>KL8E console terminal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTIX,TTOX</span></code></p></td>
+<td><p>KL8JA additional terminals, up to 16</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LPT</span></code></p></td>
+<td><p>LE8E line printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CLK</span></code></p></td>
+<td><p>DK8E line frequency clock (also PDP-8/A compatible)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RK</span></code></p></td>
+<td><p>RK8E/RK05 cartridge disk controller with four drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RF</span></code></p></td>
+<td><p>RF08/RS08 fixed head disk controller with 1-4 platters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DF</span></code></p></td>
+<td><p>DF32/DS32 fixed head disk controller with 1-4 platters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RL</span></code></p></td>
+<td><p>RL8A/RL01 cartridge disk controller with four drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RX</span></code></p></td>
+<td><p>RX8E/RX01, RX28/RX02 floppy disk controller with two drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DT</span></code></p></td>
+<td><p>TC08/TU56 DECtape controller with eight drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TD</span></code></p></td>
+<td><p>TD8E/TU56 DECtape controller with two drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MT</span></code></p></td>
+<td><p>TM8E/TU10 magnetic tape controller with eight drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CT</span></code></p></td>
+<td><p>TA8E/TU60 cassette tape controller with two drives</p></td>
+</tr>
+</tbody>
+</table>
+<p>Most devices can be disabled or enabled,
+by the commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">DISABLED</span>
+<span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">ENABLED</span>
+</pre></div>
+</div>
+<p>The simulator allows most device numbers to be changed,
+by the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="o">&lt;</span><span class="n">dev</span><span class="o">&gt;</span> <span class="n">DEV</span><span class="o">=&lt;</span><span class="n">number</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The PDP-8 can support only one of the set {<code class="docutils literal notranslate"><span class="pre">DF32</span></code>, <code class="docutils literal notranslate"><span class="pre">RF08</span></code>, <code class="docutils literal notranslate"><span class="pre">RL8A</span></code>} using the default device numbers,
+since they all use device numbers 60–61.
+The default is the RF08.
+To change the disk at device numbers 60-61:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RF</span> <span class="n">DISABLED</span>                <span class="n">Disable</span> <span class="n">RF08</span>
+<span class="n">SET</span> <span class="n">DF</span> <span class="n">ENABLED</span><span class="p">,</span> <span class="ow">or</span>             <span class="n">Enable</span> <span class="n">DF32</span>
+<span class="n">SET</span> <span class="n">RL</span> <span class="n">ENABLED</span>                 <span class="n">Enable</span> <span class="n">RL8A</span>
+</pre></div>
+</div>
+<p>The PDP-8 can only support one of the set {<code class="docutils literal notranslate"><span class="pre">TC08</span></code>, <code class="docutils literal notranslate"><span class="pre">TD8E</span></code>} using the default device numbers,
+since both use device number 77.
+The default is the TC08.
+To change the DECtape controller to the TD8E:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DT</span> <span class="n">DISABLED</span>                <span class="n">Disable</span> <span class="n">TC08</span>
+<span class="n">SET</span> <span class="n">TD</span> <span class="n">ENABLED</span>                 <span class="n">Enable</span> <span class="n">TD8E</span>
+</pre></div>
+</div>
+<p>The PDP-8 can only support one of the set {<code class="docutils literal notranslate"><span class="pre">TM8E</span></code>, <code class="docutils literal notranslate"><span class="pre">TA8E</span></code>} using the default device numbers,
+since both use device number 70.
+The default is the TM8E.
+To change the device at device number 70:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MT</span> <span class="n">DISABLED</span>                <span class="n">Disable</span> <span class="n">TM8E</span>
+<span class="n">SET</span> <span class="n">CT</span> <span class="n">ENABLED</span>                 <span class="n">Enable</span> <span class="n">TA8E</span>
+</pre></div>
+</div>
+<p>Alternately,
+the device conflict can be eliminated by changing device numbers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RL</span> <span class="n">DEV</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">SET</span> <span class="n">RL</span> <span class="n">ENA</span>
+<span class="n">SET</span> <span class="n">TD</span> <span class="n">DEV</span><span class="o">=</span><span class="mi">74</span>
+<span class="n">SET</span> <span class="n">TD</span> <span class="n">ENA</span>
+<span class="n">SET</span> <span class="n">CT</span> <span class="n">DEV</span><span class="o">=</span><span class="mi">73</span>
+<span class="n">SET</span> <span class="n">CT</span> <span class="n">ENA</span>
+</pre></div>
+</div>
+<p>However,
+devices can only be <code class="docutils literal notranslate"><span class="pre">BOOT</span></code>ed with their default device numbers.</p>
+<p>The PDP-8 simulator implements several unique stop conditions:</p>
+<ul class="simple">
+<li><p>If an undefined instruction (unimplemented IOT or OPR) is decoded, and <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+<li><p>If a simulated DECtape runs off the end of its reel</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> command supports both RIM format and BIN format tapes.
+If the file extension is <code class="docutils literal notranslate"><span class="pre">.RIM</span></code>,
+or the <code class="docutils literal notranslate"><span class="pre">r</span></code> switch is specified with <code class="docutils literal notranslate"><span class="pre">LOAD</span></code>,
+the file is assumed to be RIM format;
+if the file extension is not <code class="docutils literal notranslate"><span class="pre">.RIM</span></code>,
+or the <code class="docutils literal notranslate"><span class="pre">-b</span></code> switch is specified,
+the file is assumed to be BIN format.
+For BIN format tape loading will stop at the first trailer code (0x80).
+If the tape contains multiple sections specify the <code class="docutils literal notranslate"><span class="pre">-a</span></code> flag to load all sections on the tape.
+The number of sections loaded will be printed.
+If the tape had non-BIN format data following the last valid leader it may cause checksum errors or load unwanted data into memory.</p>
+<section id="cpu">
+<h3><span class="sectnum">1.2.1. </span>CPU<a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The only CPU options are the presence of the EAE and the size of main memory;
+the memory extension and time-share control is always included,
+even if memory size is 4K.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">EAE</span>                    <span class="n">Enable</span> <span class="n">EAE</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOEAE</span>                  <span class="n">Disable</span> <span class="n">EAE</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">4</span><span class="n">K</span>                     <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">8</span><span class="n">K</span>                     <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">8</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">12</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">16</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">16</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">20</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">20</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">24</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">24</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">28</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">28</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">32</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">32</span><span class="n">K</span>
+</pre></div>
+</div>
+<p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.
+Initial memory size is 32K.</p>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Program counter, including <code class="docutils literal notranslate"><span class="pre">IF</span></code> as high 3 bits</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">AC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Accumulator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MQ</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Multiplier-quotient</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Link</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SR</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Front panel switches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IF</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Instruction field</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DF</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Data field</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IB</span></code></p></td>
+<td><p>3</p></td>
+<td><p>Instruction field buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SF</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Save field</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>User mode flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UB</span></code></p></td>
+<td><p>1</p></td>
+<td><p>User mode buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SC</span></code></p></td>
+<td><p>5</p></td>
+<td><p>EAE shift counter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GTF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>EAE greater than flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EMODE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>EAE mode (0 = A, 1 = B)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ION</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ION_DELAY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable delay for ION</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CIF_DELAY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable delay for CIF</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PWR_INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Power fail interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UF_INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>User mode violation interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Interrupt pending flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Device done flags</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Device interrupt enable flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PCQ[0:63]</span></code></p></td>
+<td><p>15</p></td>
+<td><p>PC prior to last JMP, JMS, or interrupt;
+most recent PC change first</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on undefined instruction</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRU</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Interrupt character</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU attempts to detect when the simulator is idle.
+When idle,
+the simulator does not use any resources on the host system.
+Idle detection is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">IDLE</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">NOIDLE</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">IDLE</span>                   <span class="n">Enable</span> <span class="n">idle</span> <span class="n">detection</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOIDLE</span>                 <span class="n">Disable</span> <span class="n">idle</span> <span class="n">detection</span>
+</pre></div>
+</div>
+<p>Idle detection is disabled by default.
+At present,
+the CPU is considered idle if it is executing a <code class="docutils literal notranslate"><span class="pre">KSF/JMP *-1</span></code> loop with interrupts disabled (OS/8, DMS-8) or a <code class="docutils literal notranslate"><span class="pre">JMP *</span></code> loop (TSS/8).</p>
+<p>The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> and <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span>                <span class="n">Clear</span> <span class="n">history</span> <span class="n">buffer</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="mi">0</span>              <span class="n">Disable</span> <span class="n">history</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>              <span class="n">Enable</span> <span class="n">history</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span>               <span class="n">Print</span> <span class="n">CPU</span> <span class="n">history</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>             <span class="n">Print</span> <span class="n">first</span> <span class="n">n</span> <span class="n">entries</span> <span class="n">of</span> <span class="n">CPU</span> <span class="n">history</span>
+</pre></div>
+</div>
+<p>The maximum length for the history is 65536 entries.</p>
+</section>
+<section id="tsc8-75-etos-timeshare-control-tsc">
+<span id="tsc"></span><span id="tsc8-75-etos-timeshare-control"></span><h3><span class="sectnum">1.2.2. </span>TSC8-75 ETOS timeshare control (<code class="docutils literal notranslate"><span class="pre">TSC</span></code>)<a class="headerlink" href="#tsc8-75-etos-timeshare-control-tsc" title="Permalink to this heading">¶</a></h3>
+<p>ETOS is a timeshared operating system for the PDP-8,
+providing multiple virtual OS/8 environments for up to 32 users.
+It requires a special timeshare control option,
+the TSC8-75.
+The TSC8-75 is normally disabled;
+to run ETOS,
+it must be enabled with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TSC</span> <span class="n">ENABLED</span>
+</pre></div>
+</div>
+<p>The TSC8-75 implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IR</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Most recently trapped instruction</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>PC of most recently trapped instruction</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>1 if trapped instruction is CDF, 0 otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENB</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+</tbody>
+</table>
+<p>Except for operation of ETOS,
+the TSC8-75 should be left disabled.</p>
+<span class="target" id="fpp8a-floating-point-unit"></span></section>
+<section id="fpp8a-floating-point-unit-fpp">
+<span id="fpp"></span><h3><span class="sectnum">1.2.3. </span>FPP8A floating point unit (<code class="docutils literal notranslate"><span class="pre">FPP</span></code>)<a class="headerlink" href="#fpp8a-floating-point-unit-fpp" title="Permalink to this heading">¶</a></h3>
+<p>The floating point unit (<code class="docutils literal notranslate"><span class="pre">FPP</span></code>) is an add-on device that provides floating-point capabilities.
+It operates as a coprocessor to the main CPU,
+with its own program counter and instruction set.
+The FPP8A is normally disabled;
+to use it,
+it must be enabled with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">FPP</span> <span class="n">ENABLED</span>
+</pre></div>
+</div>
+<p>The FPP8A implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FPACE</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Floating AC exponent</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FPAC0</span></code>..<code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Floating AC fraction words <code class="docutils literal notranslate"><span class="pre">0</span></code>..<code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMD</span></code></p></td>
+<td><p>12</p></td>
+<td><p>FPP command register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>FPP status register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">APTA</span></code></p></td>
+<td><p>15</p></td>
+<td><p>APT address pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">APTSVF</span></code></p></td>
+<td><p>3</p></td>
+<td><p>APT save field</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FPC</span></code></p></td>
+<td><p>15</p></td>
+<td><p>FPP program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BRA</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Base register pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XRA</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Index register pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OPA</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Operand pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SSF</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Single step flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LASTLOCK</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Last lock bit</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAG</span></code></p></td>
+<td><p>1</p></td>
+<td><p>FPP flag</p></td>
+</tr>
+</tbody>
+</table>
+<p>Except for environments that explicitly support it,
+the FPP8A should be left disabled.</p>
+</section>
+<section id="programmed-i-o-devices">
+<h3><span class="sectnum">1.2.4. </span>Programmed I/O devices<a class="headerlink" href="#programmed-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<span class="target" id="pc8e-paper-tape-reader"></span><section id="pc8e-paper-tape-reader-ptr">
+<span id="ptr"></span><h4><span class="sectnum">1.2.4.1. </span>PC8E Paper Tape Reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)<a class="headerlink" href="#pc8e-paper-tape-reader-ptr" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>) reads data from a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be read.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the reader.</p>
+<p>The paper tape reader supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+<code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">PTR</span></code> copies the RIM loader into memory and starts it running.</p>
+<p>The paper tape reader implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the input file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out-of-tape</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>End-of-file</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out-of-tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="pc8e-paper-tape-punch"></span></section>
+<section id="pc8e-paper-tape-punch-ptp">
+<span id="ptp"></span><h4><span class="sectnum">1.2.4.2. </span>PC8E Paper Tape Punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)<a class="headerlink" href="#pc8e-paper-tape-punch-ptp" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>) writes data to a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the punch.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.
+A new file can be created if you attach with the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch.</p>
+<p>The paper tape punch implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out-of-tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="kl8e-terminal-input"></span></section>
+<section id="kl8e-terminal-input-tti">
+<span id="tti"></span><h4><span class="sectnum">1.2.4.3. </span>KL8E terminal input (<code class="docutils literal notranslate"><span class="pre">TTI</span></code>)<a class="headerlink" href="#kl8e-terminal-input-tti" title="Permalink to this heading">¶</a></h4>
+<p>The terminal interfaces (<code class="docutils literal notranslate"><span class="pre">TTI</span></code>, <code class="docutils literal notranslate"><span class="pre">TTO</span></code>) can be set to one of four modes,
+<code class="docutils literal notranslate"><span class="pre">KSR</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, or <code class="docutils literal notranslate"><span class="pre">8B</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">KSR</span></code></p></td>
+<td><p>Lowercase converted
+to uppercase,
+high-order bit set</p></td>
+<td><p>Lowercase converted to uppercase,
+high-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default mode is <code class="docutils literal notranslate"><span class="pre">KSR</span></code>.</p>
+<p>The terminal input (<code class="docutils literal notranslate"><span class="pre">TTI</span></code>) polls the console keyboard for input.
+It implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Input polling interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The terminal input is normally polled synchronously with the real-time clock.
+To avoid data loss,
+a poll is scheduled ‘TIME’ instructions after the CPU reads a character.</p>
+<span class="target" id="kl8e-terminal-output"></span></section>
+<section id="kl8e-terminal-output-tto">
+<span id="tto"></span><h4><span class="sectnum">1.2.4.4. </span>KL8E Terminal Output (<code class="docutils literal notranslate"><span class="pre">TTO</span></code>)<a class="headerlink" href="#kl8e-terminal-output-tto" title="Permalink to this heading">¶</a></h4>
+<p>The terminal output (<code class="docutils literal notranslate"><span class="pre">TTO</span></code>) writes to the simulator console window.
+It implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of characters output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="le8e-line-printer"></span></section>
+<section id="le8e-line-printer-lpt">
+<span id="lpt"></span><h4><span class="sectnum">1.2.4.5. </span>LE8E Line Printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)<a class="headerlink" href="#le8e-line-printer-lpt" title="Permalink to this heading">¶</a></h4>
+<p>The line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>) writes data to a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be read or written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the printer.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.
+A new file can be created if you attach with the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch.</p>
+<p>The line printer implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error status flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out-of-paper</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="dk8e-line-frequency-clock"></span></section>
+<section id="dk8e-line-frequency-clock-clk">
+<span id="clk"></span><h4><span class="sectnum">1.2.4.6. </span>DK8E Line-Frequency Clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>)<a class="headerlink" href="#dk8e-line-frequency-clock-clk" title="Permalink to this heading">¶</a></h4>
+<p>The real-time clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>) frequency can be adjusted as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CLK</span> <span class="mi">60</span><span class="n">HZ</span>                   <span class="n">Set</span> <span class="n">frequency</span> <span class="n">to</span> <span class="mi">60</span><span class="n">Hz</span>
+<span class="n">SET</span> <span class="n">CLK</span> <span class="mi">50</span><span class="n">HZ</span>                   <span class="n">Set</span> <span class="n">frequency</span> <span class="n">to</span> <span class="mi">50</span><span class="n">Hz</span>
+<span class="n">SET</span> <span class="n">CLK</span> <span class="n">NORMAL</span>                 <span class="n">Set</span> <span class="n">clock</span> <span class="n">to</span> <span class="n">calibrated</span> <span class="n">timing</span>
+<span class="n">SET</span> <span class="n">CLK</span> <span class="n">DIAG</span>                   <span class="n">Set</span> <span class="n">clock</span> <span class="n">to</span> <span class="n">fixed</span> <span class="n">timing</span>
+</pre></div>
+</div>
+<p>The default is 60Hz.</p>
+<p>The clock implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Clock interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The real-time clock autocalibrates;
+the clock interval is adjusted up or down so that the clock tracks actual elapsed time.</p>
+<span class="target" id="kl8ja-additional-terminals"></span></section>
+<section id="kl8ja-additional-terminals-ttix-ttox">
+<span id="ttox"></span><span id="ttix"></span><h4><span class="sectnum">1.2.4.7. </span>KL8JA Additional Terminals (<code class="docutils literal notranslate"><span class="pre">TTIX</span></code>, <code class="docutils literal notranslate"><span class="pre">TTOX</span></code>)<a class="headerlink" href="#kl8ja-additional-terminals-ttix-ttox" title="Permalink to this heading">¶</a></h4>
+<p>The simulator supports 1 to 16 additional terminals,
+with an initial default of 4 lines.
+The additional terminals consist of two independent devices,
+<code class="docutils literal notranslate"><span class="pre">TTIX</span></code> and <code class="docutils literal notranslate"><span class="pre">TTOX</span></code>.
+The entire set is modeled as a terminal multiplexer,
+with <code class="docutils literal notranslate"><span class="pre">TTIX</span></code> as the master controller.
+The number of lines is specified with a <code class="docutils literal notranslate"><span class="pre">SET</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TTIX</span> <span class="n">LINES</span><span class="o">=</span><span class="n">n</span>               <span class="n">Set</span> <span class="n">number</span> <span class="n">of</span> <span class="n">additional</span> <span class="n">lines</span> <span class="n">to</span> <span class="n">n</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command specifies the port to be used:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">TTIX</span> <span class="o">&lt;</span><span class="n">port</span><span class="o">&gt;</span>             <span class="n">Set</span> <span class="n">up</span> <span class="n">listening</span> <span class="n">port</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">port</span></code> is a decimal number between 1 and 65535 that is not being used for other TCP/IP activities.
+The additional terminals are disabled by default.</p>
+<p>The additional terminals can be set to one of four modes:
+<code class="docutils literal notranslate"><span class="pre">UC</span></code>, <code class="docutils literal notranslate"><span class="pre">7P</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, or <code class="docutils literal notranslate"><span class="pre">8B</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UC</span></code></p></td>
+<td><p>Lowercase converted
+to uppercase,
+high-order bit cleared</p></td>
+<td><p>Lowercase converted to uppercase,
+high-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default mode is <code class="docutils literal notranslate"><span class="pre">UC</span></code>.
+Finally,
+each line supports output logging.
+The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTOXn</span> <span class="pre">LOG</span></code> command enables logging on a line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TTOXn</span> <span class="n">LOG</span><span class="o">=</span><span class="n">filename</span>         <span class="n">Log</span> <span class="n">output</span> <span class="n">of</span> <span class="n">line</span> <span class="n">n</span> <span class="n">to</span> <span class="n">filename</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTOXn</span> <span class="pre">NOLOG</span></code> command disables logging and closes the open log file,
+if any.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">TTIX</span></code> is attached and the simulator is running,
+the terminals listen for connections on the specified port.
+They assume that the incoming connections are Telnet connections.
+The connections remain open until disconnected either by the Telnet client,
+a <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTIX</span> <span class="pre">DISCONNECT</span></code> command,
+or a <code class="docutils literal notranslate"><span class="pre">DETACH</span> <span class="pre">TTIX</span></code> command.</p>
+<p>Other special commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">TTIX</span> <span class="n">CONNECTIONS</span>  <span class="n">Show</span> <span class="n">current</span> <span class="n">connections</span>
+<span class="n">SHOW</span> <span class="n">TTIX</span> <span class="n">STATISTICS</span>   <span class="n">Show</span> <span class="n">statistics</span> <span class="k">for</span> <span class="n">active</span> <span class="n">connections</span>
+<span class="n">SET</span> <span class="n">TTOXn</span> <span class="n">DISCONNECT</span>   <span class="n">Disconnects</span> <span class="n">the</span> <span class="n">specified</span> <span class="n">line</span>
+</pre></div>
+</div>
+<p>The input device (<code class="docutils literal notranslate"><span class="pre">TTIX</span></code>) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF[0:15]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Input buffer, lines 0 to 15</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Device done flags (line 0 rightmost)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Initial polling interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The input device is normally polled synchronously with the real-time clock.
+To avoid data loss,
+a poll is scheduled ‘TIME’ instructions after the CPU reads a character from any line.</p>
+<p>The output device (<code class="docutils literal notranslate"><span class="pre">TTOX</span></code>) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF[0:15]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed, lines 0-15</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Device done flag (line 0 rightmost)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME[0:16]</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt, lines 0-15</p></td>
+</tr>
+</tbody>
+</table>
+<p>The additional terminals do not support save and restore.
+All open connections are lost when the simulator shuts down or <code class="docutils literal notranslate"><span class="pre">TTIX</span></code> is detached.</p>
+<span class="target" id="td8e-tu56-dectape"></span></section>
+<section id="td8e-tu56-dectape-td">
+<span id="td"></span><h4><span class="sectnum">1.2.4.8. </span>TD8E/TU56 DECtape (<code class="docutils literal notranslate"><span class="pre">TD</span></code>)<a class="headerlink" href="#td8e-tu56-dectape-td" title="Permalink to this heading">¶</a></h4>
+<p>The TD8E is a programmed I/O,
+non-interrupt controller,
+supporting two DECtape drives (0 and 1).
+The TD8E simulator puts a high burden on the host processor,
+because tape activity is simulated a line (3b) at a time.
+Unless the PDP-8 software requires the TD8E,
+the TC08 should be used to simulate DECtapes.
+The TD8E is disabled by default.</p>
+<p>TD8E options include the ability to make units write-enabled or write-locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TDn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">TDn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The TD8E supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command,
+but only for unit 0.</p>
+<p>The TD8E supports supports PDP-8 format,
+PDP-11 format,
+and 18b format DECtape images.
+<code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> assumes the image is in PDP-8 format;
+the user can force other choices with switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>PDP-11 format</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>18b format</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Autoselect based on file on file size</p></td>
+</tr>
+</tbody>
+</table>
+<p>The TD8E controller is a data-only simulator;
+the timing and mark track,
+and block header and trailer,
+are not stored.
+Thus, read always produces standard values for mark track, header, and trailer words,
+and write throws mark track, header, and trailer words into the bit bucket.</p>
+<p>The TD8E controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TDCMD</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Command register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TDDAT</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Data register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TDMTK</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Mark track register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TDSLF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Single line flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TDQLF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Quad line flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TDTME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Timing error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TDQL</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Quad line counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time between lines</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DCTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time to decelerate to a full-stop</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:1]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, in lines, units 0 and 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STATT[0:1]</span></code></p></td>
+<td><p>18</p></td>
+<td><p>Unit state, units 0 and 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_OFFR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on off-reel error</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">LTIME</span></code> parameter should not be changed,
+or OS/8 may fail to run correctly.
+The <code class="docutils literal notranslate"><span class="pre">DCTIME</span></code> parameter should always be at least 100 times greater than <code class="docutils literal notranslate"><span class="pre">LTIME</span></code>.
+Acceleration time is 75% of deceleration time.</p>
+<span class="target" id="ta8e-ta60-cassette-tape"></span></section>
+<section id="ta8e-ta60-cassette-tape-ct">
+<span id="ct"></span><h4><span class="sectnum">1.2.4.9. </span>TA8E/TA60 Cassette Tape (<code class="docutils literal notranslate"><span class="pre">CT</span></code>)<a class="headerlink" href="#ta8e-ta60-cassette-tape-ct" title="Permalink to this heading">¶</a></h4>
+<p>The TA8E is a programmed I/O controller supporting two cassette drives (0 and 1).
+The TA8E can be used with the MCPIP program under OS/8,
+and with the CAPS-8 operating system.
+Cassettes are simulated as magnetic tapes with a fixed capacity (93,000 characters).
+The tape format is always SimH standard.
+The TA8E is disabled by default.</p>
+<p>TA8E options include the ability to make units write-enabled or write-locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CTn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">CTn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units cannot be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The TA8E supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command,
+but only for CAPS-8,
+and only for unit 0.</p>
+<p>The TA8E controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CTSRA</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Status register A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CTSRB</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Status register B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CTDB</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CTDF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Data flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RDY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Write lock error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRITE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>TA60 write operation flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BPTR</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Buffer pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BLNT</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Buffer length</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Operation start time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Character latency</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O errors flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:1]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, units 0-1</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Tape not ready; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End-of-file</p></td>
+<td><p>Bad tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>CRC error; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="moving-head-disks">
+<h3><span class="sectnum">1.2.5. </span>Moving head disks<a class="headerlink" href="#moving-head-disks" title="Permalink to this heading">¶</a></h3>
+<span class="target" id="rk8e-cartridge-disk"></span><section id="rk8e-cartridge-disk-rk">
+<span id="rk"></span><h4><span class="sectnum">1.2.5.1. </span>RK8E Cartridge Disk (<code class="docutils literal notranslate"><span class="pre">RK</span></code>)<a class="headerlink" href="#rk8e-cartridge-disk-rk" title="Permalink to this heading">¶</a></h4>
+<p>RK8E options include the ability to make units write-enabled or write-locked:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RKn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">RKn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The RK8E supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.</p>
+<p>The RK8E implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RKSTA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RKCMD</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Disk command</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RKDA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Disk address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RKMA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Current memory address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Control busy flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Seek time, per cylinder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational delay</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+<tr class="row-even"><td><p>End-of-file</p></td>
+<td><p>x</p></td>
+<td><p>Assume rest of disk is zero</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="rl8a-cartridge-disk"></span></section>
+<section id="rl8a-cartridge-disk-rl">
+<span id="rl"></span><h4><span class="sectnum">1.2.5.2. </span>RL8A Cartridge Disk (<code class="docutils literal notranslate"><span class="pre">RL</span></code>)<a class="headerlink" href="#rl8a-cartridge-disk-rl" title="Permalink to this heading">¶</a></h4>
+<p>RL8A options include the ability to make units write-enabled or write-locked:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RLn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">RLn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The RL8A supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command,
+but only for unit 0.</p>
+<p>The RL8A implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLCSA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Control/status A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLCSB</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Control/status B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLMA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Memory address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLWC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLSA</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Sector address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLER</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Error flags</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLSI</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Silo top word</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLSI1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Silo second word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RLSI2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Silo third word</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RLSIL</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Silo read left/right flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Composite error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Seek time, per cylinder</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RTIME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Rotational delay</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+<tr class="row-even"><td><p>End-of-file</p></td>
+<td><p>x</p></td>
+<td><p>Assume rest of disk is zero</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="rx8e-rx01-rx28-rx02-floppy-disk"></span></section>
+</section>
+<section id="rx8e-rx01-rx28-rx02-floppy-disk-rx">
+<span id="rx"></span><h3><span class="sectnum">1.2.6. </span>RX8E/RX01, RX28/RX02 Floppy Disk (<code class="docutils literal notranslate"><span class="pre">RX</span></code>)<a class="headerlink" href="#rx8e-rx01-rx28-rx02-floppy-disk-rx" title="Permalink to this heading">¶</a></h3>
+<p>The RX can be configured as an RX8E with two RX01 drives,
+or an RX28 with two RX02 drives:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RX</span> <span class="n">RX8E</span>                    <span class="n">Set</span> <span class="n">controller</span> <span class="n">to</span> <span class="n">RX8E</span><span class="o">/</span><span class="n">RX01</span>
+<span class="n">SET</span> <span class="n">RX</span> <span class="n">RX28</span>                    <span class="n">Set</span> <span class="n">controller</span> <span class="n">to</span> <span class="n">RX28</span><span class="o">/</span><span class="n">RX02</span>
+</pre></div>
+</div>
+<p>The controller is set to the RX8E by default.
+The RX28 is not backwards-compatible with the RX8E and will not work with the standard OS/8 V3D floppy disk driver.</p>
+<p>RX8E options include the ability to set units write enabled or write locked:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RXn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">RXn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>RX28 options include,
+in addition,
+the ability to set the unit density to single density,
+double density,
+or autosized;
+autosizing is the default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RXn</span> <span class="n">SINGLE</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">single</span> <span class="n">density</span>
+<span class="n">SET</span> <span class="n">RXn</span> <span class="n">DOUBLE</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">double</span> <span class="n">density</span>
+<span class="n">SET</span> <span class="n">RXn</span> <span class="n">AUTOSIZE</span>               <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">autosize</span>
+</pre></div>
+</div>
+<p>The RX8E and RX28 support the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.</p>
+<p>The RX8E and RX28 implement these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RXCS</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RXDB</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RXES</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Error status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RXTA</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Current track</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RXSA</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Current sector</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STAPTR</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Controller state</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUFPTR</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Buffer pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Command completion time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Seek time, per track</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Transfer ready delay</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SBUF[0:255]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Sector buffer array</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>RX01 and RX02 data files are buffered in memory;
+therefore,
+end-of-file and OS I/O errors cannot occur.</p>
+</section>
+<section id="fixed-head-disks">
+<h3><span class="sectnum">1.2.7. </span>Fixed head disks<a class="headerlink" href="#fixed-head-disks" title="Permalink to this heading">¶</a></h3>
+<p>With default device addressing,
+either the RF08 or the DF32 can be present in a configuration,
+but not both.</p>
+<span class="target" id="rf08-rs08-fixed-head-disk"></span><section id="rf08-rs08-fixed-head-disk-rf">
+<span id="rf"></span><h4><span class="sectnum">1.2.7.1. </span>RF08/RS08 Fixed Head Disk (<code class="docutils literal notranslate"><span class="pre">RF</span></code>)<a class="headerlink" href="#rf08-rs08-fixed-head-disk-rf" title="Permalink to this heading">¶</a></h4>
+<p>RF08 options include the ability to set the number of platters to a fixed value between 1 and 4,
+or to autosize the number of platters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">RF</span> <span class="mi">1</span><span class="n">P</span>                      <span class="n">One</span> <span class="n">platter</span> <span class="p">(</span><span class="mi">256</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">RF</span> <span class="mi">2</span><span class="n">P</span>                      <span class="n">Two</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">512</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">RF</span> <span class="mi">3</span><span class="n">P</span>                      <span class="n">Three</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">768</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">RF</span> <span class="mi">4</span><span class="n">P</span>                      <span class="n">Four</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">1024</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">RF</span> <span class="n">AUTOSIZE</span>                <span class="n">Autosized</span> <span class="n">on</span> <span class="n">ATTACH</span>
+</pre></div>
+</div>
+<p>The default is one platter.</p>
+<p>The RF08 implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DA</span></code></p></td>
+<td><p>20</p></td>
+<td><p>Current disk address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Memory address (in memory)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count (in memory)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WLK</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Write lock switches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational delay, per word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BURST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Burst flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>The RF08 supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+The default bootstrap is for OS/8.
+To bootstrap the 4K Disk Monitor,
+use the <code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">-D</span> <span class="pre">RF</span></code> command.</p>
+<p>The RF08 is a three-cycle data break device.
+If <code class="docutils literal notranslate"><span class="pre">BURST</span> <span class="pre">=</span> <span class="pre">0</span></code>,
+word transfers are scheduled individually;
+if <code class="docutils literal notranslate"><span class="pre">BURST</span> <span class="pre">=</span> <span class="pre">1</span></code>,
+the entire transfer occurs in a single data break.</p>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>RF08 data files are buffered in memory;
+therefore,
+end-of-file and OS I/O errors cannot occur.</p>
+<span class="target" id="df32-ds32-fixed-head-disk"></span></section>
+<section id="df32-ds32-fixed-head-disk-df">
+<span id="df"></span><h4><span class="sectnum">1.2.7.2. </span>DF32/DS32 Fixed Head Disk (<code class="docutils literal notranslate"><span class="pre">DF</span></code>)<a class="headerlink" href="#df32-ds32-fixed-head-disk-df" title="Permalink to this heading">¶</a></h4>
+<p>DF32 options include the ability to set the number of platters to a fixed value between 1 and 4,
+or to autosize the number of platters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DF</span> <span class="mi">1</span><span class="n">P</span>                      <span class="n">One</span> <span class="n">platter</span> <span class="p">(</span><span class="mi">32</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">DF</span> <span class="mi">2</span><span class="n">P</span>                      <span class="n">Two</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">64</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">DF</span> <span class="mi">3</span><span class="n">P</span>                      <span class="n">Three</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">98</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">DF</span> <span class="mi">4</span><span class="n">P</span>                      <span class="n">Four</span> <span class="n">platters</span> <span class="p">(</span><span class="mi">128</span><span class="n">K</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">DF</span> <span class="n">AUTOSIZE</span>                <span class="n">Autosized</span> <span class="n">on</span> <span class="n">ATTACH</span>
+</pre></div>
+</div>
+<p>The default is one platter.</p>
+<p>The DF32 implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status, disk and memory address extension</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Low-order disk address</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Memory address (in memory)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count (in memory)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WLK</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Write lock switches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Rotational delay, per word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BURST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Burst flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>The DF32 supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+The default bootstrap is for OS/8.
+To bootstrap the 4K Disk Monitor,
+use the <code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">-D</span> <span class="pre">DF</span></code> command.</p>
+<p>The DF32 is a three-cycle data break device.
+If <code class="docutils literal notranslate"><span class="pre">BURST</span> <span class="pre">=</span> <span class="pre">0</span></code>,
+word transfers are scheduled individually;
+if <code class="docutils literal notranslate"><span class="pre">BURST</span> <span class="pre">=</span> <span class="pre">1</span></code>,
+the entire transfer occurs in a single data break.</p>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>DF32 data files are buffered in memory;
+therefore,
+end-of-file and OS I/O errors cannot occur.</p>
+<span class="target" id="tc08-tu56-dectape"></span></section>
+</section>
+<section id="tc08-tu56-dectape-dt">
+<span id="dt"></span><h3><span class="sectnum">1.2.8. </span>TC08/TU56 DECtape (<code class="docutils literal notranslate"><span class="pre">DT</span></code>)<a class="headerlink" href="#tc08-tu56-dectape-dt" title="Permalink to this heading">¶</a></h3>
+<p>DT implements the TC08 DECtape controller and TU56 drives.
+TC08 options include the ability to make units write enabled or write locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DTn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">DTn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.
+The TC08 supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command,
+but only for unit 0.</p>
+<p>The TC08 supports supports PDP-8 format,
+PDP-11 format,
+and 18b format DECtape images.
+<code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> assumes the image is in PDP-8 format;
+the user can force other choices with switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>PDP-11 format</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-f</span></code></p></td>
+<td><p>18b format</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Autoselect based on file on file size</p></td>
+</tr>
+</tbody>
+</table>
+<p>The TC08 controller is a data-only simulator;
+the timing and mark track,
+and block header and trailer,
+are not stored.
+Thus, the <code class="docutils literal notranslate"><span class="pre">WRITE</span> <span class="pre">TIMING</span> <span class="pre">AND</span> <span class="pre">MARK</span> <span class="pre">TRACK</span></code> function is not supported;
+the <code class="docutils literal notranslate"><span class="pre">READ</span> <span class="pre">ALL</span></code> function always returns the hardware standard block header and trailer;
+and the <code class="docutils literal notranslate"><span class="pre">WRITE</span> <span class="pre">ALL</span></code> function dumps non-data words into the bit bucket.</p>
+<p>The DECtape controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DTSA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status register A</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DTSB</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Status register B</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENB</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DTF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>DECtape flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Current address (memory location 7754)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count (memory location 7755)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time between lines</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DCTIME</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Time to decelerate to a full stop</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SUBSTATE</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Read/write command substate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:7]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, in lines, units 0 to 7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STATT[0:7]</span></code></p></td>
+<td><p>31</p></td>
+<td><p>Unit state, units 0 to 7</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_OFFR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on off-reel error</p></td>
+</tr>
+</tbody>
+</table>
+<p>It is critically important to maintain certain timing relationships among the DECtape parameters,
+or the DECtape simulator will fail to operate correctly.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LTIME</span></code> must be at least 6</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DCTIME</span></code> needs to be at least 100 times <code class="docutils literal notranslate"><span class="pre">LTIME</span></code></p></li>
+</ul>
+<p>Acceleration time is set to 75% of deceleration time.</p>
+<span class="target" id="tm8e-magnetic-tape"></span></section>
+<section id="tm8e-magnetic-tape-mt">
+<span id="mt"></span><h3><span class="sectnum">1.2.9. </span>TM8E Magnetic Tape (<code class="docutils literal notranslate"><span class="pre">MT</span></code>)<a class="headerlink" href="#tm8e-magnetic-tape-mt" title="Permalink to this heading">¶</a></h3>
+<p>Magnetic tape options include the ability to make units write-enabled or write-locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MTn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">MTn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Magnetic tape units can be set to a specific reel capacity in MB,
+or to unlimited capacity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MTn</span> <span class="n">CAPAC</span><span class="o">=</span><span class="n">m</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">capacity</span> <span class="n">to</span> <span class="n">m</span> <span class="n">MB</span> <span class="p">(</span><span class="mi">0</span> <span class="o">=</span> <span class="n">unlimited</span><span class="p">)</span>
+<span class="n">SHOW</span> <span class="n">MTn</span> <span class="n">CAPAC</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">capacity</span> <span class="ow">in</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+<p>The magnetic tape controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CMD</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Command</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FNC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Function</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Memory address</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WC</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Word count</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DB</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STA</span></code></p></td>
+<td><p>12</p></td>
+<td><p>Main status</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STA2</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Secondary status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DONE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Record delay</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">UST[0:7]</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Unit status, units 0 to 7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:7]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, units 0 to 7</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Tape not ready; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End-of-file</p></td>
+<td><p>Bad tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Parity error; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The PDP-8 simulator implements symbolic display and input.
+Display is controlled by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display as ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as two packed sixbit characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-t</span></code></p></td>
+<td><p>Display as two packed TSS/8 sixbit characters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics</p></td>
+</tr>
+</tbody>
+</table>
+<p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Two packed sixbit characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">#</span></code> or <code class="docutils literal notranslate"><span class="pre">-t</span></code></p></td>
+<td><p>Two packed TSS/8 sixbit characters</p></td>
+</tr>
+<tr class="row-even"><td><p>Alphabetic</p></td>
+<td><p>Instruction mnemonic</p></td>
+</tr>
+<tr class="row-odd"><td><p>Numeric</p></td>
+<td><p>Octal number</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instruction input uses standard PDP-8 assembler syntax.
+There are four instruction classes:
+memory reference, IOT, field change, and operate.</p>
+<p>Memory reference instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memref</span> <span class="p">{</span><span class="n">I</span><span class="p">}</span> <span class="p">{</span><span class="n">C</span><span class="o">/</span><span class="n">Z</span><span class="p">}</span> <span class="n">address</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">I</span></code> signifies indirect,
+<code class="docutils literal notranslate"><span class="pre">C</span></code> a current page reference,
+and <code class="docutils literal notranslate"><span class="pre">Z</span></code> a zero page reference.
+The address is an octal number in the range 0 – 07777;
+if <code class="docutils literal notranslate"><span class="pre">C</span></code> or <code class="docutils literal notranslate"><span class="pre">Z</span></code> is specified,
+the address is a page offset in the range 0 – 177.
+Normally,
+<code class="docutils literal notranslate"><span class="pre">C</span></code> is not needed;
+the simulator figures out from the address what mode to use.
+However,
+when referencing memory outside the CPU
+(e.g., disks),
+there is no valid PC,
+and <code class="docutils literal notranslate"><span class="pre">C</span></code> must be used to specify current page addressing.</p>
+<p>IOT instructions consist of single mnemonics,
+e.g., <code class="docutils literal notranslate"><span class="pre">KRB</span></code>, <code class="docutils literal notranslate"><span class="pre">TLS</span></code>.
+IOT instructions may be OR’d together</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iot</span> <span class="n">iot</span> <span class="n">iot</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>The simulator does not check the legality of the proposed combination.
+IOTs for which there is no opcode may be specified as <code class="docutils literal notranslate"><span class="pre">IOT</span> <span class="pre">n</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">n</span></code> is an octal number in the range 0 – 0777.</p>
+<p>Field change instructions
+(<code class="docutils literal notranslate"><span class="pre">CIF</span></code>, <code class="docutils literal notranslate"><span class="pre">CDF</span></code>) have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fldchg</span> <span class="n">field</span>
+</pre></div>
+</div>
+<p>where field is an octal number in the range 0 – 7.
+Field change instructions may be OR’d together.</p>
+<p>Operate instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">opr</span> <span class="n">opr</span> <span class="n">opr</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>The simulator does not check the legality of the proposed combination.
+EAE mode A and B mnemonics may be specified regardless of the EAE mode.
+The operands for MUY and DVI must be deposited explicitly.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pdp18b_doc.html" title="previous chapter"><span class="sectnum">1. </span>PDP-4/7/9/15 simulator usage</a></li>
+      <li>Next: <a href="pdp10_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-10 simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/pdp8_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

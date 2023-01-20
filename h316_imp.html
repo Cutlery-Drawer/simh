@@ -1,0 +1,1245 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. ARPANET IMP and TIP Extensions for the H316 simulator &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="arpanet-imp-and-tip-extensions-for-the-h316-simulator">
+<h1><span class="sectnum">1. </span>ARPANET IMP and TIP Extensions for the H316 simulator<a class="headerlink" href="#arpanet-imp-and-tip-extensions-for-the-h316-simulator" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2013-12-03</p>
+</dd>
+<dt class="field-even">Contact<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="mailto:bob&#37;&#52;&#48;jfcl&#46;com">bob<span>&#64;</span>jfcl<span>&#46;</span>com</a></p>
+</dd>
+<dt class="field-odd">Revision<span class="colon">:</span></dt>
+<dd class="field-odd"><p>$Format:%H$</p>
+</dd>
+<dt class="field-even">Copyright<span class="colon">:</span></dt>
+<dd class="field-even"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#introduction" id="id10"><span class="sectnum">1.1. </span>Introduction</a></p></li>
+<li><p><a class="reference internal" href="#simulator-files" id="id11"><span class="sectnum">1.2. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#additional-features-and-devices" id="id12"><span class="sectnum">1.3. </span>Additional features and devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#imp-pseudo-device" id="id13"><span class="sectnum">1.3.1. </span><span class="html"><samp>IMP</samp></span> pseudo-device</a></p></li>
+<li><p><a class="reference internal" href="#real-time-clock" id="id14"><span class="sectnum">1.3.2. </span>Real-time clock</a></p></li>
+<li><p><a class="reference internal" href="#watch-dog-timer" id="id15"><span class="sectnum">1.3.3. </span>Watch dog timer</a></p></li>
+<li><p><a class="reference internal" href="#communications-devices" id="id16"><span class="sectnum">1.3.4. </span>Communications devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#modem-interface" id="id17"><span class="sectnum">1.3.4.1. </span>Modem interface</a></p></li>
+<li><p><a class="reference internal" href="#host-interface" id="id18"><span class="sectnum">1.3.4.2. </span>Host interface</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#summary" id="id19"><span class="sectnum">1.4. </span>Summary</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#additional-devices" id="id20"><span class="sectnum">1.4.1. </span>Additional devices</a></p></li>
+<li><p><a class="reference internal" href="#modem-interface-i-o-instructions" id="id21"><span class="sectnum">1.4.2. </span>Modem interface I/O instructions</a></p></li>
+<li><p><a class="reference internal" href="#host-interface-i-o-instructions" id="id22"><span class="sectnum">1.4.3. </span>Host interface I/O instructions</a></p></li>
+<li><p><a class="reference internal" href="#other-i-o-instructions" id="id23"><span class="sectnum">1.4.4. </span>Other I/O instructions</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><span class="sectnum">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>This memorandum documents the extensions made to the SIMH Honeywell H316 simulator to allow it to run the ARPANET Interface Message Processor (aka <span class="html"><samp>IMP</samp></span>) and Terminal Interface Processor (<span class="html"><samp>TIP</samp></span>) software.
+A single <span class="html"><samp>IMP</samp></span> or <span class="html"><samp>TIP</samp></span> instance isn’t very useful,
+however these extensions allow multiple SIMH instances,
+each running a copy of the <span class="html"><samp>IMP</samp></span> or <span class="html"><samp>TIP</samp></span> code,
+to communicate using virtual modem connections implemented with physical serial ports on the host computer.
+Alternatively,
+virtual modem connections may be tunneled over TCP/IP to a remote SIMH <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> instance anywhere in the world.
+Moreover,
+each SIMH <span class="html"><samp>IMP</samp></span> instance can then be connected via virtual host interface cards to other local PDP-10 or PDP-11 SIMH instances running ARPANET host software.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Presently, <span class="html"><samp>TIP</samp></span> support is not implemented,
+and <span class="html"><samp>IMP</samp></span> host card support is only partially implemented.
+The current implementation is sufficient to allow multiple <span class="html"><samp>IMP</samp></span>s to talk via virtual modem connections,
+and that’s all.</p>
+</div>
+</section>
+<section id="simulator-files">
+<h2><span class="sectnum">1.2. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<p>These additional <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> specific files are added to SIMH:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subdirectory</p></th>
+<th class="head"><p>File</p></th>
+<th class="head"><p>Contains</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="6"><p><code class="docutils literal notranslate"><span class="pre">sim/h316/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">h316_imp.h</span></code></p></td>
+<td><p>IMP/TIP and ARPAnet specific definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h316_imp.c</span></code></p></td>
+<td><p>The IMP pseudo device</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">h316_rtc.c</span></code></p></td>
+<td><p>Real-time clock and watch dog timer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h316_hi.c</span></code></p></td>
+<td><p>Host interfaces</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">h316_mi.c</span></code></p></td>
+<td><p>Modem interfaces</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">h316_udp.c</span></code></p></td>
+<td><p>UDP support for MI and HI modules</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="additional-features-and-devices">
+<h2><span class="sectnum">1.3. </span>Additional features and devices<a class="headerlink" href="#additional-features-and-devices" title="Permalink to this heading">¶</a></h2>
+<p>The <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> adds the following devices to the H316 configuration:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>MI</samp></span></p></td>
+<td><p>Modem interface (up to 5)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>HI</samp></span></p></td>
+<td><p>Host interface (up to 4)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>WDT</samp></span></p></td>
+<td><p>Watchdog timer</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>RTC</samp></span></p></td>
+<td><p>Real-time clock
+(replaces H316 <span class="html"><samp>CLK</samp></span> device)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#imp"><span class="html"><samp>IMP</samp></span></a></p></td>
+<td><p><span class="html"><samp>TASK</samp></span>, <span class="html"><samp>IMPN</samp></span>, and <span class="html"><samp class="register">MLC</samp></span> functions
+(addresses 41<sub>8</sub> and 42<sub>8</sub>)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="imp-pseudo-device">
+<span id="imp"></span><h3><span class="sectnum">1.3.1. </span><span class="html"><samp>IMP</samp></span> pseudo-device<a class="headerlink" href="#imp-pseudo-device" title="Permalink to this heading">¶</a></h3>
+<p>The <span class="html"><samp>IMP</samp></span> pseudo-device implements two sets of miscellaneous I/O instructions in the original <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> hardware.
+This device responds both to IO address 41<sub>8</sub>,
+which implements the <span class="html"><samp>TASK</samp></span> switching interrupt and the <span class="html"><samp>IMP</samp></span> identification number,
+and to IO address 42<sub>8</sub>,
+which implements the <span class="html"><samp class="register">MLC</samp></span> test.
+The <span class="html"><samp>IMP</samp></span> device may be enabled with the standard command <span class="html"><samp><b>SET IMP ENABLED</b></samp></span>.</p>
+<p>The <span class="html"><samp>IMP</samp></span> address,
+which is returned by the <code class="docutils literal notranslate"><span class="pre">RDIMPN</span></code> (<code class="docutils literal notranslate"><span class="pre">INA 1041</span></code>) instruction,
+may be set with the command</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP NUM=</b><var>n</var></samp></span></p></td>
+<td><p>Set IMP station address to <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>This value was apparently hardwired into each original IMP/TIP station.
+The <span class="html"><samp>IMP</samp></span> device also implements the <code class="docutils literal notranslate"><span class="pre">AMIMLC</span></code> (<code class="docutils literal notranslate"><span class="pre">SKS 0042</span></code>) instruction,
+which skips if the current hardware is a multi-line controller (a.k.a, a <span class="html"><samp>TIP</samp></span>).
+Since <span class="html"><samp>TIP</samp></span> emulation is not currently supported,
+this instruction is presently hard-wired as a NOP
+(i.e., it never skips).</p>
+<p>The <span class="html"><samp>IMP</samp></span> device implements the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">MLC</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Always zero (TIP flag)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">IEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Task interrupt enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">IRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Task interrupt pending</p></td>
+</tr>
+</tbody>
+</table>
+<p>These registers can be viewed with the command <span class="html"><samp><b>EXAMINE IMP STATE</b></samp></span>.</p>
+<p>The <span class="html"><samp>IMP</samp></span> device implements these debugging flags:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET IMP DEBUG=WARN</b></samp></span></p></td>
+<td><p>Print warnings for unusual conditions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET IMP DEBUG=IO</b></samp></span></p></td>
+<td><p>Trace all IMP device I/O instructions</p></td>
+</tr>
+</tbody>
+</table>
+<p>Remember that you must enable debugging output first before these settings will be effective;
+refer to the <cite>Controlling debugging</cite> section of the <a class="reference external" href="./simh_doc.rst">SIMH Users’ Guide</a> for more information.</p>
+</section>
+<section id="real-time-clock">
+<span id="clk"></span><span id="rtc"></span><h3><span class="sectnum">1.3.2. </span>Real-time clock<a class="headerlink" href="#real-time-clock" title="Permalink to this heading">¶</a></h3>
+<p>The <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> hardware contained a custom real-time clock which was unique to that implementation,
+and further,
+the <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> did not have the standard H316 power line clock or real-time clock.
+The <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> clock is in some ways similar to the H316 real-time clock option,
+<em>but it is not the same</em>.
+Normally the <span class="html"><samp>CLK</samp></span> device would be disabled when emulating the <span class="html"><samp>IMP</samp></span>,
+however there is no actual conflict between the <span class="html"><samp>CLK</samp></span> and the <span class="html"><samp>RTC</samp></span> devices and both can be enabled simultaneously.</p>
+<p>The <span class="html"><samp>RTC</samp></span> device supports the following <span class="html"><samp><b>SET</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RTC ENABLED</b></samp></span></p></td>
+<td><p>Enable <span class="html"><samp>RTC</samp></span> emulation</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET RTC INTERVAL=</b><var>i</var></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>RTC</samp></span> tick interval to <span class="html"><samp><var>i</var></samp></span> microseconds</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RTC QUANTUM=</b><var>q</var></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>RTC</samp></span> resolution to <span class="html"><samp><var>q</var></samp></span> ticks</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="html"><samp>INTERVAL</samp></span> parameter sets the interval between <span class="html"><samp>RTC</samp></span> clock ticks,
+in microseconds,
+and the <span class="html"><samp>QUANTUM</samp></span> parameter sets how often,
+as a number of clock ticks,
+SIMH updates the <span class="html"><samp>RTC</samp></span> count.
+To give an example,
+if <span class="html"><samp>INTERVAL</samp></span> was set to 20 and <span class="html"><samp>QUANTUM</samp></span> was 1,
+SIMH would attempt to increment the <span class="html"><samp>RTC</samp></span> count by one at a rate of 50,000 times per second.
+Modern PCs are very fast and it would probably be possible for SIMH to do this,
+but the amount of overhead would be huge and it would be impractical.</p>
+<p>Instead,
+for example,
+if <span class="html"><samp>INTERVAL</samp></span> was still set to 20 but <span class="html"><samp>QUANTUM</samp></span> was now set to 50,
+SIMH would add 50 to the <span class="html"><samp>RTC</samp></span> count at a rate of 1000 times per second.
+This represents much less overhead and yet gives the same net counting rate as before.
+However,
+now the clock count jumps in increments of 50 rather than 1.
+Most software wouldn’t notice,
+but it’s always possible this could cause problems.</p>
+<p>It’s important to note that the <span class="html"><samp>QUANTUM</samp></span> does not affect the overall clock frequency —
+as long as the <span class="html"><samp>INTERVAL</samp></span> is set to 20,
+the clock would count at an effective rate of 50 kHz regardless of the <span class="html"><samp>QUANTUM</samp></span> value.</p>
+<p>The <span class="html"><samp>RTC</samp></span> device implements the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">ENA</samp></span></p></td>
+<td><p>1</p></td>
+<td><p><span class="html"><samp>RTC</samp></span> is enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">COUNT</samp></span></p></td>
+<td><p>16</p></td>
+<td><p>Current count</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">IEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p><span class="html"><samp>RTC</samp></span> interrupt enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">IRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p><span class="html"><samp>RTC</samp></span> interrupt pending</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">TPS</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Effective ticks per second</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">WAIT</samp></span></p></td>
+<td><p>24</p></td>
+<td><p>Simulator time until the next tick</p></td>
+</tr>
+</tbody>
+</table>
+<p>These registers can be viewed with the command <span class="html"><samp><b>EXAMINE RTC STATE</b></samp></span>.</p>
+<p>The <span class="html"><samp>RTC</samp></span> device implements these debugging flags:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET RTC DEBUG=WARN</b></samp></span></p></td>
+<td><p>Print warnings for unusual conditions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET RTC DEBUG=IO</b></samp></span></p></td>
+<td><p>Trace all <span class="html"><samp>RTC</samp></span> device I/O instructions</p></td>
+</tr>
+</tbody>
+</table>
+<p>Please refer to the <cite>Controlling Debugging</cite> section of the <a class="reference external" href="./simh_doc.rst">SIMH Users’ Guide</a> for more information,
+and remember that you must enable debugging output first before these settings will be effective.</p>
+</section>
+<section id="watch-dog-timer">
+<span id="wdt"></span><h3><span class="sectnum">1.3.3. </span>Watch dog timer<a class="headerlink" href="#watch-dog-timer" title="Permalink to this heading">¶</a></h3>
+<p>The <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> hardware also had a custom watch dog timer implementation which would force a non-maskable interrupt if was ever allowed to expire.
+The <span class="html"><samp>WDT</samp></span> device in SIMH implements this feature.
+The <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> watch dog timer also implemented a couple of other unrelated features —
+these include the status display panel,
+which you can see featured prominently in some <span class="html"><samp>IMP</samp></span> photos,
+and a flag to indicate whether the CPU was a H316 or DDP-516.</p>
+<p>The <span class="html"><samp>WDT</samp></span> device supports the following <span class="html"><samp><b>SET</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET WDT ENABLED</b></samp></span></p></td>
+<td><p>Enable <span class="html"><samp>WDT</samp></span> emulation</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET WDT DELAY=</b><var>n</var></samp></span></p></td>
+<td><p>Set the <span class="html"><samp>WDT</samp></span> delay to <span class="html"><samp><var>n</var></samp></span> milliseconds</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="html"><samp><var>DELAY</var></samp></span> parameter sets the <span class="html"><samp>WDT</samp></span> timeout,
+in milliseconds.
+This is a 16-bit unsigned value,
+so the maximum <span class="html"><samp>WDT</samp></span> delay is just over a minute.
+Note that there are no H316 instructions that disable the <span class="html"><samp>WDT</samp></span> —
+only one to reset it —
+so if <em>the WDT device is enabled, the WDT will run anytime simulation is active</em>.
+If the code fails to reset the <span class="html"><samp>WDT</samp></span> in a timely fashion,
+the <span class="html"><samp>WDT</samp></span> interrupt will occur regardless of the enabled or disabled state of the interrupt system.</p>
+<div class="compound">
+<p>Setting the <span class="html"><samp>WDT</samp></span> delay to zero</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">WDT</span> <span class="n">DELAY</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>prevents the <span class="html"><samp>WDT</samp></span> from ever generating a timeout.
+This special feature allows the <span class="html"><samp>WDT</samp></span> device to be enabled,
+so that code which executes <span class="html"><samp>WDT</samp></span>,
+status light,
+or AMI512 instructions can be executed and debugged,
+but without inadvertently triggering a <span class="html"><samp>WDT</samp></span> timeout.</p>
+</div>
+<p>The <span class="html"><samp>WDT</samp></span> device implements the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">COUNT</samp></span></p></td>
+<td><p>16</p></td>
+<td><p>Current countdown</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">TMO</samp></span></p></td>
+<td><p>1</p></td>
+<td><p><span class="html"><samp>WDT</samp></span> timed out</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">LIGHTS</samp></span></p></td>
+<td><p>16</p></td>
+<td><p>Last “set status lights”</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">WAIT</samp></span></p></td>
+<td><p>24</p></td>
+<td><p>Calcuated time until the next tick</p></td>
+</tr>
+</tbody>
+</table>
+<p>These registers can be viewed with the command <span class="html"><samp><b>EXAMINE WDT STATE</b></samp></span>.</p>
+<p>The <span class="html"><samp>WDT</samp></span> device implements these debugging flags:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET WDT DEBUG=WARN</b></samp></span></p></td>
+<td><p>Print warnings for unusual conditions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET WDT DEBUG=IO</b></samp></span></p></td>
+<td><p>Trace all <span class="html"><samp>WDT</samp></span> device I/O instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET WDT DEBUG=LIGHTS</b></samp></span></p></td>
+<td><p>Trace <span class="html"><samp>IMP</samp></span> status light changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>Remember that you must enable debugging output first before these settings will be effective;
+refer to the <cite>Controlling Debugging</cite> section of the <a class="reference external" href="./simh_doc.rst">SIMH Users’ Guide</a> for more information.</p>
+</section>
+<section id="communications-devices">
+<h3><span class="sectnum">1.3.4. </span>Communications devices<a class="headerlink" href="#communications-devices" title="Permalink to this heading">¶</a></h3>
+<section id="modem-interface">
+<span id="mi5"></span><span id="mi4"></span><span id="mi3"></span><span id="mi2"></span><span id="mi1"></span><span id="mi"></span><h4><span class="sectnum">1.3.4.1. </span>Modem interface<a class="headerlink" href="#modem-interface" title="Permalink to this heading">¶</a></h4>
+<p><span class="html"><samp>IMP</samp></span>s and <span class="html"><samp>TIP</samp></span>s communicated with each other via leased telephone lines and synchronous modem links.
+These modem links were point-to-point —
+each <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> modem communicated with exactly one other modem attached to exactly one other <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span>.
+SIMH simulates these modem interfaces and allows them to be attached to either a real,
+physical,
+serial port on the host computer or to a virtual UDP/IP port.
+Either can then be connected to another SIMH instance running the <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> software,
+or even a real <span class="html"><samp>IMP</samp></span> or <span class="html"><samp>TIP</samp></span> if someone gets one working again,
+and a network can be assembled.</p>
+<p>SIMH implements five modem interfaces, <span class="html"><samp>MI1</samp></span> thru <span class="html"><samp>MI5</samp></span>.
+Initially,
+<span class="html"><samp>MI1</samp></span> thru <span class="html"><samp>3</samp></span> are enabled and <span class="html"><samp>MI4</samp></span> and <span class="html"><samp>5</samp></span> are not,
+however this can be changed with the commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>ENABLED</b></samp></span></p></td>
+<td><p>Enable modem line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>DISABLED</b></samp></span></p></td>
+<td><p>Disable modem line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>A limitation of the original <span class="html"><samp>IMP</samp></span> hardware is that the DMC channels used by modem lines 4 and 5 conflict with those used by host interfaces 3 and 4.
+Thus it not possible to enable all modem lines and all host interfaces at the same time
+(see <cite>Physical serial tunnels</cite>).</p>
+<p>Modem interfaces implement one parameter which may be explicitly set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MIn</span> <span class="n">BPS</span><span class="o">=</span><span class="mi">56000</span>
+</pre></div>
+</div>
+<p>This parameter sets the simulated line speed,
+in bits per second,
+for UDP/IP virtual modem connections.</p>
+<p>Modem interfaces also implement an interface (local) and a line (remote) loopback feature.
+This cause the modem to receive its own transmitted messages,
+and are analogous to features in the IMP modem hardware.
+Loopback may be enabled or disabled with these commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>LOOPINTERFACE</b></samp></span></p></td>
+<td><p>Enable interface loopback on line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>NOLOOPINTERFACE</b></samp></span></p></td>
+<td><p>Disable interface loopback</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>LOOPLINE</b></samp></span></p></td>
+<td><p>Enable line loopback on line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>NOLOOPLINE</b></samp></span></p></td>
+<td><p>Disable line loopback</p></td>
+</tr>
+</tbody>
+</table>
+<p>Modem interfaces support the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">RXPOLL</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Receiver polling interval</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RXPEND</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver waiting for input</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">RXERR</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RXIEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">RXIRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RXTOT</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Count of total messages received</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">TXDLY</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Calculated delay before transmitter done</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">TXIEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Transmitter interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">TXIRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Transmitter interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">TXTOT</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Count of total messages transmitted</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">LINK</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Link number for <code class="docutils literal notranslate"><span class="pre">h316_udp</span></code> module</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">BPS</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Simulated line speed for UDP connections</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">ILOOP</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Interface (local) loopback enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">LLOOP</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Line (remote) loopback enabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>These registers can be viewed with the command <span class="html"><samp><b>EXAMINE MI</b><var>n</var> <b>STATE</b></samp></span>.</p>
+<p>The modem device implements these debugging flags:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>DEBUG=WARN</b></samp></span></p></td>
+<td><p>Print warnings for unusual conditions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>DEBUG=IO</b></samp></span></p></td>
+<td><p>Trace all modem interface I/O instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>DEBUG=UDP</b></samp></span></p></td>
+<td><p>Trace all UDP packets and connections</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MI</b><var>n</var> <b>DEBUG=MSG</b></samp></span></p></td>
+<td><p>Trace all <span class="html"><samp>IMP</samp></span> messages sent or received</p></td>
+</tr>
+</tbody>
+</table>
+<p>Remember that you must enable debugging output first before these settings will be effective;
+refer to the <cite>Controlling debugging</cite> section of the <a class="reference external" href="./simh_doc.rst">SIMH Users’ Guide</a> for more information.</p>
+<section id="udp-ip-tunnels">
+<h5><span class="sectnum">1.3.4.1.1. </span>UDP/IP tunnels<a class="headerlink" href="#udp-ip-tunnels" title="Permalink to this heading">¶</a></h5>
+<p>A virtual modem may also be tunneled using UDP/IP to another SIMH instance.
+UDP connections are symmetrical —
+each virtual modem listens for incoming packets on a port which you define,
+and transmit outgoing packets to another host and port which you also define.
+It’s your responsibility to define the ports appropriately so that the input of one modem is logically connected to the output of another modem.
+<em>These connections must be one-to-one.</em>
+Connecting more than one modem output to the same modem input will not cause any problems for SIMH,
+but the <span class="html"><samp>IMP</samp></span> software will become hopelessly confused.</p>
+<p>The general form of a virtual modem <span class="html"><samp><b>ATTACH</b></samp></span> command for UDP connections is like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">MIn</span> <span class="n">llll</span><span class="p">:</span><span class="n">w</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">z</span><span class="p">:</span><span class="n">rrrr</span>
+</pre></div>
+</div>
+<p>This will listen for incoming packets on port <code class="docutils literal notranslate"><span class="pre">llll</span></code>,
+which should be a decimal number,
+and will transmit outgoing packets to port <code class="docutils literal notranslate"><span class="pre">rrrr</span></code> on the host with IP address <code class="docutils literal notranslate"><span class="pre">w.x.y.z</span></code>.
+The actual port numbers you use are arbitrary;
+however some care must be used to avoid conflicts with any other network applications.</p>
+<div class="compound">
+<p>The UDP attach command also has a few alternative forms;
+for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">MIn</span> <span class="mi">4431</span><span class="p">:</span><span class="n">imp</span><span class="o">.</span><span class="n">jfcl</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="mi">4432</span>
+</pre></div>
+</div>
+<p>will listen on port 4431 of the current host,
+do a DNS lookup to determine the IP of the host <code class="docutils literal notranslate"><span class="pre">imp.jfcl.com</span></code>,
+and then transmit to port 4432 on that host.
+In another example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">MIn</span> <span class="mi">1201</span><span class="p">::</span><span class="mi">1202</span>
+</pre></div>
+</div>
+<p>will listen to port 1201 on the current, local, host and transmit to port 1202 also on the local host.
+This is useful when both SIMH instances are running on the same PC.
+In this case, <em>you must use different ports for transmitting and receiving.</em>
+If they are the same,
+the modem will transmit to itself!</p>
+</div>
+<p>Either end of the UDP connection may be disconnected with the command <span class="html"><samp><b>DETACH MI</b><var>n</var></samp></span>.</p>
+</section>
+<section id="physical-serial-tunnels">
+<h5><span class="sectnum">1.3.4.1.2. </span>Physical serial tunnels<a class="headerlink" href="#physical-serial-tunnels" title="Permalink to this heading">¶</a></h5>
+<div class="compound">
+<p>The command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="o">-</span><span class="n">p</span> <span class="n">MIn</span> <span class="n">COMnn</span>
+</pre></div>
+</div>
+<p>is reserved for a possible future option to attach a physical serial port to a virtual modem.
+This functionality is not currently implemented.</p>
+</div>
+</section>
+</section>
+<section id="host-interface">
+<span id="hi4"></span><span id="hi3"></span><span id="hi2"></span><span id="hi1"></span><span id="hi"></span><h4><span class="sectnum">1.3.4.2. </span>Host interface<a class="headerlink" href="#host-interface" title="Permalink to this heading">¶</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The current host interface implementation is presently only a skeleton —
+just enough code exists to allow the <span class="html"><samp>IMP</samp></span> software to run.
+In this version,
+the <span class="html"><samp>IMP</samp></span> effectively sees all attached hosts as permanently powered down.
+Hopefully the host interface implementation can be completed at some point,
+just as soon as there is a suitable host emulator for it to talk to.</p>
+</div>
+<p>The <span class="html"><samp>IMP</samp></span> used the host interface to connect the H316 to an Arpanet host mainframe.
+This could be a PDP-10,
+an SDS Sigma 7,
+a CDC 6600,
+an IBM 360,
+or any one of many other machines.
+Each <span class="html"><samp>IMP</samp></span> could support up to four host interface cards;
+in SIMH these are the devices <span class="html"><samp>HI1</samp></span> thru <span class="html"><samp>HI4</samp></span>.
+Initially,
+<span class="html"><samp>HI1</samp></span> and <span class="html"><samp>2</samp></span> are enabled and <span class="html"><samp>HI3</samp></span> and <span class="html"><samp>4</samp></span> are not,
+however this can be changed with the commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET HI</b><var>n</var> <b>ENABLED</b></samp></span></p></td>
+<td><p>Enable host interface <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET HI</b><var>n</var> <b>DISABLED</b></samp></span></p></td>
+<td><p>Disable host interface <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Host interfaces support the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">POLL</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Host polling interval</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RXIEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">RXIRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Receiver interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">RXTOT</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Count of total messages received</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">TXIEN</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Transmitter interrupt enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">TXIRQ</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Transmitter interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">TXTOT</samp></span></p></td>
+<td><p>32</p></td>
+<td><p>Count of total messages transmitted</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">READY</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Host ready</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FULL</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Host buffer full</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">ERROR</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Host error</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">LLOOP</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Local loopback enabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>These registers can be viewed with the command <span class="html"><samp><b>EXAMINE HI</b><var>n</var> <b>STATE</b></samp></span>.</p>
+<p>The modem device implements these debugging flags:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET HI</b><var>n</var> <b>DEBUG=IO</b></samp></span></p></td>
+<td><p>Trace all host interface I/O instructions</p></td>
+</tr>
+</tbody>
+</table>
+<p>Remember that you must enable debugging output first before these settings will be effective;
+refer to the <cite>Controlling Debugging</cite> section of the <a class="reference external" href="./simh_doc.rst">SIMH Users’ Guide</a> for more information.</p>
+<section id="id1">
+<h5><span class="sectnum">1.3.4.2.1. </span>UDP/IP tunnels<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h5>
+<p>In SIMH,
+host interfaces are simulated using UDP connections to other SIMH instances that simulate the host mainframe and run the Arpanet host operating system.
+The <span class="html"><samp><b>ATTACH</b></samp></span> command is used to connect a host interface to this other SIMH instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ATTACH</span> <span class="n">HIn</span> <span class="n">tba</span>
+</pre></div>
+</div>
+<p>The host connection may be broken with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DETACH</span> <span class="n">HIn</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="summary">
+<h2><span class="sectnum">1.4. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<section id="additional-devices">
+<h3><span class="sectnum">1.4.1. </span>Additional devices<a class="headerlink" href="#additional-devices" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference internal" href="#table-1">Table 1</a> lists the <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> specific devices added to SIMH along with their I/O address,
+interrupt number and vector,
+and DMC channel assignment.
+Note that all the <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> devices use the H316 extended interrupts and so interrupt 1,
+for example,
+corresponds to A bit 1 in the SMK 120 instruction.
+<a class="reference internal" href="#table-2">Table 2</a> shows the extended interrupt mask associated with these devices.</p>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-text">Table 1 – <span class="html"><samp>IMP</samp></span>/<span class="html"><samp>TIP</samp></span> devices</span><a class="headerlink" href="#table-1" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Device</p></th>
+<th class="head" colspan="2"><p>Interrupt</p></th>
+<th class="head" rowspan="2"><p>DMC<sub>10</sub></p></th>
+<th class="head" rowspan="2"><p>Description</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>Name</p></th>
+<th class="head"><p>Address<sub>8</sub></p></th>
+<th class="head"><p>Number<sub>10</sub></p></th>
+<th class="head"><p>Vector<sub>8</sub></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>WDT</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">26</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000062</span></code></p></td>
+<td></td>
+<td><p>Watch dog timer</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>RTC</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">40</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000102</span></code></p></td>
+<td></td>
+<td><p>Real-time clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>IMP</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">41</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000103</span></code></p></td>
+<td></td>
+<td><p>Task switch</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>IMP</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">42</span></code></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>MLC support</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>HI4</samp></span><a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">50</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000074</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Host interface #4 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000067</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Host interface #4 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>HI3</samp></span><a class="footnote-reference brackets" href="#id5" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">51</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000075</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p></td>
+<td><p>Host interface #3 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000070</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p>Host interface #3 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>HI2</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">60</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000101</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p>Host interface #2 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000077</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p>Host interface #2 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>HI1</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">70</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000100</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p>Host interface #1 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000076</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p>Host interface #1 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>MI1</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">71</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000064</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Modem interface #1 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000071</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p>Modem interface #1 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>MI2</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">72</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000065</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Modem interface #2 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000072</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p>Modem interface #2 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>MI3</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">73</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000066</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p>Modem interface #3 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000073</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p>Modem interface #3 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>MI4</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">74</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000067</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p>Modem interface #4 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000074</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p>Modem Interface #4 (TX)</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><span class="html"><samp>MI5</samp></span></p></td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">75</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000070</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p>Modem interface #5 (RX)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">000075</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Modem interface #5 (TX)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="table-2">
+<caption><span class="caption-text">Table 2 – Extended interrupt mask</span><a class="headerlink" href="#table-2" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>14</p></th>
+<th class="head"><p>15</p></th>
+<th class="head"><p>16</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M1RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M2RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M3RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M4RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M5RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M1TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M2TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M3TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M4TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M5TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H1TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H2TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H1RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H2RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">RTC</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TASK</span></code></p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H4TX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H3TX</span></code></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H4RX</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H3RX</span></code></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">5</a><span class="fn-bracket">]</span></span>
+<p>The modem 4 interrupt and DMC conflict with host 4 – only one of the two may be active.</p>
+</aside>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">6</a><span class="fn-bracket">]</span></span>
+<p>The modem 5 interrupt and DMC conflict with host 3 – only one of the two may be active.</p>
+</aside>
+</aside>
+</section>
+<section id="modem-interface-i-o-instructions">
+<h3><span class="sectnum">1.4.2. </span>Modem interface I/O instructions<a class="headerlink" href="#modem-interface-i-o-instructions" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference internal" href="#table-3">Table 3</a> summarizes the modem interface I/O instructions.
+In this table,
+<span class="html"><samp><var>n</var></samp></span> represents the modem number,
+(1 thru 5),
+and <span class="html"><samp><var>dd</var></samp></span> is the device I/O address assigned to that modem
+(71<sub>8</sub> thru 75<sub>8</sub>).</p>
+<table class="docutils align-default" id="table-3">
+<caption><span class="caption-text">Table 3 – Modem instructions</span><a class="headerlink" href="#table-3" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>Operation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>M<var>n</var>OUT</samp></span></p></td>
+<td><p><span class="html"><samp>0300<var>dd</var></samp></span></p></td>
+<td><p>Start modem output</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>M<var>n</var>UNXP</samp></span></p></td>
+<td><p><span class="html"><samp>0301<var>dd</var></samp></span></p></td>
+<td><p>Un-cross patch modem</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>M<var>n</var>LXP</samp></span></p></td>
+<td><p><span class="html"><samp>0302<var>dd</var></samp></span></p></td>
+<td><p>Enable line cross patch</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>M<var>n</var>IXP</samp></span></p></td>
+<td><p><span class="html"><samp>0303<var>dd</var></samp></span></p></td>
+<td><p>Enable interface cross patch</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>M<var>n</var>IN</samp></span></p></td>
+<td><p><span class="html"><samp>0304<var>dd</var></samp></span></p></td>
+<td><p>Start modem input</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>M<var>n</var>ERR</samp></span></p></td>
+<td><p><span class="html"><samp>0704<var>dd</var></samp></span></p></td>
+<td><p>Skip on modem error</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="host-interface-i-o-instructions">
+<h3><span class="sectnum">1.4.3. </span>Host interface I/O instructions<a class="headerlink" href="#host-interface-i-o-instructions" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference internal" href="#table-4">Table 4</a> summarizes the host interface I/O instructions.
+In this table,
+<span class="html"><samp><var>n</var></samp></span> represents the host number
+(1 thru 4),
+and <span class="html"><samp><var>dd</var></samp></span> is the device I/O address assigned to that host
+(50<sub>8</sub>, 51<sub>8</sub>, 60<sub>8</sub>, or 70<sub>8</sub>).</p>
+<table class="docutils align-default" id="table-4">
+<caption><span class="caption-text">Table 4 – Host Instructions</span><a class="headerlink" href="#table-4" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>Operation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>H<var>n</var>ROUT</samp></span></p></td>
+<td><p><span class="html"><samp>0300<var>dd</var></samp></span></p></td>
+<td><p>Start regular output to host</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>H<var>n</var>IN</samp></span></p></td>
+<td><p><span class="html"><samp>0301<var>dd</var></samp></span></p></td>
+<td><p>Start host input</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>H<var>n</var>FOUT</samp></span></p></td>
+<td><p><span class="html"><samp>0302<var>dd</var></samp></span></p></td>
+<td><p>Start host final output</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>H<var>n</var>XP</samp></span></p></td>
+<td><p><span class="html"><samp>0303<var>dd</var></samp></span></p></td>
+<td><p>Cross patch host</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>H<var>n</var>UNXP</samp></span></p></td>
+<td><p><span class="html"><samp>0304<var>dd</var></samp></span></p></td>
+<td><p>Un-cross patch host</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>H<var>n</var>ENAB</samp></span></p></td>
+<td><p><span class="html"><samp>0305<var>dd</var></samp></span></p></td>
+<td><p>Enable host interface</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>H<var>n</var>ERR</samp></span></p></td>
+<td><p><span class="html"><samp>0700<var>dd</var></samp></span></p></td>
+<td><p>Skip on host error</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>H<var>n</var>RDY</samp></span></p></td>
+<td><p><span class="html"><samp>0701<var>dd</var></samp></span></p></td>
+<td><p>Skip on host ready</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>H<var>n</var>EOM</samp></span></p></td>
+<td><p><span class="html"><samp>0702<var>dd</var></samp></span></p></td>
+<td><p>Skip on end of host message</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>H<var>n</var>FULL</samp></span></p></td>
+<td><p><span class="html"><samp>0705<var>dd</var></samp></span></p></td>
+<td><p>Skip on host buffer full</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="other-i-o-instructions">
+<h3><span class="sectnum">1.4.4. </span>Other I/O instructions<a class="headerlink" href="#other-i-o-instructions" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference internal" href="#table-5">Table 5</a> summarizes the additional miscellaneous I/O instructions.</p>
+<table class="docutils align-default" id="table-5">
+<caption><span class="caption-text">Table 5 - Other Instructions</span><a class="headerlink" href="#table-5" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mnemonic</p></th>
+<th class="head"><p>Opcode</p></th>
+<th class="head"><p>Device</p></th>
+<th class="head"><p>Operation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>SMK 120</samp></span></p></td>
+<td><p><span class="html"><samp>170120</samp></span></p></td>
+<td><p><span class="html"><samp>CPU</samp></span></p></td>
+<td><p>Set extended interrupt mask</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p><span class="html"><samp>030026</samp></span></p></td>
+<td><p><a class="reference internal" href="#wdt"><span class="html"><samp>WDT</samp></span></a></p></td>
+<td><p>Reset watch dog timer</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p><span class="html"><samp>170026</samp></span></p></td>
+<td><p><a class="reference internal" href="#wdt"><span class="html"><samp>WDT</samp></span></a></p></td>
+<td><p>Set status lights</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>AMI512</samp></span></p></td>
+<td><p><span class="html"><samp>070026</samp></span></p></td>
+<td><p><a class="reference internal" href="#wdt"><span class="html"><samp>WDT</samp></span></a></p></td>
+<td><p>Skip if this machine is a DDP-516<a class="footnote-reference brackets" href="#id8" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>CLKON</samp></span></p></td>
+<td><p><span class="html"><samp>030040</samp></span></p></td>
+<td><p><a class="reference internal" href="#rtc"><span class="html"><samp>RTC</samp></span></a></p></td>
+<td><p>Enable <span class="html"><samp>RTC</samp></span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>CLKOFF</samp></span></p></td>
+<td><p><span class="html"><samp>031040</samp></span></p></td>
+<td><p><a class="reference internal" href="#rtc"><span class="html"><samp>RTC</samp></span></a></p></td>
+<td><p>Disable <span class="html"><samp>RTC</samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>RDCLOK</samp></span></p></td>
+<td><p><span class="html"><samp>131040</samp></span></p></td>
+<td><p><a class="reference internal" href="#rtc"><span class="html"><samp>RTC</samp></span></a></p></td>
+<td><p>Read <span class="html"><samp>RTC</samp></span> count and always skip</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>TASK</samp></span></p></td>
+<td><p><span class="html"><samp>030041</samp></span></p></td>
+<td><p><a class="reference internal" href="#imp"><span class="html"><samp>IMP</samp></span></a></p></td>
+<td><p>Cause task switch interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>RDIMPN</samp></span></p></td>
+<td><p><span class="html"><samp>131041</samp></span></p></td>
+<td><p><a class="reference internal" href="#imp"><span class="html"><samp>IMP</samp></span></a></p></td>
+<td><p>Read <span class="html"><samp>IMP</samp></span> number and skip</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>AMIMLC</samp></span></p></td>
+<td><p><span class="html"><samp>070042</samp></span></p></td>
+<td><p><a class="reference internal" href="#imp"><span class="html"><samp>IMP</samp></span></a></p></td>
+<td><p>Skip if this machine is a multi-line controller<a class="footnote-reference brackets" href="#id9" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">7</a><span class="fn-bracket">]</span></span>
+<p>On SIMH, this instruction is a NOP and never skips
+(SIMH simulates an H316, not the DDP-516).</p>
+</aside>
+<aside class="footnote brackets" id="id9" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">8</a><span class="fn-bracket">]</span></span>
+<p>“Multi-line controller” was the official name for the <span class="html"><samp>TIP</samp></span>.
+<span class="html"><samp class="register">MLC</samp></span> support is not implemented and this instruction is currently a NOP and never skips.</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/h316_imp.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

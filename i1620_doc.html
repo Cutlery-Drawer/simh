@@ -1,0 +1,2016 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. IBM 1620 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. IBM 7090/7094 simulator usage" href="i7094_doc.html" />
+    <link rel="prev" title="1. IBM 1401 simulator usage" href="i1401_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ibm-1620-simulator-usage">
+<h1><span class="sectnum">1. </span>IBM 1620 simulator usage<a class="headerlink" href="#ibm-1620-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2018-10-12</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id12"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#ibm-1620-features" id="id13"><span class="sectnum">1.2. </span>IBM 1620 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id14"><span class="sectnum">1.2.1. </span><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a></p></li>
+<li><p><a class="reference internal" href="#io-operations" id="id15"><span class="sectnum">1.2.2. </span>IO operations</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#i-o-error-handling" id="id16"><span class="sectnum">1.2.2.1. </span>I/O error handling</a></p></li>
+<li><p><a class="reference internal" href="#release-console-function" id="id17"><span class="sectnum">1.2.2.2. </span>Release console function</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#console-typewriter-tty" id="id18"><span class="sectnum">1.2.3. </span>Console typewriter (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-reader-ptr" id="id19"><span class="sectnum">1.2.4. </span>1621 paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-punch-ptp" id="id20"><span class="sectnum">1.2.5. </span>1624 paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#card-reader-punch-cdr-cdp" id="id21"><span class="sectnum">1.2.6. </span>1622 card reader/punch (<code class="docutils literal notranslate"><span class="pre">CDR</span></code>, <code class="docutils literal notranslate"><span class="pre">CDP</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#line-printer-lpt" id="id22"><span class="sectnum">1.2.7. </span>1443 line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#disk-pack-dp" id="id23"><span class="sectnum">1.2.8. </span>1311 disk pack (<code class="docutils literal notranslate"><span class="pre">DP</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id24"><span class="sectnum">1.3. </span>Symbolic display and input</a></p></li>
+<li><p><a class="reference internal" href="#character-sets" id="id25"><span class="sectnum">1.4. </span>Character sets</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rn-read-numerically" id="id26"><span class="sectnum">1.4.1. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> - Read numerically</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#rn-to-tty" id="id27"><span class="sectnum">1.4.1.1. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to TTY</a></p></li>
+<li><p><a class="reference internal" href="#rn-to-cdr" id="id28"><span class="sectnum">1.4.1.2. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDR</span></code></a></p></li>
+<li><p><a class="reference internal" href="#rn-to-ptr" id="id29"><span class="sectnum">1.4.1.3. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTR</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#wn-write-numerically" id="id30"><span class="sectnum">1.4.2. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> - Write numerically</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#wn-to-tty" id="id31"><span class="sectnum">1.4.2.1. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to TTY</a></p></li>
+<li><p><a class="reference internal" href="#wn-to-cdp" id="id32"><span class="sectnum">1.4.2.2. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#wn-to-ptp" id="id33"><span class="sectnum">1.4.2.3. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#wn-to-lpt" id="id34"><span class="sectnum">1.4.2.4. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dn-dump-numerically" id="id35"><span class="sectnum">1.4.3. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> - Dump numerically</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#dn-to-tty" id="id36"><span class="sectnum">1.4.3.1. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to TTY</a></p></li>
+<li><p><a class="reference internal" href="#dn-to-cdp" id="id37"><span class="sectnum">1.4.3.2. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dn-to-ptp" id="id38"><span class="sectnum">1.4.3.3. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#dn-to-lpt" id="id39"><span class="sectnum">1.4.3.4. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ra-read-alphanumerically" id="id40"><span class="sectnum">1.4.4. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> - Read alphanumerically</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#ra-to-tty" id="id41"><span class="sectnum">1.4.4.1. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to TTY</a></p></li>
+<li><p><a class="reference internal" href="#ra-to-cdr" id="id42"><span class="sectnum">1.4.4.2. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to <code class="docutils literal notranslate"><span class="pre">CDR</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ra-to-ptr" id="id43"><span class="sectnum">1.4.4.3. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to <code class="docutils literal notranslate"><span class="pre">PTR</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#wa-write-alphanumerically" id="id44"><span class="sectnum">1.4.5. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> - Write alphanumerically</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#wa-to-tty" id="id45"><span class="sectnum">1.4.5.1. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to TTY</a></p></li>
+<li><p><a class="reference internal" href="#wa-to-cdp" id="id46"><span class="sectnum">1.4.5.2. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#wa-to-ptp" id="id47"><span class="sectnum">1.4.5.3. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code></a></p></li>
+<li><p><a class="reference internal" href="#wa-to-lpt" id="id48"><span class="sectnum">1.4.5.4. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#read-write-binary-paper-tape" id="id49"><span class="sectnum">1.4.6. </span>Read / write binary paper tape</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>This memorandum documents the IBM 1620 simulator.
+This simulator is based on Geoff Kuenning’s 1620 simulator,
+which is used by permission.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/i1620/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_fp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_tty.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_pt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_cd.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_lp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_dp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">i1620_sys.c</span></code></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="ibm-1620-features">
+<h2><span class="sectnum">1.2. </span>IBM 1620 features<a class="headerlink" href="#ibm-1620-features" title="Permalink to this heading">¶</a></h2>
+<p>The IBM 1620 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device names</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>IBM 1620 Model 1 or Model 2 CPU with 20K to 60K memory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Model 1 options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Indirect addressing, automatic divide, edit instructions, floating-point</p>
+</dd>
+<dt class="field-even">Model 2 options<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indexing, binary capability, floating-point</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTY</span></code></p></td>
+<td><p>IBM console terminal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PTR</span></code></p></td>
+<td><p>IBM 1621 paper tape reader</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PTP</span></code></p></td>
+<td><p>IBM 1624 paper tape punch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CDR</span></code>,<code class="docutils literal notranslate"><span class="pre">CDP</span></code></p></td>
+<td><p>IBM 1622 card reader/punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LPT</span></code></p></td>
+<td><p>IBM 1443 line printer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DP</span></code></p></td>
+<td><p>IBM 1311 disk pack with four drives</p></td>
+</tr>
+</tbody>
+</table>
+<p>The IBM 1620 simulator implements many unique stop conditions.
+On almost any kind of error,
+the simulator stops:</p>
+<ul class="simple">
+<li><p>Unimplemented opcode</p></li>
+<li><p>Reference to non-existent device</p></li>
+<li><p>Invalid digit</p></li>
+<li><p>Invalid alphanumeric character</p></li>
+<li><p>Invalid <span class="html"><samp><var>P</var></samp></span> address digit</p></li>
+<li><p>Invalid <span class="html"><samp><var>Q</var></samp></span> address digit</p></li>
+<li><p>Indirect address limit exceeded</p></li>
+<li><p>Invalid odd address</p></li>
+<li><p>Invalid even address</p></li>
+<li><p>Invalid function</p></li>
+<li><p>Invalid indicator</p></li>
+<li><p>Invalid return address register</p></li>
+<li><p>Skip to unpunched carriage control tape channel</p></li>
+<li><p>Card reader hopper empty</p></li>
+<li><p>Overflow with arithmetic stop switch set</p></li>
+<li><p>I/O error with I/O stop switch set</p></li>
+<li><p>Invalid disk drive</p></li>
+<li><p>Invalid disk sector address</p></li>
+<li><p>Invalid disk sector count</p></li>
+<li><p>Invalid disk buffer address</p></li>
+<li><p>Disk address compare error</p></li>
+<li><p>Disk cylinder overflow error</p></li>
+<li><p>Disk write check error</p></li>
+<li><p>Field exceeds memory</p></li>
+<li><p>Record exceeds memory</p></li>
+<li><p>Floating-point mantissa exceeds maximum length</p></li>
+<li><p>Floating-point mantissas not the same length</p></li>
+<li><p>Floating-point exponent check with arithmetic stop switch set</p></li>
+<li><p>Floating-point exponent missing high flag</p></li>
+</ul>
+<p>The <span class="html"><samp>LOAD</samp></span> command is used to load a line printer carriage-control tape.
+The <span class="html"><samp>DUMP</samp></span> command is not implemented.</p>
+<section id="cpu">
+<span id="id1"></span><h3><span class="sectnum">1.2.1. </span><code class="docutils literal notranslate"><span class="pre">CPU</span></code><a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU</span></code> options include the CPU model (Model 1 or Model 2),
+a number of special features,
+and the size of main memory.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU IA</samp></span></p></td>
+<td><p>Enable indirect addressing</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NOIA</samp></span></p></td>
+<td><p>Disable indirect addressing</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU EDT</samp></span></p></td>
+<td><p>Enable extra editing instructions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NOEDT</samp></span></p></td>
+<td><p>Disable extra editing instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU DIV</samp></span></p></td>
+<td><p>Enable divide instructions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NODIV</samp></span></p></td>
+<td><p>Disable divide instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU IDX</samp></span></p></td>
+<td><p>Enable indexing</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NOIDX</samp></span></p></td>
+<td><p>Disable indexing</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU BIN</samp></span></p></td>
+<td><p>Enable binary instructions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NOBIN</samp></span></p></td>
+<td><p>Disable binary instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU FP</samp></span></p></td>
+<td><p>Enable floating point instructions</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NOFP</samp></span></p></td>
+<td><p>Disable floating point instructions</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU RMOK</samp></span></p></td>
+<td><p>Enable record marks in add/sub/compare</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU NORMOK</samp></span></p></td>
+<td><p>Disable record marks in add/sub/compare</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU MOD1</samp></span></p></td>
+<td><p>Set Model 1</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU MOD2</samp></span></p></td>
+<td><p>Set Model 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU 20K</samp></span></p></td>
+<td><p>Set memory size = 20K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU 40K</samp></span></p></td>
+<td><p>Set memory size = 40K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU 60K</samp></span></p></td>
+<td><p>Set memory size = 60K</p></td>
+</tr>
+</tbody>
+</table>
+<p>Model 1 options include IA, EDT, DIV, FP, and RMOK;
+the first three are on by default.
+Model 2 options include IDX, BIN, and FP;
+IA, EDT, and DIV are standard on the Model 2.</p>
+<p>The RMOK option enables a strange hack on the Model I,
+which caused record marks in the Q field of add,
+subtract,
+and compare to be treated as 0.
+This was done,
+apparently,
+to get the paper-tape verification program MI-015 to run.
+It is not available on the Model 2.</p>
+<p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.
+Initially,
+the CPU is a Model 1,
+memory size is 20K,
+and indirect addressing,
+editing instructions,
+and divide are enabled.</p>
+<p>Memory is implemented as 5 bit BCD digits,
+as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">4</span>     <span class="mi">3</span>     <span class="mi">2</span>     <span class="mi">1</span>     <span class="mi">0</span>
+
+<span class="n">flag</span>  <span class="mi">8</span>     <span class="mi">4</span>     <span class="mi">2</span>     <span class="mi">1</span>
+      <span class="o">&lt;-----</span> <span class="n">digit</span> <span class="o">-----&gt;</span>
+</pre></div>
+</div>
+<p>In BCD,
+the decimal digits <span class="html"><samp>0-9</samp></span> are (hex) values
+<span class="html"><samp>0x0</samp></span>,
+<span class="html"><samp>0x1</samp></span>,
+<span class="html"><samp>0x2</samp></span>,
+<span class="html"><samp>0x3</samp></span>,
+<span class="html"><samp>0x4</samp></span>,
+<span class="html"><samp>0x5</samp></span>,
+<span class="html"><samp>0x6</samp></span>,
+<span class="html"><samp>0x7</samp></span>,
+<span class="html"><samp>0x8</samp></span>,
+<span class="html"><samp>0x9</samp></span>,
+respectively.
+<span class="html"><samp>0xA</samp></span> is record mark,
+<span class="html"><samp>0xC</samp></span> non-punching blank,
+and <span class="html"><samp>0xF</samp></span> group mark,
+respectively.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CPU</span></code> registers include the visible state of the processor.
+The 1620 has no interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Instruction storage address register (IR1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IR2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Return register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PR1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Processor register 1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PAR</span></code></p></td>
+<td><p>16</p></td>
+<td><p><span class="html"><samp><var>P</var></samp></span> address register (OR2)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">QAR</span></code></p></td>
+<td><p>16</p></td>
+<td><p><span class="html"><samp><var>Q</var></samp></span> address register (OR1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SW1</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sense switch 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SW2</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sense switch 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SW3</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sense switch 3</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SW4</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sense switch 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>High/positive indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EZ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Equal/zero indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">OVF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Arithmetic check (overflow) indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXPCHK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Exponent check indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RDCHK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Read check indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRCHK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Write check indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ARSTOP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Arithmetic check stop switch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IOSTOP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>I/O check stop switch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IND[0:99]</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Indicator array</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IAE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Indirect address enabled (Model 2 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IDXE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Indexing enabled (Model 2 only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IDXB</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Indexing band select (Model 2 only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PCQ[0:63]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>IR1 prior to last branch; most recent IR1 change first</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRU</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Interrupt character</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the <span class="html"><samp>SET CPU HISTORY</samp></span> and <span class="html"><samp>SHOW CPU HISTORY</samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU HISTORY</samp></span></p></td>
+<td><p>Clear history buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET CPU HISTORY=0</samp></span></p></td>
+<td><p>Disable history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET CPU HISTORY=<var>n</var></samp></span></p></td>
+<td><p>Enable history, length = <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SHOW CPU HISTORY</samp></span></p></td>
+<td><p>Print CPU history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SHOW CPU HISTORY=<var>n</var></samp></span></p></td>
+<td><p>Print first <span class="html"><samp><var>n</var></samp></span> entries of CPU history</p></td>
+</tr>
+</tbody>
+</table>
+<p>The minimum length for the history is 64 entries;
+the maximum length is 65536 entries.</p>
+</section>
+<section id="io-operations">
+<h3><span class="sectnum">1.2.2. </span>IO operations<a class="headerlink" href="#io-operations" title="Permalink to this heading">¶</a></h3>
+<p>The 1620 does not have asynchronous or overlapped IO.
+When an IO instruction is issued,
+the machine suspends instruction execution until IO is completed or stopped by the operator.
+From the program’s point of view,
+all IO is instantaneous.</p>
+<p>However,
+from an operational point of view,
+the delays between digits or characters may be significant.
+For example,
+the 1620 Model I typewriter did not have a correction capability.
+The convention was that if the operator typed an incorrect character,
+he would set a sense switch and terminate the IO operation manually by pressing <span class="html"><samp class="guilabel">RELEASE</samp></span> and <span class="html"><samp class="guilabel">START</samp></span>.
+The program would see that the sense switch was set and return to the typewriter input instruction or routine.</p>
+<p id="set-cpu-release">Accordingly,
+the typewriter,
+paper-tape reader,
+and paper-tape punch implement <em>deferred</em> IO.
+In this mode,
+the simulator implements delays between digits or characters and continues IO execution through errors.
+This allows the user to interrupt a type-in with <code class="docutils literal notranslate"><span class="pre">^E</span></code>,
+or to change paper tape input files after an end-of-file,
+and continue execution of the current IO operation.
+Alternately,
+the user can terminate the IO operation with the command <span class="html"><samp>SET CPU RELEASE</samp></span>.</p>
+<p>All other IO devices execute IO instructions immediately.</p>
+<section id="i-o-error-handling">
+<h4><span class="sectnum">1.2.2.1. </span>I/O error handling<a class="headerlink" href="#i-o-error-handling" title="Permalink to this heading">¶</a></h4>
+<p>The 1620 simulator stops on almost every IO error condition.
+When an error occurs,
+the simulator can be in one of two states:</p>
+<ol class="arabic simple">
+<li><p>The simulator is in the instruction execution phase.
+The <code class="docutils literal notranslate"><span class="pre">PC</span></code> of the instruction containing the error is reported.</p></li>
+<li><p>The simulator is in the IO execution phase.
+The <code class="docutils literal notranslate"><span class="pre">PC</span></code> has been advanced,
+the instruction is complete,
+but the IO operation is not complete.
+The <code class="docutils literal notranslate"><span class="pre">PC</span></code> of the next instruction is reported,
+along with an informational message,
+<em>“IO in progress”</em>.</p></li>
+</ol>
+<p>In the first state,
+typing <span class="html"><samp class="guilabel">CONTINUE</samp></span> will repeat the current instruction,
+presumably after correction of the error.
+In the second state,
+typing <span class="html"><samp class="guilabel">CONTINUE</samp></span> will return to IO execution.
+This allows the user to correct errors,
+change input files,
+set sense switches,
+or take other actions.</p>
+</section>
+<section id="release-console-function">
+<h4><span class="sectnum">1.2.2.2. </span>Release console function<a class="headerlink" href="#release-console-function" title="Permalink to this heading">¶</a></h4>
+<p>For all I/O stops,
+the simulator will return to the current instruction or IO operation unless directed otherwise.
+The command <span class="html"><samp>SET CPU RELEASE</samp></span> directs the CPU to advance to the next instruction or to cancel the current IO operation.</p>
+<span class="target" id="tty"><span id="console-typewriter"></span></span></section>
+</section>
+<section id="console-typewriter-tty">
+<h3><span class="sectnum">1.2.3. </span>Console typewriter (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>)<a class="headerlink" href="#console-typewriter-tty" title="Permalink to this heading">¶</a></h3>
+<p>The console typewriter (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>) is a half-duplex console.
+Typewriter options include the ability to set variable tab stops:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>SET TTY TABS=<var>col;col;col</var>...</samp></span></p></td>
+<td><p>Set tab stops at the specified columns</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET TTY NOTABS</samp></span></p></td>
+<td><p>Remove all tab stops</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET TTY DEFAULTTABS</samp></span></p></td>
+<td><p>Set tab stops every eight columns</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SHOW TTY TABS</samp></span></p></td>
+<td><p>Display current tab stops</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>SET TTY 1DIGIT</samp></span></p></td>
+<td><p>Type flagged digits as letters</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET TTY 2DIGIT</samp></span></p></td>
+<td><p>Type flagged digits as <span class="html"><samp>~<var>digit</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>When <span class="html"><samp>1DIGIT</samp></span> is set,
+flagged 1 to 9 are displayed as <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code>,
+flagged 0 as <code class="docutils literal notranslate"><span class="pre">]</span></code>,
+flagged record mark as <code class="docutils literal notranslate"><span class="pre">!</span></code>,
+flagged numeric blank as <code class="docutils literal notranslate"><span class="pre">I</span></code>,
+and flagged group mark as <code class="docutils literal notranslate"><span class="pre">&quot;</span></code>.
+In read numeric mode,
+these characters can be entered to represent the corresponding flagged digits.
+On a numeric read,
+flagged digits can also be entered as two characters;
+<span class="html"><samp>~<var>digit</var></samp></span>.</p>
+<p>The typewriter registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">UNLOCK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Keyboard unlocked flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAG</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Set flag on next input digit</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COL</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Current column</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CPS</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Character output rate</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ICPS</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Character input rate</p></td>
+</tr>
+</tbody>
+</table>
+<p>When the 1620 CPU requests input from the keyboard,
+a greater than sign (<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>) is printed.
+The CPU hangs waiting for input until the <span class="html"><kbd>return/enter</kbd></span> key or the interrupt key is pressed.
+The typewriter has no errors.</p>
+<span class="target" id="id2"><span id="paper-tape-reader"></span></span></section>
+<section id="paper-tape-reader-ptr">
+<span id="ptr"></span><h3><span class="sectnum">1.2.4. </span>1621 paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)<a class="headerlink" href="#paper-tape-reader-ptr" title="Permalink to this heading">¶</a></h3>
+<p>The paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>) reads data from a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be read.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the reader.</p>
+<p>The 1620 did not provide any hardware means for booting from a paper tape.
+Loading from a tape reader was accomplished by inserting an instruction in location zero using the console <span class="html"><samp class="guilabel">INSERT</samp></span> key and the console typewriter.
+The simulator,
+however,
+supports booting from the paper tape reader with the <span class="html"><samp>BOOT</samp></span> command.
+<span class="html"><samp>BOOT PTR</samp></span> starts the most common paper tape boot sequence at location 0,
+namely <span class="html"><samp>360000000300</samp></span> inserted at location 0,
+which reads the first tape record to location 0 and continues execution with the instruction just loaded into location 12.
+Because there was no official standard boot sequence for paper tape,
+this may not be correct for all programs.</p>
+<p>The paper tape reader implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BIN</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Binary mode flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the input file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPS</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Character input rate</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">IOCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End of file</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>Parity error</p></td>
+<td><p>1</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="ptp"><span id="id3"></span><span id="paper-tape-punch"></span></span></section>
+<section id="paper-tape-punch-ptp">
+<h3><span class="sectnum">1.2.5. </span>1624 paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)<a class="headerlink" href="#paper-tape-punch-ptp" title="Permalink to this heading">¶</a></h3>
+<p>The paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>) writes data to a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the punch.</p>
+<p>The paper tape punch implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BIN</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Binary mode flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPS</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Character output rate</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">IOCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End of file</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>Parity error</p></td>
+<td><p>1</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="id5"><span id="id4"></span><span id="card-punch"></span><span id="card-reader"></span><span id="card-reader-punch"></span></span></section>
+<section id="card-reader-punch-cdr-cdp">
+<span id="cdp"></span><span id="cdr"></span><h3><span class="sectnum">1.2.6. </span>1622 card reader/punch (<code class="docutils literal notranslate"><span class="pre">CDR</span></code>, <code class="docutils literal notranslate"><span class="pre">CDP</span></code>)<a class="headerlink" href="#card-reader-punch-cdr-cdp" title="Permalink to this heading">¶</a></h3>
+<p>The IBM 1622 card/reader punch is simulated as two independent devices:
+the card reader (<code class="docutils literal notranslate"><span class="pre">CDR</span></code>) and the card punch (<code class="docutils literal notranslate"><span class="pre">CDP</span></code>).</p>
+<p>The card reader supports the <span class="html"><samp>BOOT</samp></span> command.
+<span class="html"><samp>BOOT CDR</samp></span> starts the standard card boot sequence at location 0.</p>
+<p>The card reader reads data from a disk file;
+the punch writes data to a disk file.
+Cards are simulated as ASCII text lines with terminating newlines.
+For each device,
+the <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be read or written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance these devices.</p>
+<p>The card reader registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LAST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Last card indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the reader input file</p></td>
+</tr>
+</tbody>
+</table>
+<p>The card punch registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the punch output file</p></td>
+</tr>
+</tbody>
+</table>
+<p>Card reader error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">IOCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End of file</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>Invalid char</p></td>
+<td><p>1</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">RDCHK</span></code> indicator</p></td>
+</tr>
+</tbody>
+</table>
+<p>Card punch error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">IOCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>Invalid char</p></td>
+<td><p>1</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code> indicator, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code> indicator</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="lpt"><span id="id6"></span><span id="line-printer"></span></span></section>
+<section id="line-printer-lpt">
+<h3><span class="sectnum">1.2.7. </span>1443 line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)<a class="headerlink" href="#line-printer-lpt" title="Permalink to this heading">¶</a></h3>
+<p>The IBM 1443 line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>) writes its data,
+converted to ASCII,
+to a disk file.
+The line printer can be programmed with a carriage control tape.
+The <span class="html"><samp>LOAD</samp></span> command loads a new carriage control tape:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>LOAD <var>file</var></samp></span></p></td>
+<td><p>Load carriage control tape file</p></td>
+</tr>
+</tbody>
+</table>
+<p>The format of a carriage control tape consists of multiple lines.
+Each line contains an optional repeat count,
+enclosed in parentheses,
+optionally followed by a series of column numbers separated by commas.
+Column numbers must be between 1 and 12;
+a column number of zero denotes top of form.
+The following are all legal carriage control specifications:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Blank line</p></td>
+<td><p>No punch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">(5)</span></code></p></td>
+<td><p>5 lines with no punches</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1,5,7,8</span></code></p></td>
+<td><p>Columns 1, 5, 7, and 8 punched</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">(10)2</span></code></p></td>
+<td><p>10 lines with column 2 punched</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1,0</span></code></p></td>
+<td><p>Column 1 punched; top of form</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default form is 66 lines long,
+with column 1 and the top of form mark on line 1,
+and the rest blank.</p>
+<p>The line printer recognizes one option for emulating top of form –
+using multiple newline characters (the default) or a single form-feed character:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>SET LPT FF</samp></span></p></td>
+<td><p>Emulate top-of-form with one form-feed</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET LPT NOFF</samp></span></p></td>
+<td><p>Emulate top-of-form with multiple newlines</p></td>
+</tr>
+</tbody>
+</table>
+<p>The line printer registers are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">LBUF[0:119]</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Line buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BPTR</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Buffer pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PCTL</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Saved print control directive</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRCHK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Print check indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PRCH9</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Channel 9 indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRCH12</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Channel 12 indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PRBSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Busy indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CCT[0:131]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Carriage control tape array</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CCTP</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Carriage control tape pointer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CCTL</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Carriage control tape length (read-only)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">IOCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">PRCHK</span></code>, <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code>, report error, stop</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>Invalid char</p></td>
+<td><p>1</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">PRCHK</span></code>, <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code>, report error, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">PRCHK</span></code>, <code class="docutils literal notranslate"><span class="pre">WRCHK</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Invalid control</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">PRCHK</span></code>, report error, stop</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="dp"><span id="id8"></span><span id="id7"></span><span id="disk-pack"></span><span id="disk-drive"></span></span></section>
+<section id="disk-pack-dp">
+<h3><span class="sectnum">1.2.8. </span>1311 disk pack (<code class="docutils literal notranslate"><span class="pre">DP</span></code>)<a class="headerlink" href="#disk-pack-dp" title="Permalink to this heading">¶</a></h3>
+<p>The disk pack controller supports 4 drives,
+numbered 0 through 3.
+Disk pack options include the ability to enable address writing (formatting).</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>SET DP<var>n</var> ADDROFF</samp></span></p></td>
+<td><p>Set unit <span class="html"><samp><var>n</var></samp></span> address enable off</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>SET DP<var>n</var> ADDRON</samp></span></p></td>
+<td><p>Set unit <span class="html"><samp><var>n</var></samp></span> address enable on</p></td>
+</tr>
+</tbody>
+</table>
+<p>Units can also be set <span class="html"><samp>ENABLED</samp></span> or <span class="html"><samp>DISABLED</samp></span>.</p>
+<p>The 1620 had no hardware provision to boot from a disk,
+so the simulator doesn’t support the <span class="html"><samp>BOOT</samp></span> command.</p>
+<p>Unlike most simulated disks,
+the 1311 includes explicit representation for sector addresses.
+This is to support non-standard formats,
+such as the inclusion of the drive number in the sector address.
+As a result,
+1311 sectors are 105 digits long:
+5 address digits and 100 data digits.
+If the 1311 has not been formatted,
+the addresses are zeroes and are synthesized,
+if needed,
+based on the sector number.</p>
+<p>The disk pack controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ADCHK</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Address check (compare error) indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WLRC</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Wrong length record check indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CYLO</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Cylinder overflow check indicator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Disk error indicator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DPSTOP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Disk check stop</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CYL[0:3]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Current cylinder, units 0..3 (read-only)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">DPCHK</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>x</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">ERR</span></code> indicator, report error, stop</p></td>
+</tr>
+</tbody>
+</table>
+<p>1311 data files are buffered in memory;
+therefore,
+end-of-file and OS I/O errors cannot occur.</p>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The IBM 1620 simulator implements symbolic display and input.
+Display is controlled by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as single character (alphanumeric for <a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a>, ASCII for others)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>Display as alphanumeric string (<a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a> only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics (<a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a> only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-d</span></code></p></td>
+<td><p>Display 50 characters per line, with flags denoted by <code class="docutils literal notranslate"><span class="pre">_</span></code> on the line above</p></td>
+</tr>
+</tbody>
+</table>
+<p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code> or <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Character (alphanumeric for <a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a>, ASCII for others)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">-s</span></code></p></td>
+<td><p>Alphanumeric string (<a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a> only)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Alphabetic</p></td>
+<td><p>Instruction mnemonic (<a class="reference internal" href="#cpu"><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a> and <a class="reference internal" href="#dp"><code class="docutils literal notranslate"><span class="pre">DP</span></code></a> only)</p></td>
+</tr>
+<tr class="row-even"><td><p>Numeric</p></td>
+<td><p>Octal number</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instruction input is free format and consists of an opcode and up to three operands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">op</span> <span class="p">{</span><span class="o">+/-</span><span class="p">}</span><span class="n">ppppp</span><span class="p">{(</span><span class="n">idx</span><span class="p">)},{</span><span class="o">+-</span><span class="p">}</span><span class="n">qqqqq</span><span class="p">{(</span><span class="n">idx</span><span class="p">)},</span><span class="n">flags</span>
+</pre></div>
+</div>
+<div class="compound">
+<p>The <span class="html"><samp><var>P</var></samp></span> address and,
+if present,
+the <span class="html"><samp><var>Q</var></samp></span> address,
+are always decimal.
+A plus sign is ignored;
+a minus sign denotes indirect addressing
+(or a negative immediate operand).
+If indexing is enabled,
+addresses may be indexed;
+index registers are decimal numbers between 1 and 7.
+The <code class="docutils literal notranslate"><span class="pre">flags</span></code> field is used to set extra flags on the instruction.
+It consists of digit positions in ascending order,
+with no separators.
+For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AM</span> <span class="o">-</span><span class="mi">12345</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="mi">67890</span><span class="p">,</span><span class="mi">110</span>
+</pre></div>
+</div>
+<p>translates into</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="n">_</span> <span class="n">___</span>  <span class="n">_</span>
+<span class="mi">111234567890</span>
+</pre></div>
+</div>
+</div>
+<p>The flag over digits 3 and 5 specify the <span class="html"><samp><var>P</var></samp></span> index register,
+the flag over digit 6 specifies the <span class="html"><samp><var>P</var></samp></span> indirect address,
+the flag over digit 7 marks the high-order digit of the immediate <span class="html"><samp><var>Q</var></samp></span> operand,
+and the flags over digits 1 and 10 are specified by the third (<code class="docutils literal notranslate"><span class="pre">flags</span></code>) field.</p>
+</section>
+<section id="character-sets">
+<h2><span class="sectnum">1.4. </span>Character sets<a class="headerlink" href="#character-sets" title="Permalink to this heading">¶</a></h2>
+<p>Each storage location in the IBM 1620 held 6 bits:
+5 data bits and 1 check bit.
+The check bit was not addressable by the program and was maintained by the machine so that each location had an odd number of bits.
+The check bit is not simulated since it could not be referenced by any program instruction.
+On a real 1620,
+a parity error always indicated a hardware error and stopped the machine when detected.</p>
+<p id="id9">The 5 data bits in each location consisted of a flag bit and 4 data bits.
+These are often shown as <span class="html"><samp>F</samp></span> <span class="html"><samp>8 4 2 1</samp></span> in IBM documentation.
+The flag bit was used in several ways in the machine:
+to indicate the high order digit of a field,
+to indicate a negative number,
+to indicate instruction indirect addressing,
+and to specify index register modification of an address.</p>
+<p>The <span class="html"><samp>8 4 2 1</samp></span> data bits have 16 possible configurations.
+Thirteen of these were valid characters in the internal character set;
+of the remaining three,
+two were invalid and one could only be created in a special way.
+See the note below.<a class="footnote-reference brackets" href="#id11" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id11" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">1</a><span class="fn-bracket">]</span></span>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Bit configurations 1101 and 1110 were invalid,
+could not be created by any valid operation,
+and were always treated as errors if encountered.
+As far as I know,
+these could only exist in storage as a result of a machine malfunction.</p>
+<p>The 1011 bit configuration could be created in the machine if a card or paper tape containing a period,
+a comma,
+an equals sign,
+or a dollar sign was read with an <code class="docutils literal notranslate"><span class="pre">RN</span></code> (read numerically) instruction.
+The dollar sign would also set the flag bit.
+This bit configuration was treated the same as a record mark or group mark as far as stopping data transmission by a <code class="docutils literal notranslate"><span class="pre">TR</span></code> (transmit record),
+a <code class="docutils literal notranslate"><span class="pre">WN</span></code> (write numerically),
+or a <code class="docutils literal notranslate"><span class="pre">WA</span></code> (write alphanumerically) instruction and tested as a record mark when referenced by the <code class="docutils literal notranslate"><span class="pre">BNR</span></code> (branch no record) instruction.
+This behavior was a strange design choice by IBM since it could just as well have stored a record mark.
+Operationally, this character behaved the same as a record mark.
+The result of sending this character to an output device is not specified in any IBM documentation and is treated as an error by the simulator.</p>
+<p>On a 1620-1, there was no way to distinguish the 1011 character from a record mark except that it might produce an error on output to some device.
+Whether or not it did so is not known.
+On a 1620-2 machine with binary capabilities,
+the <code class="docutils literal notranslate"><span class="pre">BMK</span></code> (Branch on Mask) instruction could test any bit and,
+therefore,
+distinguish this character from a record mark.
+It’s unclear how this could be of any use to a program.</p>
+<p>As final note,
+on a 1620-1 there was no way to detect that a character was a numeric blank.
+A numeric blank could only be created in storage by reading it from a card,
+paper tape record or the console typewriter.
+On a 1620-2 machine with binary capabilities,
+the <code class="docutils literal notranslate"><span class="pre">BMK</span></code> instruction could determine that a character was a numeric blank.
+It’s possible that this could have been of some use to a program,
+but it seems unlikely that any program was ever written that made use of this.</p>
+</div>
+</aside>
+</aside>
+<table class="docutils align-default" id="bitcodes">
+<thead>
+<tr class="row-odd"><th class="head"><p>Bit configuration <span class="html"><samp>8 4 2 1</samp></span></p></th>
+<th class="head"><p>1620 character</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>0 0 0 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>0 0 0 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>0 0 1 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>0 0 1 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>0 1 0 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>0 1 0 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>0 1 1 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>0 1 1 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>1 0 0 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>1 0 0 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>1 0 1 0</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ</span></code> (Record mark)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>1 0 1 1</samp></span></p></td>
+<td><p>Valid, but see note below</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>1 1 0 0</samp></span></p></td>
+<td><p>Numeric blank</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>1 1 0 1</samp></span></p></td>
+<td><p>Invalid</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>1 1 1 0</samp></span></p></td>
+<td><p>Invalid</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>1 1 1 1</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">⹋</span></code> (Group mark)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The record mark and group mark characters were used in several ways:
+to stop transmission of data on output instructions to some devices and in some data movement instructions.
+The numeric blank character was used to create a blank space on numeric output to some devices.
+Each of these 13 valid characters could have an associated flag bit.
+Therefore, the 1620 internal character set consisted of exactly 26 characters.
+All data and instructions in storage are represented using these characters.</p>
+<p>The IBM 1620 could read,
+process,
+and write alphanumeric data
+(letters, digits, some special characters).
+These were stored internally as pairs of digits.
+The machine supported a number of different input devices
+(<a class="reference internal" href="#console-typewriter">console typewriter</a>, <a class="reference internal" href="#id2">paper tape reader</a>, <a class="reference internal" href="#id4">card reader</a>, <a class="reference internal" href="#id7">disk drive</a>)
+and a number of output devices
+(<a class="reference internal" href="#console-typewriter">console typewriter</a>, <a class="reference internal" href="#id3">paper tape punch</a>, <a class="reference internal" href="#id5">card punch</a>, <a class="reference internal" href="#id6">line printer</a>, <a class="reference internal" href="#id7">disk drive</a>).
+Except for the disk drives which transferred data in 1620 internal code,
+all input devices responded to two kinds of read operations:
+<code class="docutils literal notranslate"><span class="pre">RN</span></code> (read numerically) and <code class="docutils literal notranslate"><span class="pre">RA</span></code> (read alphabetically).
+Output devices other than disk drives responded to three kinds of write operations:
+<code class="docutils literal notranslate"><span class="pre">WN</span></code> (write numerically),
+<code class="docutils literal notranslate"><span class="pre">WA</span></code> (write alphanumerically),
+and <code class="docutils literal notranslate"><span class="pre">DN</span></code> (dump numerically).
+The numeric input and output operations transferred one 1620 character at a time;
+thus, on output,
+each storage location produced one character on the console typewriter,
+one punched card column,
+one punched character on paper tape,
+one character on the line printer.
+Similarly,
+on numeric input,
+each key typed on the console typewriter,
+each card column read,
+and each paper tape character read was placed into one storage location.
+The alphanumeric output operations transferred two 1620 storage locations to produce one character typed on the console,
+one punched card column,
+one punched character on paper tape,
+one character on the line printer.
+On alphanumeric input,
+each key typed,
+each card column read,
+and each paper tape character read was transferred into two adjacent storage locations.
+On numeric input operations each digit stored set all bits including the flag bit.
+Numeric output operations included the flag bit in determining the character to type,
+punch or print.
+Alphanumeric input operations stored data without altering any flag bits that might have been set in the input area.
+Alphanumeric output operations ignored the flag bits.
+The binary paper-tape read and write operations operated like alphanumeric operations with respect to flags.</p>
+<p>The IBM 1620 was designed in the late 1950s and sold and used during the 1960s.
+This was a period in the history of computing that was populated with many different kinds of equipment.
+There were unit record devices made by IBM and other companies which mostly processed data on punched cards.
+There were many different computers made by various companies.
+There were numerous data recording devices that read instruments and created punched paper tape or cards and there were devices with keyboards that could be used to create paper tape or cards for input to these various devices.
+There were many different printers connected to these devices that could print data from paper tape,
+punched cards and computers.
+It should come as no surprise that these devices employed a number of different codes for punching holes in paper tape and cards and different character sets for printers.</p>
+<p>Some of the IBM 1620 input and output devices are simulated with text files containing ASCII characters.
+Card decks and line printer output are simulated as text files;
+input and output from the console is simulated by typing in the simulator window.
+Paper tape input and output are simulated as text files but are coded to indicate the hole patterns that would have been in actual paper tape,
+not as equivalent ASCII characters.
+Disk devices are written with internal representations of 1620 data.
+All of this means that it is possible to prepare simulator card input files with just about any text editor;
+likewise,
+it is possible to view line printer output and card output with most editors and it is fairly easy to print that output on any printer.
+Also,
+clearly,
+creating or reading simulator paper tape files with an editor is not easy or practical;
+the same is true of disk files.</p>
+<p>In order to create input card decks for the simulator,
+it is necessary to specify a correspondence between all 1620 characters and ASCII characters.
+For the most part,
+this is easy since the 1620 character set consists of letters, digits, and some punctuation and special characters.
+The same correspondence can be used for console input and output and line printer output.
+There are a variety of difficulties with completely defining such a correspondence.
+First,
+the 1620 character set includes some characters whose graphics are not included in ASCII.
+For example,
+the ASCII set does not include the 1620 record mark, group mark, numeric blank, etc.
+This is handled by assigning them to other ASCII characters not used in the 1620 set.</p>
+<p>The second problem is that results of sending output to the console,
+printer,
+tape punch,
+and card punch using a <code class="docutils literal notranslate"><span class="pre">WN</span></code> (write numerically) instruction were not the same for all devices.
+For example,
+sending a numeric blank to the console typed an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> character;
+sending it to a tape punch punched an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>;
+sending it to a card punch or printer produced a blank space.
+All characters could be typed on the console,
+but some characters could not be printed on the line printer.
+All characters could be read from cards or paper tape;
+all characters could be written to cards or paper tape.
+There are additional difficulties depending on whether an I/O operation is numeric or alphanumeric.</p>
+<p>A third problem involves the coding of special characters.
+In the 1960s,
+when the 1620 was in use,
+there were a lot of different needs for printing special characters.
+There were not enough different characters that could be represented on cards to meet all the needs.
+This was solved in various ways by different machines.
+Often the same card code was printed as a different symbol depending on the application need.
+For example,
+some printers would print <code class="docutils literal notranslate"><span class="pre">+&#64;=(</span></code> as <code class="docutils literal notranslate"><span class="pre">&amp;'#%</span></code>.
+In some cases,
+the character printed depended on what hardware accessory
+(usually called a print belt, print chain, or print bar)
+was installed in the printer.</p>
+<p>The final problem is that machines in the 1620 days were often not completely specified.
+That is,
+the documentation defined what would happen if certain combinations of characters were sent to an output device,
+but did not specify what would happen if other unused combinations of characters were used.
+For example,
+if a <code class="docutils literal notranslate"><span class="pre">WA</span></code> (write alphabetically) instruction sent the two digits <code class="docutils literal notranslate"><span class="pre">41</span></code> to a card punch,
+paper tape punch,
+the console,
+or the printer,
+the letter <code class="docutils literal notranslate"><span class="pre">A</span></code> was printed or the code for <code class="docutils literal notranslate"><span class="pre">A</span></code> was punched.
+There are 100 two-digit combinations
+(<span class="html"><samp>00</samp></span>–<span class="html"><samp>99</samp></span>)
+which could be used,
+but the 1620 did not define all of these.
+Some combinations actually caused letters, digits, or special characters to punch/print and did not indicate an error.
+In some cases,
+this lack of specification was deliberate to allow for possible future expansion.
+In some cases,
+it was less expensive
+(i.e., used less hardware)
+to just ignore the unused combinations and not worry about what the machine did with them.
+What actually happened when these unspecified values were sent to,
+for example,
+the printer depended on the particular 1620 machine and its printer.
+Results were different depending on the model and engineering level of the machine.</p>
+<p>The following table lists the two digit alphanumeric codes recognized by the simulator.
+Actual results of alphanumeric input and output operations vary slightly depending on the device.
+See the individual instructions in sections below for details.
+Two-digit codes not listed are invalid and will produce an error if written to an output device.
+The codes shown are the only ones that will be placed into storage on a read operation.
+Not all of these codes were supported for all devices.</p>
+<table class="docutils align-default" id="alphatable" style="width: 100%">
+<caption><span class="caption-text">IBM 1620 two-digit alphanumeric internal code</span><a class="headerlink" href="#alphatable" title="Permalink to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Character</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp>00</samp></span></p></td>
+<td><p>(blank)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>03</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.</span></code> (period)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>04</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>0ǂ</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ</span></code> (record mark)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>0⹋</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">⹋</span></code> (group mark)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>10</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>13</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>14</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>20</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span></code> (hyphen)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>21</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>22</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ</span></code> (record mark on printer)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>23</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">,</span></code> (comma)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>24</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>33</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>34</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>41</samp></span>–<span class="html"><samp>49</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">A</span></code>–<code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>50</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0̅</span></code> (flagged zero)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>51</samp></span>–<span class="html"><samp>59</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>5ǂ</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ̅</span></code> (flagged record mark)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>5⹋</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">⹋̅</span></code> (flagged group mark)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>62</samp></span>–<span class="html"><samp>69</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">S</span></code>–<code class="docutils literal notranslate"><span class="pre">Z</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp>70</samp></span>–<span class="html"><samp>79</samp></span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>All of this makes for a series of dilemmas since the simulator must deal with many different possibilities.
+To begin with,
+it is necessary to specify ASCII characters to represent those 1620 characters that do not have graphics that exist in ASCII.
+These 7 characters are flagged zero,
+numeric blank,
+flagged numeric blank,
+record mark,
+flagged record mark,
+group mark,
+and flagged group mark.
+The simulator defines the following ASCII characters to be used when entering data in a text-editor for card input and for entering data in response to <code class="docutils literal notranslate"><span class="pre">RN</span></code> (read numerically) at the console:</p>
+<table class="docutils align-default" id="simulatorchars">
+<thead>
+<tr class="row-odd"><th class="head"><p>Simulator</p></th>
+<th class="head"><p>1620 internal character</p></th>
+<th class="head"><p>Card code</p></th>
+<th class="head"><p>Paper tape code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0̅</span></code> (flagged zero)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11-0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">X</span></code> or <code class="docutils literal notranslate"><span class="pre">X0C</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+<td><p>Numeric blank</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C84</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+<td><p>Flagged numeric blank</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11-4-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">X84</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ</span></code> (record mark)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0-2-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">082</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">!</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ǂ̅</span></code> (flagged record mark)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">11-2-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">X82</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">}</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">⹋</span></code> (group mark)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0-7-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">08421</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">⹋̅</span></code> (flagged group mark)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">12-7-8</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">X8421</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>These same ASCII characters are used when data is written numerically to the console.</p>
+<p>Data written numerically to the simulator console must also deal with flagged digits <span class="html"><samp>1</samp></span>–<span class="html"><samp>9</samp></span>.
+The actual 1620 console typewriter was able to type an over-bar character without advancing the carriage and then print another character under it.
+This feature was a function of the hardware and not under program control.
+Thus, it could type the flagged versions of the 10 digits,
+numeric blank,
+record mark,
+and group mark.
+Similarly,
+an operator responding to a numeric read to the console had the ability to enter a flagged digit by first pressing a flag key
+(which typed the over-bar without spacing the carriage)
+and then typing a digit,
+an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> (representing a numeric blank),
+record mark,
+or group mark.
+Numeric output to the simulator console is handled in one of two ways depending on which option is chosen on the <span class="html"><samp>SET TTY</samp></span> command.</p>
+<ul class="simple">
+<li><p>If the command <span class="html"><samp>SET TTY 1DIGIT</samp></span> has been issued,
+data written to the console in response to a <code class="docutils literal notranslate"><span class="pre">WN</span></code> (write numerically) or <code class="docutils literal notranslate"><span class="pre">DN</span></code> (dump numerically) instruction will show a flagged zero as <code class="docutils literal notranslate"><span class="pre">]</span></code> and flagged digits <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code> as the letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code>.
+This choice was made since the punch card codes for the flagged digits is an 11-punch plus the digit which is the same code as the letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code>.
+Output card decks from the 1620 which contained numeric data were often printed on other machines which interpreted these as letters,
+and programmers were accustomed to seeing this kind of output.
+Also, data written numerically to the 1620 line printer produced letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code> for the flagged digits <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code>.
+This is the default setting.</p></li>
+<li><p>If the command <span class="html"><samp>SET TTY 2DIGIT</samp></span> has been issued,
+data written to the console in response to a <code class="docutils literal notranslate"><span class="pre">WN</span></code> (write numerically) or <code class="docutils literal notranslate"><span class="pre">DN</span></code> (dump numerically) instruction will show a flagged digit by printing an accent (<code class="docutils literal notranslate"><span class="pre">`</span></code>) character in front of it.</p></li>
+</ul>
+<p>Finally,
+for convenience in entering data on the console and creating files to be treated as input card decks,
+the simulator always treats lowercase ASCII letters as if they were uppercase.
+All output is in uppercase;
+the IBM 1620 had no capability to process lowercase letters.
+The 1620 console typewriter did not have lowercase letters.</p>
+<p>There are a number of different charts in the IBM 1620 manuals which list the codes used for paper tape and cards,
+together with how various 1620 characters were treated by different input and output devices and by the five different I/O instructions:
+<a class="reference internal" href="#rn"><code class="docutils literal notranslate"><span class="pre">RN</span></code></a>, <a class="reference internal" href="#ra"><code class="docutils literal notranslate"><span class="pre">RA</span></code></a>, <a class="reference internal" href="#wn"><code class="docutils literal notranslate"><span class="pre">WN</span></code></a>, <a class="reference internal" href="#wa"><code class="docutils literal notranslate"><span class="pre">WA</span></code></a>, and <a class="reference internal" href="#dn"><code class="docutils literal notranslate"><span class="pre">DN</span></code></a>.
+None of these tables is complete in all details.
+There are some special cases that are not shown.
+Details for each of these instructions are provided below.</p>
+<span class="target" id="rn"><span id="read-numerically"></span></span><section id="rn-read-numerically">
+<h3><span class="sectnum">1.4.1. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> - Read numerically<a class="headerlink" href="#rn-read-numerically" title="Permalink to this heading">¶</a></h3>
+<section id="rn-to-tty">
+<h4><span class="sectnum">1.4.1.1. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to TTY<a class="headerlink" href="#rn-to-tty" title="Permalink to this heading">¶</a></h4>
+<p id="rs">As described briefly above,
+an operator using a real 1620 console typewriter could enter any of the 1620 numeric characters in response to a <code class="docutils literal notranslate"><span class="pre">RN</span></code> instruction.
+Unflagged characters were just typed using the keys for digits,
+<code class="docutils literal notranslate"><span class="pre">&#64;</span></code> for a numeric blank,
+and special keys for record mark and group mark.
+If the character was to be flagged,
+the special <span class="html"><samp class="guilabel">Flag</samp></span> key was pressed first to print an over-bar followed by the key for the character.
+Pressing the <span class="html"><samp class="guilabel">Flag</samp></span> key printed the over-bar,
+but did not advance the carriage so that the flagged character printed underneath it on the page.
+Characters were transferred to storage until the operator pressed the console <span class="html"><samp class="guilabel">Release</samp></span> and <span class="html"><samp class="guilabel">Start</samp></span> keys,
+or until he pressed the special <span class="html"><kbd>RS</kbd></span> key on the typewriter.
+Pressing the <span class="html"><kbd>RS</kbd></span> key on the typewriter printed a ligature <code class="docutils literal notranslate"><span class="pre">RS</span></code> on the typewriter and performed the equivalent of pressing the <span class="html"><samp class="guilabel">Release</samp></span> and <span class="html"><samp class="guilabel">Start</samp></span> console keys.
+This was the usual way to finish entering data,
+since it provided a record on the paper that it had been done.
+Pressing the <span class="html"><kbd>RS</kbd></span> key did not cause the typewriter carriage to return.
+The usual program procedure for requesting operator input from the typewriter was to
+(1) execute a <code class="docutils literal notranslate"><span class="pre">K</span></code> (control) instruction to return the carriage of the typewriter,
+(2) write a prompting message to let the operator know what data was being requested, and
+(3) issue a read to the typewriter to get the operator input.
+This left the typewriter carriage positioned just after the last character typed.
+The simulator treats pressing the <span class="html"><kbd>Enter</kbd></span> key as equivalent to the 1620 <span class="html"><kbd>RS</kbd></span> key.
+This causes a carriage return which was not true on the 1620.
+This simply means that the appearance of data on the screen will not exactly match what would have appeared on the 1620 typed output.</p>
+<p>The simulator provides two options for entering flagged data in response to <code class="docutils literal notranslate"><span class="pre">RN</span></code>.
+The ASCII characters defined for flagged special characters can be used:
+<code class="docutils literal notranslate"><span class="pre">]</span></code> for flagged zero,
+<code class="docutils literal notranslate"><span class="pre">!</span></code> for flagged record mark,
+<code class="docutils literal notranslate"><span class="pre">*</span></code> for flagged numeric blank,
+<code class="docutils literal notranslate"><span class="pre">&quot;</span></code> for flagged group mark,
+and the letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code> or <code class="docutils literal notranslate"><span class="pre">j</span></code>–<code class="docutils literal notranslate"><span class="pre">r</span></code> for flagged <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code>.
+Alternatively,
+the ASCII characters for unflagged data can be preceded by an accent (<code class="docutils literal notranslate"><span class="pre">`</span></code>) or tilde (<code class="docutils literal notranslate"><span class="pre">~</span></code>) and the next character typed will be placed into storage with a flag.</p>
+<p>The 1620-1 did not support backspace to correct a typing mistake.
+Each character entered was placed directly into storage.
+The 1620-2 did support a correction key which typed an overstrike character (<code class="docutils literal notranslate"><span class="pre">-</span></code>),
+and backed up the address in the OR-2 register so the next character could replace the one just placed in storage.
+If the correction key was pressed multiple times,
+an overstrike character was typed each time and the register decremented each time.
+If, for example,
+the operator typed <span class="html"><samp>36</samp></span> instead of the intended <span class="html"><samp>26</samp></span>,
+use of the correction key would leave <span class="html"><samp>36- -26</samp></span> on the console paper as a record of the operator action.
+The simulator does not support this function.</p>
+</section>
+<section id="rn-to-cdr">
+<h4><span class="sectnum">1.4.1.2. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDR</span></code><a class="headerlink" href="#rn-to-cdr" title="Permalink to this heading">¶</a></h4>
+<p>A numeric read to the card reader is one of the few cases which is completely defined in the IBM 1620 documentation.
+An almost complete table can be found on page 40 of IBM publication A26-5706-3, <cite>IBM 1620 Central Processing Unit, Model 1</cite>.
+Information is missing from this table for two characters:
+the flagged record mark (card code <code class="docutils literal notranslate"><span class="pre">11-2-8</span></code>) and the flagged group mark (card code <code class="docutils literal notranslate"><span class="pre">12-7-8</span></code>);
+however,
+they were read as expected.
+A read numeric to the card reader transfers 80 digits into storage.</p>
+</section>
+<section id="rn-to-ptr">
+<h4><span class="sectnum">1.4.1.3. </span><code class="docutils literal notranslate"><span class="pre">RN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTR</span></code><a class="headerlink" href="#rn-to-ptr" title="Permalink to this heading">¶</a></h4>
+<p>A numeric read to the paper tape reader,
+in contrast to the case for the card reader,
+is not completely defined in IBM documentation.
+All 10 digits are read as themselves;
+he 9 letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code> are read as flagged <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code>;
+a blank space is read as a <code class="docutils literal notranslate"><span class="pre">0</span></code>;
+a single <code class="docutils literal notranslate"><span class="pre">X</span></code> punch is read as a flagged <code class="docutils literal notranslate"><span class="pre">0</span></code>.
+Flagged and unflagged record marks and group marks are read.
+A numeric blank is read.
+There is no mention of reading a flagged numeric blank
+(tape code the same as an asterisk: <code class="docutils literal notranslate"><span class="pre">X84</span></code>),
+but this did work as expected.</p>
+<p>IBM documentation described exactly what was placed into storage when a card containing alphabetic and special characters was read numerically;
+unfortunately,
+there seems not to be any official documentation for the paper tape reader.
+Since cards read and punched numerically produce the same codes for flagged digits as the letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code> (for flagged <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code>) and <code class="docutils literal notranslate"><span class="pre">-</span></code> (hyphen),
+and those same characters are also printed for flagged digits,
+the simulator treats reading of alphabetic and special characters from paper tape exactly the same as if they were read from cards.
+See the IBM document reference mentioned in the previous section concerning the card reader.</p>
+<p>There is a book,
+<cite>Basic Programming Concepts and the IBM 1620 Computer</cite>,
+by Leeson and Dimitry,
+which has a table on page 77 of data read numerically from paper tape.
+It does not include information for record mark and group mark,
+but does confirm the results for alphabetic and special characters.</p>
+<p>A read from paper tape transferred data until it encountered an EOL (end of line) punch in the tape.
+When the EOL was encountered,
+a record mark was placed into storage.</p>
+<span class="target" id="wn"><span id="write-numerically"></span></span></section>
+</section>
+<section id="wn-write-numerically">
+<h3><span class="sectnum">1.4.2. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> - Write numerically<a class="headerlink" href="#wn-write-numerically" title="Permalink to this heading">¶</a></h3>
+<section id="wn-to-tty">
+<h4><span class="sectnum">1.4.2.1. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to TTY<a class="headerlink" href="#wn-to-tty" title="Permalink to this heading">¶</a></h4>
+<p>A numeric write to the typewriter caused characters to be typed beginning where the carriage was positioned,
+and continued until a character in storage was encountered that had both the 8 and 2 bits
+(with or without a flag).
+This was usually a record mark,
+but could also be a group mark or one of the unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+The ending character was not typed.
+Flagged characters were printed with the over-bar.</p>
+</section>
+<section id="wn-to-cdp">
+<h4><span class="sectnum">1.4.2.2. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code><a class="headerlink" href="#wn-to-cdp" title="Permalink to this heading">¶</a></h4>
+<p>A numeric write to the card punch always transferred 80 characters.
+All standard 1620 characters are punched with their respective card codes,
+except the numeric blank and flagged numeric blank.
+These cause a blank column
+(no punches).
+No IBM documentation describes what happens if one of the 4 unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+A flagged zero was punched as <code class="docutils literal notranslate"><span class="pre">11-0</span></code>.</p>
+</section>
+<section id="wn-to-ptp">
+<h4><span class="sectnum">1.4.2.3. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code><a class="headerlink" href="#wn-to-ptp" title="Permalink to this heading">¶</a></h4>
+<p>A numeric write to the tape punch transferred characters until a character in storage was encountered that had both the 8 and 2 bits
+(with or without a flag).
+This was usually a record mark,
+but could also be a group mark or one of the unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+The ending character was not punched;
+rather, an EOL character was punched in the tape.
+A numeric blank was punched as a numeric blank;
+a flagged zero produced an <code class="docutils literal notranslate"><span class="pre">X</span></code> punch.</p>
+</section>
+<section id="wn-to-lpt">
+<h4><span class="sectnum">1.4.2.4. </span><code class="docutils literal notranslate"><span class="pre">WN</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code><a class="headerlink" href="#wn-to-lpt" title="Permalink to this heading">¶</a></h4>
+<p>A numeric write to the printer caused data to be transferred to the printer buffer until the buffer was full or until a character in storage was encountered that had both the 8 and 2 bits
+(with or without a flag).
+This was usually a record mark,
+but could also be a group mark or one of the unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+The ending character was not transferred to the buffer.
+Digits were printed as digits;
+a flagged zero was printed as a hyphen;
+flagged <code class="docutils literal notranslate"><span class="pre">1</span></code>–<code class="docutils literal notranslate"><span class="pre">9</span></code> were printed as the letters <code class="docutils literal notranslate"><span class="pre">J</span></code>–<code class="docutils literal notranslate"><span class="pre">R</span></code>;
+numeric blanks
+(with or without a flag)
+were printed as blanks.
+The length of the line printed depended on the printer features:
+it was either 120 or 144 characters.
+The simulator supports only a printer with 120 characters per line.</p>
+<span class="target" id="dn"><span id="dump-numerically"></span></span></section>
+</section>
+<section id="dn-dump-numerically">
+<h3><span class="sectnum">1.4.3. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> - Dump numerically<a class="headerlink" href="#dn-dump-numerically" title="Permalink to this heading">¶</a></h3>
+<section id="dn-to-tty">
+<h4><span class="sectnum">1.4.3.1. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to TTY<a class="headerlink" href="#dn-to-tty" title="Permalink to this heading">¶</a></h4>
+<p>This instruction wrote all data characters from consecutive storage locations beginning with the <span class="html"><samp><var>P</var></samp></span> address.
+The typewriter carriage automatically returned at the end of the margin.
+Output continued until either the operator pressed the console <span class="html"><samp class="guilabel">Release</samp></span> key,
+or the highest location of the storage module where the operation started was reached.
+The highest address in a storage module is <span class="html"><samp>19999</samp></span>, <span class="html"><samp>39999</samp></span>, or <span class="html"><samp>59999</samp></span>.
+All characters including record marks and group marks were typed.
+No IBM documentation described what happened if one of the four unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card was encountered.</p>
+</section>
+<section id="dn-to-cdp">
+<h4><span class="sectnum">1.4.3.2. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code><a class="headerlink" href="#dn-to-cdp" title="Permalink to this heading">¶</a></h4>
+<p>This instruction punched the characters from all storage locations beginning with the <span class="html"><samp><var>P</var></samp></span> address and continuing through the highest address in the storage module where the operation started.
+If the last storage location did not exactly fill a card,
+additional higher locations were punched to fill out the card.
+In this case,
+if the starting address was in the highest storage module,
+additional characters were taken by wrapping around to and continuing from address 00000.
+Numeric blanks were punched as blanks;
+flagged numeric blanks were punched as blanks;
+flagged zeros produced only an <code class="docutils literal notranslate"><span class="pre">11</span></code> punch.
+No IBM documentation described what happened if one of the four unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card was encountered.</p>
+</section>
+<section id="dn-to-ptp">
+<h4><span class="sectnum">1.4.3.3. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code><a class="headerlink" href="#dn-to-ptp" title="Permalink to this heading">¶</a></h4>
+<p>This instruction caused storage locations beginning at the <span class="html"><samp><var>P</var></samp></span> address and continuing to the end of the addressed storage module.
+At the end of the operation,
+an EOL character was punched.
+Flagged zeros produced only an <code class="docutils literal notranslate"><span class="pre">X</span></code> punch.
+No IBM documentation described what happened if one of the 4 unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card was encountered.</p>
+</section>
+<section id="dn-to-lpt">
+<h4><span class="sectnum">1.4.3.4. </span><code class="docutils literal notranslate"><span class="pre">DN</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code><a class="headerlink" href="#dn-to-lpt" title="Permalink to this heading">¶</a></h4>
+<p>This instruction caused only one line to be printed.
+The printer buffer was filled
+(120 or 144 characters)
+beginning at the <span class="html"><samp><var>P</var></samp></span> address location and continuing to higher locations.
+If the end of storage was encountered before the buffer was full,
+the operation continued by wrapping around to location 00000.
+Special translation took place for special characters.
+Digits were printed as described above for <code class="docutils literal notranslate"><span class="pre">WN</span></code>.
+Numeric blank was printed as <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>,
+flagged numeric blank as <code class="docutils literal notranslate"><span class="pre">*</span></code>,
+record mark as <code class="docutils literal notranslate"><span class="pre">ǂ</span></code>,
+flagged record mark as <code class="docutils literal notranslate"><span class="pre">W</span></code>,
+group mark as <code class="docutils literal notranslate"><span class="pre">G</span></code>,
+flagged group mark as <code class="docutils literal notranslate"><span class="pre">X</span></code>.
+This translation made it possible to dump storage and tell exactly what was in every location.
+No IBM documentation described what happened if one of the 4 unusual characters mentioned above that are the result of reading a dollar sign,
+period,
+comma,
+or equals sign from a card was encountered.</p>
+<span class="target" id="ra"><span id="read-alphanumerically"></span></span></section>
+</section>
+<section id="ra-read-alphanumerically">
+<h3><span class="sectnum">1.4.4. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> - Read alphanumerically<a class="headerlink" href="#ra-read-alphanumerically" title="Permalink to this heading">¶</a></h3>
+<section id="ra-to-tty">
+<h4><span class="sectnum">1.4.4.1. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to TTY<a class="headerlink" href="#ra-to-tty" title="Permalink to this heading">¶</a></h4>
+<p>This instruction caused one line to be read from the console typewriter.
+All valid 1620 characters can be entered.
+Each character typed caused two digits to be entered into storage.
+It is unclear
+(not documented anywhere)
+if the actual 1620 supported input of flagged numeric blank,
+flagged record mark,
+or flagged group mark.
+The instruction is complete when the <span class="html"><kbd>Enter</kbd></span> key is pressed.</p>
+<p>The 1620-1 did not support backspace to correct a typing mistake.
+Each character entered was placed directly into a pair of storage locations.
+The 1620-2 did support a correction key which typed an overstrike character (<code class="docutils literal notranslate"><span class="pre">-</span></code>),
+and backed up the address in the OR-2 register by 2 so the next character could replace the one just placed in storage.
+If the correction key was pressed multiple times,
+an overstrike character was typed each time and the register decremented each time.
+If, for example,
+the operator typed <span class="html"><samp>EDN</samp></span> instead of the intended <span class="html"><samp>END</samp></span>,
+use of the correction key would leave <span class="html"><samp>EDN- -ND</samp></span> on the console paper as a record of the operator action.
+The simulator does not support this function.</p>
+</section>
+<section id="ra-to-cdr">
+<h4><span class="sectnum">1.4.4.2. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to <code class="docutils literal notranslate"><span class="pre">CDR</span></code><a class="headerlink" href="#ra-to-cdr" title="Permalink to this heading">¶</a></h4>
+<p>This instruction reads one card and places 160 digits into storage.
+All characters can be read.
+A card deck could be duplicated by issuing <code class="docutils literal notranslate"><span class="pre">RA</span></code> to the reader and then issuing <code class="docutils literal notranslate"><span class="pre">WA</span></code> of the same data to the card punch.</p>
+</section>
+<section id="ra-to-ptr">
+<h4><span class="sectnum">1.4.4.3. </span><code class="docutils literal notranslate"><span class="pre">RA</span></code> to <code class="docutils literal notranslate"><span class="pre">PTR</span></code><a class="headerlink" href="#ra-to-ptr" title="Permalink to this heading">¶</a></h4>
+<p>This instruction is similar to reading from a card reader,
+except that a variable number of characters were placed into storage.
+The operation continued until an EOL punch was detected in the tape.
+When this happened,
+the operation stopped and an alphanumeric record mark
+(the two characters <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code>)
+were placed in storage.</p>
+<span class="target" id="wa"><span id="write-alphanumerically"></span></span></section>
+</section>
+<section id="wa-write-alphanumerically">
+<h3><span class="sectnum">1.4.5. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> - Write alphanumerically<a class="headerlink" href="#wa-write-alphanumerically" title="Permalink to this heading">¶</a></h3>
+<section id="wa-to-tty">
+<h4><span class="sectnum">1.4.5.1. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to TTY<a class="headerlink" href="#wa-to-tty" title="Permalink to this heading">¶</a></h4>
+<p>This instruction decoded two characters at a time and wrote each alphanumeric character on the typewriter.
+The operation continued until a pair of digits was encountered that had the 8 and 2 bits on in the second of the pair.
+This was usually <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code>,
+but could have been anything followed by a record mark,
+group mark,
+or one of the unusual characters mentioned above that resulted from reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+All alphanumeric codes except 22 and those that contained a record mark or group mark could be written.</p>
+</section>
+<section id="wa-to-cdp">
+<h4><span class="sectnum">1.4.5.2. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">CDP</span></code><a class="headerlink" href="#wa-to-cdp" title="Permalink to this heading">¶</a></h4>
+<p>This instruction decoded two characters at a time and transferred each alphanumeric character to the card punch buffer.
+This operation continued until 160 digits were processed and the corresponding 80 characters had been transferred.
+All alphanumeric codes except 22 could be written.</p>
+</section>
+<section id="wa-to-ptp">
+<h4><span class="sectnum">1.4.5.3. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">PTP</span></code><a class="headerlink" href="#wa-to-ptp" title="Permalink to this heading">¶</a></h4>
+<p>This instruction decoded two characters at a time and punched each alphanumeric character to paper tape.
+The operation continued until a pair of digits was encountered that had the 8 and 2 bits on in the second of the pair.
+This was usually <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code>,
+but could be anything followed by a record mark,
+group mark,
+or one of the unusual characters mentioned above that resulted from reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+All alphanumeric codes except 22 and those that contained a record mark or group mark could be written.
+The terminating character was not written,
+but an EOL was punched in the tape.</p>
+</section>
+<section id="wa-to-lpt">
+<h4><span class="sectnum">1.4.5.4. </span><code class="docutils literal notranslate"><span class="pre">WA</span></code> to <code class="docutils literal notranslate"><span class="pre">LPT</span></code><a class="headerlink" href="#wa-to-lpt" title="Permalink to this heading">¶</a></h4>
+<p>This instruction decoded two characters at a time and transferred each alphanumeric character to the line printer buffer.
+The operation continued until a pair of digits was encountered that had the 8 and 2 bits one in the second of the pair or until the print buffer was full.
+This was usually <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code>,
+but could be anything followed by a record mark,
+group mark,
+or one of the unusual characters mentioned above that resulted from reading a dollar sign,
+period,
+comma,
+or equals sign from a card.
+All alphanumeric codes except those that contained a record mark or group mark could be written.
+The printer was the only device that interpreted alphanumeric code 22 and printed a record mark character (<code class="docutils literal notranslate"><span class="pre">ǂ</span></code>).
+This did not stop the operation.
+After the ending character was detected,
+any remaining buffer positions were filled with blanks.
+It was important to always provide the ending <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code> to stop the operation because,
+for reasons known only to IBM,
+the printer buffer was 197 characters long.
+Even though the printer could only print 120 or 144 characters on a line
+(depending on the printer feature installed),
+it still tried to decode and transfer 197 characters.
+Omitting the ending character in storage meant that the machine would process whatever followed the data to be printed and likely detect an error because of an invalid code.
+This obscure feature is implemented by the simulator.</p>
+<span class="target" id="wbpt"><span id="rbpt"></span><span id="write-binary-paper-tape"></span><span id="read-binary-paper-tape"></span></span></section>
+</section>
+<section id="read-write-binary-paper-tape">
+<h3><span class="sectnum">1.4.6. </span>Read / write binary paper tape<a class="headerlink" href="#read-write-binary-paper-tape" title="Permalink to this heading">¶</a></h3>
+<p>The instructions <code class="docutils literal notranslate"><span class="pre">RBPT</span></code> (read binary paper tape) and <code class="docutils literal notranslate"><span class="pre">WBPT</span></code> (write binary paper tape) operated in a manner similar to read and write alphanumerically.
+That is,
+two storage locations are transferred for each column on paper tape.
+On reading,
+each column of tape is stored into two storage positions;
+on output,
+each pair of storage locations is punched as one column of tape.
+<code class="docutils literal notranslate"><span class="pre">WBPT</span></code> stops writing when it encounters a <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code> combination in storage and an EOL is punched in the tape.
+<code class="docutils literal notranslate"><span class="pre">RBPT</span></code> reads data until it encounters an EOL on the tape.
+Presumably,
+this caused a <code class="docutils literal notranslate"><span class="pre">0ǂ</span></code> to be placed into storage to indicate the end of the data read;
+however,
+the IBM documentation does not actually state that this is the case.
+The simulator does insert the record mark when EOL is encountered.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="i1401_doc.html" title="previous chapter"><span class="sectnum">1. </span>IBM 1401 simulator usage</a></li>
+      <li>Next: <a href="i7094_doc.html" title="next chapter"><span class="sectnum">1. </span>IBM 7090/7094 simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/i1620_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

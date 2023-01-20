@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. IBM 7010 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="ibm-7010-simulator-usage">
+<h1><span class="sectnum">1. </span>IBM 7010 simulator usage<a class="headerlink" href="#ibm-7010-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2018-07-25</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#introduction" id="id1"><span class="sectnum">1.1. </span>Introduction</a></p></li>
+<li><p><a class="reference internal" href="#simulator-files" id="id2"><span class="sectnum">1.2. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#ibm-7010-features" id="id3"><span class="sectnum">1.3. </span>IBM 7010 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id4"><span class="sectnum">1.3.1. </span><span class="html"><samp>CPU</samp></span></a></p></li>
+<li><p><a class="reference internal" href="#i-o-channels-ch1-ch4" id="id5"><span class="sectnum">1.3.2. </span>I/O channels (<span class="html"><samp>CH1</samp></span>..<span class="html"><samp>CH4</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#unit-record-devices" id="id6"><span class="sectnum">1.3.3. </span>Unit record devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#inquiry-station-inq" id="id7"><span class="sectnum">1.3.3.1. </span>Inquiry station (<span class="html"><samp>INQ</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#card-reader-cdr" id="id8"><span class="sectnum">1.3.3.2. </span>1402 card reader (<span class="html"><samp>CDR</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#card-punch-cdp" id="id9"><span class="sectnum">1.3.3.3. </span>1402 card punch (<span class="html"><samp>CDP</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#stack-device-stkr" id="id10"><span class="sectnum">1.3.3.4. </span>Stack device (<span class="html"><samp>STKR</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#line-printer-lp" id="id11"><span class="sectnum">1.3.3.5. </span>1403 line printer (<span class="html"><samp>LP</samp></span>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#magnetic-tape-devices" id="id12"><span class="sectnum">1.3.4. </span>Magnetic tape devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#magnetic-tape-mta-c" id="id13"><span class="sectnum">1.3.4.1. </span>729 magnetic tape (<span class="html"><samp>MTA-C</samp></span>)</a></p></li>
+<li><p><a class="reference internal" href="#chronoclock" id="id14"><span class="sectnum">1.3.4.2. </span>ChronoClock</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#devices" id="id15"><span class="sectnum">1.3.5. </span>7909 devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#disk-devices" id="id16"><span class="sectnum">1.3.5.1. </span>1301/1302/2302/7320 disk devices</a></p></li>
+<li><p><a class="reference internal" href="#communications-controller-com-and-coml" id="id17"><span class="sectnum">1.3.5.2. </span>7750 communications controller (<span class="html"><samp>COM</samp></span> and <span class="html"><samp>COML</samp></span>)</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id18"><span class="sectnum">1.4. </span>Symbolic display and input</a></p></li>
+<li><p><a class="reference internal" href="#character-codes" id="id19"><span class="sectnum">1.5. </span>Character codes</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><span class="sectnum">1.1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>The IBM 1410 and 7010 were designed as enhancements to the IBM 1401;
+these were somewhat source-compatible,
+but not binary-compatible.
+The 1410 was introduced on September 12, 1960,
+and the 7010 in 1962.
+The 1410 was withdrawn on March 30th, 1970.
+The 7010 featured 4 I/O channels where the 1410 had 2.
+Also, the 7010 could access 100,000 characters of memory,
+as opposed to the 80,000 for the 1410.
+The 7010 also featured optional decimal floating-point instructions.
+Memory was divided into fields separated by a special flag called a <em>word mark</em>.
+Instructions end at the first character with the word mark set.
+They consist of a operation code,
+followed by 1 or 2 5-digit addresses,
+and an optional instruction modifier.
+If the 10’s and 100’s digit have zone bits set,
+the address is modified by the contents of the five characters at locations 25–100.
+Each register is 5 characters long and word marks are ignored.
+The 1410 and 7010 could also be optionally equipped with priority mode to allow for device complete interrupts.</p>
+<p>The 7010 or 1410 CPU has no registers.
+All operations on done from memory.</p>
+</section>
+<section id="simulator-files">
+<h2><span class="sectnum">1.2. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<p>To compile the IBM 7010:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subdirectory</p></th>
+<th class="head"><p>File</p></th>
+<th class="head"><p>Contains</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="15"><p><code class="docutils literal notranslate"><span class="pre">I7000/</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">i7000_defs.h</span></code></p></td>
+<td><p>IBM 7000 simulators general definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7010_defs.h</span></code></p></td>
+<td><p>IBM 7010 simulator specific definitions</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_chan.c</span></code></p></td>
+<td><p>Generic channel interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7010_cpu.c</span></code></p></td>
+<td><p>7010 CPU, channel, interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">I7010_chan.c</span></code></p></td>
+<td><p>7010 channel</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7010_sys.c</span></code></p></td>
+<td><p>7010 system interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_cdr.c</span></code></p></td>
+<td><p>1402 card reader</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_cdp.c</span></code></p></td>
+<td><p>1402 card punch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_com.c</span></code></p></td>
+<td><p>7750 communications controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_con.c</span></code></p></td>
+<td><p>Inquiry console</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_dsk.c</span></code></p></td>
+<td><p>1301/2302 disk and 7238 drum controller</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_ht.c</span></code></p></td>
+<td><p>7340 hypertape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_lpr.c</span></code></p></td>
+<td><p>1403 line printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_mt.c</span></code></p></td>
+<td><p>729 tape controller</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">i7000_chron.c</span></code></p></td>
+<td><p>ChronoClock</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ibm-7010-features">
+<h2><span class="sectnum">1.3. </span>IBM 7010 features<a class="headerlink" href="#ibm-7010-features" title="Permalink to this heading">¶</a></h2>
+<p>The IBM 7010 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#cpu"><span class="html"><samp>CPU</samp></span></a></p></td>
+<td><p>7010 CPU with 10-60K of memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ch1"><span class="html"><samp>CH1</samp></span></a>..<a class="reference internal" href="#ch4"><span class="html"><samp>CH4</samp></span></a></p></td>
+<td><p>7010 channels</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mta"><span class="html"><samp>MTA</samp></span></a></p></td>
+<td><p>729 magnetic tape controller (channel 20)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mtb"><span class="html"><samp>MTB</samp></span></a></p></td>
+<td><p>729 magnetic tape controller (channel 21)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mtc"><span class="html"><samp>MTC</samp></span></a></p></td>
+<td><p>729 magnetic tape controller (channel 22)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chron"><span class="html"><samp>CHRON</samp></span></a></p></td>
+<td><p>ChronoClock</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cdr"><span class="html"><samp>CDR</samp></span></a></p></td>
+<td><p>1402 card reader</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cdp"><span class="html"><samp>CDP</samp></span></a></p></td>
+<td><p>1402 card punch</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#stkr"><span class="html"><samp>STKR</samp></span></a></p></td>
+<td><p>1402 card punch stacker</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lp"><span class="html"><samp>LP</samp></span></a></p></td>
+<td><p>1403 line printer</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#dk"><span class="html"><samp>DK</samp></span></a></p></td>
+<td><p>1301/2302/7304 disk</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#com"><span class="html"><samp>COM</samp></span></a></p></td>
+<td><p>7750 communications controller</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#coml"><span class="html"><samp>COML</samp></span></a></p></td>
+<td><p>7750 communications lines</p></td>
+</tr>
+</tbody>
+</table>
+<p>The 7010 simulator implements several unique stop conditions:</p>
+<ul class="simple">
+<li><p>I/O device not ready</p></li>
+<li><p>Unknown CPU instruction</p></li>
+<li><p>I/O check</p></li>
+<li><p>Divide error</p></li>
+<li><p>No word mark</p></li>
+<li><p>Invalid addresses</p></li>
+<li><p>Invalid instruction length</p></li>
+<li><p>Program check</p></li>
+<li><p>Protection check</p></li>
+<li><p>Invalid message to 7750</p></li>
+<li><p>No buffer storage available for input character on 7750</p></li>
+<li><p>No buffer storage available for output character on 7750</p></li>
+</ul>
+<section id="cpu">
+<h3><span class="sectnum">1.3.1. </span><span class="html"><samp>CPU</samp></span><a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p>The <span class="html"><samp>CPU</samp></span> options include setting memory size and CPU type.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 1401</b></samp></span></p></td>
+<td><p>Emulate a 1401</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 7010</b></samp></span></p></td>
+<td><p>Emulate a 7010</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 10K</b></samp></span></p></td>
+<td><p>Set memory to 10K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 20K</b></samp></span></p></td>
+<td><p>Set memory to 20K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 30K</b></samp></span></p></td>
+<td><p>Set memory to 30K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 40K</b></samp></span></p></td>
+<td><p>Set memory to 40K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 50K</b></samp></span></p></td>
+<td><p>Set memory to 50K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 60K</b></samp></span></p></td>
+<td><p>Set memory to 60K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 70K</b></samp></span></p></td>
+<td><p>Set memory to 70K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 80K</b></samp></span></p></td>
+<td><p>Set memory to 80K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU 90K</b></samp></span></p></td>
+<td><p>Set memory to 90K</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU 100K</b></samp></span></p></td>
+<td><p>Set memory to 100K</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOPRIORITY</b></samp></span></p></td>
+<td><p>No priority mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU PRIORITY</b></samp></span></p></td>
+<td><p>Priority mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOFLOAT</b></samp></span></p></td>
+<td><p>No floating-point</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU FLOAT</b></samp></span></p></td>
+<td><p>Floating-point</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU NOPROT</b></samp></span></p></td>
+<td><p>No memory protection</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU PROT</b></samp></span></p></td>
+<td><p>Memory protection</p></td>
+</tr>
+</tbody>
+</table>
+<p>Memory size is 10KW on a standard CPU,
+extended option must be enabled to use memory sizes over 10KW.</p>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size (digits)</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">IAR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Instruction address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">AAR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>A address register</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">BAR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>B address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">CAR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>C address register</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">DAR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>D address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">E</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Channel 0 address register</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">F</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Channel 1 address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">G</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Channel 2 address register</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">H</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Channel 3 address register</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">ASTRISK</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Asterix mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">SW0</samp></span>..<span class="html"><samp class="register">SW6</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Sense switch</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">SW</samp></span></p></td>
+<td><p>6</p></td>
+<td><p>Sense switches</p></td>
+</tr>
+</tbody>
+</table>
+<p>The CPU can maintain a history of the most recently executed instructions.
+This is controlled by the <span class="html"><samp><b>SET CPU HISTORY</b></samp></span> and <span class="html"><samp><b>SHOW CPU HISTORY</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU HISTORY</b></samp></span></p></td>
+<td><p>Clear history buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CPU HISTORY=0</b></samp></span></p></td>
+<td><p>Disable history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CPU HISTORY=</b><var>n</var></samp></span></p></td>
+<td><p>Enable history, length = <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SHOW CPU HISTORY</b></samp></span></p></td>
+<td><p>Print CPU history</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SHOW CPU HISTORY=</b><var>n</var></samp></span></p></td>
+<td><p>Print first <span class="html"><samp><var>n</var></samp></span> entries of CPU history</p></td>
+</tr>
+</tbody>
+</table>
+<p>The history trace shows the instruction counter,
+the <span class="html"><samp class="register">AAR</samp></span> and <span class="html"><samp class="register">BAR</samp></span> before and after the instruction executed.
+The result of the instruction is displayed followed by the symbolic instruction.</p>
+</section>
+<section id="i-o-channels-ch1-ch4">
+<span id="i-o-channels"></span><span id="ch4"></span><span id="ch1"></span><h3><span class="sectnum">1.3.2. </span>I/O channels (<span class="html"><samp>CH1</samp></span>..<span class="html"><samp>CH4</samp></span>)<a class="headerlink" href="#i-o-channels-ch1-ch4" title="Permalink to this heading">¶</a></h3>
+<p>The 7010 supported 4 channels.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CHAN UREC=</b><var>dev</var></samp></span></p></td>
+<td><p>Set device to cause interrupts on a channel</p></td>
+</tr>
+</tbody>
+</table>
+<p>Channels have the following registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size (digits)</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">ADDR</samp></span></p></td>
+<td><p>5</p></td>
+<td><p>Channel data address</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">CMD</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Channel command</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">FLAGS</samp></span></p></td>
+<td><p>32 (binary)</p></td>
+<td><p>Channel flags</p></td>
+</tr>
+</tbody>
+</table>
+<p>For the meaning of bits in <span class="html"><samp class="register">FLAGS</samp></span>,
+see <code class="docutils literal notranslate"><span class="pre">i7000_defs.h</span></code>.</p>
+</section>
+<section id="unit-record-devices">
+<h3><span class="sectnum">1.3.3. </span>Unit record devices<a class="headerlink" href="#unit-record-devices" title="Permalink to this heading">¶</a></h3>
+<section id="inquiry-station-inq">
+<span id="inquiry-station"></span><span id="inq"></span><h4><span class="sectnum">1.3.3.1. </span>Inquiry station (<span class="html"><samp>INQ</samp></span>)<a class="headerlink" href="#inquiry-station-inq" title="Permalink to this heading">¶</a></h4>
+<p>The inquiry station allows for communications with the operating system.
+The station is half-duplex and will either print or accept input.
+Whenever the computer sends a message,
+it is prefixed with an <code class="docutils literal notranslate"><span class="pre">R</span></code> character.
+When the station is ready to receive input,
+it prompts with an <code class="docutils literal notranslate"><span class="pre">I</span></code>.
+Input is buffered until the return character is entered.
+<span class="html"><kbd>Backspace</kbd></span> will remove the last character typed.
+An <span class="html"><kbd>esc</kbd></span> will send an interrupt to the processor to request it read a record from the console.
+An <span class="html"><kbd>esc</kbd></span> while in input mode will cancel input mode and clear any typed message.</p>
+</section>
+<section id="card-reader-cdr">
+<span id="card-reader"></span><span id="cdr"></span><h4><span class="sectnum">1.3.3.2. </span>1402 card reader (<span class="html"><samp>CDR</samp></span>)<a class="headerlink" href="#card-reader-cdr" title="Permalink to this heading">¶</a></h4>
+<p>The card reader (<span class="html"><samp>CDR</samp></span>) reads data from a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card reader files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a <span class="html"><samp><b>SET</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>FORMAT=TEXT</b></samp></span></p></td>
+<td><p>Set ASCII text mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>FORMAT=BINARY</b></samp></span></p></td>
+<td><p>Set for binary card images</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>FORMAT=BCD</b></samp></span></p></td>
+<td><p>Set for BCD records</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>FORMAT=CBN</b></samp></span></p></td>
+<td><p>Set for column binary BCD records</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>FORMAT=AUTO</b></samp></span></p></td>
+<td><p>Automatically determine format</p></td>
+</tr>
+</tbody>
+</table>
+<p>or in the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CDR</b><var>n</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CDR</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CDR</b><var>n</var> <b>-s</b> <var>file</var></samp></span></p></td>
+<td><p>Add file onto current cards to read</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CDR</b><var>n</var> <b>-e</b> <var>file</var></samp></span></p></td>
+<td><p>After file is read in, the reader will receive and end-of-file flag</p></td>
+</tr>
+</tbody>
+</table>
+<p>The channel can be changed by the following command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDR</b><var>n</var> <b>CHAN=</b><var>c</var></samp></span></p></td>
+<td><p>Set this device to channel <span class="html"><samp><var>c</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>The default assignments are:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>CDR0</samp></span></p></td>
+<td><p>Channel 1</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>CDR1</samp></span></p></td>
+<td><p>Disabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>The card reader can be booted with the following command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>BOOT CDR</b><var>n</var></samp></span></p></td>
+<td><div class="line-block">
+<div class="line">Read first card into address 1.</div>
+<div class="line">Start execution at location 1.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End of file</p></td>
+<td><p>Out of cards</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="card-punch-cdp">
+<span id="card-punch"></span><span id="cdp"></span><h4><span class="sectnum">1.3.3.3. </span>1402 card punch (<span class="html"><samp>CDP</samp></span>)<a class="headerlink" href="#card-punch-cdp" title="Permalink to this heading">¶</a></h4>
+<p>The card reader (<span class="html"><samp>CDP</samp></span>) writes data to a disk file.
+Cards are simulated as ASCII lines with terminating newlines.
+Card punch files can either be text (one character per column) or column binary (two characters per column).
+The file type can be specified with a <span class="html"><samp><b>SET</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>FORMAT=TEXT</b></samp></span></p></td>
+<td><p>Set ASCII text mode</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>FORMAT=BINARY</b></samp></span></p></td>
+<td><p>Set for binary card images</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>FORMAT=BCD</b></samp></span></p></td>
+<td><p>Set for BCD records</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>FORMAT=CBN</b></samp></span></p></td>
+<td><p>Set for column binary BCD records</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>FORMAT=AUTO</b></samp></span></p></td>
+<td><p>Automatically determine format</p></td>
+</tr>
+</tbody>
+</table>
+<p>or in the <span class="html"><samp><b>ATTACH</b></samp></span> command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH CDP</b><var>n</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>ATTACH CDP</b><var>n</var> <b>-f</b> <var>format</var> <var>file</var></samp></span></p></td>
+<td><p>Attach a file with the given format</p></td>
+</tr>
+</tbody>
+</table>
+<p>The channel can be changed by the following command:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CDP</b><var>n</var> <b>CHAN=</b><var>c</var></samp></span></p></td>
+<td><p>Set this device to channel <span class="html"><samp><var>c</var></samp></span></p></td>
+</tr>
+</tbody>
+</table>
+<p>The default assignments are:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>CDP0</samp></span></p></td>
+<td><p>Channel 1</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>CDP1</samp></span></p></td>
+<td><p>Disabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="stack-device-stkr">
+<span id="stack-device"></span><span id="stkr"></span><h4><span class="sectnum">1.3.3.4. </span>Stack device (<span class="html"><samp>STKR</samp></span>)<a class="headerlink" href="#stack-device-stkr" title="Permalink to this heading">¶</a></h4>
+<p>The stacker device can be enabled,
+and files can be attached to individual bins of the stacker.
+The file format follows that of the <a class="reference internal" href="#cdp"><span class="html"><samp>CDP</samp></span></a> device.
+The individual unit reflects the stacker code sent by the computer.
+If no file is attached,
+the output will go to the file attached to the <a class="reference internal" href="#cdp"><span class="html"><samp>CDP</samp></span></a> device.</p>
+</section>
+<section id="line-printer-lp">
+<span id="line-printer"></span><span id="lp"></span><h4><span class="sectnum">1.3.3.5. </span>1403 line printer (<span class="html"><samp>LP</samp></span>)<a class="headerlink" href="#line-printer-lp" title="Permalink to this heading">¶</a></h4>
+<p>The line printer (<span class="html"><samp>LP</samp></span>) writes data to a disk file as ASCII text with terminating newlines.
+Currently set to handle standard signals to control paper advance.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET LP</b><var>n</var> <b>NO</b>/<b>ECHO</b></samp></span></p></td>
+<td><p>Set echoing to console of line-printer output</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET LP</b><var>n</var> <b>CHAN=</b><var>n</var></samp></span></p></td>
+<td><p>Set channel for this device</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET LP</b><var>n</var> <b>LINESPERPAGE=</b><var>lpp</var></samp></span></p></td>
+<td><p>Set number of lines per page on printer</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default assignments are:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp>LP0</samp></span></p></td>
+<td><p>Channel 1</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp>LP1</samp></span></p></td>
+<td><p>Disabled</p></td>
+</tr>
+</tbody>
+</table>
+<p>If the printer supports the following control codes to control spacing.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Character (octal)</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>060</p></td>
+<td><p>Suppress spacing</p></td>
+</tr>
+<tr class="row-odd"><td><p>020</p></td>
+<td><p>Single space after</p></td>
+</tr>
+<tr class="row-even"><td><p>040</p></td>
+<td><p>Single space before</p></td>
+</tr>
+<tr class="row-odd"><td><p>063</p></td>
+<td><p>Skip to channel 3 (every 5th line)</p></td>
+</tr>
+<tr class="row-even"><td><p>062</p></td>
+<td><p>Skip to channel 2 (every 8th line)</p></td>
+</tr>
+<tr class="row-odd"><td><p>061 &amp; 069</p></td>
+<td><p>Skip to channel 1 (or 9), (top of form)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="magnetic-tape-devices">
+<h3><span class="sectnum">1.3.4. </span>Magnetic tape devices<a class="headerlink" href="#magnetic-tape-devices" title="Permalink to this heading">¶</a></h3>
+<section id="magnetic-tape-mta-c">
+<span id="magnetic-tape"></span><span id="mta-c"></span><span id="mtc"></span><span id="mtb"></span><span id="mta"></span><h4><span class="sectnum">1.3.4.1. </span>729 magnetic tape (<span class="html"><samp>MTA-C</samp></span>)<a class="headerlink" href="#magnetic-tape-mta-c" title="Permalink to this heading">¶</a></h4>
+<p>These come in groups of 10 units each.</p>
+<p>Each individual tape drive support several options:
+<span class="html"><samp>MTA</samp></span> used as an example.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>REWIND</b></samp></span></p></td>
+<td><p>Set the mag tape to the load point</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>LOCKED</b></samp></span></p></td>
+<td><p>Set the mag tape to be read-only</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>WRITEENABLE</b></samp></span></p></td>
+<td><p>Set the mag tape to be writable</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>LOW</b></samp></span></p></td>
+<td><p>Set mag tape to low density</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET MTA</b><var>n</var> <b>HIGH</b></samp></span></p></td>
+<td><p>Set mag tape to high density</p></td>
+</tr>
+</tbody>
+</table>
+<p>Options: Density <span class="html"><samp>LOW</samp></span>/<span class="html"><samp>HIGH</samp></span> is only for informational purposes,
+and it does not change the format of how tapes are written.</p>
+<p>Tape drives can be booted with:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>BOOT MT</b><var>xn</var></samp></span></p></td>
+<td><p>Read in record into location 0</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="chronoclock">
+<span id="chron"></span><h4><span class="sectnum">1.3.4.2. </span>ChronoClock<a class="headerlink" href="#chronoclock" title="Permalink to this heading">¶</a></h4>
+<p>Disabled by default.
+This is a special 729 tape drive which returns the current time.
+It supports the option of setting the channel and drive that it will occupy.
+Note: You must disable the real 729 drive that is is replacing.
+The clock responds to Read and Backspace commands.
+A read results in a 10-character buffer being generated that has the month, day, hour, minutes, seconds and milliseconds.
+This time is taken from the local computer time.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET CHRON CHAN=</b><var>n</var></samp></span></p></td>
+<td><p>Set channel for chrono clock</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET CHRON UNIT=</b><var>n</var></samp></span></p></td>
+<td><p>Set the unit for the chrono clock</p></td>
+</tr>
+</tbody>
+</table>
+<p>Example: To set Chronoclock to unit A9,
+do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MTA9</span> <span class="n">DISABLE</span>
+<span class="n">SET</span> <span class="n">CHRON</span> <span class="n">UNIT</span><span class="o">=</span><span class="mi">9</span> <span class="n">CHAN</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="devices">
+<h3><span class="sectnum">1.3.5. </span>7909 devices<a class="headerlink" href="#devices" title="Permalink to this heading">¶</a></h3>
+<p>These devices must be attached to a 7909 channel to work.</p>
+<section id="disk-devices">
+<span id="dk"></span><h4><span class="sectnum">1.3.5.1. </span>1301/1302/2302/7320 disk devices<a class="headerlink" href="#disk-devices" title="Permalink to this heading">¶</a></h4>
+<p>The 7631 file control supports up to ten devices,
+which can be 7320 drums,
+1301 disks,
+1302 disks,
+or 2302 disks.
+Unit types are specified with the <span class="html"><samp><b>SET</b></samp></span> command.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=7320</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a drum</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=7320-2</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a drum (two modules)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=1301</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a 1301 disk</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=130l-2</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a 1301-2 disk (two modules)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=1302</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a 1302 disk</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=1302-2</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a 1302-2 disk (two modules)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>TYPE=2302</b></samp></span></p></td>
+<td><p>Unit <span class="html"><samp><var>n</var></samp></span> is a 2302 disk</p></td>
+</tr>
+</tbody>
+</table>
+<p>Units can be <span class="html"><samp><b>SET ENABLED</b></samp></span> or <span class="html"><samp><b>DISABLED</b></samp></span>.
+In addition,
+units can be set to enable or disable formatting:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>FORMAT</b></samp></span></p></td>
+<td><p>Enable formatting</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>NOFORMAT</b></samp></span></p></td>
+<td><p>Disable formatting</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>HA2</b></samp></span></p></td>
+<td><p>Enable writing of home address 2</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>NOHA2</b></samp></span></p></td>
+<td><p>Disable writing of home address 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>MODULE=</b><var>n</var></samp></span></p></td>
+<td><p>Set modules for unit; modules can only be even (0–8)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>CHAN=</b><var>n</var></samp></span></p></td>
+<td><p>Set channel for unit (A-H)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>SELECT=</b><var>n</var></samp></span></p></td>
+<td><p>Set select on channel (0 or 1)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>CTSS</b></samp></span></p></td>
+<td><p>Set disk to use CTSS bootstrap</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET DK</b><var>n</var> <b>IBSYS</b></samp></span></p></td>
+<td><p>Set disk to use IBSYS bootstrap</p></td>
+</tr>
+</tbody>
+</table>
+<p>Formatting is disabled by default.</p>
+<p>All disk units support bootstrapping with <span class="html"><samp><b>BOOT</b></samp></span> command.
+Bootstrap code is build based on whether CPU is in CTSS mode or not.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>BOOT DK</b><var>n</var></samp></span></p></td>
+<td><p>Insert custom loader into lower memory and start</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>OS I/O error</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="communications-controller-com-and-coml">
+<span id="communications-controller"></span><span id="coml"></span><span id="com"></span><h4><span class="sectnum">1.3.5.2. </span>7750 communications controller (<span class="html"><samp>COM</samp></span> and <span class="html"><samp>COML</samp></span>)<a class="headerlink" href="#communications-controller-com-and-coml" title="Permalink to this heading">¶</a></h4>
+<p>The 7750 is modeled as a terminal multiplexer with 33 lines.
+It consists of two devices:
+<span class="html"><samp>COM</samp></span> is the multiplexer controller,
+and <span class="html"><samp>COML</samp></span> is the individual lines.
+For the first 32 lines,
+the 7750 performs input and output through Telnet sessions connected via a user-specified listening port;
+the 33rd line is permanently attached to the simulator console window.
+The <span class="html"><samp><b>ATTACH</b></samp></span> command specifies the port to be used for Telnet sessions:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>ATTACH COM</b> <var>port</var></samp></span></p></td>
+<td><p>Set up listening port</p></td>
+</tr>
+</tbody>
+</table>
+<p>… where <span class="html"><samp><var>port</var></samp></span> is a decimal number between 1 and 65535 that is not being used by other TCP/IP activities.</p>
+<p>Each line
+(each unit of <span class="html"><samp>COML</samp></span>)
+can be set to one of two modes:
+KSR-35 and KSR-37.
+In KSR-35 mode,
+lowercase input and output characters are converted automatically to uppercase,
+and parity is ignored.
+In KSR-37 mode,
+lowercase characters are left alone,
+and even parity is generated on input.
+KSR-37 is the default.</p>
+<p>Once <span class="html"><samp>COM</samp></span> is attached and the simulator is running,
+the 7750 listens for connections on the specified port.
+It assumes that any incoming connection is a Telnet connection.
+The connections remain open until disconnected either by the Telnet client,
+a <span class="html"><samp><b>SET COM DISCONNECT</b></samp></span> command,
+or a <span class="html"><samp><b>DETACH COM</b></samp></span> command.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET COM DISCONNECT=</b><var>n</var></samp></span></p></td>
+<td><p>Disconnect line <span class="html"><samp><var>n</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET COM CHAN=</b><var>n</var></samp></span></p></td>
+<td><p>Set channel for <span class="html"><samp>COM</samp></span> controller</p></td>
+</tr>
+</tbody>
+</table>
+<p>The 7750 implements the following special <span class="html"><samp><b>SHOW</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SHOW COM CONNECTIONS</b></samp></span></p></td>
+<td><p>Display current connections to the 7750</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SHOW COM STATISTICS</b></samp></span></p></td>
+<td><p>Display statistics for active connections</p></td>
+</tr>
+</tbody>
+</table>
+<p>The 7750 implements the following special <span class="html"><samp><b>SET</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET COML</b><var>n</var> <b>LOG=</b><var>filename</var></samp></span></p></td>
+<td><p>Log output of line <span class="html"><samp><var>n</var></samp></span> to <span class="html"><samp><var>filename</var></samp></span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET COML</b><var>n</var> <b>NOLOG</b></samp></span></p></td>
+<td><p>Disable logging and close log file</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET COML</b><var>n</var> <b>KSR35</b></samp></span></p></td>
+<td><p>Set line <span class="html"><samp><var>n</var></samp></span> to ksr-35</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp><b>SET COML</b><var>n</var> <b>KSR37</b></samp></span></p></td>
+<td><p>Set line <span class="html"><samp><var>n</var></samp></span> to ksr-37</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp><b>SET COML</b><var>n</var> <b>2741</b></samp></span></p></td>
+<td><p>Set line <span class="html"><samp><var>n</var></samp></span> to 2741</p></td>
+</tr>
+</tbody>
+</table>
+<p>The controller (<span class="html"><samp>COM</samp></span>) implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="html"><samp class="register">ENABLE</samp></span></p></td>
+<td><p>1</p></td>
+<td><p>Enable flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="html"><samp class="register">STATE</samp></span></p></td>
+<td><p>6</p></td>
+<td><p>Controller state</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="html"><samp class="register">MSGNUM</samp></span></p></td>
+<td><p>12</p></td>
+<td><p>Input message sequence number</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.4. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The IBM 7010 simulator implements symbolic display and input.
+These are controlled by the following switches to the <span class="html"><samp><b>EXAMINE</b></samp></span> and <span class="html"><samp><b>DEPOSIT</b></samp></span> commands:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display/enter symbolic machine code</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display/enter BCD characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-n</span></code></p></td>
+<td><p>Display 1401 symbolic machine code</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Display/enter octal characters</p></td>
+</tr>
+</tbody>
+</table>
+<p>The symbolic input/display supports several formats for instruction display:</p>
+<ul class="simple">
+<li><p><span class="html"><samp><var>opcode</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>character</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>character</var><var>character</var><var>character</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>address</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>address</var>,<var>address</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>address</var>,<var>character</var></samp></span></p></li>
+<li><p><span class="html"><samp><var>opcode</var> <var>address</var>,<var>address</var>,<var>character</var></samp></span></p></li>
+</ul>
+<p>An address is a decimal number optionally followed by a <span class="html"><samp>+X<var>nn</var></samp></span> specifying an index register.</p>
+</section>
+<section id="character-codes">
+<h2><span class="sectnum">1.5. </span>Character codes<a class="headerlink" href="#character-codes" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Commercial</p></th>
+<th class="head"><p>Scientific</p></th>
+<th class="head"><p>ASCII</p></th>
+<th class="head"><p>BCD</p></th>
+<th class="head"><p>Card</p></th>
+<th class="head"><p>Remark</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p></p></td>
+<td></td>
+<td></td>
+<td><p>00</p></td>
+<td></td>
+<td><p>Blank</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>01</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>02</p></td>
+<td><p>2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>03</p></td>
+<td><p>3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>04</p></td>
+<td><p>4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>05</p></td>
+<td><p>5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>06</p></td>
+<td><p>6</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>07</p></td>
+<td><p>7</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>10</p></td>
+<td><p>8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>11</p></td>
+<td><p>9</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>12</p></td>
+<td><p>10</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">#</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">=</span></code></p></td>
+<td><p>13</p></td>
+<td><p>3–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'</span></code>/<code class="docutils literal notranslate"><span class="pre">&#64;</span></code></p></td>
+<td><p>14</p></td>
+<td><p>4–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">:</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">:</span></code></p></td>
+<td><p>15</p></td>
+<td><p>5–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&gt;</span></code></p></td>
+<td><p>16</p></td>
+<td><p>6–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">√</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code></p></td>
+<td><p>17</p></td>
+<td><p>7–8</p></td>
+<td><p>Tape mark</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ƀ</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">_</span></code></p></td>
+<td><p>20</p></td>
+<td><p>2–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>21</p></td>
+<td><p>10–1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">S</span></code></p></td>
+<td><p>22</p></td>
+<td><p>10–1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">T</span></code></p></td>
+<td><p>23</p></td>
+<td><p>10–2</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">U</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">U</span></code></p></td>
+<td><p>24</p></td>
+<td><p>10–3</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">V</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">V</span></code></p></td>
+<td><p>25</p></td>
+<td><p>10–4</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">W</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">W</span></code></p></td>
+<td><p>26</p></td>
+<td><p>10–5</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">X</span></code></p></td>
+<td><p>27</p></td>
+<td><p>10–6</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Y</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Y</span></code></p></td>
+<td><p>30</p></td>
+<td><p>10–7</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Z</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Z</span></code></p></td>
+<td><p>31</p></td>
+<td><p>10–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">#</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">#</span></code></p></td>
+<td><p>32</p></td>
+<td><p>10–2–8</p></td>
+<td><p>Word mark</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">,</span></code></p></td>
+<td><p>33</p></td>
+<td><p>10–3–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">%</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">%</span></code>/<code class="docutils literal notranslate"><span class="pre">(</span></code></p></td>
+<td><p>34</p></td>
+<td><p>10–4–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">`</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">`</span></code></p></td>
+<td><p>35</p></td>
+<td><p>10–5–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">\</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\</span></code></p></td>
+<td><p>36</p></td>
+<td><p>10–6–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">⧻</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{</span></code></p></td>
+<td><p>37</p></td>
+<td><p>10–7–8</p></td>
+<td><p>Segment mark</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-</span></code></p></td>
+<td><p>40</p></td>
+<td><p>11</p></td>
+<td><p>Also −0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">J</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">J</span></code></p></td>
+<td><p>41</p></td>
+<td><p>11–1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">K</span></code></p></td>
+<td><p>42</p></td>
+<td><p>11–2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">L</span></code></p></td>
+<td><p>43</p></td>
+<td><p>11–3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">M</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">M</span></code></p></td>
+<td><p>44</p></td>
+<td><p>11–4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">N</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">N</span></code></p></td>
+<td><p>45</p></td>
+<td><p>11–5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">O</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">O</span></code></p></td>
+<td><p>46</p></td>
+<td><p>11–6</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td><p>47</p></td>
+<td><p>11–7</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td><p>50</p></td>
+<td><p>11–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>51</p></td>
+<td><p>11–9</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">!</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">!</span></code></p></td>
+<td><p>52</p></td>
+<td><p>11–2–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">$</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">$</span></code></p></td>
+<td><p>53</p></td>
+<td><p>11–3–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">*</span></code></p></td>
+<td><p>54</p></td>
+<td><p>11–4–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">]</span></code></p></td>
+<td><p>55</p></td>
+<td><p>11–5–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">;</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">;</span></code></p></td>
+<td><p>56</p></td>
+<td><p>11–6–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">△</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">^</span></code></p></td>
+<td><p>57</p></td>
+<td><p>11–7–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&amp;</span></code>/<code class="docutils literal notranslate"><span class="pre">+</span></code></p></td>
+<td><p>60</p></td>
+<td><p>12</p></td>
+<td><p>Also +0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p>61</p></td>
+<td><p>12–1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p>62</p></td>
+<td><p>12–2</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">C</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C</span></code></p></td>
+<td><p>63</p></td>
+<td><p>12–3</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td><p>64</p></td>
+<td><p>12–4</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">E</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">E</span></code></p></td>
+<td><p>65</p></td>
+<td><p>12–5</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">F</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">F</span></code></p></td>
+<td><p>66</p></td>
+<td><p>12–6</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">G</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">G</span></code></p></td>
+<td><p>67</p></td>
+<td><p>12–7</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">H</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">H</span></code></p></td>
+<td><p>70</p></td>
+<td><p>12–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">I</span></code></p></td>
+<td><p>71</p></td>
+<td><p>12–9</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">?</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">?</span></code></p></td>
+<td><p>72</p></td>
+<td><p>12–2–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">.</span></code></p></td>
+<td><p>73</p></td>
+<td><p>12–3–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">⌑</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">)</span></code></p></td>
+<td><p>74</p></td>
+<td><p>12–4–8</p></td>
+<td><p>Lozenge</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">[</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[</span></code></p></td>
+<td><p>75</p></td>
+<td><p>12–5–8</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;</span></code></p></td>
+<td><p>76</p></td>
+<td><p>12–3–8</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">⧻*</span></code></p></td>
+<td></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">|</span></code></p></td>
+<td><p>77</p></td>
+<td><p>12–7–8</p></td>
+<td><p>Group mark</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/i7010_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

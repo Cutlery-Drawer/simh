@@ -1,0 +1,1566 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>1. H316 simulator usage &#8212; Python  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. LGP simulator usage" href="lgp_doc.html" />
+    <link rel="prev" title="1. Interdata 16b/32b simulator usage" href="id_doc.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="h316-simulator-usage">
+<h1><span class="sectnum">1. </span>H316 simulator usage<a class="headerlink" href="#h316-simulator-usage" title="Permalink to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd">Date<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2020-04-30</p>
+</dd>
+<dt class="field-even">Revision<span class="colon">:</span></dt>
+<dd class="field-even"><p>$Format:%H$</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>See <a class="reference external" href="../LICENSE.txt">LICENSE.txt</a> for terms of use.</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="topic-title"><strong>Copyright notice</strong></p>
+<p>The following copyright notice applies to the SIMH source, binary, and documentation:</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Except as contained in this notice, the names of The Authors shall not be
+used in advertising or otherwise to promote the sale, use or other dealings
+in this Software without prior written authorization from the Authors.</p>
+</aside>
+<nav class="contents local" id="contents">
+<ul class="auto-toc simple">
+<li><p><a class="reference internal" href="#simulator-files" id="id2"><span class="sectnum">1.1. </span>Simulator files</a></p></li>
+<li><p><a class="reference internal" href="#h316-h516-features" id="id3"><span class="sectnum">1.2. </span>H316/H516 features</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#cpu" id="id4"><span class="sectnum">1.2.1. </span><code class="docutils literal notranslate"><span class="pre">CPU</span></code></a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#extended-interrupts" id="id5"><span class="sectnum">1.2.1.1. </span>Extended interrupts</a></p></li>
+<li><p><a class="reference internal" href="#dma-channels" id="id6"><span class="sectnum">1.2.1.2. </span>DMA channels</a></p></li>
+<li><p><a class="reference internal" href="#break-on-write" id="id7"><span class="sectnum">1.2.1.3. </span>Break on write</a></p></li>
+<li><p><a class="reference internal" href="#cpu-state" id="id8"><span class="sectnum">1.2.1.4. </span>CPU state</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#programmed-i-o-devices" id="id9"><span class="sectnum">1.2.2. </span>Programmed I/O devices</a></p>
+<ul class="auto-toc">
+<li><p><a class="reference internal" href="#paper-tape-reader-ptr" id="id10"><span class="sectnum">1.2.2.1. </span>316/516-50 paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#paper-tape-punch-ptp" id="id11"><span class="sectnum">1.2.2.2. </span>316/516-52 paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#console-teletype-tty" id="id12"><span class="sectnum">1.2.2.3. </span>316/516-33 console teletype (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#real-time-clock-clk" id="id13"><span class="sectnum">1.2.2.4. </span>316/516-12 real-time clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#line-printer-lpt" id="id14"><span class="sectnum">1.2.3. </span>316/516 line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#fixed-head-disk-fhd" id="id15"><span class="sectnum">1.2.4. </span>4400 fixed head disk (<code class="docutils literal notranslate"><span class="pre">FHD</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#track-magnetic-tape-mt" id="id16"><span class="sectnum">1.2.5. </span>4100 7-track magnetic tape (<code class="docutils literal notranslate"><span class="pre">MT</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#disk-packs-dp" id="id17"><span class="sectnum">1.2.6. </span>4623/4651/4720 disk packs (<code class="docutils literal notranslate"><span class="pre">DP</span></code>)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#symbolic-display-and-input" id="id18"><span class="sectnum">1.3. </span>Symbolic display and input</a></p></li>
+</ul>
+</nav>
+<p>This memorandum documents the Honeywell H316/H516 simulator.</p>
+<section id="simulator-files">
+<h2><span class="sectnum">1.1. </span>Simulator files<a class="headerlink" href="#simulator-files" title="Permalink to this heading">¶</a></h2>
+<p>The H316 requires the following files:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_rev.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">scp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_console.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_fio.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_sock.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tape.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_timer.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">sim_tmxr.c</span></code></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">sim/h316/</span></code></dt><dd><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_defs.h</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_cpu.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_dp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_fhd.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_hi.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_imp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_lp.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_mi.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_mt.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_rtc.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_stddev.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_sys.c</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">h316_udp.c</span></code></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="h316-h516-features">
+<h2><span class="sectnum">1.2. </span>H316/H516 features<a class="headerlink" href="#h316-h516-features" title="Permalink to this heading">¶</a></h2>
+<p>The Honeywell 316/516 simulator is configured as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Device name(s)</p></th>
+<th class="head"><p>Simulates</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CPU</span></code></p></td>
+<td><p>H316/H516 CPU with 16/32KW memory</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PTR</span></code></p></td>
+<td><p>316/516-50 paper tape reader</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PTP</span></code></p></td>
+<td><p>316/516-52 paper tape punch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LPT</span></code></p></td>
+<td><p>316/516 line printer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTY</span></code></p></td>
+<td><p>316/516-33 console terminal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MT</span></code></p></td>
+<td><p>4100 seven track magnetic tape with four drives</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CLK</span></code></p></td>
+<td><p>316/516-12 real time clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FHD</span></code></p></td>
+<td><p>4400 fixed head disk</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DP</span></code></p></td>
+<td><p>4623/4653/4720 disk pack controller with eight drives</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WDT</span></code></p></td>
+<td><p>4400 fixed head disk</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RTC</span></code></p></td>
+<td><p>4400 fixed head disk</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IMP</span></code></p></td>
+<td><p>IM/TIP Specific Hardware</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MI1</span></code></p></td>
+<td><p>IM/TIP Modem Interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MI2</span></code></p></td>
+<td><p>IM/TIP Modem Interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MI3</span></code></p></td>
+<td><p>IM/TIP Modem Interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MI4</span></code></p></td>
+<td><p>IM/TIP Modem Interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MI5</span></code></p></td>
+<td><p>IM/TIP Modem Interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HI1</span></code></p></td>
+<td><p>IMP Host Interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HI2</span></code></p></td>
+<td><p>IMP Host Interface</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HI3</span></code></p></td>
+<td><p>IMP Host Interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HI4</span></code></p></td>
+<td><p>IMP Host Interface</p></td>
+</tr>
+</tbody>
+</table>
+<p>The H316/H516 simulator implements several unique stop conditions:</p>
+<ul class="simple">
+<li><p>Decode of an undefined instruction, and <code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code> is set</p></li>
+<li><p>Reference to an undefined I/O device, and <code class="docutils literal notranslate"><span class="pre">STOP_DEV</span></code> is set</p></li>
+<li><p>More than <code class="docutils literal notranslate"><span class="pre">INDMAX</span></code> indirect references are detected during memory reference address decoding</p></li>
+<li><p>DMA/DMC direction does not agree with I/O device operation</p></li>
+<li><p>A write operation is initiated on a write locked magnetic tape unit
+(hangs the real system)</p></li>
+<li><p>A disk write overruns the specified record size
+(destroys the rest of the track on the real system)</p></li>
+<li><p>A disk track has an illegal format</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">LOAD</span></code> and <code class="docutils literal notranslate"><span class="pre">DUMP</span></code> commands are not implemented.</p>
+<section id="cpu">
+<span id="id1"></span><h3><span class="sectnum">1.2.1. </span><code class="docutils literal notranslate"><span class="pre">CPU</span></code><a class="headerlink" href="#cpu" title="Permalink to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">CPU</span></code> options include choice of instruction set,
+memory size,
+DMC option,
+and number of DMA channels.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">HSA</span>                    <span class="n">High</span> <span class="n">speed</span> <span class="n">arithmetic</span> <span class="n">instructions</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NOHSA</span>                  <span class="n">No</span> <span class="n">high</span> <span class="n">speed</span> <span class="n">arithmetic</span> <span class="n">instructions</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">4</span><span class="n">K</span>                     <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">8</span><span class="n">K</span>                     <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">8</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">12</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">12</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">16</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">16</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">24</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">24</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="mi">32</span><span class="n">K</span>                    <span class="n">Set</span> <span class="n">memory</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">32</span><span class="n">K</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">DMC</span>                    <span class="n">Enable</span> <span class="n">DMC</span> <span class="n">option</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">NODMC</span>                  <span class="n">Disable</span> <span class="n">DMC</span> <span class="n">option</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">DMA</span><span class="o">=</span><span class="n">n</span>                  <span class="n">Set</span> <span class="n">number</span> <span class="n">of</span> <span class="n">DMA</span> <span class="n">channels</span> <span class="n">to</span> <span class="n">n</span> <span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If memory size is being reduced,
+and the memory being truncated contains non-zero data,
+the simulator asks for confirmation.
+Data in the truncated portion of memory is lost.
+Initial memory size is 32K.
+By default,
+the <code class="docutils literal notranslate"><span class="pre">HSA</span></code> and DMC options are enabled,
+and four DMA channels are configured.</p>
+<section id="extended-interrupts">
+<h4><span class="sectnum">1.2.1.1. </span>Extended interrupts<a class="headerlink" href="#extended-interrupts" title="Permalink to this heading">¶</a></h4>
+<p>The H316 came with one interrupt vector and 16 individually maskable interrupt sources as standard,
+but could optionally be extended to support up to 48 additional individually maskable interrupt sources,
+each with its own unique vector.
+Extended interrupts are enabled with the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">EXTINT</span><span class="o">=</span><span class="mi">16</span>
+</pre></div>
+</div>
+<p>and the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">EXTINT</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>restores the original default H316 single interrupt behavior.
+Note that the IMP and TIP custom hardware required one additional bank of 16 interrupts.</p>
+<p>Only 16 extended interrupts (out of a possible 48) are currently implemented.</p>
+</section>
+<section id="dma-channels">
+<h4><span class="sectnum">1.2.1.2. </span>DMA channels<a class="headerlink" href="#dma-channels" title="Permalink to this heading">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU</span></code> includes special <code class="docutils literal notranslate"><span class="pre">show</span></code> commands to display the state of the DMA channels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">DMAn</span>                  <span class="n">Show</span> <span class="n">DMA</span> <span class="n">channel</span> <span class="n">n</span>
+</pre></div>
+</div>
+</section>
+<section id="break-on-write">
+<h4><span class="sectnum">1.2.1.3. </span>Break on write<a class="headerlink" href="#break-on-write" title="Permalink to this heading">¶</a></h4>
+<p>The H316 emulation supports “break on memory write” breakpoints in addition to the standard “break on execution” type.
+For example, the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>BREAK –W 2000
+</pre></div>
+</div>
+<p>will cause a break to occur any time memory location <code class="docutils literal notranslate"><span class="pre">2000</span></code><sub>8</sub> is written.
+All the usual SIMH breakpoint options,
+including address ranges and commands to be executed automatically upon breaking,
+work here too.
+Break on write has two restrictions –
+first, setting a write break on a DMC channel pointer location,
+<code class="docutils literal notranslate"><span class="pre">20</span></code><sub>8</sub> thru <code class="docutils literal notranslate"><span class="pre">57</span></code><sub>8</sub>,
+will break only on explicit programmed writes to that address.
+Implicit DMC operations will not cause a break.
+Second,
+remember that when any break occurs,
+SIMH prints the PC and the instruction after the one which actually caused the break.
+It will always be the previous instruction which actually modified the breakpoint location.</p>
+</section>
+<section id="cpu-state">
+<h4><span class="sectnum">1.2.1.4. </span>CPU state<a class="headerlink" href="#cpu-state" title="Permalink to this heading">¶</a></h4>
+<p>CPU registers include the visible state of the processor as well as the control registers for the interrupt system.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Program counter</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">A</span></code></p></td>
+<td><p>16</p></td>
+<td><p>A register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">B</span></code></p></td>
+<td><p>16</p></td>
+<td><p>B register</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">X</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Index register</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SC</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Shift count</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">C</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Carry flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Extend flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PME</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Previous mode extend flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXT_OFF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Extend off pending flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DP</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Double precision flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SS1</span></code>..<code class="docutils literal notranslate"><span class="pre">SS14</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Sense switches 1 to 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ION</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupts enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INODEF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupts not deferred</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Interrupt requests</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXTINT</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Extended interrupt requests</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EXTENB</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Extended interrupt enables</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEVRDY</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Device ready flags (read-only)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEVENB</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Device interrupt enable flags (read-only)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CHREQ</span></code></p></td>
+<td><p>20</p></td>
+<td><p>DMA/DMC channel requests</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DMAAD[0:3]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>DMA channel current address, channels 1 to 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DMAWC[0:3]</span></code></p></td>
+<td><p>15</p></td>
+<td><p>DMA channel word count, channels 1 to 4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DMAEOR[0:3]</span></code></p></td>
+<td><p>1</p></td>
+<td><p>DMA end of range flag, channels 1 to 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_INST</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on undefined instruction</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_DEV</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on undefined device</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INDMAX</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Indirect address limit</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PCQ[0:63]</span></code></p></td>
+<td><p>15</p></td>
+<td><p>PC prior to last <code class="docutils literal notranslate"><span class="pre">JMP</span></code>, <code class="docutils literal notranslate"><span class="pre">JSB</span></code>, or interrupt;
+most recent PC change first</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WRU</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Interrupt character</p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">CPU</span></code> can maintain a history of the most recently executed instructions.
+This is controlled by the <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> and <code class="docutils literal notranslate"><span class="pre">SHOW</span> <span class="pre">CPU</span> <span class="pre">HISTORY</span></code> commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span>                <span class="n">Clear</span> <span class="n">history</span> <span class="n">buffer</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="mi">0</span>              <span class="n">Disable</span> <span class="n">history</span>
+<span class="n">SET</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>              <span class="n">Enable</span> <span class="n">history</span><span class="p">,</span> <span class="n">length</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span>               <span class="n">Print</span> <span class="n">CPU</span> <span class="n">history</span>
+<span class="n">SHOW</span> <span class="n">CPU</span> <span class="n">HISTORY</span><span class="o">=</span><span class="n">n</span>             <span class="n">Print</span> <span class="n">first</span> <span class="s1">&#39;n&#39;</span> <span class="n">entries</span> <span class="n">of</span> <span class="n">CPU</span> <span class="n">history</span>
+</pre></div>
+</div>
+<p>The maximum length for the history is 65,536 entries.</p>
+</section>
+</section>
+<section id="programmed-i-o-devices">
+<h3><span class="sectnum">1.2.2. </span>Programmed I/O devices<a class="headerlink" href="#programmed-i-o-devices" title="Permalink to this heading">¶</a></h3>
+<section id="paper-tape-reader-ptr">
+<span id="ptr"></span><h4><span class="sectnum">1.2.2.1. </span>316/516-50 paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>)<a class="headerlink" href="#paper-tape-reader-ptr" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape reader (<code class="docutils literal notranslate"><span class="pre">PTR</span></code>) reads data from a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be read.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the reader.</p>
+<p>The paper tape reader can bet set to operate in binary, ASCII, or Unix ASCII mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">PTR</span> <span class="n">BINARY</span>                 <span class="n">Binary</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">PTR</span> <span class="n">ASCII</span>                  <span class="n">ASCII</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">PTR</span> <span class="n">UASCII</span>                 <span class="n">Unix</span> <span class="n">ASCII</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>The mode can also be set by a switch setting in the <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ATT –B PTR &lt;file&gt;              Binary mode
+ATT –A PTR &lt;file&gt;              ASCII mode
+ATT –U PTR &lt;file&gt;              Unix ASCII mode
+</pre></div>
+</div>
+<p>In ASCII or Unix ASCII mode,
+all non-zero characters have the high-order bit forced on.
+In Unix ASCII mode,
+newline is converted to <code class="docutils literal notranslate"><span class="pre">CR</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">LF</span></code> is inserted as the following character.</p>
+<p>The paper tape reader supports the <code class="docutils literal notranslate"><span class="pre">BOOT</span></code> command.
+<code class="docutils literal notranslate"><span class="pre">BOOT</span> <span class="pre">PTR</span></code> copies the absolute binary loader into memory and starts it running.</p>
+<p>The paper tape reader implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">READY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device ready</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupts enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the input file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p>end of file</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="paper-tape-punch-ptp">
+<span id="ptp"></span><h4><span class="sectnum">1.2.2.2. </span>316/516-52 paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>)<a class="headerlink" href="#paper-tape-punch-ptp" title="Permalink to this heading">¶</a></h4>
+<p>The paper tape punch (<code class="docutils literal notranslate"><span class="pre">PTP</span></code>) writes data to a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the punch.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.
+A new file can be created if you attach with the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch.</p>
+<p>The paper tape punch can bet set to operate in binary, ASCII, or Unix ASCII mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">PTP</span> <span class="n">BINARY</span>                 <span class="n">Binary</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">PTP</span> <span class="n">ASCII</span>                  <span class="n">ASCII</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">PTP</span> <span class="n">UASCII</span>                 <span class="n">Unix</span> <span class="n">ASCII</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>The mode can also be set by a switch setting in the <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ATT –B PTP &lt;file&gt;              Binary mode
+ATT –A PTP &lt;file&gt;              ASCII mode
+ATT –U PTP &lt;file&gt;              Unix ASCII mode
+</pre></div>
+</div>
+<p>In ASCII or Unix ASCII mode,
+all characters are masked to <code class="docutils literal notranslate"><span class="pre">0x7B</span></code> before being written to the output file.
+In Unix ASCII mode,
+<code class="docutils literal notranslate"><span class="pre">LF</span></code> is converted to newline,
+and <code class="docutils literal notranslate"><span class="pre">CR</span></code> is discarded.</p>
+<p>The paper tape punch implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">READY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device ready</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupts enabled</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POWER</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device powered up</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PWRTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O request to power up</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="console-teletype-tty">
+<span id="tty3"></span><span id="tty2"></span><span id="tty1"></span><span id="tty0"></span><span id="tty"></span><h4><span class="sectnum">1.2.2.3. </span>316/516-33 console teletype (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>)<a class="headerlink" href="#console-teletype-tty" title="Permalink to this heading">¶</a></h4>
+<p>The console Teletype (<code class="docutils literal notranslate"><span class="pre">TTY</span></code>) consists of four separate units:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTY0</span></code></p></td>
+<td><p>Keyboard</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTY1</span></code></p></td>
+<td><p>Printer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTY2</span></code></p></td>
+<td><p>Paper tape reader</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TTY3</span></code></p></td>
+<td><p>Paper tape punch</p></td>
+</tr>
+</tbody>
+</table>
+<p>The keyboard and printer (<code class="docutils literal notranslate"><span class="pre">TTY0</span></code>, <code class="docutils literal notranslate"><span class="pre">TTY1</span></code>) can be set to one of four modes,
+<code class="docutils literal notranslate"><span class="pre">KSR</span></code>, <code class="docutils literal notranslate"><span class="pre">7P</span></code>, <code class="docutils literal notranslate"><span class="pre">7B</span></code>, or <code class="docutils literal notranslate"><span class="pre">8B</span></code>:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Input characters</p></th>
+<th class="head"><p>Output characters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">KSR</span></code></p></td>
+<td><p>Lowercase converted
+to uppercase,
+high-order bit set</p></td>
+<td><p>Lowercase converted to uppercase,
+high-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">7P</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared,
+non-printing characters suppressed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">7B</span></code></p></td>
+<td><p>High-order bit cleared</p></td>
+<td><p>High-order bit cleared</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">8B</span></code></p></td>
+<td><p>No changes</p></td>
+<td><p>No changes</p></td>
+</tr>
+</tbody>
+</table>
+<p>The default mode is <code class="docutils literal notranslate"><span class="pre">KSR</span></code>.
+The Teletype keyboard reads from the console keyboard,
+and the printer writes to the simulator console window.</p>
+<p>The paper tape reader (<code class="docutils literal notranslate"><span class="pre">TTY2</span></code>) can be set to operate in binary, ASCII, or Unix ASCII mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TTY2</span> <span class="n">BINARY</span>                <span class="n">Binary</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">TTY2</span> <span class="n">ASCII</span>                 <span class="n">ASCII</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">TTY2</span> <span class="n">UASCII</span>                <span class="n">Unix</span> <span class="n">ASCII</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>The mode can also be set by a switch setting in the <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ATT –B TTY2 &lt;file&gt;             Binary mode
+ATT –A TTY2 &lt;file&gt;             ASCII mode
+ATT –U TTY2 &lt;file&gt;             Unix ASCII mode
+</pre></div>
+</div>
+<p>In ASCII or Unix ASCII mode,
+all non-zero characters have the high-order bit forced on.
+In Unix ASCII mode,
+newline is converted to <code class="docutils literal notranslate"><span class="pre">CR</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">LF</span></code> is inserted as the following character.</p>
+<p>The paper tape reader is started by program output of <code class="docutils literal notranslate"><span class="pre">XON</span></code> or by the command <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTY2</span> <span class="pre">START</span></code>.
+The paper tape reader is stopped by reader input of <code class="docutils literal notranslate"><span class="pre">XOFF</span></code> or by the command <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTY2</span> <span class="pre">STOP</span></code>.</p>
+<p>The Teletype paper tape punch (<code class="docutils literal notranslate"><span class="pre">TTY3</span></code>) can be set to operate in binary, ASCII, or Unix ASCII mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">TTY2</span> <span class="n">BINARY</span>                <span class="n">Binary</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">TTY2</span> <span class="n">ASCII</span>                 <span class="n">ASCII</span> <span class="n">mode</span>
+<span class="n">SET</span> <span class="n">TTY2</span> <span class="n">UASCII</span>                <span class="n">Unix</span> <span class="n">ASCII</span> <span class="n">mode</span>
+</pre></div>
+</div>
+<p>The mode can also be set by a switch setting in the <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ATT –B TTY3 &lt;file&gt;             Binary mode
+ATT –A TTY3 &lt;file&gt;             ASCII mode
+ATT –U TTY3 &lt;file&gt;             Unix ASCII mode
+</pre></div>
+</div>
+<p>In ASCII or Unix ASCII mode,
+all characters are masked to <code class="docutils literal notranslate"><span class="pre">0x7B</span></code> before being written to the output file.
+In Unix ASCII mode,
+<code class="docutils literal notranslate"><span class="pre">LF</span></code> is converted to newline,
+and <code class="docutils literal notranslate"><span class="pre">CR</span></code> is discarded.</p>
+<p>The Teletype paper tape punch is started by program output of <code class="docutils literal notranslate"><span class="pre">TAPE</span></code> or by the command <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTY3</span> <span class="pre">START</span></code>.
+The punch is stopped by program output of <code class="docutils literal notranslate"><span class="pre">XOFF</span></code> or by the command <code class="docutils literal notranslate"><span class="pre">SET</span> <span class="pre">TTY3</span> <span class="pre">STOP</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TTY</span></code> implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Last data item processed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IN2ND</span></code></p></td>
+<td><p>9</p></td>
+<td><p>Holding buffer, input busy wait; the
+high-order bit indicates character present</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MODE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Read/write mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">READY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device ready flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device busy flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">KPOS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of keyboard characters input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">KTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Keyboard polling interval</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">KBTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Keyboard busy wait after receive</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TPOS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of printer characters output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Time from I/O initiation to interrupt</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RPOS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Current reader character position</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PPOS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Current punch character position</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="real-time-clock-clk">
+<span id="clk"></span><h4><span class="sectnum">1.2.2.4. </span>316/516-12 real-time clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>)<a class="headerlink" href="#real-time-clock-clk" title="Permalink to this heading">¶</a></h4>
+<p>The real-time clock (<code class="docutils literal notranslate"><span class="pre">CLK</span></code>) frequency can be adjusted as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">CLK</span> <span class="mi">60</span><span class="n">HZ</span>                   <span class="n">Set</span> <span class="n">frequency</span> <span class="n">to</span> <span class="mi">60</span><span class="n">Hz</span>
+<span class="n">SET</span> <span class="n">CLK</span> <span class="mi">50</span><span class="n">HZ</span>                   <span class="n">Set</span> <span class="n">frequency</span> <span class="n">to</span> <span class="mi">50</span><span class="n">Hz</span>
+</pre></div>
+</div>
+<p>The default is 60Hz.</p>
+<p>The clock implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">READY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device ready</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupts enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Clock interval</p></td>
+</tr>
+</tbody>
+</table>
+<p>The real-time clock autocalibrates;
+the clock interval is adjusted up or down so that the clock tracks actual elapsed time.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Previous releases of SIMH did not allow the <code class="docutils literal notranslate"><span class="pre">CLK</span></code> device to be disabled.
+However, this device was optional and it was possible to configure an H316 system without one
+(although this apparently rarely happened).</p>
+<p>Current SIMH releases will allow the <code class="docutils literal notranslate"><span class="pre">CLK</span></code> device to be disabled.
+When the <code class="docutils literal notranslate"><span class="pre">CLK</span></code> device is disabled,
+it does not respond to the clock-specific IO instructions;
+it does not increment location <code class="docutils literal notranslate"><span class="pre">61</span></code><sub>8</sub>,
+and it does not generate interrupts.
+The <code class="docutils literal notranslate"><span class="pre">SMK</span></code> and <code class="docutils literal notranslate"><span class="pre">OTK</span></code> instructions are unaffected.</p>
+</div>
+</section>
+</section>
+<section id="line-printer-lpt">
+<span id="lpt"></span><h3><span class="sectnum">1.2.3. </span>316/516 line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>)<a class="headerlink" href="#line-printer-lpt" title="Permalink to this heading">¶</a></h3>
+<p>The line printer (<code class="docutils literal notranslate"><span class="pre">LPT</span></code>) writes data to a disk file.
+The <code class="docutils literal notranslate"><span class="pre">POS</span></code> register specifies the number of the next data item to be written.
+Thus, by changing <code class="docutils literal notranslate"><span class="pre">POS</span></code>,
+the user can backspace or advance the printer.
+The default position after <code class="docutils literal notranslate"><span class="pre">ATTACH</span></code> is to position at the end of an existing file.
+A new file can be created if you attach with the <code class="docutils literal notranslate"><span class="pre">-N</span></code> switch.</p>
+<p>The line printer can be connected to the IO bus,
+a DMC channel,
+or a DMA channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">LPT</span> <span class="n">IOBUS</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">IO</span> <span class="n">bus</span>
+<span class="n">SET</span> <span class="n">LPT</span> <span class="n">DMC</span><span class="o">=</span><span class="n">n</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMC</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">LPT</span> <span class="n">DMA</span><span class="o">=</span><span class="n">n</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMA</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, the line printer is connected to the IO bus.</p>
+<p>The line printer implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WDPOS</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Word position in current scan</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DRPOS</span></code></p></td>
+<td><p>6</p></td>
+<td><p>Drum position</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CRPOS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Carriage position</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PRDN</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Print done flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RDY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EOR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>(DMA/DMC) End of range flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DMA</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer using DMA/DMC</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SVCST</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Service state</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SVCCH</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Service channel</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position in the output file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay between transfers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ETIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay at end of scan</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay for shuttle/line advance</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Out of paper</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>x</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fixed-head-disk-fhd">
+<span id="fhd"></span><h3><span class="sectnum">1.2.4. </span>4400 fixed head disk (<code class="docutils literal notranslate"><span class="pre">FHD</span></code>)<a class="headerlink" href="#fixed-head-disk-fhd" title="Permalink to this heading">¶</a></h3>
+<p>Fixed head disk options include the ability to set the number of surfaces to a fixed value between 1 and 16,
+or to autosize the number of surfaces from the attached file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>SET FHD 1S                     One surface (98K)
+SET FHD 2S                     Two platters (196K)
+⋮
+SET FHD 16S                    Sixteen surfaces (1568K)
+SET FHD AUTOSIZE               Autosized on ATTACH
+</pre></div>
+</div>
+<p>The default is one surface.</p>
+<p>The fixed head disk can be connected to the IO bus,
+a DMC channel,
+or a DMA channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">FHD</span> <span class="n">IOBUS</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">IO</span> <span class="n">bus</span>
+<span class="n">SET</span> <span class="n">FHD</span> <span class="n">DMC</span><span class="o">=</span><span class="n">n</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMC</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">FHD</span> <span class="n">DMA</span><span class="o">=</span><span class="n">n</span>                  <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMA</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, the fixed head disk is connected to the IO bus.</p>
+<p>The fixed head disk implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CW1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control word 1 (read write, surface, track)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CW2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Control word 2 (character address)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Controller busy flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RDY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer ready flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DTE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Data transfer error flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ACE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Access error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EOR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>(DMA/DMC) End of range</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DMA</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer using DMA/DMC</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSUM</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer parity checksum</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay between words</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p>Not attached</p></td>
+<td><p>1</p></td>
+<td><p>Report error and stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>Disk not ready</p></td>
+</tr>
+</tbody>
+</table>
+<p>Fixed head disk data files are buffered in memory;
+therefore,
+end-of-file and OS I/O errors cannot occur.</p>
+</section>
+<section id="track-magnetic-tape-mt">
+<span id="mt"></span><h3><span class="sectnum">1.2.5. </span>4100 7-track magnetic tape (<code class="docutils literal notranslate"><span class="pre">MT</span></code>)<a class="headerlink" href="#track-magnetic-tape-mt" title="Permalink to this heading">¶</a></h3>
+<p>Magnetic tape options include the ability to make units write enabled or write locked.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MTn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="s1">&#39;n&#39;</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">MTn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="s1">&#39;n&#39;</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Magnetic tape units can be set to a specific reel capacity in MB,
+or to unlimited capacity:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MTn</span> <span class="n">CAPAC</span><span class="o">=</span><span class="n">m</span>                <span class="n">Set</span> <span class="n">unit</span> <span class="s1">&#39;n&#39;</span> <span class="n">capacity</span> <span class="n">to</span> <span class="s1">&#39;m&#39;</span> <span class="n">MB</span> <span class="p">(</span><span class="mi">0</span> <span class="o">=</span> <span class="n">unlimited</span><span class="p">)</span>
+<span class="n">SHOW</span> <span class="n">MTn</span> <span class="n">CAPAC</span>                 <span class="n">Show</span> <span class="n">unit</span> <span class="s1">&#39;n&#39;</span> <span class="n">capacity</span> <span class="ow">in</span> <span class="n">MB</span>
+</pre></div>
+</div>
+<p>Units can also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+<p>The magnetic tape controller can be connected to the IO bus,
+a DMC channel,
+or a DMA channel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">MT</span> <span class="n">IOBUS</span>                   <span class="n">Connect</span> <span class="n">to</span> <span class="n">IO</span> <span class="n">bus</span>
+<span class="n">SET</span> <span class="n">MT</span> <span class="n">DMC</span><span class="o">=</span><span class="n">n</span>                   <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMC</span> <span class="n">channel</span> <span class="s1">&#39;n&#39;</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">MT</span> <span class="n">DMA</span><span class="o">=</span><span class="n">n</span>                   <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMA</span> <span class="n">channel</span> <span class="s1">&#39;n&#39;</span> <span class="p">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, the magnetic tape controller is connected to the IO bus.</p>
+<p>The magnetic tape controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">USEL</span></code></p></td>
+<td><p>2</p></td>
+<td><p>Unit select</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Controller busy flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RDY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer ready flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ERR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Error flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EOF</span></code></p></td>
+<td><p>1</p></td>
+<td><p>End of file flag</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EOR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>(DMA/DMC) End of range</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DMA</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer using DMA/DMC</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MDIRQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Motion done interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt request</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Device interrupt enable</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DBUF[0:65535]</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Transfer buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BPTR</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Transfer buffer pointer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BMAX</span></code></p></td>
+<td><p>17</p></td>
+<td><p>Transfer size (reads)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Start/stop time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Delay between words</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">POS[0:3]</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Position, units 0 to 3</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Stop on I/O error</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Tape not ready; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End-of-file</p></td>
+<td><p>Bad tape</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Parity error; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="disk-packs-dp">
+<span id="dp"></span><h3><span class="sectnum">1.2.6. </span>4623/4651/4720 disk packs (<code class="docutils literal notranslate"><span class="pre">DP</span></code>)<a class="headerlink" href="#disk-packs-dp" title="Permalink to this heading">¶</a></h3>
+<p>The disk controller can be configured as a 4623,
+supporting 10-surface disk packs;
+a 4651,
+supporting 2-surface disk packs;
+or a 4720,
+supporting 20-surface disk packs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DP</span> <span class="mi">4623</span>                    <span class="n">Controller</span> <span class="ow">is</span> <span class="mi">4623</span>
+<span class="n">SET</span> <span class="n">DP</span> <span class="mi">4651</span>                    <span class="n">Controller</span> <span class="ow">is</span> <span class="mi">4651</span>
+<span class="n">SET</span> <span class="n">DP</span> <span class="mi">4720</span>                    <span class="n">Controller</span> <span class="ow">is</span> <span class="mi">4720</span>
+</pre></div>
+</div>
+<p>The default is 4651.
+All disk packs on the controller must be of the same type.</p>
+<p>Individual units can be write-enabled or write-locked:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DPn</span> <span class="n">LOCKED</span>                 <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">locked</span>
+<span class="n">SET</span> <span class="n">DPn</span> <span class="n">WRITEENABLED</span>           <span class="n">Set</span> <span class="n">unit</span> <span class="n">n</span> <span class="n">write</span> <span class="n">enabled</span>
+</pre></div>
+</div>
+<p>Units can be also be set <code class="docutils literal notranslate"><span class="pre">ENABLED</span></code> or <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>.</p>
+<p>The disk pack controller can be connected to a DMC channel or a DMA channel;
+it cannot be connected to the IO bus:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DP</span> <span class="n">DMC</span><span class="o">=</span><span class="n">n</span>                   <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMC</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">SET</span> <span class="n">DP</span> <span class="n">DMA</span><span class="o">=</span><span class="n">n</span>                   <span class="n">Connect</span> <span class="n">to</span> <span class="n">DMA</span> <span class="n">channel</span> <span class="n">n</span> <span class="p">(</span><span class="mi">1</span> <span class="n">to</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The disk pack controller supports variable track formatting.
+Each track can contain between 1 and 103 records,
+with a minimum size of 1 word and a maximum size of 1893 words.
+Record addresses are unconstrained.
+The simulator provides a command to perform a simple,
+fixed record size format of a new disk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DPn</span> <span class="n">FORMAT</span><span class="o">=</span><span class="n">k</span>               <span class="n">Format</span> <span class="n">unit</span> <span class="n">n</span> <span class="k">with</span> <span class="n">k</span> <span class="n">words</span> <span class="n">per</span> <span class="n">record</span>
+<span class="n">SET</span> <span class="o">-</span><span class="n">R</span> <span class="n">DPn</span> <span class="n">FORMAT</span><span class="o">=</span><span class="n">k</span>            <span class="n">Format</span> <span class="n">unit</span> <span class="n">n</span> <span class="k">with</span> <span class="n">k</span> <span class="n">records</span> <span class="n">per</span> <span class="n">track</span>
+</pre></div>
+</div>
+<p>Record addresses can either be geometric (cylinder/track/sector) or simple sequential starting from 0:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SET</span> <span class="n">DPn</span> <span class="n">FORMAT</span><span class="o">=</span><span class="n">k</span>               <span class="n">Format</span> <span class="k">with</span> <span class="n">geometric</span> <span class="n">record</span> <span class="n">addresses</span>
+<span class="n">SET</span> <span class="o">-</span><span class="n">S</span> <span class="n">DPn</span> <span class="n">FORMAT</span><span class="o">=</span><span class="n">k</span>            <span class="n">Format</span> <span class="k">with</span> <span class="n">sequential</span> <span class="n">record</span> <span class="n">addresses</span>
+</pre></div>
+</div>
+<p>Geometric address have the cylinder number in <code class="docutils literal notranslate"><span class="pre">bits&lt;1:8&gt;</span></code>,
+the head number in <code class="docutils literal notranslate"><span class="pre">bits&lt;9:13&gt;</span></code>,
+and the sector number in bits <code class="docutils literal notranslate"><span class="pre">&lt;14:16&gt;</span></code>.</p>
+<p>A summary of the current format,
+and its validity,
+can be obtained with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SHOW</span> <span class="n">DPn</span> <span class="n">FORMAT</span>                <span class="n">Display</span> <span class="nb">format</span> <span class="n">of</span> <span class="n">unit</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>To accommodate the variable formatting,
+each track is allocated 2048 words in the data file.
+A record consists of a three-word header,
+the data,
+and a five-word trailer:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(word 0\)</span></p></td>
+<td><p>Record length in words, not including header/trailer</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(word 1\)</span></p></td>
+<td><p>Record address</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(word 2\)</span></p></td>
+<td><p>Number of extension words used (0-4)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(word 3\)</span></p></td>
+<td><p>Start of data record</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(word 3+n-1\)</span></p></td>
+<td><p>End of data record</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(word 3+n..7+n\)</span></p></td>
+<td><p>Record trailer: up to four extension words, plus checksum</p></td>
+</tr>
+</tbody>
+</table>
+<p>A record can “grow” by up to four words without disrupting the track formatting;
+writing more than four extra words destroys the formatting of the rest of the track and causes a simulator error.</p>
+<p>The disk pack controller implements these registers:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STA</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Status</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BUF</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Data buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FNC</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Controller function</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CW1</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command word 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CW2</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Command word 2</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CSUM</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Record checksum</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BUSY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Controller busy</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RDY</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Transfer ready</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EOR</span></code></p></td>
+<td><p>1</p></td>
+<td><p>(DMA/DMC) End of range</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEFINT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Seek deferred interrupt pending</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INTREQ</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt request</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Interrupt enable</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TBUF[0:2047]</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Track buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RPTR</span></code></p></td>
+<td><p>11</p></td>
+<td><p>Pointer to start of record in track buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">WPTR</span></code></p></td>
+<td><p>11</p></td>
+<td><p>Pointer to current word in record</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BCTR</span></code></p></td>
+<td><p>15</p></td>
+<td><p>Bit counter for formatting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Seek time, per cylinder</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">XTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Transfer time, per word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BTIME</span></code></p></td>
+<td><p>24</p></td>
+<td><p>Controller busy time</p></td>
+</tr>
+</tbody>
+</table>
+<p>Error handling is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Error</p></th>
+<th class="head"><p>Processed as</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not attached</p></td>
+<td><p>Pack off line; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>End-of-file</p></td>
+<td><p>Ignored</p></td>
+</tr>
+<tr class="row-even"><td><p>OS I/O error</p></td>
+<td><p>Data error; if <code class="docutils literal notranslate"><span class="pre">STOP_IOE</span></code>, stop</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="symbolic-display-and-input">
+<h2><span class="sectnum">1.3. </span>Symbolic display and input<a class="headerlink" href="#symbolic-display-and-input" title="Permalink to this heading">¶</a></h2>
+<p>The H316/H516 simulator implements symbolic display and input.
+Display is controlled by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>Display as ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Display as two packed ASCII characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<td><p>Display instruction mnemonics</p></td>
+</tr>
+</tbody>
+</table>
+<p>Input parsing is controlled by the first character typed in or by command-line switches:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'</span></code> or <code class="docutils literal notranslate"><span class="pre">-a</span></code></p></td>
+<td><p>ASCII character</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">-c</span></code></p></td>
+<td><p>Two packed ASCII characters</p></td>
+</tr>
+<tr class="row-odd"><td><p>Alphabetic</p></td>
+<td><p>Instruction mnemonic</p></td>
+</tr>
+<tr class="row-even"><td><p>Numeric</p></td>
+<td><p>Octal number</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instruction input uses standard H316/H516 assembler syntax.
+There are six instruction classes:
+memory reference,
+I/O,
+control,
+shift,
+skip,
+and operate.</p>
+<div class="compound">
+<p>Memory reference instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">memref</span><span class="p">{</span><span class="o">*</span><span class="p">}</span> <span class="p">{</span><span class="n">C</span><span class="o">/</span><span class="n">Z</span><span class="p">}</span> <span class="n">address</span><span class="p">{,</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">*</span></code> signifies indirect,
+<code class="docutils literal notranslate"><span class="pre">C</span></code> a current sector reference,
+<code class="docutils literal notranslate"><span class="pre">Z</span></code> a sector zero reference,
+and <code class="docutils literal notranslate"><span class="pre">1</span></code> indexed.
+The <code class="docutils literal notranslate"><span class="pre">address</span></code> is an octal number in the range 0–077777;
+if <code class="docutils literal notranslate"><span class="pre">C</span></code> or <code class="docutils literal notranslate"><span class="pre">Z</span></code> is specified,
+the <code class="docutils literal notranslate"><span class="pre">address</span></code> is a page offset in the range 0–0777.
+Normally, <code class="docutils literal notranslate"><span class="pre">C</span></code> is not needed;
+the simulator figures out from the address what mode to use.
+However, when referencing memory outside the <code class="docutils literal notranslate"><span class="pre">CPU</span></code>,
+there is no valid PC,
+and <code class="docutils literal notranslate"><span class="pre">C</span></code> must be used to specify current sector addressing.</p>
+</div>
+<p>I/O instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">io</span> <span class="n">function</span><span class="p">,</span><span class="n">device</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">function</span></code> is an octal number in the range 0–17.
+The <code class="docutils literal notranslate"><span class="pre">device</span></code> is a symbolic name (e.g., <code class="docutils literal notranslate"><span class="pre">TTY</span></code>)
+or an octal number in the range 0–77.</p>
+<p>Control and operate instructions consist of a single opcode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">opcode</span>
+</pre></div>
+</div>
+<p>Shift instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">shift</span> <span class="n">n</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">n</span></code> is an octal number in the range 0–77.</p>
+<p>Skip instructions have the format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span><span class="o">-</span><span class="n">op</span> <span class="n">sub</span><span class="o">-</span><span class="n">op</span> <span class="n">sub</span><span class="o">-</span><span class="n">op</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>The simulator checks that the combination of sub-opcodes is legal.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Python</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simh_doc.html">SimH Users' Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_swre.html">SimH Sample Software Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp1_doc.html">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh_vmio.html">Adding an I/O device to a SIMH virtual machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulators_acm_queue_2004.html">Simulators: virtual machines of the past and future</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Summary%20of%20IMP%20IO%20Device%20Codes.html">Summary of I/O commands for the Arpanet IMP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssem_doc.html">SSEM simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swtp6800_doc.html">SWTP 6800 simulator usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simh.html">Writing a simulator for the SIMH system</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="id_doc.html" title="previous chapter"><span class="sectnum">1. </span>Interdata 16b/32b simulator usage</a></li>
+      <li>Next: <a href="lgp_doc.html" title="next chapter"><span class="sectnum">1. </span>LGP simulator usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/h316_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

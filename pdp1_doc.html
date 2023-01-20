@@ -7,19 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>1. PDP-1 simulator usage &#8212; Python  documentation</title>
-    <link rel="stylesheet" type="text/css" href="static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="static/documentation_options.js"></script>
-    <script src="static/jquery.js"></script>
-    <script src="static/underscore.js"></script>
-    <script src="static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="static/doctools.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. PDP-11 simulator usage" href="pdp11_doc.html" />
+    <link rel="next" title="1. PDP-4/7/9/15 simulator usage" href="pdp18b_doc.html" />
     <link rel="prev" title="1. Nova Simulator Usage" href="nova_doc.html" />
    
-  <link rel="stylesheet" href="static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -1619,9 +1620,21 @@ The console table also applies to ASCII mode for the paper tape reader and punch
 <li class="toctree-l1"><a class="reference internal" href="simh_faq.html">SimH FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nova_doc.html">Data General Nova</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Digital Equipment Corporation PDP-1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp18b_doc.html">Digital Equipment Corporation PDP-4, PDP-7, PDP-9, PDP-15</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp8_doc.html">Digital Equipment Corporation PDP-8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pdp10_doc.html">Digital Equipment Corporation PDP-10</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pdp11_doc.html">Digital Equipment Corporation PDP-11</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax780_doc.html">Digital Equipment Corporation VAX-11/780</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vax_doc.html">Digital Equipment Corporation MicroVAX 3900</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gri_doc.html">GRI Computer Corporation GRI-909</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1401_doc.html">IBM 1401</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i1620_doc.html">IBM 1620</a></li>
+<li class="toctree-l1"><a class="reference internal" href="i7094_doc.html">IBM 7094</a></li>
+<li class="toctree-l1"><a class="reference internal" href="id_doc.html">Interdata (Perkin Elmer) 16b and 32b systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="h316_doc.html">Honeywell H316/H516</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgp_doc.html">Royal-Mcbee LGP-30 (and LGP-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sds_doc.html">Scientific Data Systems SDS-940</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sigma_doc.html">Xerox Data Systems Sigma 32b systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx0_doc.html">TX-0 simulator usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_breakpoints.html">The SIMH breakpoint subsystem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simh_magtape.html">SIMH magtape representation and handling</a></li>
@@ -1638,7 +1651,7 @@ The console table also applies to ASCII mode for the paper tape reader and punch
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="nova_doc.html" title="previous chapter"><span class="sectnum">1. </span>Nova Simulator Usage</a></li>
-      <li>Next: <a href="pdp11_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-11 simulator usage</a></li>
+      <li>Next: <a href="pdp18b_doc.html" title="next chapter"><span class="sectnum">1. </span>PDP-4/7/9/15 simulator usage</a></li>
   </ul></li>
 </ul>
 </div>
@@ -1668,7 +1681,7 @@ The console table also applies to ASCII mode for the paper tape reader and punch
       &copy;.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
