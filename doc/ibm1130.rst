@@ -413,7 +413,7 @@ Start the emulator by typing the command
 
    **ibm1130**
 
-Later on, you may wish to run an emulator script directly from the command line by typing
+Later on, you may wish to run an emulator script directly from the command-line by typing
 
 .. parsed-literal::
 
@@ -1003,7 +1003,7 @@ and the deck file ``fortran.deck``::
 
 the ``do`` argument ``myprogram.for`` will be substituted in the deck file,
 and the source program will thus be inserted between the ``// FOR`` and ``// XEQ`` cards.
-If a second argument is specified on the ``do`` command line,
+If a second argument is specified on the ``do`` command-line,
 it will be read after the ``// XEQ`` card.
 If no second argument is specified,
 the substituted line will be blank and no error will result.
@@ -1020,7 +1020,7 @@ In this mode a script should be used to configure the emulator,
 attach |stdin| and |stdout| to the reader and printer respectively,
 run the job,
 and quit so that no user input is requested.
-In this case, the ``-q`` flag may be passed on the ``ibm1130`` command line to prevent it from printing informational messages.
+In this case, the ``-q`` flag may be passed on the ``ibm1130`` command-line to prevent it from printing informational messages.
 
 Attachment to a real card reader
 """"""""""""""""""""""""""""""""
@@ -2398,7 +2398,7 @@ one-trip ``do``\ s,
 
 Using functions and subroutines
 -------------------------------
-Function subprograms are strictly prohibited from producing "side effects" and may not modify dummy variables (parameters) or variables in |COMMON|_.
+Function subprograms are strictly prohibited from producing "side-effects" and may not modify dummy variables (parameters) or variables in |COMMON|_.
 
 In addition:
 

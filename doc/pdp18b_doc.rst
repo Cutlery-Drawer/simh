@@ -516,7 +516,7 @@ A new file can be created if you attach with the ``-N`` switch.
 The ``ATTACH PTP`` command recognizes one switch,
 ``-A`` for ASCII mode.
 In ASCII mode,
-data is punched with the high order bit clear,
+data is punched with the high-order bit clear,
 and NULL and DEL characters are suppressed.
 This allows punch output to be processed with normal text-editing utilities.
 
@@ -1252,7 +1252,7 @@ The PDP-15 recognizes two additional switches:
    :class: switches
 
    ======  =====================================================
-   ``-u``  Display as PDP11 ASCII
+   ``-u``  Display as PDP-11 ASCII
            (two 7b ASCII characters in 8b bytes, little-endian);
            16b devices only
    ``-p``  Display as packed ASCII
@@ -1285,10 +1285,10 @@ The PDP-15 also recognizes an additional input mode:
 .. table::
    :class: switches
 
-   ======  =====================================================
+   ======  ======================================================
    ``-p``  Five character packed ASCII string in two 18b words
-   ``-u``  PDP11 ASCII (two 7b ASCII in 8b bytes, little-endian)
-   ======  =====================================================
+   ``-u``  PDP-11 ASCII (two 7b ASCII in 8b bytes, little-endian)
+   ======  ======================================================
 
 Instruction input uses standard 18b PDP assembler syntax.
 There are eight instruction classes:

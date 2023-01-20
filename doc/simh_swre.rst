@@ -73,7 +73,7 @@ To boot and run OS/8::
     .DA dd-mmm-yy
     .
 
-Note that OS/8 only recognizes upper case characters.
+Note that OS/8 only recognizes uppercase characters.
 The first disk (drive 0) is the system disk; it also includes BASIC.
 The second disk (drive 1) includes FORTRAN.
 

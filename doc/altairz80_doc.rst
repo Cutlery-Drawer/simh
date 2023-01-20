@@ -1244,7 +1244,7 @@ The |SIO| can be configured in SIMH with the following commands:
      - Console input remain unchanged
 
    * - :html:`<samp><b>SET SIO UPPER</b></samp>`
-     - Console input is transformed to upper case characters only
+     - Console input is transformed to uppercase characters only
        (This feature is useful for most Altair software).
        |SET SIO MAP|_ must also have been executed for this option to take effect —
        otherwise, no mapping occurs.

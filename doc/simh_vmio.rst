@@ -431,7 +431,7 @@ Massbus devices (PDP-11, VAX-780 only)
 """"""""""""""""""""""""""""""""""""""
 For Massbus devices,
 I/O dispatching is done by table-driven address decoding in the Massbus adapter
-(RH for the PDP11, MBA for the VAX-780).
+(RH for the PDP-11, MBA for the VAX-780).
 These tables are constructed at run time from device information blocks (DIBs).
 Each Massbus device has a DIB with the following information::
 

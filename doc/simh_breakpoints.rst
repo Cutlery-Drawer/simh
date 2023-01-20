@@ -56,7 +56,7 @@ The virtual machine defines the valid breakpoint types to SIMH through two varia
 
 ``sim_brk_types``
     Initialized by the VM (usually in the CPU reset routine) to a mask of all supported breakpoints;
-    bit 0 (low order bit) corresponds to type "A", bit 1 to type "B", etc.
+    bit 0 (low-order bit) corresponds to type "A", bit 1 to type "B", etc.
 
 ``sim_brk_dflt``
     Initialized by the VM to the mask for the default breakpoint type.
@@ -217,7 +217,7 @@ otherwise the replay will produce the wrong answer.
 Some processors implement interruptible instructions,
 where intermediate state is held in registers and/or memory,
 and there is some state flag to indicate an interrupt occurred partway through.
-For example the PDP11 CIS instructions do this,
+For example the PDP-11 CIS instructions do this,
 using the First Part Done flag in the processor status word.
 For such instructions, breakpoint processing may take advantage of that mechanism;
 in effect the breakpoint looks like an interrupt partway through the execution.
@@ -226,13 +226,13 @@ If memory access breakpoints are implemented,
 write breakpoint testing is best done before the write,
 so the write can be skipped (rather than have to be explicitly reverted) on a match.
 The same may be useful for read breakpoints,
-since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side effect.
+since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side-effect.
 
 If memory access breakpoints are implemented,
 write breakpoint testing is best done before the write,
 so the write can be skipped (rather than have to be explicitly reverted) on a match.
 The same may be useful for read breakpoints,
-since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side effect.
+since this allows a read breakpoint to be set for a memory mapped I/O device register for which reads have a side-effect.
 
 Breakpoint classes
 ==================

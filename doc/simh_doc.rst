@@ -620,7 +620,7 @@ Examples:
 :code:`ex rx sbuf[3-6]`            Examine SBUF[3] to SBUF[6] in RX
 :code:`ex r4,$`                    Examine R4 and where it points
 :code:`de all 0`                   Set main memory to 0
-:code:`de &77>0 0`                 Set all addresses whose low order bits are non-zero to 0
+:code:`de &77>0 0`                 Set all addresses whose low-order bits are non-zero to 0
 :code:`ex -m @memdump.txt 0-7777`  Dump memory to file named ``memdump.txt``
 =================================  ===========================================================
 
@@ -1401,7 +1401,7 @@ The simulator can execute command files with the |DO| command::
     DO <filename> {arguments...}    Execute commands in file
 
 The |DO| command allows command files to contain substitutable arguments.
-The string ``%n``, where *n* is between 1 and 9, is replaced with argument *n* from the |DO| command line.
+The string ``%n``, where *n* is between 1 and 9, is replaced with argument *n* from the |DO| command-line.
 The string ``%0`` is replaced with *<filename>*.
 The sequences ``\%`` and ``\\`` are replaced with the literal characters ``%`` and ``\``, respectively.
 Arguments with spaces can be enclosed in matching single or double quotation marks.
@@ -2066,7 +2066,7 @@ The current debug settings for output destination, options and device specific d
 .. _BYE:
 
 |EXIT| (synonyms |QUIT| and |BYE|) returns control to the operating system
-An optional numeric exit status may be provided on the |EXIT| command line that an operating system script may act on. ::
+An optional numeric exit status may be provided on the |EXIT| command-line that an operating system script may act on. ::
 
     EXIT {status}    Return to the operating system
 
@@ -2117,7 +2117,7 @@ A.3 Magnetic tapes
 SIMH format magnetic tapes are represented as unstructured binary files of 8b data items.
 Each record starts with a 32b record header, in little-endian format.
 If the record header is not a special header, it is followed by n 8b bytes of data, followed by a repeat of the 32b record header.
-A 1 in the high order bit of the record header indicates an error in the record.
+A 1 in the high-order bit of the record header indicates an error in the record.
 If the byte count is odd, the record is padded to even length; the pad byte is undefined.
 
 Special record headers occur only once and have no data.
@@ -2142,7 +2142,7 @@ Some TPC formatted tapes have an end-of-medium indicated as a record length of 0
 
 SIMH can read Pierce-format seven-track magnetic tape images.
 Pierce format uses only 6 data bits, and one parity bit, in each byte.
-The high order bit indicates start of record.
+The high-order bit indicates start of record.
 End-of-file is indicated by a record of one (occasionally two) bytes consisting of code 017 (octal).
 
 SIMH can read and write AWS format tape images.

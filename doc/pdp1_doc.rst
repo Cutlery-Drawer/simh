@@ -194,7 +194,7 @@ Thus, by changing POS, the user can backspace or advance the reader.
 The paper tape reader supports the ``BOOT`` command.
 ``BOOT PTR`` copies the RIM loader into memory and starts it running.
 ``BOOT PTR`` loads into the field selected by ``TA<0:3>``
-(the high order four bits of the address switches).
+(the high-order four bits of the address switches).
 
 The paper tape reader recognizes one switch at ``ATTACH`` time::
 
@@ -294,7 +294,7 @@ The typewriter input implements these registers:
 Name          Size  Comments
 ============  ====  ======================================
 ``BUF``       6     Typewriter buffer (shared)
-``UC``        1     Upper case/lower case state (shared)
+``UC``        1     Uppercase/lowercase state (shared)
 ``DONE``      1     Input ready flag
 ``POS``       32    Number of characters input
 ``TIME``      24    Keyboard polling interval
@@ -306,7 +306,7 @@ The typewriter output implements these registers:
 Name          Size  Comments
 ============  ====  ======================================
 ``BUF``       6     Typewriter buffer (shared)
-``UC``        1     Upper case/lower case state (shared)
+``UC``        1     Uppercase/lowercase state (shared)
 ``RPLS``      1     Return restart pulse flag
 ``DONE``      1     Output done flag
 ``POS``       32    Number of characters output

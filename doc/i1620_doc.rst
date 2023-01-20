@@ -745,7 +745,7 @@ a parity error always indicated a hardware error and stopped the machine when de
 The 5 data bits in each location consisted of a flag bit and 4 data bits.
 These are often shown as :html:`<samp>F</samp>` |8 4 2 1| in IBM documentation.
 The flag bit was used in several ways in the machine:
-to indicate the high order digit of a field,
+to indicate the high-order digit of a field,
 to indicate a negative number,
 to indicate instruction indirect addressing,
 and to specify index register modification of an address.

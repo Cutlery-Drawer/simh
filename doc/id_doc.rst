@@ -200,8 +200,8 @@ Name                   Size  Comments
 ``PC``                 16    Program counter
 ``R0``\ ..\ ``R15``    16    General registers
 ``FR0``\ ..\ ``F14``   32    Single-precision floating-point registers
-``D0H``\ ..\ ``D14H``  32    Double-precision floating-point registers, high order
-``D0L``\ ..\ ``D14L``  32    Double-precision floating-point registers, low order
+``D0H``\ ..\ ``D14H``  32    Double-precision floating-point registers, high-order
+``D0L``\ ..\ ``D14L``  32    Double-precision floating-point registers, low-order
 ``PSW``                16    Processor status word
 ``CC``                 4     Condition codes, PSW<12:15>
 ``SR``                 16    Switch register
@@ -297,8 +297,8 @@ Name                      Size    Comments
 ``R0``\ ..\ ``R15``       32      Active general register set
 ``GREG[32]``              32      General register sets, 16 × 2
 ``FR0``\ ..\ ``FR14``     32      Single-precision floating-point registers
-``D0H``\ ..\ ``D14H``     32      Double-precision floating-point registers, high order
-``D0L``\ ..\ ``D14L``     32      Double-precision floating-point registers, low order
+``D0H``\ ..\ ``D14H``     32      Double-precision floating-point registers, high-order
+``D0L``\ ..\ ``D14L``     32      Double-precision floating-point registers, low-order
 ``PSW``                   16      Processor status word
 ``CC``                    4       Condition codes, ``PSW<12:15>``
 ``SR``                    16      Switch register
@@ -544,7 +544,7 @@ The PASLA units (|TTP0|, |TTP1|) can be set to one of four modes,
 ======  ======================  ==========================================
 Mode    Input characters        Output characters
 ======  ======================  ==========================================
-``UC``  Lowercase converted     Lowercase converted to upper case,
+``UC``  Lowercase converted     Lowercase converted to uppercase,
         to uppercase,           high-order bit cleared,
         high-order bit cleared  non-printing characters suppressed
 ``7P``  High-order bit cleared  High-order bit cleared,

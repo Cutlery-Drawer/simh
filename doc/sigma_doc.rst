@@ -559,7 +559,7 @@ Mode    Input characters         Output characters
 ======  =======================  ==================================
 ``UC``  High-order bit cleared,  High-order bit cleared,
         lowercase converted      lowercase converted
-        to uppercase             to upper case
+        to uppercase             to uppercase
 ``7P``  High-order bit cleared   High-order bit cleared,
                                  non-printing characters suppressed
 ``7B``  High-order bit cleared   High-order bit cleared

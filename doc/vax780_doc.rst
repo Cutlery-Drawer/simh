@@ -1556,15 +1556,15 @@ Related devices
 The DMC can facilitate communication with other SIMH simulators which have emulated synchronous network devices available.
 These include the following:
 
-==============  =================================================
-``DUP11`` [1]_  Unibus PDP11 simulators
-``DPV11`` [1]_  Qbus PDP11 simulators
-``KDP11`` [1]_  Unibus PDP11 simulators and PDP10 simulators
-``DMR11``       Unibus PDP11 simulators and Unibus VAX simulators
-``DMC11``       Unibus PDP11 simulators and Unibus VAX simulators
-``DMP11``       Unibus PDP11 simulators and Unibus VAX simulators
+==============  ==================================================
+``DUP11`` [1]_  Unibus PDP-11 simulators
+``DPV11`` [1]_  Qbus PDP-11 simulators
+``KDP11`` [1]_  Unibus PDP-11 simulators and PDP-10 simulators
+``DMR11``       Unibus PDP-11 simulators and Unibus VAX simulators
+``DMC11``       Unibus PDP-11 simulators and Unibus VAX simulators
+``DMP11``       Unibus PDP-11 simulators and Unibus VAX simulators
 ``DMV11``       Qbus VAX simulators
-==============  =================================================
+==============  ==================================================
 
 .. [1] Indicates systems which have OS provided DDCMP implementations.
        The DMC11 is a synchronous serial point-to-point communications device.

@@ -357,7 +357,7 @@ If a given instruction encounters multiple breakpoints, for example an instructi
 CIS instructions are designed to be interruptible, using the FPD bit in the processor status word.
 For those instructions, a read or write breakpoint is treated as an interrupt, so the instruction is left partially completed.
 When execution continues, the instruction is resumed from where it left off, provided the instruction state is not modified by the user.
-The CIS instruction description in the PDP11 documentation spells out what the CIS state is that must be left untouched.
+The CIS instruction description in the PDP-11 documentation spells out what the CIS state is that must be left untouched.
 
 Interrupts involve two reads (the vector) and two writes (the stack push of the previous PC and PSW).
 Those may match memory read or write breakpoints.
@@ -583,7 +583,7 @@ The terminal interfaces (TTI, TTO) can be set to one of four modes, ``7P``, ``7B
 ======  =======================  ======================
 Mode    Input characters         Output characters
 ======  =======================  ======================
-``UC``  High-order bit cleared,  High order-bit cleared,
+``UC``  High-order bit cleared,  High-order bit cleared,
         lowercase converted      lowercase converted
         to uppercase             to uppercase
 ``7P``  High-order bit cleared   High-order bit cleared,

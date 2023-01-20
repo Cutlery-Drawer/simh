@@ -2789,7 +2789,7 @@ SCP will use the specified routine to obtain command input in place of its stand
 The calling sequence for the |sim_vm_read| routine is:
 
 :c:`char sim_vm_input (char *buf, int32 *max, FILE *stream)`
-    Read the next command line from ``stream`` and store it in ``buf``,
+    Read the next command-line from ``stream`` and store it in ``buf``,
     up to a maximum of ``max`` characters.
 
 The routine is expected to strip off leading whitespace characters and to return |NULL| on end-of-file.
@@ -2887,7 +2887,7 @@ Each entry is defined with a |sim_ctab| structure (:c:`typedef CTAB`):
         const char  *help;       /* Help string */
     };
 
-If the first word of a command line matches ``ctab.name``,
+If the first word of a command-line matches ``ctab.name``,
 then the action routine is called with the following arguments:
 
 :c:`t_stat action_routine (int32 arg, const char *buf)`
@@ -2976,7 +2976,7 @@ The supported modes are:
 ``TTUF_MODE_7P``  7b printable mode; the high-order bit is masked off.
                   In addition, on output, if the character is not printable,
                   -1 is returned.
-``TTUF_MODE_UC``  7b upper case mode; the high-order bit is masked off.
+``TTUF_MODE_UC``  7b uppercase mode; the high-order bit is masked off.
                   In addition, lowercase is converted to uppercase
                   If the character is not printable, -1 is returned.
 ================  =======================================================

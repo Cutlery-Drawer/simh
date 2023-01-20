@@ -539,7 +539,7 @@ SIMH reads the whole source deck file at once in an internal buffer
 (room for 10K cards),
 then writes the destination files.
 Therefore,
-there is no problem on using same file name as source and destination.
+there is no problem on using same filename as source and destination.
 
 Examples
 ........
@@ -595,7 +595,7 @@ Any source file can have same name as destination deck.
 SIMH reads all the source deck files one-by-one in an internal buffer
 (room for 10K cards),
 then writes the destination file.
-Therefore, there is no problem on using same file name as source and destination.
+Therefore, there is no problem on using same filename as source and destination.
 
 Examples
 ........

@@ -234,7 +234,7 @@ The Typewriter output implements these registers:
 Name          Size        Comments
 ============  ==========  ======================================
 ``BUF``       6           Data buffer
-``UC``        1           Upper case flag
+``UC``        1           Uppercase flag
 ``TPOS``      32          Count of output characters
 ``PPOS``      32          Position in the punch output file
 ``TIME``      24          Time from I/O initiation to completion

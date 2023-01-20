@@ -197,7 +197,7 @@ The typewriter input implements these registers:
 Name      Size  Comments
 ========  ====  ====================================
 ``BUF``   6     Typewriter buffer (shared)
-``UC``    1     Upper case/lower case state (shared)
+``UC``    1     Uppercase/lowercase state (shared)
 ``DONE``  1     Input ready flag
 ``POS``   32    Number of characters input
 ``TIME``  24    Keyboard polling interval
@@ -209,7 +209,7 @@ The typewriter output implements these registers:
 Name      Size  Comments
 ========  ====  ====================================
 ``BUF``   6     Typewriter buffer (shared)
-``UC``    1     Upper case/lower case state (shared)
+``UC``    1     Uppercase/lowercase state (shared)
 ``RPLS``  1     Return restart pulse flag
 ``DONE``  1     Output done flag
 ``POS``   32    Number of characters output
