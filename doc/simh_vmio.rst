@@ -583,7 +583,7 @@ The device information block is declared in the device module, as follows:
     int32 new_iack2 (void);
 
     #define IOLN_NEW        010                     /* length = 8 bytes */
-    
+
     DIB new_dib = {
         IOBA_AUTO,
         IOLN_NEW,

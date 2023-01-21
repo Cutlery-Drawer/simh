@@ -122,7 +122,7 @@ To load and run TSS/8:
    ``[0,1]``    ``VH3M``
    ``[0,2]``    ``LXHE``
    ``[0,3]``    ``SHUG``
-   ``[77,77]``  
+   ``[77,77]``
    ``[1,10]``   ``WBCN``
    ``[20,1]``   ``DT``
    ``[20,2]``   ``PT``
@@ -550,7 +550,7 @@ To run in the simulator, attach thusly::
 The simulator will halt with ``IS = 433``.
 At this point, you can set options through the sense switches and memory. ::
 
-    D 1252 "1"      Will cause headings to print for each test run. 
+    D 1252 "1"      Will cause headings to print for each test run.
                     Otherwise no printing will occur unless there are
                     errors.
     D SSB 1         Loop if an error is detected.

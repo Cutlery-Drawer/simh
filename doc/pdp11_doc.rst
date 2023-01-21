@@ -317,7 +317,7 @@ Idle detection is controlled by the ``SET IDLE`` and ``SET NOIDLE`` commands::
 
 Idle detection is disabled by default.
 The CPU is considered idle if a ``WAIT`` instruction is executed.
-This will work for RSTS/E and RSX-11M+, but not for RT-11 or UNIX. 
+This will work for RSTS/E and RSX-11M+, but not for RT-11 or UNIX.
 
 The CPU can maintain a history of the most recently executed instructions.
 This is controlled by the ``SET CPU HISTORY`` and ``SHOW CPU HISTORY`` commands::
@@ -1785,7 +1785,7 @@ Name           Size  Comments
 The output device (DCO) implements these registers:
 
 ==============  ====  ====================================================
-Name            Size  Comments 
+Name            Size  Comments
 ==============  ====  ====================================================
 ``CSR[0:15]``   16    Input control/stats register, lines 0 to 15
 ``BUF[0:15]``   8     Input buffer, lines 0 to 15
@@ -1798,7 +1798,7 @@ All open connections are lost when the simulator shuts down or DCI is detached.
 
 KL11/DL11 additional terminal interfaces (DLI/DLO)
 """"""""""""""""""""""""""""""""""""""""""""""""""
-The PDP-11 simulator supports up to sixteen additional KL11/DL11 terminal interfaces. 
+The PDP-11 simulator supports up to sixteen additional KL11/DL11 terminal interfaces.
 The additional terminals consist of two independent devices, DLI and DLO.
 The entire set is modeled as a terminal multiplexer, with DLI as the master controller.
 The additional terminals perform input and output through Telnet sessions connected to a user-specified port.
@@ -1890,7 +1890,7 @@ All open connections are lost when the simulator shuts down or DLO is detached.
 DZ11 terminal multiplexer (DZ)
 """"""""""""""""""""""""""""""
 The DZ11 is an 8-line terminal multiplexer.
-Up to 4 DZ11s (32 lines) are supported. 
+Up to 4 DZ11s (32 lines) are supported.
 The number of lines can be changed with the command ::
 
     SET DZ LINES=n                Set line count to n

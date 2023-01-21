@@ -232,7 +232,7 @@ SCP does the record keeping for timing.
 
 SCP will display pending events or other activities and report the number these event times reflect using the string ``sim_vm_interval_units``.
 The ``sim_vm_interval_units`` defaults to ``"instructions"``,
-but the simulator may change this to ``"cycles"`` if the simulator tracks machine state updates internally based on cycles. 
+but the simulator may change this to ``"cycles"`` if the simulator tracks machine state updates internally based on cycles.
 
 A simulator's time base needs to be specifically considered when writing simulated devices.
 The correct choice that a |DEVICE|_ may use depends on,
@@ -720,7 +720,7 @@ SCP provides routines to synchronize multiple simulated clocks (to a maximum of 
 
 :c:`int32 sim_rtcn_init_unit (UNIT *uptr, int32 clock_interval, int32 clk, int32 ticksper)`
     This routine initializes the clock calibration mechanism for simulated clock ``clk`` and ``uptr`` identifies which unit's service routine performs clock tick activities.
-    The argument ``clock_interval`` is returned as the result. 
+    The argument ``clock_interval`` is returned as the result.
 
 .. |sim_rtcn_calb| replace:: ``sim_rtcn_calb``
 .. _sim_rtcn_calb:
@@ -740,7 +740,7 @@ SCP provides routines to synchronize multiple simulated clocks (to a maximum of 
 Some host computers have relatively poor resolution clock ticks (:math:`>= 10ms`) and/or variable or high minimum sleep times (:math:`> 2ms`).
 Some simulators have clocks which may need to tick faster than the clock resolution or minimum sleep times.
 In order to provide accurate time services,
-a simulator should notify the timing services that the simulated system has digested a previously generated clock tick. 
+a simulator should notify the timing services that the simulated system has digested a previously generated clock tick.
 
 .. |sim_rtcn_tick_ack| replace:: ``sim_rtcn_tick_ack``
 .. _sim_rtcn_tick_ack:
@@ -760,7 +760,7 @@ The simulator calls |sim_rtcn_calb|_ to calculate the actual interval delay when
 
     /* clock start */
 
-    if (!sim_is_active (&clk_unit)) 
+    if (!sim_is_active (&clk_unit))
         sim_activate (&clk_unit, sim_rtcn_init_unit_ticks (&clk_unit, clk_delay, clkno, clk_ticks_per_second));
     /* etc. */
 
@@ -1539,8 +1539,8 @@ For example:
 .. code:: c
 
     static const char *rp_fname[CS1_N_FNC] = {
-        "NOP", "UNLD", "SEEK", "RECAL", "DCLR", "RLS", 
-        "OFFS", "RETN","PRESET", "PACK", "SEARCH", 
+        "NOP", "UNLD", "SEEK", "RECAL", "DCLR", "RLS",
+        "OFFS", "RETN","PRESET", "PACK", "SEARCH",
         "WRCHK", "WRITE", "WRHDR", "READ", "RDHDR"
     };
 
@@ -2107,7 +2107,7 @@ Each of the |ORDATA|_,
 ``BRDATADF``,
 ``VBRDATADF``,
 ``URDATADF`` and ``STRDATADF``)
-which can be used to provide initialization values to the |REG.desc|_ fields in the |REG|_ structure. 
+which can be used to provide initialization values to the |REG.desc|_ fields in the |REG|_ structure.
 
 .. |SAVEDATA| replace:: ``SAVEDATA``
 .. _SAVEDATA:
@@ -2422,7 +2422,7 @@ For ``SET``, an extended |MTAB| entry is interpreted as follows:
 2. Test to see if the ``SET`` parameter matches the |MTAB.mstring|.
 3. Test to see if the entry is valid for the type of ``SET`` being done (``SET device`` or ``SET unit``).
 4. If a validation routine exists, call it and return its status.
-   The validation routine is responsible for storing the result. 
+   The validation routine is responsible for storing the result.
 5. If ``desc`` is |NULL|, exit.
 6. Otherwise, store the |MTAB.match| value in the :c:`int32` pointed to by ``desc``.
 
@@ -2723,7 +2723,7 @@ A VM requiring special initialization would fill in this pointer with the addres
 
 The special initialization routine could perform any actions required by the VM.
 If the other optional interfaces are to be used,
-the initialization routine could also fill in the appropriate pointers.  
+the initialization routine could also fill in the appropriate pointers.
 
 Due to the lack of reliable functionality across all different supported host platforms,
 this "weak global" paradigm has been removed.
@@ -3220,7 +3220,7 @@ Library |sim_tmxr.c| provides the following routines to support Telnet and seria
 
 :c:`t_stat tmxr_putc_ln (TMLN *lp, int32 chr)`
     Output character ``chr`` to the line described by ``lp``.
-    Possible errors are ``SCPE_LOST`` (connection lost) and ``SCPE_STALL`` (connection backlogged).  
+    Possible errors are ``SCPE_LOST`` (connection lost) and ``SCPE_STALL`` (connection backlogged).
     If executed directly in instruction simulation code
     (as opposed to during event processing)
     and line output rate limiting is in effect,
@@ -3900,7 +3900,7 @@ as follows:
 
     MTAB tape_mod[] = {
         { MTAB_XTD|MTAB_VDV, 0, "FORMAT", "FORMAT",
-      	  &sim_tape_set_fmt, &sim_tape_show_fmt, NULL },
+          &sim_tape_set_fmt, &sim_tape_show_fmt, NULL },
         { MTAB_XTD|MTAB_VUN, 0, "CAPACITY", "CAPACITY",
           &sim_tape_set_capac, &sim_tape_show_capac, NULL },
         /* … */

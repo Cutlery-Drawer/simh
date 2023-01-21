@@ -376,7 +376,7 @@ and files can be attached to individual bins of the stacker.
 The file format follows that of the |CDP|_ device.
 The individual unit reflects the stacker code sent by the computer.
 If no file is attached,
-the output will go to the file attached to the |CDP|_ device. 
+the output will go to the file attached to the |CDP|_ device.
 
 .. |LP| replace:: :html:`<samp>LP</samp>`
 .. _LP:

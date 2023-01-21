@@ -2282,7 +2282,7 @@ There is also a small collection of sample application software containing the f
    and to use it, do
 
    .. parsed-literal::
-   
+
       sim> **attach dsk1 app.dsk**
 
    before booting CP/M.

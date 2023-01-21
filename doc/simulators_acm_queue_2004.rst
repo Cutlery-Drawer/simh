@@ -19,7 +19,7 @@ it is increasingly being used in long-lived production environments as a substit
 SIMH is continuously being extended to simulate new machines,
 a process that requires equal parts of historical research,
 software engineering, and detective work.
- 
+
 A taxonomy of virtual machines
 ==============================
 The term "virtual machine" has been used to describe at least three different types of computer programs:
@@ -37,7 +37,7 @@ The term "virtual machine" has been used to describe at least three different ty
 All virtual machines share a common set of problems:
 
 1. The virtual system must faithfully reproduce the target.
-2. The virtual system must be able to faithfully reproduce the environment expected by the software (timing, I/O, etc). 
+2. The virtual system must be able to faithfully reproduce the environment expected by the software (timing, I/O, etc).
 3. The virtual system must deliver adequate performance to be a usable environment.
 
 SIMH

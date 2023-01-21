@@ -134,7 +134,7 @@ Device name(s)  Simulates
 ``SBB``         MFP SCSI bus B tape controller with up to 2 units
 ``SDA``         SCFI SCSI disk controller with up to 8 units
 ``SDB``         SCFI SCSI disk controller with up to 8 units
-``MTA``         8051 9-Trk Buffered tape processor with up to 8 drives 
+``MTA``         8051 9-Trk Buffered tape processor with up to 8 drives
 ``MTB``         8051 9-Trk Buffered tape processor with up to 8 drives
 ==============  ======================================================
 
@@ -428,7 +428,7 @@ Each line (each unit of ``COML``) supports four character processing modes:
 ``UC``, ``7P``, ``7B``, and ``8B``.
 
 ======  ================================  ==================================
-Mode    Input characters                  Output characters                 
+Mode    Input characters                  Output characters
 ======  ================================  ==================================
 ``UC``  High-order bit cleared,           High-order bit cleared,
         lowercase converted to uppercase  lowercase converted to uppercase

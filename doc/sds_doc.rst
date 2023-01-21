@@ -845,7 +845,7 @@ Class                 Operands                 Examples          Comments
 No operand            None                     ``EIR``
 ``POP`` (prog op)     ``op,addr{,tag}``        ``POP 66,100``
 I/O                   ``addr{,tag}``           ``EOM 1266``
-Mem reference         ``addr{,tag}``           | ``LDA 400,2``  
+Mem reference         ``addr{,tag}``           | ``LDA 400,2``
                                                | ``STA* 300``    Indirect addr
 Reg change            ``op`` ``op`` ``op``...  ``CLA CLB``       Opcodes OR
 Shift                 ``cnt{,tag}``            ``LSH 10``

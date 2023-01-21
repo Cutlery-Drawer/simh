@@ -75,7 +75,7 @@ testing for an execution breakpoint:
 .. code:: c
 
     /* Test for breakpoint before fetching next instruction */
-   
+
     if ((sim_brk_summ & SWMASK ('E')) &&
          sim_brk_test (PC, SWMASK ('E'))) <execution break>
 

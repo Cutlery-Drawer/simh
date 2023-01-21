@@ -81,7 +81,7 @@ The TX-0 was upgraded over the years from the original 1956 "Standard" instructi
 In addition, the TX-0 CPU can operate in one of three operating modes:
 
 ============  ============================================
-Read In	Mode  Instruction words are fetched from the tape.
+Read In Mode  Instruction words are fetched from the tape.
 Test Mode     Instruction words are fetched from the TBR.
 Normal Mode   Instruction words are fetched from memory.
 ============  ============================================

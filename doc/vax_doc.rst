@@ -801,7 +801,7 @@ and to specify the controller type and tape length::
     SET TQ TU81                   Set controller type to TU81
     SET TQ TKUSER{=n}             Set controller type to TK50 with tape capacity of n MB
 
-User-specified capacity must be between 50 and 2000000000 MB. 
+User-specified capacity must be between 50 and 2000000000 MB.
 Regardless of the controller type,
 individual units can be set to a specific reel capacity in MB,
 or to unlimited capacity::
@@ -1140,7 +1140,7 @@ Even though the CR11 is normally configured as a BR6 device,
 it is configured for BR4 in this simulation.
 
 The card reader supports ASCII, card image, and column binary format card "decks".
-When reading plain ASCII files, lines longer than 80 characters are silently truncated. 
+When reading plain ASCII files, lines longer than 80 characters are silently truncated.
 Card image support is included for 80 column Hollerith, 82 column Hollerith (silently ignoring columns 0 and 81), and 40 column Hollerith (mark-sense) cards.
 Column binary supports 80 column card images only.
 All files are attached read-only (as if the ``-R`` switch were given). ::

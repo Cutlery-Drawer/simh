@@ -1445,7 +1445,7 @@ You can repeat this process over and over as desired.
 If you need to reboot the system:
 
 - Click the card reader icon twice to remove any cards in it.
-- Click Immediate Stop, Check Reset, Program Load [#]_ and Program Start in that order. 
+- Click Immediate Stop, Check Reset, Program Load [#]_ and Program Start in that order.
 - Continue with step 3 above.
 
 .. [#] When Program Load is pressed with no card file attached,
@@ -3236,7 +3236,7 @@ _`C06`  Unreachable statement
 _`C07`  Name longer than 5 characters, or name not starting with alphabetic character
 _`C08`  Incorrect or missing subscript within dimension information
 _`C09`  Duplicate statement number
-_`C10`  Syntax error 
+_`C10`  Syntax error
 _`C11`  Duplicate name in |COMMON|_ statement
 _`C12`  Syntax error in |FUNCTION|_ or |SUBROUTINE|_ statement
 _`C13`  Parameter (dummy argument) appears in |COMMON|_ statement
@@ -4196,7 +4196,7 @@ DMS issues
 * Until October 24th 2012,
   due to a bug in the cross-assembler asm1130,
   the FORTRAN extended-precision ``SQRT()`` function was defective.
-  DMS images obtained from us prior to this date should be replaced with a newer version. 
+  DMS images obtained from us prior to this date should be replaced with a newer version.
 * There is a bug in the Fortran compiler:
   if you call a function with no arguments,
   it will flag the wrong statement with the C36 syntax error.

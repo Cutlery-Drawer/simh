@@ -1,7 +1,7 @@
 .. -*- coding: utf-8; mode: rst; tab-width: 4; truncate-lines: t; indent-tabs-mode: nil; truncate-lines: t; -*- vim:set et ts=4 ft=rst nowrap:
 
 **************************
-         SimH FAQ         
+         SimH FAQ
 **************************
 :Date: 2019-05-13
 :Revision: $Format:%H$
@@ -449,7 +449,7 @@ An example::
     Ethernet adapter Local Area Connection:
 
       Connection-specific DNS Suffix  . :
-      Description . . . . . . . . . . . : D-Link DWL-650+ Wireless Cardbus 
+      Description . . . . . . . . . . . : D-Link DWL-650+ Wireless Cardbus
       Physical Address. . . . . . . . . : 00-80-C8-08-CE-DB   <-- MAC address
       DHCP Enabled. . . . . . . . . . . : No
       IP Address. . . . . . . . . . . . : 192.168.0.5
