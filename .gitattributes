@@ -14,3 +14,7 @@
 *.dck binary
 sim_rev.h export-subst
 
+# Document diffs
+*.doc  diff=doc
+*.docx diff=docx
+*.odt  diff=odt

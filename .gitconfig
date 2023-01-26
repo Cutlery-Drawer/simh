@@ -1,0 +1,58 @@
+# -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t; -*- vim:set noet ts=4:
+
+# To use this config in your local workflow, run
+# `git config --local --add include.path ../.gitconfig`
+
+# Diff drivers for binary file formats
+[diff "doc"]
+	textconv = antiword -rsft
+	cachetextconv = true
+[diff "docx"]
+	textconv = docx2txt.pl - /dev/stdout <
+	cachetextconv = true
+[diff "exif"]
+	textconv = exiftool -a -U -x FileName -x Directory
+	cachetextconv = true
+[diff "pdf"]
+	textconv = pdftotext -htmlmeta -layout - /dev/stdout <
+	cachetextconv = true
+	binary = true
+
+
+[simh "doc-review"]
+	remote-name = closed-simh
+	review-hash = af4f37efacff4f26bf0143de99cf15193f2063d1
+
+[alias]
+	# Print the name of the most recently-tagged release
+	latest-tag = for-each-ref \
+		--merged=HEAD \
+		--count=1 \
+		--ignore-case \
+		--sort='-*creatordate' \
+		--format='%(refname:lstrip=-1)' \
+		refs/tags
+
+	# Print the object-ID of the branch's last commit
+	tip = show --no-patch --format=%H
+
+	# Setup an isolated branch to track changes to @markpizz's version of SIMH
+	configure-closed-branch = "! { \
+		set -e; \
+		remote_name=`git config -f ./.gitconfig simh.doc-review.remote-name`; \
+		review_hash=`git config -f ./.gitconfig simh.doc-review.review-hash`; \
+		review_date=`git show --date=unix --pretty='format:%cd' --no-patch "$review_hash"`; \
+		git remote get-url >/dev/null 2>&1 "$remote_name" || \
+		git remote add -t master --no-tags "$remote_name" "https://github.com/simh/simh.git"; \
+		git fetch --no-recurse-submodules --shallow-since="$review_date" "$remote_name"; \
+	};"
+
+	# Display unreviewed changes made to @markpizz's SIMH docs
+	compare-docs = "! { \
+		set -e; \
+		start=`git config -f ./.gitconfig simh.doc-review.review-hash`; \
+		end=`git config -f ./.gitconfig simh.doc-review.remote-name`; \
+		end=`git rev-parse --symbolic-full-name \"$end/master\"`; \
+		end=`git tip \"$end\"`; \
+		git diff \"$start:doc..$end:doc\"; \
+	};"
