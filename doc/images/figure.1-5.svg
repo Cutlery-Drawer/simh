@@ -39,7 +39,7 @@
 			marker-mid: url(#tick);
 			stroke: none;
 		}
-		
+
 		@media (prefers-color-scheme: dark){
 			:root { color: #ccc; }
 		}
@@ -54,7 +54,7 @@
 		markerUnits="userSpaceOnUse"
 		orient="-180deg"
 	><line y2="100"/></marker>
-	
+
 	<clipPath id="tick-clip">
 		<use xlink:href="#frame"/>
 	</clipPath>

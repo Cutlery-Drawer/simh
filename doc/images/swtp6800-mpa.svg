@@ -24,7 +24,7 @@
 		.left  { text-anchor: start; }
 		.right { text-anchor: end; }
 		.mono  { font-family: ui-monospace, monospace; }
-		
+
 		.arrow{
 			marker-start: url(#arrowhead);
 			marker-end:   url(#arrowhead);
@@ -33,7 +33,7 @@
 		#arrowhead polyline{
 			stroke-linejoin: bevel;
 		}
-		
+
 		@media (prefers-color-scheme: dark){
 			rect  { fill: #081517; }
 			:root { color: #ccc; }

@@ -14,6 +14,9 @@
 *.dck binary
 sim_rev.h export-subst
 
+# reStructuredText documents
+*.rst text eol=lf whitespace=space-before-tab,tab-in-indent,tabwidth=4,trailing-space
+
 # Document diffs
 *.doc  diff=doc
 *.docx diff=docx
