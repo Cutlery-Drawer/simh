@@ -77,6 +77,12 @@ extern DEVICE pmmi_dev;
 extern DEVICE hayes_dev;
 extern DEVICE mmd_dev;
 extern DEVICE mmdm_dev;
+extern DEVICE sol20_dev;
+extern DEVICE sol20k_dev;
+extern DEVICE sol20t_dev;
+extern DEVICE sol20s_dev;
+extern DEVICE sol20p_dev;
+extern DEVICE vdm1_dev;
 
 extern DEVICE cromfdc_dev;
 extern DEVICE wd179x_dev;
@@ -141,6 +147,13 @@ DEVICE      *sim_devices[]  = {
     &djhdc_dev,
     &mmd_dev,
     &mmdm_dev,
+    /* Processor Technology Devices */
+    &sol20_dev,
+    &sol20k_dev,
+    &sol20t_dev,
+    &sol20s_dev,
+    &sol20p_dev,
+    &vdm1_dev,
     /* MITS 88-2SIO */
     &m2sio0_dev,
     &m2sio1_dev,
@@ -939,3 +952,19 @@ t_stat show_iobase(FILE *st, UNIT *uptr, int32 val, CONST void *desc)
     return SCPE_OK;
 }
 
+/* find_unit_index   find index of a unit
+
+   Inputs:
+        uptr    =       pointer to unit
+   Outputs:
+        result  =       index of device
+*/
+int32 find_unit_index(UNIT* uptr)
+{
+    DEVICE *dptr = find_dev_from_unit(uptr);
+
+    if (dptr == NULL)
+        return -1;
+
+    return (uptr - dptr->units);
+}

@@ -5,11 +5,10 @@ root = true
 charset = utf-8
 end_of_line = crlf
 insert_final_newline = true
-trim_trailing_whitespace = false
+trim_trailing_whitespace = true
 
-# Files that require Unix-style line-endings
-[{*.sh,SetupNet}]
-end_of_line = lf
+[*.{c,h}]
+indent_style = space
 
 # Python
 [*.{py,py3}]
@@ -17,19 +16,20 @@ end_of_line = lf
 indent_style = space
 indent_size = 4
 max_line_length = 95
-trim_trailing_whitespace = true
 
 # reStructuredText
 [*.{rst,rest}{,.txt}]
 max_line_length = off
-trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 end_of_line = lf
 
+# Files that require Unix-style line-endings
+[{*.sh,SetupNet}]
+end_of_line = lf
+
 # Tab-formatted files: SVGs, Makefiles, git-config(1), et al
-[{{GNU,BSD,g,s,}{M,m}akefile,*.mk,*.svg,*.gitconfig,.git/config}]
-trim_trailing_whitespace = true
+[{{GNU,BSD,g,s,}{M,m}akefile,descrip.mms,*.mk,*.svg,*.gitconfig,.git/config}]
 indent_style = tab
 end_of_line = lf
 
@@ -40,7 +40,6 @@ indent_size = 4
 
 # Git commit messages
 [{COMMIT_EDITMSG,MERGE_MSG}]
-trim_trailing_whitespace = true
 max_line_length = 72
 indent_style = space
 indent_size = 4

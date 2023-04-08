@@ -57,18 +57,9 @@
 
 uint8 *URLContents(const char *URL, uint32 *length);
 #ifndef URL_READER_SUPPORT
-#define RESULT_BUFFER_LENGTH    1024
-#define RESULT_LEAD_IN          "URL is not supported on this platform. START URL \""
-#define RESULT_LEAD_OUT         "\" URL END."
 uint8 *URLContents(const char *URL, uint32 *length) {
-    char str[RESULT_BUFFER_LENGTH] = RESULT_LEAD_IN;
-    char *result;
-    strncat(str, URL, RESULT_BUFFER_LENGTH - strlen(RESULT_LEAD_IN) - strlen(RESULT_LEAD_OUT) - 1);
-    strcat(str, RESULT_LEAD_OUT);
-    result = (char*)malloc(strlen(str) + 1);
-    strcpy(result, str);
-    *length = strlen(str);
-    return (uint8*)result;
+    *length = 0;
+    return (uint8*)NULL;
 }
 #endif
 
@@ -209,13 +200,7 @@ static uint32 stopWatchDelta        = 0;        /* stores elapsed time of stop w
 static int32 getStopWatchDeltaPos   = 0;        /* determines the state for receiving stopWatchDelta            */
 static uint32 stopWatchNow          = 0;        /* stores starting time of stop watch                           */
 static int32 markTimeSP             = 0;        /* stack pointer for timer stack                                */
-
-                                                /* default time in milliseconds to sleep for SIMHSleepCmd       */
-#if defined (__MWERKS__) && defined (macintosh)
-       uint32 SIMHSleep             = 0;        /* no sleep on Macintosh OS9                                    */
-#else
-       uint32 SIMHSleep             = 1;        /* default value is one millisecond                             */
-#endif
+       uint32 SIMHSleep             = 1;        /* default time in milliseconds to sleep for SIMHSleepCmd is 1  */
 static uint32 sleepAllowedCounter   = 0;        /* only sleep on no character available when == 0               */
 static uint32 sleepAllowedStart     = SLEEP_ALLOWED_START_DEFAULT;  /* default start for above counter          */
 
@@ -238,10 +223,7 @@ static int32 FCBAddress = CPM_FCB_ADDRESS;      /* FCB Address                  
 
 /* support for wild card file expansion */
 
-#if defined (__MWERKS__) && defined (macintosh)
-const static char hostPathSeparator     = ':';  /* colon on Macintosh OS 9  */
-const static char hostPathSeparatorAlt  = ':';  /* no alternative           */
-#elif defined (_WIN32)
+#if defined (_WIN32)
 const static char hostPathSeparator     = '\\'; /* back slash in Windows    */
 const static char hostPathSeparatorAlt  = '/';  /* '/' is an alternative    */
 #else
@@ -261,7 +243,7 @@ static int32 currentNameIndex           = 0;
 static int32 lastPathSeparatorIndex     = 0;
 static int32 firstPathCharacterIndex    = 0;
 
-static void deleteNameList() {
+static void deleteNameList(void) {
     while (nameListHead != NULL) {
         NameNode_t *next = nameListHead -> next;
         free(nameListHead -> name);
@@ -279,9 +261,11 @@ static void processDirEntry (const char *directory,
                              void *context) {
     if (filename != NULL) {
         NameNode_t *top = (NameNode_t *)malloc(sizeof(NameNode_t));
-        top -> name = strdup(filename);
-        top -> next = nameListHead;
-        nameListHead = top;
+        if (top) {
+            top->name = strdup(filename);
+            top->next = nameListHead;
+            nameListHead = top;
+        }
     }
 }
 
@@ -1771,12 +1755,12 @@ static int32 simh_out(const int32 port, const int32 data) {
             if (genInterruptPos == 0) {
                 genInterruptVec = data;
                 genInterruptPos = 1;
-		sim_printf("genInterruptVec=%d genInterruptPos=%d\n", genInterruptVec, genInterruptPos);
+                sim_printf("genInterruptVec=%d genInterruptPos=%d\n", genInterruptVec, genInterruptPos);
             } else {
                 vectorInterrupt |= (1 << genInterruptVec);
                 dataBus[genInterruptVec] = data;
                 genInterruptPos = lastCommand = 0;
-		sim_printf("genInterruptVec=%d vectorInterrupt=%X dataBus=%02X genInterruptPos=%d\n", genInterruptVec, vectorInterrupt, data, genInterruptPos);
+                sim_printf("genInterruptVec=%d vectorInterrupt=%X dataBus=%02X genInterruptPos=%d\n", genInterruptVec, vectorInterrupt, data, genInterruptPos);
             }
             break;
         case setFCBAddressCmd:

@@ -237,7 +237,9 @@ switch (op) {                                           /* case on op */
 
     case OP_SIO:                                        /* start I/O */
         *dvst = mt_tio_status (un);                     /* get status */
-        if ((*dvst & (DVS_CST|DVS_DST)) == 0) {         /* ctrl + dev idle? */
+         if (chan_chk_dvi (dva))                         /* int pending? */
+            *dvst |= (CC2 << DVT_V_CC);                 /* SIO fails */
+        else if ((*dvst & (DVS_CST|DVS_DST)) == 0) {    /* ctrl + dev idle? */
             uptr->UCMD = MCM_INIT;                      /* start dev thread */
             sim_activate (uptr, chan_ctl_time);
             }
@@ -265,7 +267,8 @@ switch (op) {                                           /* case on op */
 
     case OP_AIO:                                        /* acknowledge int */
         un = mt_clr_int (mt_dib.dva);                   /* clr int, get unit and flag */
-        *dvst = (mt_tdv_status (un) & MTAI_MASK) |      /* device status */
+        *dvst =
+            (mt_tdv_status (un & DVA_M_DEVMU) & MTAI_MASK) | /* device status */
             (un & MTAI_INT) |                           /* device int flag */
             ((un & DVA_M_UNIT) << DVT_V_UN);            /* unit number */
         break;
